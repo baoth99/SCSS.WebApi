@@ -5,7 +5,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SCSS.Application.Admin\SCSS.Application.Admin.csproj" />
+    <ProjectReference Include="..\SCSS.Application.ScrapCollector\SCSS.Application.ScrapCollector.csproj" />
+    <ProjectReference Include="..\SCSS.Application.ScrapDealer\SCSS.Application.ScrapDealer.csproj" />
+    <ProjectReference Include="..\SCSS.Application.ScrapSeller\SCSS.Application.ScrapSeller.csproj" />
+    <ProjectReference Include="..\SCSS.Data.EF\SCSS.Data.EF.csproj" />
+    <ProjectReference Include="..\SCSS.ORM.Dapper\SCSS.ORM.Dapper.csproj" />
+    <ProjectReference Include="..\SCSS.Utilities\SCSS.Utilities.csproj" />
+    <ProjectReference Include="..\SCSS.Validations\SCSS.Validations.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AppData\SqlCommands\" />
   </ItemGroup>
 
 </Project>

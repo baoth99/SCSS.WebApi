@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SCSS.Utilities.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,8 @@ using System.Threading.Tasks;
 namespace SCSS.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [ApiVersion(ApiVersions.ApiVersionV1)]
+    [Route(ApplicationRestfulApi.BaseApiUrl)]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
