@@ -2,6 +2,7 @@
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.ORM.Dapper.Implementations;
 using SCSS.ORM.Dapper.Interfaces;
+using SCSS.Utilities.AuthSessionConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,10 @@ namespace SCSS.WebApi.SystemConfigurations
                 throw new ArgumentException(nameof(services));
             }
 
+
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddSingleton<IDapperService, DapperService>();
+            services.AddScoped<IAuthSession, AuthSession>();
         }
     }
 }

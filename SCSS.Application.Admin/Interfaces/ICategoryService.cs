@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SCSS.Data
+namespace SCSS.Application.Admin.Interfaces
 {
-    public class BaseEntity
+    public interface ICategoryService
     {
-        public DateTime CreateTime { get; set; }
+
     }
 }

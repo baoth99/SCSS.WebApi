@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SCSS.Data
+namespace SCSS.Utilities.AuthSessionConfig
 {
-    public class BaseEntity
+    public interface IAuthSession
     {
-        public DateTime CreateTime { get; set; }
+        public UserInfoSession UserSession { get; }
     }
 }
