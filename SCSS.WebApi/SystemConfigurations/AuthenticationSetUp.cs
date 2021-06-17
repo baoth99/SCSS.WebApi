@@ -2,8 +2,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using SCSS.Utilities.Configurations;
+using SCSS.Utilities.Constants;
+using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
+using SCSS.WebApi.SystemExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +41,14 @@ namespace SCSS.WebApi.SystemConfigurations
                             {
                                 // this method will run when authentication fail 
                                 // To Do something here when authentication fail
+
+                               
+                                var exceptionType = context.Exception.ResponseErrorTokenExceptionResult(HttpStatusCodes.Unauthorized);
+
+                                
+
+                                //Response Error Model here
+
                                 return Task.CompletedTask;
                             },
 

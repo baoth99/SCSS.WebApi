@@ -9,5 +9,7 @@ namespace SCSS.Data
     public class BaseEntity
     {
         public DateTime CreateTime { get; set; }
+
+
     }
 }
