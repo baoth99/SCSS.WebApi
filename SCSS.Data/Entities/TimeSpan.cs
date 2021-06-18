@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace SCSS.Data.Entities
 {
-    [Table("Notification")]
-    public class Notification : BaseEntity, IHasSoftDelete
+    [Table("TimeSpan")]
+    public class TimeSpan : IHasSoftDelete
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
-        [ForeignKey("Account")]
-        public Guid AccountId { get; set; }
+        public DateTime? TimeFrom { get; set; }
 
-        public string Message { get; set; }
+        public DateTime? TimeTo { get; set; }
 
         public bool? IsDeleted { get; set; }
 
         public DateTime? DeleteTime { get; set; }
     }
 }
+

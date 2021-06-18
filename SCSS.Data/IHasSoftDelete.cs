@@ -8,8 +8,8 @@ namespace SCSS.Data
 {
     public interface IHasSoftDelete
     {
-        public bool IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; }
 
-        public DateTime DeleteTime { get; set; }
+        public DateTime? DeleteTime { get; set; }
     }
 }

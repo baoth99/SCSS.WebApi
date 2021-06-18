@@ -8,17 +8,15 @@ using System.Threading.Tasks;
 
 namespace SCSS.Data.Entities
 {
-    [Table("Notification")]
-    public class Notification : BaseEntity, IHasSoftDelete
+    [Table("ItemType")]
+    public class ItemType : IHasSoftDelete
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
-        [ForeignKey("Account")]
-        public Guid AccountId { get; set; }
-
-        public string Message { get; set; }
+        [MaxLength(500)]
+        public string Name { get; set; }
 
         public bool? IsDeleted { get; set; }
 

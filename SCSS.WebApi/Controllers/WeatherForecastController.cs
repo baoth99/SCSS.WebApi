@@ -11,6 +11,7 @@ namespace SCSS.WebApi.Controllers
     [ApiController]
     [ApiVersion(ApiVersions.ApiVersionV1)]
     [Route(ApplicationRestfulApi.BaseApiUrl)]
+    [ApiVersion(ApiVersions.ApiVersionV1)]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

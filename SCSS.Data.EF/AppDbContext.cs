@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SCSS.Utilities.AuthSessionConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,11 +58,19 @@ namespace SCSS.Data.EF
                 {
                     case EntityState.Added:
                         entry.CurrentValues["IsDeleted"] = false;
+                        entry.CurrentValues["CreateTime"] = DateTime.Now;
                         break;
 
                     case EntityState.Deleted:
                         entry.State = EntityState.Modified;
                         entry.CurrentValues["IsDeleted"] = true;
+                        entry.CurrentValues["DeleteTime"] = DateTime.Now;
+                        break;
+
+                    case EntityState.Modified:
+                        entry.State = EntityState.Modified;
+                        entry.CurrentValues["ModifyTime"] = DateTime.Now;
+                        entry.CurrentValues["ModifyBy"] = AuthSessionGlobalVariable.UserSession.Id; // Custom
                         break;
                 }
             }

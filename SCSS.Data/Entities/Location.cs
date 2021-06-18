@@ -8,17 +8,19 @@ using System.Threading.Tasks;
 
 namespace SCSS.Data.Entities
 {
-    [Table("Notification")]
-    public class Notification : BaseEntity, IHasSoftDelete
+    [Table("Location")]
+    public class Location : IHasSoftDelete
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
-        [ForeignKey("Account")]
-        public Guid AccountId { get; set; }
+        [MaxLength(1000)]
+        public string PlaceName { get; set; }
 
-        public string Message { get; set; }
+        public string Latitude { get; set; }
+
+        public string Longtitude { get; set; }
 
         public bool? IsDeleted { get; set; }
 
