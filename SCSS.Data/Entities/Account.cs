@@ -10,7 +10,6 @@ namespace SCSS.Data.Entities
     public class Account : BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
         [MaxLength(256)]

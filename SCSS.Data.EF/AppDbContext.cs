@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using SCSS.Data.Entities;
 using SCSS.Utilities.AuthSessionConfig;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,41 @@ namespace SCSS.Data.EF
         #region DbSet
 
         // Add Dbset here
+        public DbSet<Account> Account { get; set; }
+
+        public DbSet<AccountCategory> MyProperty { get; set; }
+
+        public DbSet<Booking> Booking { get; set; }
+
+        public DbSet<CategoryAdmin> CategoryAdmin { get; set; }
+
+        public DbSet<CollectDealTransaction> CollectDealTransaction { get; set; }
+
+        public DbSet<CollectDealTransactionDetail> CollectDealTransactionDetail { get; set; }
+
+        public DbSet<Feedback> Feedback { get; set; }
+
+        public DbSet<ItemType> ItemType { get; set; }
+
+        public DbSet<Location> Location { get; set; }
+
+        public DbSet<Notification> Notification { get; set; }
+
+        public DbSet<Promotion> Promotion { get; set; }
+
+        public DbSet<Role> Role { get; set; }
+
+        public DbSet<ScheduleType> ScheduleType { get; set; }
+
+        public DbSet<SellCollectTransaction> SellCollectTransaction { get; set; }
+
+        public DbSet<SellCollectTransactionDetail> SellCollectTransactionDetail { get; set; }
+
+        public DbSet<ServiceTransaction> ServiceTransaction { get; set; }
+
+        public DbSet<TimePeriod> TimePeriod { get; set; }
+
+        public DbSet<Unit> Unit { get; set; }
 
         #endregion
 
@@ -44,6 +80,109 @@ namespace SCSS.Data.EF
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            #region Entities Config
+
+            modelBuilder.Entity<Account>(entity =>
+            {
+                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
+            });
+
+            modelBuilder.Entity<AccountCategory>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
+            });
+
+            modelBuilder.Entity<Booking>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
+            });
+
+            modelBuilder.Entity<CategoryAdmin>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
+            });
+
+            modelBuilder.Entity<CollectDealTransaction>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
+            });
+
+            modelBuilder.Entity<CollectDealTransactionDetail>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+            });
+
+            modelBuilder.Entity<Feedback>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
+            });
+
+            modelBuilder.Entity<ItemType>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+            });
+
+            modelBuilder.Entity<Location>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+            });
+
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
+            });
+
+            modelBuilder.Entity<Promotion>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
+            });
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+            });
+
+            modelBuilder.Entity<ScheduleType>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+            });
+
+            modelBuilder.Entity<SellCollectTransaction>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
+            });
+
+            modelBuilder.Entity<SellCollectTransactionDetail>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+            });
+
+            modelBuilder.Entity<ServiceTransaction>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
+            });
+
+            modelBuilder.Entity<TimePeriod>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+            });
+
+            modelBuilder.Entity<Unit>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
+            });
+
+            #endregion
 
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
@@ -73,7 +212,7 @@ namespace SCSS.Data.EF
                 {
                     case EntityState.Added:
                         entry.CurrentValues["IsDeleted"] = false;
-                        entry.CurrentValues["CreateTime"] = DateTime.Now;
+                        //entry.CurrentValues["CreateTime"] = DateTime.Now;
                         break;
 
                     case EntityState.Deleted:
@@ -122,3 +261,4 @@ namespace SCSS.Data.EF
 
     #endregion
 }
+

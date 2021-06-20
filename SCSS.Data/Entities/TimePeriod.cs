@@ -5,16 +5,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SCSS.Data.Entities
 {
-    [Table("TimeSpan")]
-    public class TimeSpan : IHasSoftDelete
+    [Table("TimePeriod")]
+    public class TimePeriod : IHasSoftDelete
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        public TimeSpan TimeFrom { get; set; }
+        public TimePeriod TimeFrom { get; set; }
 
-        public TimeSpan TimeTo { get; set; }
+        public TimePeriod TimeTo { get; set; }
 
         public bool IsDeleted { get; set; }
 

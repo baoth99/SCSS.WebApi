@@ -15,8 +15,8 @@ namespace SCSS.Data.Entities
         [ForeignKey("ScheduleType")]
         public Guid? ScheduleTypeId { get; set; }
 
-        [ForeignKey("TimeSpan")]
-        public Guid? TimeSpanId { get; set; }
+        [ForeignKey("TimePeriod")]
+        public Guid? TimePeriodId { get; set; }
 
         [ForeignKey("ItemType")]
         public Guid? ItemTypeId { get; set; }
