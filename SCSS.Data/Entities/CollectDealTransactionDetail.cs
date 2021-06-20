@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SCSS.Data.Entities
 {
     [Table("CollectDealTransactionDetail")]
-    public class CollectDealTransactionDetail : IHasSoftDelete
+    public class CollectDealTransactionDetail : BaseEntity, IHasSoftDelete
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -29,6 +29,5 @@ namespace SCSS.Data.Entities
 
         public bool IsDeleted { get; set; }
 
-        public DateTime? DeleteTime { get; set; }
     }
 }

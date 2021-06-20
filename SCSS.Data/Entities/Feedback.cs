@@ -17,6 +17,12 @@ namespace SCSS.Data.Entities
 
         [ForeignKey("Account")]
         public Guid? BuyingAccountId { get; set; }
+        
+        [ForeignKey("SellCollectTransaction")]
+        public Guid? SellCollectTransactionId { get; set; }
+
+        [ForeignKey("CollectDealTransaction")]
+        public Guid? CollectDealTransactionId { get; set; }
 
         public float? Rate { get; set; }
 
@@ -27,7 +33,5 @@ namespace SCSS.Data.Entities
         public string BuyingReview { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public DateTime? DeleteTime { get; set; }
     }
 }

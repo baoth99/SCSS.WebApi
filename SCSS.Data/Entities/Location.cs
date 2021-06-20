@@ -20,7 +20,5 @@ namespace SCSS.Data.Entities
         public decimal? Longtitude { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public DateTime? DeleteTime { get; set; }
     }
 }

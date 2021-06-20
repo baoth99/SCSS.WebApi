@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using SCSS.Data.Entities;
 using SCSS.Utilities.AuthSessionConfig;
+using SCSS.Utilities.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace SCSS.Data.EF
 {
     public class AppDbContext : DbContext
     {
+        #region Constructor
+
         public AppDbContext()
         {
         }
@@ -23,6 +26,7 @@ namespace SCSS.Data.EF
             Database.EnsureCreated();
         }
 
+        #endregion
 
         #region DbSet
 
@@ -51,19 +55,17 @@ namespace SCSS.Data.EF
 
         public DbSet<Role> Role { get; set; }
 
-        public DbSet<ScheduleType> ScheduleType { get; set; }
-
         public DbSet<SellCollectTransaction> SellCollectTransaction { get; set; }
 
         public DbSet<SellCollectTransactionDetail> SellCollectTransactionDetail { get; set; }
 
         public DbSet<ServiceTransaction> ServiceTransaction { get; set; }
 
-        public DbSet<TimePeriod> TimePeriod { get; set; }
-
         public DbSet<Unit> Unit { get; set; }
 
         #endregion
+
+        #region OnConfiguring
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -77,6 +79,10 @@ namespace SCSS.Data.EF
             base.OnConfiguring(optionsBuilder);
         }
 
+        #endregion
+
+        #region OnModelCreating
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -84,31 +90,28 @@ namespace SCSS.Data.EF
 
             modelBuilder.Entity<Account>(entity =>
             {
-                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
+
             });
 
             modelBuilder.Entity<AccountCategory>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
             });
 
             modelBuilder.Entity<Booking>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
+                entity.Property(e => e.CollectorAccountId).IsConcurrencyToken();
             });
 
             modelBuilder.Entity<CategoryAdmin>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
             });
 
             modelBuilder.Entity<CollectDealTransaction>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
             });
 
             modelBuilder.Entity<CollectDealTransactionDetail>(entity =>
@@ -119,7 +122,6 @@ namespace SCSS.Data.EF
             modelBuilder.Entity<Feedback>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
             });
 
             modelBuilder.Entity<ItemType>(entity =>
@@ -135,13 +137,11 @@ namespace SCSS.Data.EF
             modelBuilder.Entity<Notification>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
             });
 
             modelBuilder.Entity<Promotion>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -149,15 +149,9 @@ namespace SCSS.Data.EF
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
             });
 
-            modelBuilder.Entity<ScheduleType>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-            });
-
             modelBuilder.Entity<SellCollectTransaction>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
             });
 
             modelBuilder.Entity<SellCollectTransactionDetail>(entity =>
@@ -168,18 +162,11 @@ namespace SCSS.Data.EF
             modelBuilder.Entity<ServiceTransaction>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
-            });
-
-            modelBuilder.Entity<TimePeriod>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
             });
 
             modelBuilder.Entity<Unit>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.CreateTime).HasDefaultValue(DateTime.Now);
             });
 
             #endregion
@@ -196,6 +183,8 @@ namespace SCSS.Data.EF
             base.OnModelCreating(modelBuilder);
         }
 
+        #endregion
+
         #region Before SaveChanges
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -211,20 +200,20 @@ namespace SCSS.Data.EF
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.CurrentValues["IsDeleted"] = false;
-                        //entry.CurrentValues["CreateTime"] = DateTime.Now;
+                        entry.CurrentValues["IsDeleted"] = BooleanConstants.FALSE;
+                        entry.CurrentValues["CreatedTime"] = DateTime.Now;
+                        entry.CurrentValues["CreatedBy"] = AuthSessionGlobalVariable.UserSession.Id;
                         break;
 
                     case EntityState.Deleted:
                         entry.State = EntityState.Modified;
-                        entry.CurrentValues["IsDeleted"] = true;
-                        entry.CurrentValues["DeleteTime"] = DateTime.Now;
+                        entry.CurrentValues["IsDeleted"] = BooleanConstants.TRUE;
                         break;
 
                     case EntityState.Modified:
                         entry.State = EntityState.Modified;
-                        entry.CurrentValues["ModifyTime"] = DateTime.Now;
-                        entry.CurrentValues["ModifyBy"] = AuthSessionGlobalVariable.UserSession.Id; // Custom
+                        entry.CurrentValues["UpdatedTime"] = DateTime.Now;
+                        entry.CurrentValues["UpdatedBy"] = AuthSessionGlobalVariable.UserSession.Id; // Custom
                         break;
                 }
             }
@@ -233,7 +222,6 @@ namespace SCSS.Data.EF
         #endregion
 
     }
-
 
     #region HasSoftDelete Config
 

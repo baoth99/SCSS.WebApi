@@ -18,7 +18,5 @@ namespace SCSS.Data.Entities
         public string Message { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public DateTime? DeleteTime { get; set; }
     }
 }

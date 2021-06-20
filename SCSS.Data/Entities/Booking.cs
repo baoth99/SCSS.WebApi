@@ -12,11 +12,11 @@ namespace SCSS.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        [ForeignKey("ScheduleType")]
-        public Guid? ScheduleTypeId { get; set; }
+        public DateTime? BookingDate { get; set; }
 
-        [ForeignKey("TimePeriod")]
-        public Guid? TimePeriodId { get; set; }
+        public TimeSpan? TimeFrom { get; set; }
+
+        public TimeSpan? TimeTo { get; set; }
 
         [ForeignKey("ItemType")]
         public Guid? ItemTypeId { get; set; }
@@ -30,11 +30,11 @@ namespace SCSS.Data.Entities
         [ForeignKey("Account")]
         public Guid? CollectorAccountId { get; set; }
 
+        public string CancelReason { get; set; }
+
         public int Status { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public DateTime? DeleteTime { get; set; }
     }
 }
 

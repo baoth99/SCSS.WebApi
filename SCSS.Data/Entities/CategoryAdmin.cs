@@ -32,10 +32,5 @@ namespace SCSS.Data.Entities
         public Guid? LockedBy { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public DateTime? DeleteTime { get; set; }
-
-        [ForeignKey("Account")]
-        public Guid? CreatedBy { get; set; }
     }
 }

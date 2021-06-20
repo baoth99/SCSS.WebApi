@@ -29,8 +29,8 @@ namespace SCSS.Data.Entities
 
         public DateTime? ToTime { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public int? Status { get; set; }
 
-        public DateTime? DeleteTime { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

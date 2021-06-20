@@ -23,7 +23,5 @@ namespace SCSS.Data.Entities
         public decimal? Total { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public DateTime? DeleteTime { get; set; }
     }
 }
