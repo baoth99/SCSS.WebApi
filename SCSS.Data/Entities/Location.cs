@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SCSS.Data.Entities
 {
@@ -15,14 +12,14 @@ namespace SCSS.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid? Id { get; set; }
 
-        [MaxLength(1000)]
-        public string PlaceName { get; set; }
+        [MaxLength(255)]
+        public string Address { get; set; }
 
-        public string Latitude { get; set; }
+        public decimal? Latitude { get; set; }
 
-        public string Longtitude { get; set; }
+        public decimal? Longtitude { get; set; }
 
-        public bool? IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
 
         public DateTime? DeleteTime { get; set; }
     }

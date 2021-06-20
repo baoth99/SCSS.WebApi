@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SCSS.Data.Entities
 {
@@ -13,7 +10,10 @@ namespace SCSS.Data.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
+
+        [MaxLength(100)]
+        public string Name { get; set; }
 
         public string ImageUrl { get; set; }
 
@@ -26,8 +26,16 @@ namespace SCSS.Data.Entities
         [MaxLength(500)]
         public string Description { get; set; }
 
-        public bool? IsDeleted { get; set; }
+        public bool? IsLocked { get; set; }
+
+        [ForeignKey("Account")]
+        public Guid? LockedBy { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         public DateTime? DeleteTime { get; set; }
+
+        [ForeignKey("Account")]
+        public Guid? CreatedBy { get; set; }
     }
 }

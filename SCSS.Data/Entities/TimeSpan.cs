@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SCSS.Data.Entities
 {
@@ -13,13 +10,13 @@ namespace SCSS.Data.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
 
-        public DateTime? TimeFrom { get; set; }
+        public TimeSpan TimeFrom { get; set; }
 
-        public DateTime? TimeTo { get; set; }
+        public TimeSpan TimeTo { get; set; }
 
-        public bool? IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
 
         public DateTime? DeleteTime { get; set; }
     }

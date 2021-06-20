@@ -5,22 +5,26 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SCSS.Data.Entities
 {
-    [Table("CollectDealTransaction")]
-    public class CollectDealTransaction : BaseEntity, IHasSoftDelete
+    [Table("Feedback")]
+    public class Feedback : BaseEntity, IHasSoftDelete
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
         [ForeignKey("Account")]
-        public Guid? DealerAccountId { get; set; }
+        public Guid? SellingAccountId { get; set; }
 
         [ForeignKey("Account")]
-        public Guid? CollectorAccountId { get; set; }
+        public Guid? BuyingAccountId { get; set; }
 
-        public decimal? Total { get; set; }
+        public float? Rate { get; set; }
 
-        public float? AwardPoint { get; set; }
+        [MaxLength(500)]
+        public string SellingReview { get; set; }
+
+        [MaxLength(500)]
+        public string BuyingReview { get; set; }
 
         public bool IsDeleted { get; set; }
 

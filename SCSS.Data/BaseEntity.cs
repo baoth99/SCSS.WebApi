@@ -11,11 +11,5 @@ namespace SCSS.Data
     {
         public DateTime? CreateTime { get; set; }
 
-        public Guid? CreatedBy { get; set; }
-
-        public DateTime? ModifyTime { get; set; }
-
-        public Guid? ModifyBy { get; set; }
-
     }
 }

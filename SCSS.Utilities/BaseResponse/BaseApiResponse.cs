@@ -21,7 +21,7 @@ namespace SCSS.Utilities.BaseResponse
         {
             return new BaseApiResponseModel()
             {
-                IsSuccess = BooleanConstants.True,
+                IsSuccess = BooleanConstants.TRUE,
                 StatusCode = HttpStatusCodes.Ok
             };
         }
@@ -40,7 +40,7 @@ namespace SCSS.Utilities.BaseResponse
             }
             return new BaseApiResponseModel()
             {
-                IsSuccess = BooleanConstants.True,
+                IsSuccess = BooleanConstants.TRUE,
                 StatusCode = HttpStatusCodes.Ok,
                 Data = resData,
                 Total = totalRecord
@@ -57,7 +57,7 @@ namespace SCSS.Utilities.BaseResponse
         {
             return new BaseApiResponseModel()
             {
-                IsSuccess = BooleanConstants.True,
+                IsSuccess = BooleanConstants.TRUE,
                 StatusCode = HttpStatusCodes.Ok,
                 Data = resData,
                 Total = totalRecord
@@ -75,7 +75,7 @@ namespace SCSS.Utilities.BaseResponse
         {
             return new BaseApiResponseModel()
             {
-                IsSuccess = BooleanConstants.False,
+                IsSuccess = BooleanConstants.FALSE,
                 StatusCode = HttpStatusCodes.BadRequest
             };
         }
@@ -89,7 +89,7 @@ namespace SCSS.Utilities.BaseResponse
         {
             return new BaseApiResponseModel()
             {
-                IsSuccess = BooleanConstants.False,
+                IsSuccess = BooleanConstants.FALSE,
                 StatusCode = HttpStatusCodes.BadRequest,
                 MessageCode = msgCode
             };
@@ -111,7 +111,7 @@ namespace SCSS.Utilities.BaseResponse
             }
             return new BaseApiResponseModel()
             {
-                IsSuccess = BooleanConstants.False,
+                IsSuccess = BooleanConstants.FALSE,
                 StatusCode = HttpStatusCodes.BadRequest,
                 MessageCode = msgCode,
                 MessageDetail = msgDetail,
@@ -132,7 +132,7 @@ namespace SCSS.Utilities.BaseResponse
         {
             return new BaseApiResponseModel()
             {
-                IsSuccess = BooleanConstants.False,
+                IsSuccess = BooleanConstants.FALSE,
                 StatusCode = HttpStatusCodes.NotFound
             };
         }
@@ -146,7 +146,7 @@ namespace SCSS.Utilities.BaseResponse
         {
             return new BaseApiResponseModel()
             {
-                IsSuccess = BooleanConstants.False,
+                IsSuccess = BooleanConstants.FALSE,
                 StatusCode = HttpStatusCodes.NotFound,
                 MessageCode = msgCode
             };
@@ -160,7 +160,7 @@ namespace SCSS.Utilities.BaseResponse
         {
             return new BaseApiResponseModel()
             {
-                IsSuccess = BooleanConstants.False,
+                IsSuccess = BooleanConstants.FALSE,
                 StatusCode = HttpStatusCodes.Unauthorized,
                 MessageCode = SystemMessageCode.Unauthorized,
                 MessageDetail = "An error occurred processing your authentication."

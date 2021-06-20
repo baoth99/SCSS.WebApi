@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SCSS.Data.Entities
 {
@@ -13,17 +10,16 @@ namespace SCSS.Data.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid? Id { get; set; }
-
+        public Guid Id { get; set; }
 
         [ForeignKey("Account")]
         public Guid? CollectorDealerId { get; set; }
 
         public float? Amount { get; set; }
 
-        public string Period { get; set; }
+        public DateTime? Period { get; set; }
 
-        public bool? IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
 
         public DateTime? DeleteTime { get; set; }
     }

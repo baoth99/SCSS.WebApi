@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SCSS.Data.Entities
 {
@@ -15,11 +12,16 @@ namespace SCSS.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid? Id { get; set; }
 
+        [MaxLength(100)]
+        public string Name { get; set; }
+
         [ForeignKey("AccountCategory")]
         public Guid? DealerCategoryId { get; set; }
 
         [ForeignKey("Account")]
         public Guid? DealerAccountId { get; set; }
+
+        public float? AppliedQuantity { get; set; }
 
         public float? BonusPercent { get; set; }
 
@@ -27,7 +29,7 @@ namespace SCSS.Data.Entities
 
         public DateTime? ToTime { get; set; }
 
-        public bool? IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
 
         public DateTime? DeleteTime { get; set; }
     }
