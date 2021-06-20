@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using SCSS.Data.Entities;
 using SCSS.Utilities.AuthSessionConfig;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace SCSS.Data.EF
         #region DbSet
 
         // Add Dbset here
+        public DbSet<Role> Role { get; set; }
 
         #endregion
 
@@ -33,7 +35,7 @@ namespace SCSS.Data.EF
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("ConnectionString", builder =>
+                optionsBuilder.UseSqlServer("Data Source=scss-database.cehfzxl85v4h.ap-southeast-1.rds.amazonaws.com;Initial Catalog=SCSS.Demo;User ID=admin;Password=scsspassword123", builder =>
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 });

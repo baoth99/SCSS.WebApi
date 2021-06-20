@@ -73,7 +73,7 @@ namespace SCSS.WebApi
 
             #region Database Connection
 
-            //services.AddDatabaseConnectionSetUp();
+            services.AddDatabaseConnectionSetUp();
 
             #endregion
 
