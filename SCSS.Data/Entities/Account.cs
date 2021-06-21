@@ -16,7 +16,6 @@ namespace SCSS.Data.Entities
         public string Name { get; set; }
 
         [MaxLength(50)]
-        [NotNull]
         public string UserName { get; set; }
 
         [MaxLength(100)]
