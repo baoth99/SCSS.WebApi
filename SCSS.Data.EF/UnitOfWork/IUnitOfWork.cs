@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SCSS.Data.EF.Repositories;
+using SCSS.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +12,37 @@ namespace SCSS.Data.EF.UnitOfWork
     {
         #region Repositories
 
-        // Create Repository here !
+        IRepository<Account> AccountRepository { get; }
+
+        IRepository<AccountCategory> AccountCategoryRepository { get; }
+
+        IRepository<Booking> BookingRepository { get; }
+
+        IRepository<CategoryAdmin> CategoryAdminRepository { get; }
+
+        IRepository<CollectDealTransaction> CollectDealTransactionRepository { get; }
+
+        IRepository<CollectDealTransactionDetail> CollectDealTransactionDetailRepository { get; }
+
+        IRepository<Feedback> FeedbackRepository { get; }
+
+        IRepository<ItemType> ItemTypeRepository { get; }
+
+        IRepository<Location> LocationRepository { get; }
+
+        IRepository<Notification> NotificationRepository { get; }
+
+        IRepository<Promotion> PromotionRepository { get; }
+
+        IRepository<Role> RoleRepository { get; }
+
+        IRepository<SellCollectTransaction> SellCollectTransactionRepository { get; }
+
+        IRepository<SellCollectTransactionDetail> SellCollectTransactionDetailRepository { get; }
+
+        IRepository<ServiceTransaction> ServiceTransactionRepository { get; }
+
+        IRepository<Unit> UnitRepository { get; }
 
         #endregion
 

@@ -21,5 +21,10 @@ namespace SCSS.Utilities.Configurations
 
         public static string ApiSecret => ConfigurationHelper.GetValue<string>(AppSettingKeys.IdentityServer.ApiSecret);
 
+        public static string AWSS3AccessKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.S3AccessKey);
+
+        public static string AWSS3SecretKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.S3SecretKey);
+
+        public static string AWSS3BucketName => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.S3BucketName);
     }
 }

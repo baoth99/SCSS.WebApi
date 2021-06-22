@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SCSS.Application.Admin
 {
-    internal class BaseService
+    public class BaseService
     {
         /// <summary>
         /// Gets the unit of work.
