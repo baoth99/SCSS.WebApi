@@ -24,7 +24,6 @@ namespace SCSS.Data.Entities
         public bool Gender { get; set; }
 
         [MaxLength(10)]
-        [NotNull]
         public string Phone { get; set; }
 
         [MaxLength(256)]
