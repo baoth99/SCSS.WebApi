@@ -22,5 +22,10 @@ namespace SCSS.Utilities.Helper
         {
             return guid == null || guid == Guid.Empty;
         }
+
+        public static bool IsOfType<T>(object value)
+        {
+            return value is T;
+        }
     }
 }
