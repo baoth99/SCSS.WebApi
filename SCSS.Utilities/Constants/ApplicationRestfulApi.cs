@@ -12,6 +12,8 @@ namespace SCSS.Utilities.Constants
 
         public const string ApplicationProduce = "application/json";
 
+        public const string UrlencodedContentType = "application/x-www-form-urlencoded";
+
         public const string ApplicationContentType = "application/json; charset-utf-8";
     }
 }

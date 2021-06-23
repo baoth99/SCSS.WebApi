@@ -20,7 +20,5 @@ namespace SCSS.Data.Entities
         public DateTime? Period { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public DateTime? DeleteTime { get; set; }
     }
 }

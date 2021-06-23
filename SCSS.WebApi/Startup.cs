@@ -89,6 +89,7 @@ namespace SCSS.WebApi
 
             #endregion
 
+            services.AddExternalServiceSetUp();
 
         }
 

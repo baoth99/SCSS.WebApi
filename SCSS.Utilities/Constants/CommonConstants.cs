@@ -12,6 +12,15 @@ namespace SCSS.Utilities.Constants
         public const bool FALSE = false;
     }
     
+    public class CommonConstants
+    {
+        public const string ContentType = "Content-Type";
+    }
+
+    public class IdentityServer4Constant
+    {
+        public const string ClientId = "client_id";
+    }
 
     public class AccountStatus
     {

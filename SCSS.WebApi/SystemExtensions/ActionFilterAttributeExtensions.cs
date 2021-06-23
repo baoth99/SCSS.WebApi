@@ -11,7 +11,7 @@ namespace SCSS.WebApi.SystemExtensions
 {
     internal static class ActionFilterAttributeExtensions
     {
-        public static void ActionFilterResult(this ActionExecutedContext context,string messageHeader, string message ,int httpStatusCode)
+        public static void ActionFilterResult(this ActionExecutingContext context, string messageHeader, string message ,int httpStatusCode)
         {
             context.HttpContext.Response.Headers.Add(messageHeader, "true");
             context.Result = new JsonResult(new ErrorResponseModel()

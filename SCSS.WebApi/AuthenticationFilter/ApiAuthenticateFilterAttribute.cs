@@ -21,12 +21,14 @@ namespace SCSS.WebApi.AuthenticationFilter
 
         }
 
-        public override void OnActionExecuted(ActionExecutedContext context)
+        
+
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
             // Config filter here
             // If env is dev enviroment 
             if (ConfigurationHelper.IsDevelopment)
-            {                
+            {
                 context.HttpContext.Request.Headers.TryGetValue("UserId", out StringValues AccountIdVal);
                 var accountId = AccountIdVal.ToString();
 
@@ -44,11 +46,10 @@ namespace SCSS.WebApi.AuthenticationFilter
 
                 JwtManager.ValidateToken(token);
             }
-
-            base.OnActionExecuted(context);
+            
         }
 
-        public override void OnActionExecuting(ActionExecutingContext context)
+        public override void OnActionExecuted(ActionExecutedContext context)
         {
             try
             {
@@ -75,9 +76,10 @@ namespace SCSS.WebApi.AuthenticationFilter
             {
                 // Ignore
             }
+
+            base.OnActionExecuted(context);
         }
 
 
-        
     }
 }

@@ -28,5 +28,12 @@ namespace SCSS.Utilities.Configurations
             public const string ApiName = "IdentityServer:ApiName";
             public const string ApiSecret = "IdentityServer:ApiSecret";
         }
+
+        public static class AWSService
+        {
+            public const string S3BucketName = "AWSService:S3BucketName";
+            public const string S3AccessKey = "AWSService:S3AccessKey";
+            public const string S3SecretKey = "AWSService:S3SecretKey";
+        }
     }
 }

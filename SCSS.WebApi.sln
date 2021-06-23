@@ -21,17 +21,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCSS.Data.EF", "SCSS.Data.E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCSS.Utilities", "SCSS.Utilities\SCSS.Utilities.csproj", "{55D47050-F753-4B9F-897B-44547E1EB438}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCSS.ORM.Dapper", "SCSS.ORM.Dapper\SCSS.ORM.Dapper.csproj", "{CD2A18F9-8585-46A7-AF39-C71E96C8AD29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCSS.ORM.Dapper", "SCSS.ORM.Dapper\SCSS.ORM.Dapper.csproj", "{CD2A18F9-8585-46A7-AF39-C71E96C8AD29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCSS.Validations", "SCSS.Validations\SCSS.Validations.csproj", "{450A51E4-5AF7-422D-8F81-24176604C950}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCSS.Validations", "SCSS.Validations\SCSS.Validations.csproj", "{450A51E4-5AF7-422D-8F81-24176604C950}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCSS.Application.ScrapCollector", "SCSS.Application.ScrapCollector\SCSS.Application.ScrapCollector.csproj", "{754F9A26-1EC4-4DAD-B7B5-99297234D465}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCSS.Application.ScrapCollector", "SCSS.Application.ScrapCollector\SCSS.Application.ScrapCollector.csproj", "{754F9A26-1EC4-4DAD-B7B5-99297234D465}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCSS.Application.ScrapDealer", "SCSS.Application.ScrapDealer\SCSS.Application.ScrapDealer.csproj", "{9B26CCC6-62D7-48B3-AA18-063B54115952}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCSS.Application.ScrapDealer", "SCSS.Application.ScrapDealer\SCSS.Application.ScrapDealer.csproj", "{9B26CCC6-62D7-48B3-AA18-063B54115952}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCSS.Application.ScrapSeller", "SCSS.Application.ScrapSeller\SCSS.Application.ScrapSeller.csproj", "{1B1758D7-3D5D-4FEC-8C52-231B98086B78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCSS.Application.ScrapSeller", "SCSS.Application.ScrapSeller\SCSS.Application.ScrapSeller.csproj", "{1B1758D7-3D5D-4FEC-8C52-231B98086B78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCSS.Application.Admin", "SCSS.Application.Admin\SCSS.Application.Admin.csproj", "{6309C897-2EF7-4CCD-B7BC-B6DE50FB7123}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCSS.Application.Admin", "SCSS.Application.Admin\SCSS.Application.Admin.csproj", "{6309C897-2EF7-4CCD-B7BC-B6DE50FB7123}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCSS.FirebaseService", "SCSS.FirebaseService\SCSS.FirebaseService.csproj", "{481FC752-F907-4B36-B34D-EBBB88420D80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCSS.AWSService", "SCSS.AWSService\SCSS.AWSService.csproj", "{2D97721E-15F1-4E44-A20F-C2E5EDB80C83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +83,14 @@ Global
 		{6309C897-2EF7-4CCD-B7BC-B6DE50FB7123}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6309C897-2EF7-4CCD-B7BC-B6DE50FB7123}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6309C897-2EF7-4CCD-B7BC-B6DE50FB7123}.Release|Any CPU.Build.0 = Release|Any CPU
+		{481FC752-F907-4B36-B34D-EBBB88420D80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{481FC752-F907-4B36-B34D-EBBB88420D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{481FC752-F907-4B36-B34D-EBBB88420D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{481FC752-F907-4B36-B34D-EBBB88420D80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D97721E-15F1-4E44-A20F-C2E5EDB80C83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D97721E-15F1-4E44-A20F-C2E5EDB80C83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D97721E-15F1-4E44-A20F-C2E5EDB80C83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D97721E-15F1-4E44-A20F-C2E5EDB80C83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +106,8 @@ Global
 		{9B26CCC6-62D7-48B3-AA18-063B54115952} = {C275D8AF-E358-4C67-84FB-142DF726CFA1}
 		{1B1758D7-3D5D-4FEC-8C52-231B98086B78} = {C275D8AF-E358-4C67-84FB-142DF726CFA1}
 		{6309C897-2EF7-4CCD-B7BC-B6DE50FB7123} = {C275D8AF-E358-4C67-84FB-142DF726CFA1}
+		{481FC752-F907-4B36-B34D-EBBB88420D80} = {32CB6256-C4F8-4B86-A0C8-F338F3563FDE}
+		{2D97721E-15F1-4E44-A20F-C2E5EDB80C83} = {32CB6256-C4F8-4B86-A0C8-F338F3563FDE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6634B941-55AC-4C95-ABBA-F49B97A79E9A}
