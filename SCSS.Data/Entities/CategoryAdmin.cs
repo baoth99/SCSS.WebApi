@@ -15,7 +15,7 @@ namespace SCSS.Data.Entities
         [MaxLength(100)]
         public string Name { get; set; }
 
-        public string ImageUrl { get; set; }
+        public string ImageName { get; set; }
 
         [ForeignKey("Unit")]
         public Guid? UnitId { get; set; }

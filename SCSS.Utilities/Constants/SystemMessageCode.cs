@@ -63,5 +63,38 @@ namespace SCSS.Utilities.Constants
         /// The data not found.
         /// </value>
         public static string DataNotFound => "300006";
+
+        /// <summary>
+        /// Gets the data not found.
+        /// </summary>
+        /// <value>
+        /// The data not found.
+        /// </value>
+        public static string SystemException => "300007";
+
+        /// <summary>
+        /// Gets the token exception.
+        /// </summary>
+        /// <value>
+        /// The token exception.
+        /// </value>
+        public static string TokenException => "300008";
+
+        /// <summary>
+        /// Gets the account status exception.
+        /// </summary>
+        /// <value>
+        /// The account status exception.
+        /// </value>
+        public static string BlockAccountException => "300009";
+
+        /// <summary>
+        /// Gets the not approve account exception.
+        /// </summary>
+        /// <value>
+        /// The not approve account exception.
+        /// </value>
+        public static string NotApproveAccountException => "300010";
+
     }
 }

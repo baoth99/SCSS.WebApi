@@ -64,6 +64,12 @@ namespace SCSS.Data.EF.UnitOfWork
 
         private IRepository<Unit> _unitRepository;
 
+        private IRepository<CollectDealTransactionPromotion> _collectDealTransactionPromotionRepository;
+
+        private IRepository<TransactionServiceFeePercent> _transactionServiceFeePercentRepository;
+
+        private IRepository<TransactionAwardAmount> _transactionAwardAmountRepository;
+
         #endregion
 
         #region Constructor
@@ -115,6 +121,12 @@ namespace SCSS.Data.EF.UnitOfWork
         public IRepository<ServiceTransaction> ServiceTransactionRepository => _serviceTransactionRepository ??= (_serviceTransactionRepository = new Repository<ServiceTransaction>(AppDbContext));
 
         public IRepository<Unit> UnitRepository => _unitRepository ??= (_unitRepository = new Repository<Unit>(AppDbContext));
+
+        public IRepository<CollectDealTransactionPromotion> CollectDealTransactionPromotionRepository => _collectDealTransactionPromotionRepository ??= (_collectDealTransactionPromotionRepository = new Repository<CollectDealTransactionPromotion>(AppDbContext));
+
+        public IRepository<TransactionServiceFeePercent> TransactionServiceFeePercentRepository => _transactionServiceFeePercentRepository ??= (_transactionServiceFeePercentRepository = new Repository<TransactionServiceFeePercent>(AppDbContext));
+
+        public IRepository<TransactionAwardAmount> TransactionAwardAmountRepository => _transactionAwardAmountRepository ??= (_transactionAwardAmountRepository = new Repository<TransactionAwardAmount>(AppDbContext));
 
         #endregion
 

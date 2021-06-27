@@ -17,7 +17,7 @@ namespace SCSS.Data.Entities
 
         public decimal? Latitude { get; set; }
 
-        public decimal? Longtitude { get; set; }
+        public decimal? Longitude { get; set; }
 
         public bool IsDeleted { get; set; }
     }

@@ -20,6 +20,8 @@ namespace SCSS.Data.Entities
 
         public decimal? Total { get; set; }
 
+        public decimal? BonusAmount { get; set; }
+
         public float? AwardPoint { get; set; }
 
         public bool IsDeleted { get; set; }

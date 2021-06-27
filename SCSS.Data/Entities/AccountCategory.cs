@@ -15,7 +15,7 @@ namespace SCSS.Data.Entities
         [MaxLength(256)]
         public string Name { get; set; }
 
-        public string ImageUrl { get; set; }
+        public string ImageName { get; set; }
 
         [ForeignKey("Account")]
         public Guid? AccountId { get; set; }
@@ -30,7 +30,7 @@ namespace SCSS.Data.Entities
         public string Description { get; set; }
 
         [MaxLength(20)]
-        public int Status { get; set; }
+        public int? Status { get; set; }
 
         public bool IsDeleted { get; set; }
 

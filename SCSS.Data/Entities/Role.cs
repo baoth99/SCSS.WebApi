@@ -12,11 +12,12 @@ namespace SCSS.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
+        public int Key { get; set; }
+
         [MaxLength(256)]
         public string Name { get; set; }
 
         public bool IsDeleted { get; set; }
 
-        public DateTime? DeleteTime { get; set; }
     }
 }

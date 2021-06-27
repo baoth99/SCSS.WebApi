@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace SCSS.Data.Entities
 {
     [Table("Account")]
-    public class Account : BaseEntity
+    public class Account
     {
         [Key]
         public Guid Id { get; set; }
@@ -21,7 +21,7 @@ namespace SCSS.Data.Entities
         [MaxLength(100)]
         public string Email { get; set; }      
 
-        public bool Gender { get; set; }
+        public int? Gender { get; set; }
 
         [MaxLength(10)]
         public string Phone { get; set; }
@@ -35,7 +35,7 @@ namespace SCSS.Data.Entities
 
         public DateTime? BirthDate { get; set; }
 
-        public string Image { get; set; }
+        public string ImageName { get; set; }
 
         [ForeignKey("Role")]
         public Guid? RoleId { get; set; }
@@ -48,5 +48,11 @@ namespace SCSS.Data.Entities
         public int? Status { get; set; }
 
         public string DeviceId { get; set; }
+
+        public DateTime? CreatedTime { get; set; }
+
+        public DateTime? UpdatedTime { get; set; }
+
+        public Guid? UpdatedBy { get; set; }
     }
 }

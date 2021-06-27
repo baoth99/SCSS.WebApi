@@ -13,6 +13,14 @@ namespace SCSS.Utilities.ResponseModel
         public int StatusCode { get; set; }
 
         /// <summary>
+        /// Gets or sets the message code.
+        /// </summary>
+        /// <value>
+        /// The message code.
+        /// </value>
+        public string MessageCode { get; set; }
+
+        /// <summary>
         /// Gets or sets the message.
         /// </summary>
         /// <value>

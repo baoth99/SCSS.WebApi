@@ -33,6 +33,7 @@ namespace SCSS.WebApi.SystemConfigurations
                         await context.Response.WriteAsync(new ErrorResponseModel()
                         {
                             StatusCode = context.Response.StatusCode,
+                            MessageCode = SystemMessageCode.SystemException,
                             Message = contextFeature.Error.Message
                         }.ToString());
                     }

@@ -60,8 +60,8 @@ namespace SCSS.WebApi
 
             #region Authentication & Authorization
 
-            //services.AddAuthenticationSetUp();
-            //services.AddAuthorizationSetUp();
+            services.AddAuthenticationSetUp();
+            services.AddAuthorizationSetUp();
 
             #endregion
 
@@ -73,13 +73,13 @@ namespace SCSS.WebApi
 
             #region Database Connection
 
-            //services.AddDatabaseConnectionSetUp();
+            services.AddDatabaseConnectionSetUp();
 
             #endregion
 
             #region Dependency Injection
 
-            //services.AddDependencyInjectionSetUp();
+            services.AddDependencyInjectionSetUp();
 
             #endregion
 
@@ -104,7 +104,7 @@ namespace SCSS.WebApi
 
             app.UseSwaggerGenSetUp();
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
 
             app.UseExceptionHandlerSetUp();
 

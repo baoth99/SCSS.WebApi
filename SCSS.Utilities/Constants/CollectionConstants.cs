@@ -11,12 +11,16 @@ namespace SCSS.Utilities.Constants
         public static readonly List<int> AccountStatusCollection = new List<int>()
         {
             AccountStatus.NOT_APPROVED,
-            AccountStatus.APPROVED,
             AccountStatus.ACTIVE,
             AccountStatus.BANNING,
-            AccountStatus.DELECTED
         };
 
+        public static readonly List<string> ImageExtensions = new List<string>()
+        {
+            ImageFileConstants.JPEG,
+            ImageFileConstants.JPG,
+            ImageFileConstants.PNG
+        };
 
         public static readonly List<int> BookingStatusCollection = new List<int>()
         {
@@ -32,7 +36,16 @@ namespace SCSS.Utilities.Constants
             AccountCategoryStatus.DISABLED,
             AccountCategoryStatus.ENABLED
         };
+    }
 
-
+    public class DictionaryConstants
+    {
+        public static readonly Dictionary<string, int> AccountStatusCollection = new Dictionary<string, int>()
+        {
+            {AccountRole.ADMIN_TEXT, AccountRole.ADMIN },
+            {AccountRole.SELLER_TEXT, AccountRole.SELLER },
+            {AccountRole.DEALER_TEXT, AccountRole.DEALER },
+            {AccountRole.COLLECTOR_TEXT, AccountRole.COLLECTOR }
+        };
     }
 }

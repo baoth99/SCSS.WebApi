@@ -18,7 +18,7 @@ namespace SCSS.Validations.InvalidResponseModels
             MessageCode = SystemMessageCode.DataInvalid;
             MessageDetail = "Validation Failed";
             Data = modelState.Keys
-                    .SelectMany(key => modelState[key].Errors.Select(x => new ValidationError(key, 0, x.ErrorMessage)))
+                    .SelectMany(key => modelState[key].Errors.Select(x => new ValidationError(key, x.ErrorMessage)))
                     .ToList();
             Total = 0;
         }
@@ -28,15 +28,12 @@ namespace SCSS.Validations.InvalidResponseModels
     {
         public string Field { get; }
 
-        public int Code { get; set; }
+        public string Code { get; set; }
 
-        public string Message { get; }
-
-        public ValidationError(string field, int code, string message)
+        public ValidationError(string field, string code)
         {
             Field = field != string.Empty ? field : null;
-            Code = code != 0 ? code : 55; //Custom
-            Message = message;
+            Code = code;
         }
     }
 }

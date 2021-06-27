@@ -16,7 +16,11 @@ namespace SCSS.Utilities.Helper
             }
 
             return str1.ToUpper().Contains(str2.ToUpper());
+        }
 
+        public static string ImageBase64()
+        {
+            return "data:image/jpeg;base64,";
         }
     }
 }

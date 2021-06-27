@@ -23,7 +23,7 @@ namespace SCSS.Data.Entities
 
         public float? AppliedQuantity { get; set; }
 
-        public float? BonusPercent { get; set; }
+        public float? BonusAmount { get; set; }
 
         public DateTime? FromTime { get; set; }
 

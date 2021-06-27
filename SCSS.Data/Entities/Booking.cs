@@ -32,7 +32,7 @@ namespace SCSS.Data.Entities
 
         public string CancelReason { get; set; }
 
-        public int Status { get; set; }
+        public int? Status { get; set; }
 
         public bool IsDeleted { get; set; }
     }

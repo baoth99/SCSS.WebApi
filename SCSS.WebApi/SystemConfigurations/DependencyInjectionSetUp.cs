@@ -1,4 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SCSS.Application.Admin.Implementations;
+using SCSS.Application.Admin.Interfaces;
+using SCSS.AWSService.Implementations;
+using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.ORM.Dapper.Implementations;
 using SCSS.ORM.Dapper.Interfaces;
@@ -23,6 +27,10 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddSingleton<IDapperService, DapperService>();
             services.AddScoped<IAuthSession, AuthSession>();
+
+            services.AddScoped<IStorageBlobS3Service, StorageBlobS3Service>();
+            services.AddScoped<ICategoryAdminService, CategoryAdminService>();
+            services.AddScoped<IAccountService, AccountService>();
         }
     }
 }
