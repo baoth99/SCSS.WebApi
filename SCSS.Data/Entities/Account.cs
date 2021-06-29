@@ -35,7 +35,7 @@ namespace SCSS.Data.Entities
 
         public DateTime? BirthDate { get; set; }
 
-        public string ImageName { get; set; }
+        public string ImageUrl { get; set; }
 
         [ForeignKey("Role")]
         public Guid? RoleId { get; set; }

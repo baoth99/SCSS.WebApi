@@ -15,6 +15,13 @@ namespace SCSS.Utilities.Constants
             AccountStatus.BANNING,
         };
 
+        public static readonly List<string> FileS3PathCollection = new List<string>()
+        {
+            FileS3Path.AccountImages.ToString(),
+            FileS3Path.AdminCategoryImages.ToString(),
+        };
+
+
         public static readonly List<string> ImageExtensions = new List<string>()
         {
             ImageFileConstants.JPEG,
@@ -47,5 +54,6 @@ namespace SCSS.Utilities.Constants
             {AccountRole.DEALER_TEXT, AccountRole.DEALER },
             {AccountRole.COLLECTOR_TEXT, AccountRole.COLLECTOR }
         };
+
     }
 }

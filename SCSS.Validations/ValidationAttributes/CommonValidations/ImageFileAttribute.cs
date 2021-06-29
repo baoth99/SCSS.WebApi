@@ -24,12 +24,15 @@ namespace SCSS.Validations.ValidationAttributes.CommonValidations
                 return new ValidationResult(InvalidFileCode.Extension);
             }
 
-            if (imageFile.Length > 500)
+            //if (imageFile.Length > 500)
+            //{
+            //    return new ValidationResult(InvalidFileCode.Size);
+            //}
+
+            if (imageFile.Name.Contains("/") || imageFile.Name.Length > 50)
             {
-                return new ValidationResult(InvalidFileCode.Size);
-
+                return new ValidationResult(InvalidFileCode.Name);
             }
-
 
             return ValidationResult.Success;
         }

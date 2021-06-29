@@ -15,5 +15,7 @@ namespace SCSS.Application.Admin.Interfaces
         Task<BaseApiResponseModel> CreateCategoryAdmin(CreateCategoryAdminModel model);
 
         Task<BaseApiResponseModel> GetCategoryAdminDetail(Guid id);
+
+        Task<BaseApiResponseModel> GetUnitList();
     }
 }

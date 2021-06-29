@@ -75,7 +75,7 @@ namespace SCSS.Application.Admin.Implementations
                                                                                                  Email = x.Email,
                                                                                                  Gender = x.Gender,
                                                                                                  IdCard = x.IdCard,
-                                                                                                 Image = x.ImageName,
+                                                                                                 Image = x.ImageUrl,
                                                                                                  Name = x.Name,
                                                                                                  Phone = x.Phone,
                                                                                                  RoleKey = y.Key,
@@ -128,5 +128,21 @@ namespace SCSS.Application.Admin.Implementations
         }
 
         #endregion
+
+        #region Get Role List
+
+        public async Task<BaseApiResponseModel> GetRoleList()
+        {
+            var data = await _roleRepository.GetAllAsNoTracking().Select(x => new RoleViewModel()
+            {
+                Key = x.Key,
+                Val = x.Name
+            }).ToListAsync();
+
+            return BaseApiResponse.OK(data);
+        }
+
+        #endregion
+
     }
 }

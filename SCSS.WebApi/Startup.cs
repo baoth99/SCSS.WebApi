@@ -102,6 +102,12 @@ namespace SCSS.WebApi
                    
             }
 
+            app.UseCors(option => option
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+            );
+
             app.UseSwaggerGenSetUp();
 
             app.UseAuthentication();

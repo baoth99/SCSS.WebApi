@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+﻿
 namespace SCSS.WebApi.SystemConstants
 {
     public class AdminCategoryApiUrlDefinition
@@ -11,6 +7,14 @@ namespace SCSS.WebApi.SystemConstants
         public const string Search = AdminCategory + "/search";
         public const string Detail = AdminCategory + "/detail";
         public const string Create = AdminCategory + "/create";
+    }
+
+    public class AdminDataApiUrlDefinition
+    {
+        public const string Data = "data";
+        public const string Unit = Data + "/units";
+        public const string Role = Data + "/roles";
+        public const string Image = Data + "/image";
     }
 }
 ;

@@ -10,7 +10,7 @@ namespace SCSS.Data.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
 
         [ForeignKey("Booking")]
         public Guid? BookingId { get; set; }

@@ -13,7 +13,7 @@ namespace SCSS.Application.Admin.Models.AdminCategoryModels
         [TextUtil(100, false)]
         public string Name { get; set; }
 
-        public Guid Unit { get; set; }
+        public Guid? Unit { get; set; }
 
         [ImageFile]
         public IFormFile Image { get; set; }

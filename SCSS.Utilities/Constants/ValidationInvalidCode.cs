@@ -10,6 +10,7 @@ namespace SCSS.Utilities.Constants
     {
         public const string Extension = "IFE0001";
         public const string Size = "IFS0002";
+        public const string Name = "IFN0003";
     }
 
     public class InvalidTextCode

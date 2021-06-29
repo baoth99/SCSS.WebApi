@@ -12,5 +12,6 @@ namespace SCSS.Utilities.Helper
         {
             return DateTime.Compare(dateTime1, dateTime2);
         }
+
     }
 }

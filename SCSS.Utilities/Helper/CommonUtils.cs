@@ -43,7 +43,7 @@ namespace SCSS.Utilities.Helper
 
         public static string GetFileName(PrefixFileName prefix, string fileNameEx)
         {
-            return $"{prefix}-{DateTime.Now.ToString(DateTimeFormat.Format01)}-{fileNameEx}";
+            return $"{prefix}-{DateTime.Now.ToString(DateTimeFormat.Format01)}-{fileNameEx.ToLower()}";
         }
     }
 }

@@ -20,6 +20,6 @@ namespace SCSS.Application.Admin.Models.AdminCategoryModels
 
         public string CreatedBy { get; set; }
 
-        public DateTime? CreatedTime { get; set; }
+        public string CreatedTime { get; set; }
     }
 }

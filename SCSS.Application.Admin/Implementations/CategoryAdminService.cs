@@ -1,4 +1,5 @@
-﻿using SCSS.Application.Admin.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SCSS.Application.Admin.Interfaces;
 using SCSS.Application.Admin.Models.AdminCategoryModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
@@ -7,6 +8,7 @@ using SCSS.Data.Entities;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
+using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using System;
@@ -72,11 +74,11 @@ namespace SCSS.Application.Admin.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> CreateCategoryAdmin(CreateCategoryAdminModel model)
         {
-            string imageName = "";
+            string imageUrl = "";
             if (model.Image != null)
             {
                 var fileName = CommonUtils.GetFileName(PrefixFileName.AdminCategory, model.Image.FileName);
-                imageName = await _storageBlobS3Service.UploadFile(model.Image, fileName, FileS3Path.AdminCategoryImages);
+                imageUrl = await _storageBlobS3Service.UploadFile(model.Image, fileName, FileS3Path.AdminCategoryImages);
             }
 
             var unit = _unitRepository.GetById(model.Unit);
@@ -90,7 +92,7 @@ namespace SCSS.Application.Admin.Implementations
             {
                 Name = model.Name,
                 UnitId = model.Unit,
-                ImageName = imageName,
+                ImageUrl = imageUrl,
                 Description = model.Description
             };
 
@@ -103,8 +105,13 @@ namespace SCSS.Application.Admin.Implementations
 
         #endregion
 
-        #region Get Category Admin
+        #region Get Category Admin Detail
 
+        /// <summary>
+        /// Gets the category admin detail.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         public async Task<BaseApiResponseModel> GetCategoryAdminDetail(Guid id)
         {
             if (!_categoryAdminRepository.IsExisted(x => x.Id.Equals(id)))
@@ -112,30 +119,25 @@ namespace SCSS.Application.Admin.Implementations
                 return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
             }
 
-            var data = _categoryAdminRepository.GetManyAsNoTracking(x => x.Id.Equals(id)).Join(_accountRepository.GetAllAsNoTracking(),
+            var data = await _categoryAdminRepository.GetManyAsNoTracking(x => x.Id.Equals(id)).Join(_accountRepository.GetAllAsNoTracking(),
                                                                         x => x.CreatedBy, y => y.Id, (x, y) => new
                                                                         {
                                                                             CategoryAdminId = x.Id,
                                                                             CategoryName = x.Name,
                                                                             x.Description,
-                                                                            x.ImageName,
+                                                                            x.ImageUrl,
                                                                             CreatedBy =  y.Name,
                                                                             x.CreatedTime,
                                                                             x.UnitId
-                                                                        }).FirstOrDefault();
-            string image = "";
-            if (!ValidatorUtil.IsBlank(data.ImageName))
-            {
-                var imageBase64 = await _storageBlobS3Service.GetFile(data.ImageName, FileS3Path.AdminCategoryImages);
-                image = imageBase64.Base64;
-            }
+                                                                        }).FirstOrDefaultAsync();
+
 
             var dataResult = new CategoryAdminViewDetailModel()
             {
                 Id = data.CategoryAdminId,
-                Image = image,
+                Image = data.ImageUrl,
                 CreatedBy = data.CreatedBy,
-                CreatedTime = data.CreatedTime,
+                CreatedTime = data.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
                 Description = data.Description,
                 Name = data.CategoryName,
                 UnitId = data.UnitId
@@ -151,5 +153,25 @@ namespace SCSS.Application.Admin.Implementations
             Console.WriteLine(UserAuthSession.UserSession.Id);
             return BaseApiResponse.OK();
         }
+
+
+        #region Get Unit List
+
+        /// <summary>
+        /// Gets the unit list.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> GetUnitList()
+        {
+            var data = await _unitRepository.GetAllAsNoTracking().Select(x => new UnitViewModel()
+            {
+                Key = x.Id,
+                Val = x.Acronym
+            }).ToListAsync();
+
+            return BaseApiResponse.OK(data);
+        }
+
+        #endregion
     }
 }

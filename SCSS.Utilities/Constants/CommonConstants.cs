@@ -15,11 +15,13 @@ namespace SCSS.Utilities.Constants
     public class DateTimeFormat
     {
         public const string Format01 = "MM-dd-yyyy-hh:mm:tt";
+        public const string DD_MM_yyyy_time = "dd/MM/yyyy hh:mm tt";
     }
 
     public class CommonConstants
     {
         public const string ContentType = "Content-Type";
+        public const string Null = "N/A";
     }
 
     public class ImageFileConstants

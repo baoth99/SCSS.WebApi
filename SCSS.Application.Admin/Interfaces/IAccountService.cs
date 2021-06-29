@@ -13,5 +13,7 @@ namespace SCSS.Application.Admin.Interfaces
 
         Task<BaseApiResponseModel> ChangeStatus(Guid Id, int? Status);
 
+        Task<BaseApiResponseModel> GetRoleList();
+
     }
 }

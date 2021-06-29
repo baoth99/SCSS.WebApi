@@ -14,7 +14,7 @@ namespace SCSS.Validations.InvalidResponseModels
         public ValidationFailResultModel(ModelStateDictionary modelState)
         {
             IsSuccess = BooleanConstants.FALSE;
-            StatusCode = HttpStatusCodes.Ok;
+            StatusCode = HttpStatusCodes.BadRequest;
             MessageCode = SystemMessageCode.DataInvalid;
             MessageDetail = "Validation Failed";
             Data = modelState.Keys
