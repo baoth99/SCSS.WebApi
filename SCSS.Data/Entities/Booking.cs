@@ -12,6 +12,9 @@ namespace SCSS.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
+        [MaxLength(50)]
+        public string BookingCode { get; set; }
+
         public DateTime? BookingDate { get; set; }
 
         public TimeSpan? TimeFrom { get; set; }
