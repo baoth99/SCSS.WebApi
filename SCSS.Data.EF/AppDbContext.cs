@@ -76,7 +76,7 @@ namespace SCSS.Data.EF
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=scss-database.cehfzxl85v4h.ap-southeast-1.rds.amazonaws.com;Initial Catalog=SCSS.DB-DEV;User ID=admin;Password=scsspassword123", builder =>
+                optionsBuilder.UseSqlServer(AppSettingValues.SqlConnectionString, builder =>
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 });
