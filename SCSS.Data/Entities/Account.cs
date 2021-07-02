@@ -29,10 +29,6 @@ namespace SCSS.Data.Entities
         [MaxLength(256)]
         public string Address { get; set; }
 
-        public decimal? Latitude { get; set; }
-
-        public decimal? Longitude { get; set; }
-
         public DateTime? BirthDate { get; set; }
 
         public string ImageUrl { get; set; }

@@ -11,6 +11,14 @@ namespace SCSS.Utilities.Helper
 {
     public class CommonUtils
     {
+
+        public static Guid? CheckGuid(string guidString)
+        {
+            var isValid = Guid.TryParse(guidString, out Guid val);
+
+            return isValid? val : Guid.Empty;
+        }
+
         public static Dictionary<string, string> ObjToDictionary<T>(T obj) where T : class
         {
             var data = obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)

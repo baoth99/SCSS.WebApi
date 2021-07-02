@@ -76,7 +76,7 @@ namespace SCSS.Data.EF
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(AppSettingValues.SqlConnectionString, builder =>
+                optionsBuilder.UseSqlServer("Data Source=scss-database.cehfzxl85v4h.ap-southeast-1.rds.amazonaws.com;Initial Catalog=SCSS.DB-DEV;User ID=admin;Password=scsspassword123", builder =>
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 });
@@ -96,8 +96,6 @@ namespace SCSS.Data.EF
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.HasIndex(e => e.Phone).IsUnique();
-                entity.Property(e => e.Latitude).HasColumnType("decimal(8,6)");
-                entity.Property(e => e.Longitude).HasColumnType("decimal(9,6)");
             });
 
             modelBuilder.Entity<AccountCategory>(entity =>

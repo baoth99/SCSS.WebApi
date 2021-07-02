@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SCSS.Data.Entities
 {
     [Table("TransactionAwardAmount")]
-    public class TransactionAwardAmount : BaseEntity, IHasSoftDelete
+    public class TransactionAwardAmount : IHasSoftDelete
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,5 +18,9 @@ namespace SCSS.Data.Entities
         public float? Amount { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public DateTime? CreatedTime { get; set; }
+
+        public Guid? CreatedBy { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SCSS.Data.Entities
 {
     [Table("TransactionServiceFeePercent")]
-    public class TransactionServiceFeePercent : BaseEntity, IHasSoftDelete
+    public class TransactionServiceFeePercent : IHasSoftDelete
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,5 +17,9 @@ namespace SCSS.Data.Entities
         public float? Percent { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public DateTime? CreatedTime { get; set; }
+
+        public Guid? CreatedBy { get; set; }
     }
 }

@@ -7,6 +7,8 @@ namespace SCSS.WebApi.SystemConstants
         public const string Search = AdminCategory + "/search";
         public const string Detail = AdminCategory + "/detail";
         public const string Create = AdminCategory + "/create";
+        public const string Edit = AdminCategory + "/edit";
+        public const string Remove = AdminCategory + "/remove";
     }
 
     public class AdminDataApiUrlDefinition

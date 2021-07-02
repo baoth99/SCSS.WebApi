@@ -34,7 +34,7 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #endregion
 
-        #region Seach AdminCategory
+        #region Seach Category Admin
 
         /// <summary>
         /// Searches the specified model.
@@ -74,8 +74,7 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #endregion
 
-
-        #region Create Admin Category
+        #region Create Category Admin 
 
         /// <summary>
         /// Creates the specified model.
@@ -95,6 +94,44 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #endregion
 
+        #region Edit Category Admin
 
+        /// <summary>
+        /// Edits the specified model.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminCategoryApiUrlDefinition.Edit)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> Edit([FromForm] CategoryAdminEditModel model)
+        {
+            return await _categoryAdminService.EditCategoryAdmin(model);
+        }
+
+        #endregion
+
+        #region Remove Category Admin
+
+        /// <summary>
+        /// Removes the specified model.
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminCategoryApiUrlDefinition.Remove)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> Remove([FromQuery] Guid Id)
+        {
+            return await _categoryAdminService.RemoveCategoryAdmin(Id);
+        }
+
+        #endregion
     }
 }

@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -64,7 +65,6 @@ namespace SCSS.Application.Admin.Implementations
 
         #endregion
 
-
         #region Create AdminCategory
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace SCSS.Application.Admin.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> CreateCategoryAdmin(CreateCategoryAdminModel model)
         {
-            string imageUrl = "";
+            string imageUrl = string.Empty;
             if (model.Image != null)
             {
                 var fileName = CommonUtils.GetFileName(PrefixFileName.AdminCategory, model.Image.FileName);
@@ -148,12 +148,116 @@ namespace SCSS.Application.Admin.Implementations
 
         #endregion
 
-        public async Task<BaseApiResponseModel> SearchCategoryAdmin(SearchCategoryAdminModel model)
+        #region Remove Admin Category
+
+        public async Task<BaseApiResponseModel> RemoveCategoryAdmin(Guid id)
         {
-            Console.WriteLine(UserAuthSession.UserSession.Id);
+            if (_categoryAdminRepository.IsExisted(x => x.Id.Equals(id)))
+            {
+                return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
+            }
+
+            _categoryAdminRepository.RemoveById(id);
+
+            await UnitOfWork.CommitAsync();
+
             return BaseApiResponse.OK();
         }
 
+
+        #endregion
+
+        #region Search Category Admin
+
+        /// <summary>
+        /// Searches the category admin.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> SearchCategoryAdmin(SearchCategoryAdminModel model)
+        {
+            if (model == null)
+            {
+                return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
+            }
+
+            var UnitId = CommonUtils.CheckGuid(model.Unit);
+
+
+            var dataQuery = _categoryAdminRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.Name) || x.Name.Contains(model.Name)) &&
+                                                                              (ValidatorUtil.IsBlank(model.Description) || x.Description.Contains(model.Description)))
+                                                                                .Join(_unitRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(UnitId) || x.Id.Equals(UnitId))),
+                                                                                    x => x.UnitId, y => y.Id, (x, y) => new
+                                                                                    {
+                                                                                        CategoryAdminId = x.Id,
+                                                                                        SCName = x.Name,
+                                                                                        UnitName = y.Name,
+                                                                                        CreatedTime = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
+                                                                                        x.CreatedBy
+                                                                                    }).Join(_accountRepository.GetAllAsNoTracking(), x => x.CreatedBy, y => y.Id,
+                                                                                        (x, y) => new
+                                                                                        {
+                                                                                            Id = x.CategoryAdminId,
+                                                                                            Name = x.SCName,
+                                                                                            Unit = x.UnitName,
+                                                                                            CreatedTime = x.CreatedTime,
+                                                                                            CreatedBy = y.Name
+                                                                                        }).OrderBy("Name");
+
+            var totalRecord = await dataQuery.CountAsync();
+
+            var dataRes = dataQuery.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize).Select(x => new CategoryAdminViewModel()
+            {
+                Id= x.Id,
+                Name = x.Name,
+                Unit = x.Unit,
+                CreatedBy = x.CreatedBy,
+                CreatedTime = x.CreatedTime
+            }).ToList();
+
+            return BaseApiResponse.OK(resData: dataRes, totalRecord: totalRecord);
+        }
+
+        #endregion
+
+        #region Edit Category Admin
+
+        /// <summary>
+        /// Edits the category admin.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> EditCategoryAdmin(CategoryAdminEditModel model)
+        {
+            if (model == null)
+            {
+                return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
+            }
+
+            var categoryAdmin = _categoryAdminRepository.GetById(model.Id);
+
+            if (categoryAdmin == null)
+            {
+                return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
+            }           
+
+            categoryAdmin.Name = model.Name;
+            categoryAdmin.Description = model.Description;
+            categoryAdmin.UnitId = CommonUtils.CheckGuid(model.Unit);
+
+            if (model.ImageFile != null)
+            {
+                var fileName = CommonUtils.GetFileName(PrefixFileName.AdminCategory, model.ImageFile.FileName);
+                string imageUrl = await _storageBlobS3Service.UploadFile(model.ImageFile, fileName, FileS3Path.AdminCategoryImages);
+                categoryAdmin.ImageUrl = imageUrl;
+            }
+
+            _categoryAdminRepository.Update(categoryAdmin);
+            await UnitOfWork.CommitAsync();
+            return BaseApiResponse.OK();
+        }
+
+        #endregion
 
         #region Get Unit List
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SCSS.Data.Entities
 {
     [Table("CollectDealTransactionPromotion")]
-    public class CollectDealTransactionPromotion : BaseEntity, IHasSoftDelete
+    public class CollectDealTransactionPromotion : IHasSoftDelete
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
