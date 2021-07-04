@@ -53,16 +53,20 @@ namespace SCSS.AWSService.Implementations
             var response = await _amazonS3.GetObjectAsync(request);
 
             var stream = response.ResponseStream;
+            var base64 = stream.ToBase64();
+
 
             return new FileViewModel()
             {
                 Extension = Path.GetExtension(fileName),
-                Base64 = stream.ToBase64()
+                Base64 = base64
             };
         }
 
+
         public async Task<BaseApiResponseModel> GetImage(string filepath)
         {
+            
             var path = filepath.Split("/")[0];
 
             if (!CollectionConstants.FileS3PathCollection.Contains(path))
@@ -85,11 +89,11 @@ namespace SCSS.AWSService.Implementations
             var response = await _amazonS3.GetObjectAsync(request);
 
             var stream = response.ResponseStream;
-
+            var base64 = stream.ToBase64();
             var fileResponse = new FileViewModel()
             {
-                Extension = Path.GetExtension(filepath).ToLower(),
-                Base64 = stream.ToBase64()
+                Extension = Path.GetExtension(filepath).ToLower().Substring(1),
+                Base64 = base64
             };
 
             return BaseApiResponse.OK(fileResponse);
