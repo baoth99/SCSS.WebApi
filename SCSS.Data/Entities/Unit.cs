@@ -15,9 +15,6 @@ namespace SCSS.Data.Entities
         [MaxLength(20)]
         public string Name { get; set; }
 
-        [MaxLength(20)]
-        public string Acronym { get; set; }
-
         public bool IsDeleted { get; set; }
     }
 }

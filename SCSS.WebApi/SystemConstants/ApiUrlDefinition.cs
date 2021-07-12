@@ -11,6 +11,15 @@ namespace SCSS.WebApi.SystemConstants
         public const string Remove = AdminCategory + "/remove";
     }
 
+    public class UnitApiUrlDefinition
+    {
+        public const string Unit = "unit";
+        public const string Search = Unit + "/search";
+        public const string Create = Unit + "/create";
+        public const string Edit = Unit + "/edit";
+        public const string Remove = Unit + "/remove";
+    }
+
     public class AdminDataApiUrlDefinition
     {
         public const string Data = "data";

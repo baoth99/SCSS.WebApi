@@ -20,7 +20,7 @@ namespace SCSS.Utilities.Helper
 
         public static bool IsBlank(Guid? guid)
         {
-            return guid == null || guid == Guid.Empty;
+            return guid == Guid.Empty;
         }
 
         public static bool IsOfType<T>(object value)

@@ -152,7 +152,7 @@ namespace SCSS.Application.Admin.Implementations
 
         public async Task<BaseApiResponseModel> RemoveCategoryAdmin(Guid id)
         {
-            if (_categoryAdminRepository.IsExisted(x => x.Id.Equals(id)))
+            if (!_categoryAdminRepository.IsExisted(x => x.Id.Equals(id)))
             {
                 return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
             }
@@ -163,7 +163,6 @@ namespace SCSS.Application.Admin.Implementations
 
             return BaseApiResponse.OK();
         }
-
 
         #endregion
 
@@ -192,7 +191,7 @@ namespace SCSS.Application.Admin.Implementations
                                                                                         CategoryAdminId = x.Id,
                                                                                         SCName = x.Name,
                                                                                         UnitName = y.Name,
-                                                                                        CreatedTime = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
+                                                                                        CreatedTime = x.CreatedTime,
                                                                                         x.CreatedBy
                                                                                     }).Join(_accountRepository.GetAllAsNoTracking(), x => x.CreatedBy, y => y.Id,
                                                                                         (x, y) => new
@@ -202,7 +201,7 @@ namespace SCSS.Application.Admin.Implementations
                                                                                             Unit = x.UnitName,
                                                                                             CreatedTime = x.CreatedTime,
                                                                                             CreatedBy = y.Name
-                                                                                        }).OrderBy("Name");
+                                                                                        }).OrderBy("CreatedTime DESC");
 
             var totalRecord = await dataQuery.CountAsync();
 
@@ -212,7 +211,7 @@ namespace SCSS.Application.Admin.Implementations
                 Name = x.Name,
                 Unit = x.Unit,
                 CreatedBy = x.CreatedBy,
-                CreatedTime = x.CreatedTime
+                CreatedTime = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time)
             }).ToList();
 
             return BaseApiResponse.OK(resData: dataRes, totalRecord: totalRecord);
@@ -239,11 +238,21 @@ namespace SCSS.Application.Admin.Implementations
             if (categoryAdmin == null)
             {
                 return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
-            }           
+            }
+
+            if (!_unitRepository.IsExisted(x => x.Id.Equals(CommonUtils.CheckGuid(model.Unit))))
+            {
+                return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
+            }
 
             categoryAdmin.Name = model.Name;
             categoryAdmin.Description = model.Description;
             categoryAdmin.UnitId = CommonUtils.CheckGuid(model.Unit);
+
+            if (model.IsDeleteImg)
+            {
+                categoryAdmin.ImageUrl = string.Empty;
+            }
 
             if (model.ImageFile != null)
             {
@@ -251,7 +260,7 @@ namespace SCSS.Application.Admin.Implementations
                 string imageUrl = await _storageBlobS3Service.UploadFile(model.ImageFile, fileName, FileS3Path.AdminCategoryImages);
                 categoryAdmin.ImageUrl = imageUrl;
             }
-
+            
             _categoryAdminRepository.Update(categoryAdmin);
             await UnitOfWork.CommitAsync();
             return BaseApiResponse.OK();
@@ -267,10 +276,10 @@ namespace SCSS.Application.Admin.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> GetUnitList()
         {
-            var data = await _unitRepository.GetAllAsNoTracking().Select(x => new UnitViewModel()
+            var data = await _unitRepository.GetAllAsNoTracking().Select(x => new UnitListViewModel()
             {
                 Key = x.Id,
-                Val = x.Acronym
+                Val = x.Name
             }).ToListAsync();
 
             return BaseApiResponse.OK(data);

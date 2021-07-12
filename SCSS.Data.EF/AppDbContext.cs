@@ -231,9 +231,7 @@ namespace SCSS.Data.EF
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.State = EntityState.Added;
                         entry.CurrentValues["IsDeleted"] = BooleanConstants.FALSE;
-                        entry.CurrentValues["IsLocked"] = BooleanConstants.FALSE;
                         entry.CurrentValues["CreatedTime"] = DateTime.Now;
                         entry.CurrentValues["CreatedBy"] = AuthSessionGlobalVariable.UserSession.Id;
                         break;

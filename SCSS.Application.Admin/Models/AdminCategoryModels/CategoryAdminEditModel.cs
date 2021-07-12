@@ -20,5 +20,7 @@ namespace SCSS.Application.Admin.Models.AdminCategoryModels
 
         [ImageFile]
         public IFormFile ImageFile { get; set; }
+
+        public bool IsDeleteImg { get; set; }
     }
 }

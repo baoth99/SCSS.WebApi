@@ -31,6 +31,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<IStorageBlobS3Service, StorageBlobS3Service>();
             services.AddScoped<ICategoryAdminService, CategoryAdminService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUnitService, UnitService>();
         }
     }
 }
