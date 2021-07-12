@@ -47,7 +47,7 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(AdminCategoryApiUrlDefinition.Search)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> Search([FromQuery] SearchCategoryAdminModel model)
+        public async Task<BaseApiResponseModel> SearchCategoryAdmins([FromQuery] SearchCategoryAdminModel model)
         {
             return await _categoryAdminService.SearchCategoryAdmin(model);
         }
@@ -87,7 +87,7 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(AdminCategoryApiUrlDefinition.Create)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> Create([FromForm] CreateCategoryAdminModel model)
+        public async Task<BaseApiResponseModel> CreateCategoryAdmin([FromForm] CreateCategoryAdminModel model)
         {
             return await _categoryAdminService.CreateCategoryAdmin(model);
         }
@@ -107,7 +107,7 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(AdminCategoryApiUrlDefinition.Edit)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> Edit([FromForm] CategoryAdminEditModel model)
+        public async Task<BaseApiResponseModel> EditCategoryAdmin([FromForm] CategoryAdminEditModel model)
         {
             return await _categoryAdminService.EditCategoryAdmin(model);
         }
@@ -127,7 +127,7 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(AdminCategoryApiUrlDefinition.Remove)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> Remove([FromQuery] Guid Id)
+        public async Task<BaseApiResponseModel> RemoveCategoryAdmin([FromQuery] Guid Id)
         {
             return await _categoryAdminService.RemoveCategoryAdmin(Id);
         }

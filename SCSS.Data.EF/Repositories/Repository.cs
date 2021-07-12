@@ -30,6 +30,10 @@ namespace SCSS.Data.EF.Repositories
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Repository{T}"/> class.
+        /// </summary>
+        /// <param name="context">The context.</param>
         public Repository(AppDbContext context)
         {
             DbSet = context.Set<T>();
