@@ -6,6 +6,10 @@ pipeline {
         git 'Default'
     }
 
+    // withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'aws-key', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+    //     AWS("--region=eu-west-1 s3 ls")
+    // }
+
     stages {
         stage('Clean Workspace') {
             steps {
@@ -37,6 +41,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploy'  
+                sh 'aws s3 ls'
                 bat 'dotnet publish "SCSS.WebApi\\SCSS.WebApi.csproj" -c Release -o /SCSS.WebApi/publish'
             }
         }
