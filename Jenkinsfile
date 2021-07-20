@@ -1,5 +1,7 @@
 pipeline {
-    agent any 
+    agent {
+        node
+    } 
 
     stages {
         stage('Clean Workspace') {
@@ -10,7 +12,6 @@ pipeline {
         stage('Build') {
             steps {
                echo 'Build'    
-               sh 'dotnet restore SCSS.WebApi.sln'
             }
         }
         stage('Test') {
