@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        asp.net5
+    }
 
     stages {
         stage('Clean workspace') {
