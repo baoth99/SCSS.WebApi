@@ -1,9 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        dotnet = 'path\\to\\dotnet.exe'
-    }
     stages {
         stage('Clean Workspace') {
             steps {
@@ -13,7 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                echo 'Build'    
-               sh 'dotnet restore SCSS.WebApi.sln'
+               bat 'dotnetClean project: 'SCSS.WebApi', sdk: 'asp.net5''
             }
         }
         stage('Test') {
