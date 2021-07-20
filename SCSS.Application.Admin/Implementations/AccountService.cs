@@ -97,16 +97,16 @@ namespace SCSS.Application.Admin.Implementations
         /// <param name="Id">The identifier.</param>
         /// <param name="Status">The status.</param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> ChangeStatus(Guid Id, int? Status)
+        public async Task<BaseApiResponseModel> ChangeStatus(AccountStatusRequestModel model)
         {
-            if (!_accountRepository.IsExisted(x => x.Id.Equals(Id)))
+            if (!_accountRepository.IsExisted(x => x.Id.Equals(model.Id)))
             {
                 return BaseApiResponse.NotFound();
             }
             var dictionary = new Dictionary<string, string>()
             {
-                {"id", Id.ToString() },
-                {"status", Status.ToString() }
+                {"id", model.Id.ToString() },
+                {"status", model.Status.ToString() }
             };
 
             var res = await HttpClientHelper.IDHttpClientPost(IdentityServer4Route.ChangStatus,UserAuthSession.UserSession.ClientId, dictionary);
@@ -116,8 +116,8 @@ namespace SCSS.Application.Admin.Implementations
                 return BaseApiResponse.Error(SystemMessageCode.OtherException);
             }
 
-            var account = _accountRepository.GetById(Id);
-            account.Status = Status;
+            var account = _accountRepository.GetById(model.Id);
+            account.Status = model.Status;
 
             _accountRepository.Update(account);
 

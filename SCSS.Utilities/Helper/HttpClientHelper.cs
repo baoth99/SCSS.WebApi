@@ -15,10 +15,15 @@ namespace SCSS.Utilities.Helper
     {
         public static HttpClient GetHttpClient(string clientId)
         {
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
             var httpClient = new HttpClient();
 
             httpClient.DefaultRequestHeaders.Add(IdentityServer4Constant.ClientId, clientId);
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(ApplicationRestfulApi.ApplicationProduce));
+
+
 
             return httpClient;
         }

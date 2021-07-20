@@ -1,6 +1,7 @@
 ﻿
 namespace SCSS.WebApi.SystemConstants
 {
+
     public class AdminCategoryApiUrlDefinition
     {
         public const string AdminCategory = "admin-category";
@@ -11,6 +12,11 @@ namespace SCSS.WebApi.SystemConstants
         public const string Remove = AdminCategory + "/remove";
     }
 
+    public class AccountApiUrlDefinition
+    {
+        public const string Account = "account";
+        public const string ChangeStatus = Account + "/change-status";
+    }
     public class UnitApiUrlDefinition
     {
         public const string Unit = "unit";

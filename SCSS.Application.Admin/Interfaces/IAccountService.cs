@@ -1,4 +1,5 @@
-﻿using SCSS.Utilities.ResponseModel;
+﻿using SCSS.Application.Admin.Models.AccountModels;
+using SCSS.Utilities.ResponseModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace SCSS.Application.Admin.Interfaces
     {
         Task<BaseApiResponseModel> GetAccountDetail(Guid Id);
 
-        Task<BaseApiResponseModel> ChangeStatus(Guid Id, int? Status);
+        Task<BaseApiResponseModel> ChangeStatus(AccountStatusRequestModel model);
 
         Task<BaseApiResponseModel> GetRoleList();
 

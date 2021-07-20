@@ -33,6 +33,8 @@ namespace SCSS.Data.Entities
         [ForeignKey("Account")]
         public Guid? CollectorAccountId { get; set; }
 
+        public string Note { get; set; }
+
         public string CancelReason { get; set; }
 
         public int? Status { get; set; }

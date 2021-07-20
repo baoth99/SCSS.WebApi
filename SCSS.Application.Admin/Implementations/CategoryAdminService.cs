@@ -185,15 +185,22 @@ namespace SCSS.Application.Admin.Implementations
 
             var dataQuery = _categoryAdminRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.Name) || x.Name.Contains(model.Name)) &&
                                                                               (ValidatorUtil.IsBlank(model.Description) || x.Description.Contains(model.Description)))
-                                                                                .Join(_unitRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(UnitId) || x.Id.Equals(UnitId))),
+                                                                                .GroupJoin(_unitRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(UnitId) || x.Id.Equals(UnitId))),
                                                                                     x => x.UnitId, y => y.Id, (x, y) => new
                                                                                     {
                                                                                         CategoryAdminId = x.Id,
                                                                                         SCName = x.Name,
-                                                                                        UnitName = y.Name,
+                                                                                        Unit = y,
                                                                                         CreatedTime = x.CreatedTime,
                                                                                         x.CreatedBy
-                                                                                    }).Join(_accountRepository.GetAllAsNoTracking(), x => x.CreatedBy, y => y.Id,
+                                                                                    }).SelectMany(x => x.Unit.DefaultIfEmpty(), (x, y) => new
+                                                                                    {
+                                                                                        x.CategoryAdminId,
+                                                                                        x.SCName,
+                                                                                        UnitName = y.Name,
+                                                                                        x.CreatedTime,
+                                                                                        x.CreatedBy
+                                                                                    }).Join(_accountRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.CreatedBy) || x.Name.Contains(model.CreatedBy))), x => x.CreatedBy, y => y.Id,
                                                                                         (x, y) => new
                                                                                         {
                                                                                             Id = x.CategoryAdminId,
@@ -202,6 +209,9 @@ namespace SCSS.Application.Admin.Implementations
                                                                                             CreatedTime = x.CreatedTime,
                                                                                             CreatedBy = y.Name
                                                                                         }).OrderBy("CreatedTime DESC");
+
+
+
 
             var totalRecord = await dataQuery.CountAsync();
 

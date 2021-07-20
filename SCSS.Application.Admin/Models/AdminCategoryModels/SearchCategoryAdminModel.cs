@@ -12,6 +12,8 @@ namespace SCSS.Application.Admin.Models.AdminCategoryModels
 
         public string Unit { get; set; }
 
+        public string CreatedBy { get; set; }
+
         public string Description { get; set; }
 
     }

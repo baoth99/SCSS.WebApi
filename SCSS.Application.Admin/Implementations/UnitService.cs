@@ -104,7 +104,7 @@ namespace SCSS.Application.Admin.Implementations
         {
 
             var dataQuery = _unitRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.Name) || x.Name.Contains(model.Name)))
-                                       .Join(_accountRepository.GetAllAsNoTracking(), x => x.CreatedBy, y => y.Id, (x, y) => new
+                                       .Join(_accountRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.CreatedBy) || x.Name.Contains(model.CreatedBy))), x => x.CreatedBy, y => y.Id, (x, y) => new
                                        {
                                            Id = x.Id,
                                            Name = x.Name,

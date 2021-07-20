@@ -12,6 +12,7 @@ using SCSS.WebApi.SystemConfigurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace SCSS.WebApi
@@ -41,6 +42,10 @@ namespace SCSS.WebApi
             AppFileHelper.ContentRootPath = Environment.ContentRootPath;
 
             #endregion
+
+            //ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, errors) => {
+            //    return true;
+            //};
 
             #region Authentication Policy
 

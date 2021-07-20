@@ -17,6 +17,8 @@ namespace SCSS.Utilities.Constants
     {
         public const string Empty = "ET0001";
         public const string MaxLength = "ET0001";
-
+        public const string AccountStatus = "ACCS001";
     }
+
+
 }

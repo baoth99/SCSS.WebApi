@@ -9,5 +9,7 @@ namespace SCSS.Application.Admin.Models.UnitModels
     public class SearchUnitModel : BaseFilterModel
     {
         public string Name { get; set; }
+
+        public string CreatedBy { get; set; }
     }
 }

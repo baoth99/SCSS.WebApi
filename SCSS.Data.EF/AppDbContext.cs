@@ -68,6 +68,8 @@ namespace SCSS.Data.EF
 
         public DbSet<TransactionAwardAmount> TransactionAwardAmount { get; set; }
 
+        public DbSet<BookingRejection> BookingRejection { get; set; }
+
         #endregion
 
         #region OnConfiguring
@@ -200,6 +202,12 @@ namespace SCSS.Data.EF
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
             });
+
+            modelBuilder.Entity<BookingRejection>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+            });
+
             #endregion
 
 
@@ -231,7 +239,6 @@ namespace SCSS.Data.EF
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.CurrentValues["IsDeleted"] = BooleanConstants.FALSE;
                         entry.CurrentValues["CreatedTime"] = DateTime.Now;
                         entry.CurrentValues["CreatedBy"] = AuthSessionGlobalVariable.UserSession.Id;
                         break;
