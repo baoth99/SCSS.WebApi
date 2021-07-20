@@ -4,8 +4,12 @@ pipeline {
     stages {
         stage('Clean') {
             steps {
-                echo 'Helllo'
-                echo 'sadsada'
+              cleanWs()    
+            }
+        }
+        stage('Restore packages') {
+            steps {
+                dotnetRestore project: 'SCSS.WebApi', sdk: 'asp.net5'           
             }
         }
     }
