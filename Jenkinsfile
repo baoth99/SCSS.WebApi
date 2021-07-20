@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    tools {
+        dotnetsdk 'asp.net5'
+        git 'Default'
+    }
+
     stages {
         stage('Clean Workspace') {
             steps {
@@ -14,13 +19,14 @@ pipeline {
         }
         stage('Restore packages') {
             steps {
-               dotnetRestore project: 'SCSS.WebApi', sdk: 'asp.net5' 
+               dotnet restore "SCSS.WebApi.csproj"
             }
         }
         stage('Build') {
             steps {
                echo 'Build'    
-               dotnetClean project: 'SCSS.WebApi', sdk: 'asp.net5'
+               dotnet clean "SCSS.WebApi"
+               dotnet build "SCSS.WebApi.csproj" -c Release -o /SCSS.WebApi/build
             }
         }
         stage('Test') {
