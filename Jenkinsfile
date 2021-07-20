@@ -9,7 +9,7 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = "ap-southeast-1"
-        //THE_BUTLER_SAYS_SO=credentials('fda170f9-93f6-4b08-9099-f3abc7a26f18')
+        THE_BUTLER_SAYS_SO=credentials('fda170f9-93f6-4b08-9099-f3abc7a26f18')
     }
 
     stages {
@@ -44,9 +44,10 @@ pipeline {
             steps {
                 echo 'Deploy'  
                 bat 'dotnet publish "SCSS.WebApi\\SCSS.WebApi.csproj" -c Release -o /SCSS.WebApi/publish'
-                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'fda170f9-93f6-4b08-9099-f3abc7a26f18', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh 'aws --version'
-                }
+                sh 'aws --version'
+                // withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'fda170f9-93f6-4b08-9099-f3abc7a26f18', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                //     sh 'aws --version'
+                // }
             }
         }
     }
