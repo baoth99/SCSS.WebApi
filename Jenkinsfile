@@ -7,9 +7,19 @@ pipeline {
               cleanWs()    
             }
         }
-        stage('Restore packages') {
+        stage('Build') {
             steps {
-                sh 'dotnet restore SCSS.WebApi.sln'         
+               echo 'Build'    
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Test'    
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploy'    
             }
         }
     }
