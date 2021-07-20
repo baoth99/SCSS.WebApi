@@ -19,14 +19,14 @@ pipeline {
         }
         stage('Restore packages') {
             steps {
-               dotnet restore "SCSS.WebApi.csproj"
+               bat 'dotnet restore "SCSS.WebApi.csproj"'
             }
         }
         stage('Build') {
             steps {
                echo 'Build'    
-               dotnet clean "SCSS.WebApi"
-               dotnet build "SCSS.WebApi.csproj" -c Release -o /SCSS.WebApi/build
+               bat 'dotnet clean "SCSS.WebApi"'               
+               bat 'dotnet build "SCSS.WebApi.csproj" -c Release -o /SCSS.WebApi/build'
             }
         }
         stage('Test') {
