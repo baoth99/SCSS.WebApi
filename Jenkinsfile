@@ -1,8 +1,4 @@
-pipeline {
-    agent {
-        asp.net5
-    }
-
+node {
     stages {
         stage('Clean workspace') {
             steps {
@@ -15,9 +11,7 @@ pipeline {
             }
         }
         stage('Restore packages') {
-            steps {
-                bat "dotnetRestore project: 'SCSS.WebApi', sdk: 'asp.net5'"
-            }
+            dotnetRestore project: 'SCSS.WebApi', sdk: 'asp.net5'           
         }
         // stage('Clean') {
         //     steps {
