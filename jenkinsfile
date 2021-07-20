@@ -5,6 +5,7 @@ pipeline {
         stage('Clean') {
             steps {
                 echo 'Helllo'
+                echo 'sadsada'
             }
         }
     }
