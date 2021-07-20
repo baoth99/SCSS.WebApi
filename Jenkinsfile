@@ -37,9 +37,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploy'  
-                bat 'aws s3 ls'  
                 bat 'dotnet publish "SCSS.WebApi\\SCSS.WebApi.csproj" -c Release -o /SCSS.WebApi/publish'
-
             }
         }
     }
