@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Restore packages') {
             steps {
-                sh 'dotnetRestore project: 'SCSS.WebApi', sdk: 'asp.net5''         
+                sh 'dotnet restore SCSS.WebApi.sln'         
             }
         }
     }
