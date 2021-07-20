@@ -1,5 +1,5 @@
 node {
-    stages {
+
         stage('Clean workspace') {
             steps {
                 cleanWs()
@@ -18,5 +18,5 @@ node {
         //         bat "msbuild.exe SCSS.WebApi.sln" /nologo /nr:false /p:platform=\"x64\" /p:configuration=\"release\" /t:clean"
         //     }
         // }
-    }
+    
 }
