@@ -9,7 +9,7 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = "ap-southeast-1"
-        THE_BUTLER_SAYS_SO=credentials('fda170f9-93f6-4b08-9099-f3abc7a26f18')
+        //THE_BUTLER_SAYS_SO=credentials('fda170f9-93f6-4b08-9099-f3abc7a26f18')
     }
 
     stages {
