@@ -10,7 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                echo 'Build'    
-               bat 'dotnetClean project: 'SCSS.WebApi', sdk: 'asp.net5''
+               dotnetClean project: 'SCSS.WebApi', sdk: 'asp.net5'
             }
         }
         stage('Test') {
