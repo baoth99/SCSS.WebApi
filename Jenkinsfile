@@ -14,15 +14,5 @@ pipeline {
                 }
             }
         }
-        stage('Restore packages') {
-            steps {
-                bat "dotnet restore SCSS.WebApi.sln"
-            }
-        }
-        stage('Clean') {
-            steps {
-                bat "msbuild.exe SCSS.WebApi.sln" /nologo /nr:false /p:platform=\"x64\" /p:configuration=\"release\" /t:clean"
-            }
-        }
     }
 }
