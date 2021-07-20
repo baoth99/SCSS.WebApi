@@ -2,7 +2,7 @@ pipeline {
     agent any 
 
     stages {
-        stage('Clean') {
+        stage('Clean Workspace') {
             steps {
               cleanWs()    
             }
@@ -10,6 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                echo 'Build'    
+               dotnetClean project: 'SCSS.WebApi', sdk: 'asp.net5'
             }
         }
         stage('Test') {
