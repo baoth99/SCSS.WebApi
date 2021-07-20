@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-    enviroment {
+    environment {
         dotnet = 'path\\to\\dotnet.exe'
     }
     stages {
