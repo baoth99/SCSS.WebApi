@@ -25,7 +25,7 @@ pipeline {
         stage('Build') {
             steps {
                echo 'Build'    
-               bat 'dotnet clean "SCSS.WebApi\\SCSS.WebApi"'               
+               bat 'dotnet clean "SCSS.WebApi\\SCSS.WebApi.csproj"'               
                bat 'dotnet build "SCSS.WebApi\\SCSS.WebApi.csproj" -c Release -o /SCSS.WebApi/build'
             }
         }
@@ -37,6 +37,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploy'    
+                bat 'dotnet publish "SCSS.WebApi\\SCSS.WebApi.csproj" -c Release -o /SCSS.WebApi/publish'
             }
         }
     }
