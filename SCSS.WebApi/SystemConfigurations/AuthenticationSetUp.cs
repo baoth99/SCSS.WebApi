@@ -11,6 +11,8 @@ using SCSS.WebApi.SystemExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace SCSS.WebApi.SystemConfigurations
@@ -27,14 +29,14 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<ApiAuthenticateFilterAttribute>();
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                    .AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme, option =>
+                    .AddIdentityServerAuthentication(option =>
                     {
                         option.Authority = AppSettingValues.Authority;
-                        //option.RequireHttpsMetadata = false;
-                        option.SupportedTokens = IdentityServer4.AccessTokenValidation.SupportedTokens.Jwt;
+                        option.RequireHttpsMetadata = false;
                         option.ApiName = AppSettingValues.ApiName;
                         option.ApiSecret = AppSettingValues.ApiSecret;
 
+                        option.SupportedTokens = IdentityServer4.AccessTokenValidation.SupportedTokens.Jwt;
                         option.JwtBearerEvents = new JwtBearerEvents()
                         {
                             OnAuthenticationFailed = (context) =>

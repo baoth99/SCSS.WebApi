@@ -15,6 +15,7 @@ namespace SCSS.Data.Entities
         [MaxLength(256)]
         public string Name { get; set; }
 
+        [Column(TypeName = "VARCHAR(MAX)")]
         public string ImageUrl { get; set; }
 
         [ForeignKey("Account")]

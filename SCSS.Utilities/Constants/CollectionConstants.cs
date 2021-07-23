@@ -49,10 +49,10 @@ namespace SCSS.Utilities.Constants
     {
         public static readonly Dictionary<string, int> AccountStatusCollection = new Dictionary<string, int>()
         {
-            {AccountRole.ADMIN_TEXT, AccountRole.ADMIN },
-            {AccountRole.SELLER_TEXT, AccountRole.SELLER },
-            {AccountRole.DEALER_TEXT, AccountRole.DEALER },
-            {AccountRole.COLLECTOR_TEXT, AccountRole.COLLECTOR }
+            {AccountRoleConstants.ADMIN, AccountRole.ADMIN },
+            {AccountRoleConstants.SELLER, AccountRole.SELLER },
+            {AccountRoleConstants.DEALER, AccountRole.DEALER },
+            {AccountRoleConstants.COLLECTOR, AccountRole.COLLECTOR }
         };
 
     }

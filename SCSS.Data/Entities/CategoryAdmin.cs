@@ -15,6 +15,7 @@ namespace SCSS.Data.Entities
         [MaxLength(100)]
         public string Name { get; set; }
 
+        [Column(TypeName = "VARCHAR(MAX)")]
         public string ImageUrl { get; set; }
 
         [ForeignKey("Unit")]
@@ -23,7 +24,7 @@ namespace SCSS.Data.Entities
         [MaxLength(500)]
         public string Description { get; set; }
 
-        public bool? IsLocked { get; set; }
+        public bool IsLocked { get; set; }
 
         [ForeignKey("Account")]
         public Guid? LockedBy { get; set; }

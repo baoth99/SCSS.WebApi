@@ -12,7 +12,7 @@ namespace SCSS.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        [MaxLength(50)]
+        [Column(TypeName = "VARCHAR(50)")]
         public string TransactionCode { get; set; }
 
         [ForeignKey("Account")]

@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Folder Include="AppData\SqlCommands\" />
+    <Folder Include="BackgroundTasks\" />
   </ItemGroup>
 
 </Project>

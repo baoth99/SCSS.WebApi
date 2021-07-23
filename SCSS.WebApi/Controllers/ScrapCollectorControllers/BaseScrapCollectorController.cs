@@ -11,7 +11,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
     [Route(ApplicationRestfulApi.BaseApiUrl)]
     [Produces(ApplicationRestfulApi.ApplicationProduce)]
     [ApiController]
-    [Authorize]
+    [Authorize(Policy = SystemPolicy.CollectorPolicy)]
     public class BaseScrapCollectorController : ControllerBase
     {
     }

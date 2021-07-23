@@ -12,18 +12,22 @@ namespace SCSS.Data.Entities
         [Key]
         public Guid Id { get; set; }
 
-        [MaxLength(256)]
+        [MaxLength(255)]
         public string Name { get; set; }
 
-        [MaxLength(50)]
+        [MaxLength(255)]
+        public string DealerName { get; set; }
+
+
+        [Column(TypeName = "VARCHAR(50)")]
         public string UserName { get; set; }
 
-        [MaxLength(100)]
+        [Column(TypeName = "VARCHAR(255)")]
         public string Email { get; set; }      
 
         public int? Gender { get; set; }
 
-        [MaxLength(10)]
+        [Column(TypeName = "VARCHAR(20)")]
         public string Phone { get; set; }
 
         [MaxLength(256)]
@@ -31,18 +35,20 @@ namespace SCSS.Data.Entities
 
         public DateTime? BirthDate { get; set; }
 
+        [Column(TypeName = "VARCHAR(MAX)")]
         public string ImageUrl { get; set; }
 
         [ForeignKey("Role")]
         public Guid? RoleId { get; set; }
 
-        [MaxLength(255)]
+        [Column(TypeName = "VARCHAR(255)")]
         public string IdCard { get; set; }
 
         public float? TotalPoint { get; set; }
 
         public int? Status { get; set; }
 
+        [Column(TypeName = "VARCHAR(MAX)")]
         public string DeviceId { get; set; }
 
         public DateTime? CreatedTime { get; set; }

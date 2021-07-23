@@ -11,7 +11,7 @@ namespace SCSS.WebApi.Controllers.AdminControllers
     [Route(ApplicationRestfulApi.BaseApiUrl)]
     [Produces(ApplicationRestfulApi.ApplicationProduce)]
     [ApiController]
-    [Authorize]
+    [Authorize(Policy = SystemPolicy.AdminPolicy)]
     public class BaseAdminController : ControllerBase
     {
     }

@@ -14,7 +14,7 @@ namespace SCSS.Data.Entities
 
         public int Key { get; set; }
 
-        [MaxLength(256)]
+        [Column(TypeName = "VARCHAR(50)")]
         public string Name { get; set; }
 
         public bool IsDeleted { get; set; }

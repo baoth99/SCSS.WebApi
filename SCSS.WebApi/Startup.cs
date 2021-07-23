@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Helper;
 using SCSS.WebApi.AuthenticationFilter;
@@ -43,11 +44,8 @@ namespace SCSS.WebApi
 
             #endregion
 
-            //ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, errors) => {
-            //    return true;
-            //};
-
             #region Authentication Policy
+            IdentityModelEventSource.ShowPII = true; 
 
             if (ConfigurationHelper.IsDevelopment)
             {

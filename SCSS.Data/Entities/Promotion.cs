@@ -15,6 +15,9 @@ namespace SCSS.Data.Entities
         [MaxLength(100)]
         public string Name { get; set; }
 
+        [Column(TypeName = "VARCHAR(50)")]
+        public string Code { get; set; }
+
         [ForeignKey("AccountCategory")]
         public Guid? DealerCategoryId { get; set; }
 

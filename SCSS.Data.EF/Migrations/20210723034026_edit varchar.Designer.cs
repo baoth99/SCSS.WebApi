@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCSS.Data.EF;
 
 namespace SCSS.Data.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210723034026_edit varchar")]
+    partial class editvarchar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,31 +37,30 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<DateTime?>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DealerName")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
                     b.Property<string>("DeviceId")
-                        .HasColumnType("VARCHAR(MAX)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("VARCHAR(255)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("Gender")
                         .HasColumnType("int");
 
                     b.Property<string>("IdCard")
-                        .HasColumnType("VARCHAR(255)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("VARCHAR(MAX)");
-
-                    b.Property<string>("Name")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
                     b.Property<string>("Phone")
-                        .HasColumnType("VARCHAR(20)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<Guid?>("RoleId")
                         .HasColumnType("uniqueidentifier");
@@ -77,7 +78,8 @@ namespace SCSS.Data.EF.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("VARCHAR(50)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -112,7 +114,7 @@ namespace SCSS.Data.EF.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("VARCHAR(MAX)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -149,7 +151,8 @@ namespace SCSS.Data.EF.Migrations
                         .HasDefaultValueSql("newsequentialid()");
 
                     b.Property<string>("BookingCode")
-                        .HasColumnType("VARCHAR(50)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("BookingDate")
                         .HasColumnType("datetime2");
@@ -262,12 +265,12 @@ namespace SCSS.Data.EF.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("VARCHAR(MAX)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsLocked")
+                    b.Property<bool?>("IsLocked")
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("LockedBy")
@@ -325,7 +328,8 @@ namespace SCSS.Data.EF.Migrations
                         .HasColumnType("decimal(15,2)");
 
                     b.Property<string>("TransactionCode")
-                        .HasColumnType("VARCHAR(50)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -452,7 +456,7 @@ namespace SCSS.Data.EF.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int?>("Type")
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.Property<Guid?>("UpdatedBy")
@@ -536,7 +540,7 @@ namespace SCSS.Data.EF.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("VARCHAR(MAX)");
 
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -563,9 +567,6 @@ namespace SCSS.Data.EF.Migrations
 
                     b.Property<float?>("BonusAmount")
                         .HasColumnType("real");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("VARCHAR(50)");
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -622,7 +623,8 @@ namespace SCSS.Data.EF.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("VARCHAR(50)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -657,7 +659,8 @@ namespace SCSS.Data.EF.Migrations
                         .HasColumnType("decimal(15,2)");
 
                     b.Property<string>("TransactionCode")
-                        .HasColumnType("VARCHAR(50)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");

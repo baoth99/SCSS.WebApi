@@ -50,6 +50,8 @@ namespace SCSS.Data.EF.UnitOfWork
 
         IRepository<TransactionAwardAmount> TransactionAwardAmountRepository { get; }
 
+        IRepository<BookingRejection> BookingRejectionRepository { get; }
+
         #endregion
 
         Task CommitAsync();

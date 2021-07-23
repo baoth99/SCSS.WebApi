@@ -9,11 +9,21 @@ namespace SCSS.Utilities.Constants
 {
     public class PolicyScopeConstants
     {
+        public const string SCOPE = "scope";
         public const string ADMIN = "SCSS.WebAdmin.Scope";
         public const string SELLER = "SCSS.SellerMobileApp.Scope";
         public const string COLLECTOR = "SCSS.CollectorMobileApp.Scope";
         public const string DEALER = "SCSS.DealerMobileApp.Scope";
     }
+
+    public class SystemPolicy
+    {
+        public const string AdminPolicy = "AdminPolicy";
+        public const string SellerPolicy = "SellerPolicy";
+        public const string DealerPolicy = "DealerPolicy";
+        public const string CollectorPolicy = "CollectorPolicy";
+    }
+
 
     public class AccountRoleConstants
     {

@@ -68,11 +68,5 @@ namespace SCSS.Utilities.Constants
         public const int SELLER = 2;
         public const int DEALER = 3;
         public const int COLLECTOR = 4;
-
-        public const string ADMIN_TEXT = "Admin";
-        public const string SELLER_TEXT = "Seller";
-        public const string DEALER_TEXT = "Dealer";
-        public const string COLLECTOR_TEXT = "Collector";
     }
-
 }

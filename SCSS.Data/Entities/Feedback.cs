@@ -24,6 +24,8 @@ namespace SCSS.Data.Entities
         [ForeignKey("CollectDealTransaction")]
         public Guid? CollectDealTransactionId { get; set; }
 
+        public int? Type { get; set; }
+
         public float? Rate { get; set; }
 
         [MaxLength(500)]
