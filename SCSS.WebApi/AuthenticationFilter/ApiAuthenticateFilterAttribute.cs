@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Primitives;
+using SCSS.Application.Admin.Interfaces;
+using SCSS.Application.Admin.Models.AccountModels;
+using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Helper;
@@ -16,9 +19,11 @@ namespace SCSS.WebApi.AuthenticationFilter
 {
     public class ApiAuthenticateFilterAttribute : ActionFilterAttribute
     {
-        public ApiAuthenticateFilterAttribute()
-        {
+        private readonly IAccountService _accountService;
 
+        public ApiAuthenticateFilterAttribute(IAccountService accountService)
+        {
+            _accountService = accountService;
         }
 
         
@@ -27,16 +32,46 @@ namespace SCSS.WebApi.AuthenticationFilter
         {
             // Config filter here
             // If env is dev enviroment 
+
             if (ConfigurationHelper.IsDevelopment)
             {
-                context.HttpContext.Request.Headers.TryGetValue("UserId", out StringValues AccountIdVal);
-                var accountId = AccountIdVal.ToString();
+                context.HttpContext.Request.Headers.TryGetValue("AccountId", out StringValues AccountIdVal);
 
-                if (ValidatorUtil.IsBlank(accountId))
+                bool isValid = Guid.TryParse(AccountIdVal.ToString(), out Guid accountIdVal);
+
+                var accountId = isValid ? accountIdVal : Guid.Empty;
+
+                var account = _accountService.GetAccountDetail(accountId).Result;
+
+                if (account.StatusCode == HttpStatusCodes.NotFound)
                 {
-                    context.ActionFilterResult("UserId is not valid", "UserId is not valid", HttpStatusCodes.Unauthorized);
+                    context.ActionFilterResult(SystemMessageCode.TokenException, "AccountId is not valid", HttpStatusCodes.Unauthorized);
+                    return;
                 }
-                // Call AccountService to get Account Infomation to save info into UserAuthSession
+                var accountInfo = account.Data as AccountDetailViewModel;
+
+                if (accountInfo.Status == AccountStatus.BANNING)
+                {
+                    context.ActionFilterResult(SystemMessageCode.BlockAccountException, "Account is block", HttpStatusCodes.Unauthorized);
+                    return;
+
+                }
+                if (accountInfo.Status == AccountStatus.NOT_APPROVED)
+                {
+                    context.ActionFilterResult(SystemMessageCode.NotApproveAccountException, "Account is not approved", HttpStatusCodes.Unauthorized);
+                    return;
+                }
+                AuthSessionGlobalVariable.UserSession = new UserInfoSession()
+                {
+                    Id = accountInfo.Id,
+                    Address = accountInfo.Address,
+                    Email = accountInfo.Email,
+                    Gender = accountInfo.Gender,
+                    Role = accountInfo.RoleKey,
+                    Name = accountInfo.Name,
+                    ClientId = "SCSS-WebAdmin-FrontEnd",
+                    Phone = accountInfo.Phone
+                };
             }
             else
             {
@@ -44,7 +79,23 @@ namespace SCSS.WebApi.AuthenticationFilter
                 context.HttpContext.Request.Headers.TryGetValue("Authorization", out StringValues tokenVal);
                 var token = tokenVal.ToString().Split(" ").Last();
 
-                JwtManager.ValidateToken(token);
+                var authSessionModel = JwtManager.ValidateToken(token);
+
+                var account = _accountService.GetAccountDetail(authSessionModel.Id).Result;
+
+                var accountInfo = account.Data as AccountDetailViewModel;
+                if (accountInfo.Status == AccountStatus.BANNING)
+                {
+                    context.ActionFilterResult(SystemMessageCode.BlockAccountException, "Account is block", HttpStatusCodes.Unauthorized);
+                    return;
+                }
+                if (accountInfo.Status == AccountStatus.NOT_APPROVED)
+                {
+                    context.ActionFilterResult(SystemMessageCode.NotApproveAccountException, "Account is not approved", HttpStatusCodes.Unauthorized);
+                    return;
+                }
+
+                AuthSessionGlobalVariable.UserSession = authSessionModel;
             }
             
         }

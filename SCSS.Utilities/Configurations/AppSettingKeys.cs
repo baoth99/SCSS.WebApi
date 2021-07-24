@@ -35,5 +35,13 @@ namespace SCSS.Utilities.Configurations
             public const string S3AccessKey = "AWSService:S3AccessKey";
             public const string S3SecretKey = "AWSService:S3SecretKey";
         }
+
+        public static class ESMS
+        {
+            public const string ApiKey = "ESMSService:ApiKey";
+            public const string SecrectKey = "ESMSService:SecretKey";
+            public const string BrandName = "ESMSService:BrandName";
+            public const string ApiUrl = "ESMSService:ApiUrl";
+        }
     }
 }

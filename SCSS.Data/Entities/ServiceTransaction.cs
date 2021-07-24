@@ -15,7 +15,7 @@ namespace SCSS.Data.Entities
         [ForeignKey("Account")]
         public Guid? CollectorDealerId { get; set; }
 
-        public float? Amount { get; set; }
+        public decimal? Amount { get; set; }
 
         public DateTime? Period { get; set; }
 

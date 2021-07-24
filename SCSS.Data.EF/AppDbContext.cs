@@ -2,11 +2,13 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using SCSS.Data.Entities;
 using SCSS.Utilities.AuthSessionConfig;
+using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
-
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SCSS.Data.EF
 {
@@ -60,6 +62,14 @@ namespace SCSS.Data.EF
 
         public DbSet<Unit> Unit { get; set; }
 
+        public DbSet<CollectDealTransactionPromotion> CollectDealTransactionPromotion { get; set; }
+
+        public DbSet<TransactionServiceFeePercent> TransactionServiceFeePercent { get; set; }
+
+        public DbSet<TransactionAwardAmount> TransactionAwardAmount { get; set; }
+
+        public DbSet<BookingRejection> BookingRejection { get; set; }
+
         #endregion
 
         #region OnConfiguring
@@ -68,7 +78,7 @@ namespace SCSS.Data.EF
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("ConnectionString", builder =>
+                optionsBuilder.UseSqlServer(AppSettingValues.SqlConnectionString, builder =>
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 });
@@ -87,7 +97,7 @@ namespace SCSS.Data.EF
 
             modelBuilder.Entity<Account>(entity =>
             {
-
+                entity.HasIndex(e => e.Phone).IsUnique();
             });
 
             modelBuilder.Entity<AccountCategory>(entity =>
@@ -99,6 +109,7 @@ namespace SCSS.Data.EF
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
                 entity.Property(e => e.CollectorAccountId).IsConcurrencyToken();
+                entity.Property(e => e.Status).IsConcurrencyToken();
             });
 
             modelBuilder.Entity<CategoryAdmin>(entity =>
@@ -109,11 +120,15 @@ namespace SCSS.Data.EF
             modelBuilder.Entity<CollectDealTransaction>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.BonusAmount).HasColumnType("decimal(15,2)");
+                entity.Property(e => e.Total).HasColumnType("decimal(15,2)");
             });
 
             modelBuilder.Entity<CollectDealTransactionDetail>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.BonusAmount).HasColumnType("decimal(15,2)");
+                entity.Property(e => e.Total).HasColumnType("decimal(15,2)");
             });
 
             modelBuilder.Entity<Feedback>(entity =>
@@ -129,6 +144,8 @@ namespace SCSS.Data.EF
             modelBuilder.Entity<Location>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.Latitude).HasColumnType("decimal(8,6)");
+                entity.Property(e => e.Longitude).HasColumnType("decimal(9,6)");
             });
 
             modelBuilder.Entity<Notification>(entity =>
@@ -149,19 +166,44 @@ namespace SCSS.Data.EF
             modelBuilder.Entity<SellCollectTransaction>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.Total).HasColumnType("decimal(15,2)");
             });
 
             modelBuilder.Entity<SellCollectTransactionDetail>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.Total).HasColumnType("decimal(15,2)");
             });
 
             modelBuilder.Entity<ServiceTransaction>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.Amount).HasColumnType("decimal(15,2)");
+
             });
 
             modelBuilder.Entity<Unit>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+            });
+
+            modelBuilder.Entity<CollectDealTransactionPromotion>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.Property(e => e.BonusAmount).HasColumnType("decimal(15,2)");
+            });
+
+            modelBuilder.Entity<TransactionServiceFeePercent>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+            });
+
+            modelBuilder.Entity<TransactionAwardAmount>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+            });
+
+            modelBuilder.Entity<BookingRejection>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
             });
@@ -184,10 +226,10 @@ namespace SCSS.Data.EF
 
         #region Before SaveChanges
 
-        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             OnBeforeSaving();
-            return base.SaveChanges(acceptAllChangesOnSuccess);
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
         private void OnBeforeSaving()
@@ -197,7 +239,6 @@ namespace SCSS.Data.EF
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.CurrentValues["IsDeleted"] = BooleanConstants.FALSE;
                         entry.CurrentValues["CreatedTime"] = DateTime.Now;
                         entry.CurrentValues["CreatedBy"] = AuthSessionGlobalVariable.UserSession.Id;
                         break;

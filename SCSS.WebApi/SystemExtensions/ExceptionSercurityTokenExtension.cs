@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,8 @@ namespace SCSS.WebApi.SystemExtensions
         {
             var errorResponseModel = new ErrorResponseModel()
             {
-                StatusCode = httpStatusCode
+                StatusCode = httpStatusCode,
+                MessageCode = SystemMessageCode.TokenException
             };
 
             var exceptionType = exception.GetType();

@@ -10,14 +10,14 @@ namespace SCSS.Data.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
 
         [MaxLength(255)]
         public string Address { get; set; }
 
         public decimal? Latitude { get; set; }
 
-        public decimal? Longtitude { get; set; }
+        public decimal? Longitude { get; set; }
 
         public bool IsDeleted { get; set; }
     }

@@ -12,6 +12,9 @@ namespace SCSS.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
+        [Column(TypeName = "VARCHAR(50)")]
+        public string TransactionCode { get; set; }
+
         [ForeignKey("Account")]
         public Guid? DealerAccountId { get; set; }
 
@@ -19,6 +22,8 @@ namespace SCSS.Data.Entities
         public Guid? CollectorAccountId { get; set; }
 
         public decimal? Total { get; set; }
+
+        public decimal? BonusAmount { get; set; }
 
         public float? AwardPoint { get; set; }
 

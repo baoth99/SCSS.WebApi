@@ -6,6 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="3.7.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SCSS.Utilities\SCSS.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

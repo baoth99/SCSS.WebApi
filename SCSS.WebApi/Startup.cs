@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Helper;
 using SCSS.WebApi.AuthenticationFilter;
@@ -12,6 +13,7 @@ using SCSS.WebApi.SystemConfigurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace SCSS.WebApi
@@ -43,6 +45,7 @@ namespace SCSS.WebApi
             #endregion
 
             #region Authentication Policy
+            IdentityModelEventSource.ShowPII = true; 
 
             if (ConfigurationHelper.IsDevelopment)
             {
@@ -60,8 +63,8 @@ namespace SCSS.WebApi
 
             #region Authentication & Authorization
 
-            //services.AddAuthenticationSetUp();
-            //services.AddAuthorizationSetUp();
+            services.AddAuthenticationSetUp();
+            services.AddAuthorizationSetUp();
 
             #endregion
 
@@ -73,13 +76,13 @@ namespace SCSS.WebApi
 
             #region Database Connection
 
-            //services.AddDatabaseConnectionSetUp();
+            services.AddDatabaseConnectionSetUp();
 
             #endregion
 
             #region Dependency Injection
 
-            //services.AddDependencyInjectionSetUp();
+            services.AddDependencyInjectionSetUp();
 
             #endregion
 
@@ -96,15 +99,21 @@ namespace SCSS.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
                    
             }
 
+            app.UseCors(option => option
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+            );
+
             app.UseSwaggerGenSetUp();
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
 
             app.UseExceptionHandlerSetUp();
 

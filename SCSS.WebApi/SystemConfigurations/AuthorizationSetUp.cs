@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SCSS.Utilities.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,15 +18,30 @@ namespace SCSS.WebApi.SystemConfigurations
 
             services.AddAuthorization(options =>
             {
-                // Add Pocicy and Role here
-                // Exmaple
-                //options.AddPolicy("ProductApi",
-                //    policy =>
-                //    {
-                //        policy.RequireClaim("scope", "ProductApi");
-                //        policy.RequireRole(new List<string>() { "Admin", "User" });
-
-                //    });
+                options.AddPolicy(SystemPolicy.AdminPolicy,
+                    policy =>
+                    {
+                        policy.RequireClaim(PolicyScopeConstants.SCOPE, PolicyScopeConstants.ADMIN);
+                        policy.RequireRole(AccountRoleConstants.ADMIN);
+                    });
+                options.AddPolicy(SystemPolicy.SellerPolicy,
+                    policy =>
+                    {
+                        policy.RequireClaim(PolicyScopeConstants.SCOPE, PolicyScopeConstants.SELLER);
+                        policy.RequireRole(AccountRoleConstants.SELLER);
+                    });
+                options.AddPolicy(SystemPolicy.DealerPolicy,
+                    policy =>
+                    {
+                        policy.RequireClaim(PolicyScopeConstants.SCOPE, PolicyScopeConstants.DEALER);
+                        policy.RequireRole(AccountRoleConstants.DEALER);
+                    });
+                options.AddPolicy(SystemPolicy.CollectorPolicy,
+                    policy =>
+                    {
+                        policy.RequireClaim(PolicyScopeConstants.SCOPE, PolicyScopeConstants.COLLECTOR);
+                        policy.RequireRole(AccountRoleConstants.COLLECTOR);
+                    });
             });
         }
     }

@@ -18,6 +18,7 @@ namespace SCSS.WebApi.SystemConfigurations
                 throw new ArgumentException(nameof(services));
             }
 
+            //services.AddAWSService<IAmazonS3>();
 
             //IAmazonS3 client = new AmazonS3Client(AppSettingValues.AWSS3AccessKey, AppSettingValues.AWSS3SecretKey, RegionEndpoint.APSoutheast1);
             

@@ -10,13 +10,10 @@ namespace SCSS.Data.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
 
         [MaxLength(20)]
         public string Name { get; set; }
-
-        [MaxLength(20)]
-        public string Acronym { get; set; }
 
         public bool IsDeleted { get; set; }
     }

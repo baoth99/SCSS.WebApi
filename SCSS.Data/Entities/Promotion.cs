@@ -10,10 +10,13 @@ namespace SCSS.Data.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
 
         [MaxLength(100)]
         public string Name { get; set; }
+
+        [Column(TypeName = "VARCHAR(50)")]
+        public string Code { get; set; }
 
         [ForeignKey("AccountCategory")]
         public Guid? DealerCategoryId { get; set; }
@@ -23,7 +26,7 @@ namespace SCSS.Data.Entities
 
         public float? AppliedQuantity { get; set; }
 
-        public float? BonusPercent { get; set; }
+        public float? BonusAmount { get; set; }
 
         public DateTime? FromTime { get; set; }
 

@@ -5,10 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.10" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SCSS.AWSService\SCSS.AWSService.csproj" />
     <ProjectReference Include="..\SCSS.Data.EF\SCSS.Data.EF.csproj" />
     <ProjectReference Include="..\SCSS.Data\SCSS.Data.csproj" />
     <ProjectReference Include="..\SCSS.ORM.Dapper\SCSS.ORM.Dapper.csproj" />

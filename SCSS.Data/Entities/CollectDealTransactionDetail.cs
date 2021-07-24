@@ -25,7 +25,7 @@ namespace SCSS.Data.Entities
 
         public decimal? Total { get; set; }
 
-        public decimal? BonusMoney { get; set; }
+        public decimal? BonusAmount { get; set; }
 
         public bool IsDeleted { get; set; }
 

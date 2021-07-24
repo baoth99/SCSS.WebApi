@@ -11,7 +11,7 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
     [Route(ApplicationRestfulApi.BaseApiUrl)]
     [Produces(ApplicationRestfulApi.ApplicationProduce)]
     [ApiController]
-    [Authorize]
+    [Authorize(Policy = SystemPolicy.SellerPolicy)]
     public class BaseScrapSellerControllers : ControllerBase
     {
     }

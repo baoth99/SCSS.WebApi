@@ -15,6 +15,7 @@ namespace SCSS.Data.Entities
         [MaxLength(256)]
         public string Name { get; set; }
 
+        [Column(TypeName = "VARCHAR(MAX)")]
         public string ImageUrl { get; set; }
 
         [ForeignKey("Account")]
@@ -30,7 +31,7 @@ namespace SCSS.Data.Entities
         public string Description { get; set; }
 
         [MaxLength(20)]
-        public int Status { get; set; }
+        public int? Status { get; set; }
 
         public bool IsDeleted { get; set; }
 
