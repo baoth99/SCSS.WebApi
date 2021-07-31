@@ -1,11 +1,10 @@
-﻿using Amazon;
-using Amazon.S3;
+﻿using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.DependencyInjection;
-using SCSS.Utilities.Configurations;
+using SCSS.FirebaseService.Implementations;
+using SCSS.FirebaseService.Interfaces;
+using SCSS.Utilities.Constants;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SCSS.WebApi.SystemConfigurations
 {
@@ -17,11 +16,14 @@ namespace SCSS.WebApi.SystemConfigurations
             {
                 throw new ArgumentException(nameof(services));
             }
+            Environment.SetEnvironmentVariable(CommonConstants.GoogleCredentials, "scss-e0dfc-firebase-adminsdk-i33yy-555ad9cd95.json");
 
-            //services.AddAWSService<IAmazonS3>();
+            FirebaseApp.Create(new AppOptions()
+            {
+                Credential = GoogleCredential.GetApplicationDefault(),
+            });
 
-            //IAmazonS3 client = new AmazonS3Client(AppSettingValues.AWSS3AccessKey, AppSettingValues.AWSS3SecretKey, RegionEndpoint.APSoutheast1);
-            
+            services.AddScoped<IFCMService, FCMService>();
         }
     }
 }

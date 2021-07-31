@@ -18,14 +18,8 @@ using System.Threading.Tasks;
 
 namespace SCSS.AWSService.Implementations
 {
-    public class StorageBlobS3Service : IStorageBlobS3Service
+    public class StorageBlobS3Service : AWSBaseService ,IStorageBlobS3Service
     {
-        private readonly IAmazonS3 _amazonS3;
-
-        public StorageBlobS3Service()
-        {
-            _amazonS3 = new AmazonS3Client(AppSettingValues.AWSS3AccessKey, AppSettingValues.AWSS3SecretKey, RegionEndpoint.APSoutheast1);
-        }
 
         public async Task<string> UploadFile(IFormFile file,string fileName , FileS3Path path)
         {

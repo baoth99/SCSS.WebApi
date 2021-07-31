@@ -5,6 +5,7 @@ using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
+using SCSS.FirebaseService.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;

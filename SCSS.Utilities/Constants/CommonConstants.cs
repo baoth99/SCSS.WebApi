@@ -29,6 +29,7 @@ namespace SCSS.Utilities.Constants
     {
         public const string ContentType = "Content-Type";
         public const string Null = "N/A";
+        public const string GoogleCredentials = "GOOGLE_APPLICATION_CREDENTIALS";
     }
 
     public class ImageFileConstants

@@ -55,7 +55,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         public async Task<BaseApiResponseModel> UpdateAccountInformation(AccountUpdateRequestModel model)
         {
-
             return null;
         }
 

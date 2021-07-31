@@ -12,6 +12,7 @@
     <ProjectReference Include="..\SCSS.AWSService\SCSS.AWSService.csproj" />
     <ProjectReference Include="..\SCSS.Data.EF\SCSS.Data.EF.csproj" />
     <ProjectReference Include="..\SCSS.Data\SCSS.Data.csproj" />
+    <ProjectReference Include="..\SCSS.FirebaseService\SCSS.FirebaseService.csproj" />
     <ProjectReference Include="..\SCSS.ORM.Dapper\SCSS.ORM.Dapper.csproj" />
     <ProjectReference Include="..\SCSS.Utilities\SCSS.Utilities.csproj" />
     <ProjectReference Include="..\SCSS.Validations\SCSS.Validations.csproj" />

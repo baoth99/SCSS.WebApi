@@ -5,9 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="3.7.0.37" />
-    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.0.1" />
-    <PackageReference Include="AWSSDK.S3" Version="3.7.1.5" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
@@ -22,6 +19,7 @@
     <ProjectReference Include="..\SCSS.Application.ScrapDealer\SCSS.Application.ScrapDealer.csproj" />
     <ProjectReference Include="..\SCSS.Application.ScrapSeller\SCSS.Application.ScrapSeller.csproj" />
     <ProjectReference Include="..\SCSS.Data.EF\SCSS.Data.EF.csproj" />
+    <ProjectReference Include="..\SCSS.FirebaseService\SCSS.FirebaseService.csproj" />
     <ProjectReference Include="..\SCSS.ORM.Dapper\SCSS.ORM.Dapper.csproj" />
     <ProjectReference Include="..\SCSS.Utilities\SCSS.Utilities.csproj" />
     <ProjectReference Include="..\SCSS.Validations\SCSS.Validations.csproj" />
