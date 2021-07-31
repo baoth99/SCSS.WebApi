@@ -40,5 +40,6 @@ namespace SCSS.Application.ScrapSeller
         }
 
         #endregion
+
     }
 }
