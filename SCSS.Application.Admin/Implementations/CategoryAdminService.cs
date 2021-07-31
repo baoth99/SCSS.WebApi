@@ -291,7 +291,6 @@ namespace SCSS.Application.Admin.Implementations
                 Key = x.Id,
                 Val = x.Name
             }).ToListAsync();
-
             return BaseApiResponse.OK(data);
         }
 

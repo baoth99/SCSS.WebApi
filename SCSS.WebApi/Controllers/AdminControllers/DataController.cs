@@ -42,7 +42,6 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #endregion
 
-
         #region Unit List
 
         /// <summary>
@@ -51,9 +50,9 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminDataApiUrlDefinition.Unit)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.AdminDataApiUrl.Unit)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> UnitList()
         {
@@ -70,9 +69,9 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminDataApiUrlDefinition.Role)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.AdminDataApiUrl.Role)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> RoleList()
         {
@@ -90,9 +89,9 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminDataApiUrlDefinition.Image)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.AdminDataApiUrl.Image)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> GetImage(string image)
         {

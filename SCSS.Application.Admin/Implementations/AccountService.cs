@@ -12,7 +12,6 @@ using SCSS.Utilities.ResponseModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.Admin.Implementations
@@ -45,7 +44,11 @@ namespace SCSS.Application.Admin.Implementations
 
         #region Search Account
 
-
+        public async Task<BaseApiResponseModel> Search(SearchAccountRequestModel model)
+        {
+            var dataQuery = _accountRepository.GetAllAsNoTracking().ToList();
+            return BaseApiResponse.OK(dataQuery);
+        }
 
         #endregion
 

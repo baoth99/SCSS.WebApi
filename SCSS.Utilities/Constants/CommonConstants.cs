@@ -12,6 +12,13 @@ namespace SCSS.Utilities.Constants
         public const bool FALSE = false;
     }
     
+    public class DateTimeInDay
+    {
+        public static DateTime DATEFROM = DateTime.Now.Date;
+        public static DateTime DATETO = DateTime.Now.Date.AddHours(24);
+
+    }
+
     public class DateTimeFormat
     {
         public const string Format01 = "MM-dd-yyyy-hh:mm:tt";

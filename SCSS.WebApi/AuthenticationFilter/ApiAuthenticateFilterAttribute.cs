@@ -19,15 +19,41 @@ namespace SCSS.WebApi.AuthenticationFilter
 {
     public class ApiAuthenticateFilterAttribute : ActionFilterAttribute
     {
+        #region Fields
+
+        /// <summary>
+        /// The account service
+        /// </summary>
         private readonly IAccountService _accountService;
 
-        public ApiAuthenticateFilterAttribute(IAccountService accountService)
+        /// <summary>
+        /// The authentication session
+        /// </summary>
+        private readonly IAuthSession _authSession;
+
+        #endregion
+
+        #region Constructor        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApiAuthenticateFilterAttribute"/> class.
+        /// </summary>
+        /// <param name="accountService">The account service.</param>
+        /// <param name="authSession">The authentication session.</param>
+        public ApiAuthenticateFilterAttribute(IAccountService accountService, IAuthSession authSession)
         {
             _accountService = accountService;
+            _authSession = authSession;
         }
 
-        
+        #endregion
 
+        #region Called before action executes, after model binding is complete        
+
+        /// <summary>
+        /// </summary>
+        /// <param name="context"></param>
+        /// <inheritdoc />
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             // Config filter here
@@ -61,7 +87,7 @@ namespace SCSS.WebApi.AuthenticationFilter
                     context.ActionFilterResult(SystemMessageCode.NotApproveAccountException, "Account is not approved", HttpStatusCodes.Unauthorized);
                     return;
                 }
-                AuthSessionGlobalVariable.UserSession = new UserInfoSession()
+                var authSessionModel = new UserInfoSession()
                 {
                     Id = accountInfo.Id,
                     Address = accountInfo.Address,
@@ -72,6 +98,7 @@ namespace SCSS.WebApi.AuthenticationFilter
                     ClientId = "SCSS-WebAdmin-FrontEnd",
                     Phone = accountInfo.Phone
                 };
+                _authSession.SetUserInfoSession(authSessionModel);
             }
             else
             {
@@ -95,11 +122,18 @@ namespace SCSS.WebApi.AuthenticationFilter
                     return;
                 }
 
-                AuthSessionGlobalVariable.UserSession = authSessionModel;
+                _authSession.SetUserInfoSession(authSessionModel);
             }
-            
         }
 
+        #endregion Called before action executes, after model binding is complete
+
+        #region Called after action executes, before the action result
+
+        /// <summary>
+        /// </summary>
+        /// <param name="context"></param>
+        /// <inheritdoc />
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             try
@@ -127,10 +161,9 @@ namespace SCSS.WebApi.AuthenticationFilter
             {
                 // Ignore
             }
-
-            base.OnActionExecuted(context);
         }
 
+        #endregion Called after action executes, before the action result
 
     }
 }
