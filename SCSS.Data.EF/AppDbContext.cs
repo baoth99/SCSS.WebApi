@@ -5,6 +5,7 @@ using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
@@ -14,15 +15,25 @@ namespace SCSS.Data.EF
 {
     public class AppDbContext : DbContext
     {
+        #region Fields
+
+        /// <summary>
+        /// The authentication session
+        /// </summary>
+        private readonly IAuthSession _authSession;
+
+        #endregion Fields
+
         #region Constructor
 
         public AppDbContext()
         {
         }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options, IAuthSession authSession) : base(options)
         {
             Database.EnsureCreated();
+            _authSession = authSession;
         }
 
         #endregion
@@ -234,24 +245,43 @@ namespace SCSS.Data.EF
 
         private void OnBeforeSaving()
         {
-            foreach (var entry in ChangeTracker.Entries())
+            ChangeTracker.DetectChanges();
+
+            var accountId = _authSession.UserSession != null ? _authSession.UserSession.Id : Guid.Empty;
+
+            var entitiesTrackingChanged = ChangeTracker.Entries().Where(e => e.State == EntityState.Added ||
+                                                                             e.State == EntityState.Modified ||
+                                                                             e.State == EntityState.Deleted);
+
+            foreach (var entry in entitiesTrackingChanged)
             {
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.CurrentValues["CreatedTime"] = DateTime.Now;
-                        entry.CurrentValues["CreatedBy"] = AuthSessionGlobalVariable.UserSession.Id;
+                        if (entry.Entity is BaseEntity)
+                        {
+                            entry.CurrentValues["CreatedTime"] = DateTime.Now;
+                            entry.CurrentValues["CreatedBy"] = accountId;                          
+                        }
+                        if (entry.Entity is Account)
+                        {
+                            entry.CurrentValues["CreatedTime"] = DateTime.Now;
+                        }
                         break;
 
                     case EntityState.Deleted:
-                        entry.State = EntityState.Modified;
-                        entry.CurrentValues["IsDeleted"] = BooleanConstants.TRUE;
+                        if (entry.Entity is IHasSoftDelete)
+                        {
+                            entry.CurrentValues["IsDeleted"] = BooleanConstants.TRUE;
+                        }
                         break;
 
                     case EntityState.Modified:
-                        entry.State = EntityState.Modified;
-                        entry.CurrentValues["UpdatedTime"] = DateTime.Now;
-                        entry.CurrentValues["UpdatedBy"] = AuthSessionGlobalVariable.UserSession.Id; // Custom
+                        if (entry.Entity is BaseEntity)
+                        {
+                            entry.CurrentValues["UpdatedTime"] = DateTime.Now;
+                            entry.CurrentValues["UpdatedBy"] = accountId; // Custom
+                        }                         
                         break;
                 }
             }
@@ -286,5 +316,6 @@ namespace SCSS.Data.EF
     }
 
     #endregion
+
 }
 

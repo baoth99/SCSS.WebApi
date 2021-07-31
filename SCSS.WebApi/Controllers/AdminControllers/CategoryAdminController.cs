@@ -41,9 +41,9 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminCategoryApiUrlDefinition.Search)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.CategoryAdminApiUrl.Search)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> SearchCategoryAdmins([FromQuery] SearchCategoryAdminModel model)
         {
@@ -61,9 +61,9 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminCategoryApiUrlDefinition.Detail)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.CategoryAdminApiUrl.Detail)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> GetCategoryAdminDetail([FromQuery] Guid id)
         {
@@ -75,15 +75,15 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         #region Create Category Admin 
 
         /// <summary>
-        /// Creates the specified model.
+        /// Creates the category admin.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminCategoryApiUrlDefinition.Create)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.CategoryAdminApiUrl.Create)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> CreateCategoryAdmin([FromForm] CreateCategoryAdminModel model)
         {
@@ -101,9 +101,9 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminCategoryApiUrlDefinition.Edit)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.CategoryAdminApiUrl.Edit)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> EditCategoryAdmin([FromForm] CategoryAdminEditModel model)
         {
@@ -121,9 +121,9 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminCategoryApiUrlDefinition.Remove)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.CategoryAdminApiUrl.Remove)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> RemoveCategoryAdmin([FromQuery] Guid Id)
         {

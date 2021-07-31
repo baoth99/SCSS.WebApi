@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 
 namespace SCSS.Utilities.AuthSessionConfig
 {
-    public class AuthSessionGlobalVariable
-    {
-        public static UserInfoSession UserSession { get; set;}
-    }
-
     public class UserInfoSession
     {
         public Guid Id { get; set; }

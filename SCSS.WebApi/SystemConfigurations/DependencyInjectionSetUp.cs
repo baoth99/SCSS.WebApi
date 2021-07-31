@@ -8,9 +8,6 @@ using SCSS.ORM.Dapper.Implementations;
 using SCSS.ORM.Dapper.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SCSS.WebApi.SystemConfigurations
 {
@@ -32,6 +29,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<ICategoryAdminService, CategoryAdminService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUnitService, UnitService>();
+            services.AddScoped<IDashboardService, DashboardService>();
         }
     }
 }

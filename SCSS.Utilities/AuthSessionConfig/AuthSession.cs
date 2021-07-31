@@ -8,6 +8,11 @@ namespace SCSS.Utilities.AuthSessionConfig
 {
     public class AuthSession : IAuthSession
     {
-        public UserInfoSession UserSession => AuthSessionGlobalVariable.UserSession;
+        public UserInfoSession UserSession { get; private set; }
+
+        public void SetUserInfoSession(UserInfoSession user)
+        {
+            UserSession = user;
+        }
     }
 }

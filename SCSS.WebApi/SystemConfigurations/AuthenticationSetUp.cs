@@ -2,17 +2,14 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
-using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemExtensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.WebApi.SystemConfigurations
@@ -28,43 +25,75 @@ namespace SCSS.WebApi.SystemConfigurations
 
             services.AddScoped<ApiAuthenticateFilterAttribute>();
 
-            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                    .AddIdentityServerAuthentication(option =>
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddIdentityServerAuthentication(option =>
+            {
+                option.Authority = AppSettingValues.Authority;
+                option.RequireHttpsMetadata = false;
+                option.ApiName = AppSettingValues.ApiName;
+                option.ApiSecret = AppSettingValues.ApiSecret;
+
+                option.SupportedTokens = SupportedTokens.Jwt;
+                option.JwtBearerEvents = new JwtBearerEvents()
+                {
+                    OnAuthenticationFailed = (context) =>
                     {
-                        option.Authority = AppSettingValues.Authority;
-                        option.RequireHttpsMetadata = false;
-                        option.ApiName = AppSettingValues.ApiName;
-                        option.ApiSecret = AppSettingValues.ApiSecret;
+                        var exceptionType = context.Exception.ResponseErrorTokenExceptionResult(HttpStatusCodes.Unauthorized);
+                        var result = exceptionType.ToString();
+                        context.Response.ContentType = ApplicationRestfulApi.ApplicationProduce;
+                        context.Response.ContentLength = result.Length;
+                        context.Response.Body.Write(Encoding.UTF8.GetBytes(result),0, result.Length);
+                        context.Response.StatusCode = HttpStatusCodes.Unauthorized;
+                        return Task.CompletedTask;
+                    },
+                    //OnMessageReceived = context =>
+                    //{
+                    //    var accessToken = context.Request.Query["access_token"].ToString();
 
-                        option.SupportedTokens = IdentityServer4.AccessTokenValidation.SupportedTokens.Jwt;
-                        option.JwtBearerEvents = new JwtBearerEvents()
-                        {
-                            OnAuthenticationFailed = (context) =>
-                            {
-                                // this method will run when authentication fail 
-                                // To Do something here when authentication fail
+                    //    // If the request is for our hub...
+                    //    var path = context.HttpContext.Request.Path;
+                    //    if (!string.IsNullOrEmpty(accessToken) &&
+                    //        (path.StartsWithSegments("/hubs")))
+                    //    {
+                    //        // Read the token out of the query string
+                    //        context.Token = accessToken;
+                    //    }
+                    //    return Task.CompletedTask;
+                    //},
+                    OnTokenValidated = (context) =>
+                    {                     
+                        return Task.CompletedTask;
+                    },
+                };
+            });
+            services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<JwtBearerOptions>,ConfigureJwtBearerOptions>());
+        }
+    }
 
-                               
-                                var exceptionType = context.Exception.ResponseErrorTokenExceptionResult(HttpStatusCodes.Unauthorized);
+    public class ConfigureJwtBearerOptions : IPostConfigureOptions<JwtBearerOptions>
+    {
+        public void PostConfigure(string name, JwtBearerOptions options)
+        {
+            var originalOnMessageReceived = options.Events.OnMessageReceived;
+            options.Events.OnMessageReceived = async context =>
+            {
+                await originalOnMessageReceived(context);
+                if (string.IsNullOrEmpty(context.Token))
+                {
+                    var accessToken = context.Request.Query["access_token"].ToString();
+                    var path = context.HttpContext.Request.Path;
 
-                                
-
-                                //Response Error Model here
-
-                                return Task.CompletedTask;
-                            },
-
-                            OnTokenValidated = (context) =>
-                            {
-                                // this method will run when authentication success 
-                                // To Do something here when authentication success
-                                return Task.CompletedTask;
-                            },
-
-
-                        };
-                    });
-
+                    if (!string.IsNullOrEmpty(accessToken) &&
+                        path.StartsWithSegments("/hubs"))
+                    {
+                        context.Token = accessToken;
+                    }
+                }
+            };
         }
     }
 }

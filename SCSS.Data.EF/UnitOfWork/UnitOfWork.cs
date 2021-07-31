@@ -136,6 +136,9 @@ namespace SCSS.Data.EF.UnitOfWork
 
         #region Commit
 
+        /// <summary>
+        /// Commits the asynchronous.
+        /// </summary>
         public async Task CommitAsync()
         {
             try

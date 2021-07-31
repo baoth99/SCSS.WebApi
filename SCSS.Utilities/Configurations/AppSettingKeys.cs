@@ -43,5 +43,12 @@ namespace SCSS.Utilities.Configurations
             public const string BrandName = "ESMSService:BrandName";
             public const string ApiUrl = "ESMSService:ApiUrl";
         }
+
+        public static class Twilio
+        {
+            public const string AccountSID = "Twilio:AccountSID";
+            public const string AuthToken = "Twilio:AuthToken";
+            public const string PhoneNumber = "Twilio:PhoneNumber";
+        }
     }
 }

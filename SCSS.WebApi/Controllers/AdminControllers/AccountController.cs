@@ -6,8 +6,6 @@ using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConstants;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SCSS.WebApi.Controllers.AdminControllers
@@ -33,16 +31,57 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #region Change Status
 
+        /// <summary>
+        /// Changes the status.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AccountApiUrlDefinition.ChangeStatus)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.AccountApiUrl.ChangeStatus)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> ChangeStatus([FromBody] AccountStatusRequestModel model)
         {
             return await _accountService.ChangeStatus(model);
         }
+
+        #endregion
+
+        #region Search Account
+
+        /// <summary>
+        /// Searches the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.AccountApiUrl.Search)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> Search([FromQuery] SearchAccountRequestModel model)
+        {
+            return await _accountService.Search(model);
+        }
+
+        #endregion
+
+        #region Get Account Detail
+
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.AccountApiUrl.Detail)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetAccountDetail([FromQuery] Guid id)
+        {
+            return await _accountService.GetAccountDetail(id);
+        }
+
         #endregion
     }
 }

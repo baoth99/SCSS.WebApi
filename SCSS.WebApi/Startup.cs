@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -10,11 +11,6 @@ using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Helper;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConfigurations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace SCSS.WebApi
 {
@@ -42,9 +38,10 @@ namespace SCSS.WebApi
             ConfigurationHelper.IsProduction = Environment.IsProduction();
             AppFileHelper.ContentRootPath = Environment.ContentRootPath;
 
-            #endregion
+            #endregion          
 
             #region Authentication Policy
+
             IdentityModelEventSource.ShowPII = true; 
 
             if (ConfigurationHelper.IsDevelopment)
@@ -54,6 +51,16 @@ namespace SCSS.WebApi
             }
 
             #endregion
+
+            #region Proxy servers and load balancers 
+
+            // Configure ASP.NET Core to work with proxy servers and load balancers
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
+
+            #endregion       
 
             #region Controller & Validation Behavior
 
@@ -65,6 +72,12 @@ namespace SCSS.WebApi
 
             services.AddAuthenticationSetUp();
             services.AddAuthorizationSetUp();
+
+            #endregion
+
+            #region Add SignalR
+
+            services.AddSignalR();
 
             #endregion
 
@@ -92,17 +105,25 @@ namespace SCSS.WebApi
 
             #endregion
 
+            #region External Service SetUp
+
             services.AddExternalServiceSetUp();
+
+            #endregion
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment() || env.IsProduction())
+            if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                   
+                app.UseDeveloperExceptionPage();                   
+            }
+
+            if (ConfigurationHelper.IsProduction || ConfigurationHelper.IsTesting)
+            {
+                app.UseForwardedHeaders();
             }
 
             app.UseCors(option => option
@@ -123,10 +144,7 @@ namespace SCSS.WebApi
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpointsSetUp();
         }
     }
 }
