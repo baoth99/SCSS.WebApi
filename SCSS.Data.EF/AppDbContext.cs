@@ -55,6 +55,8 @@ namespace SCSS.Data.EF
 
         public DbSet<Feedback> Feedback { get; set; }
 
+        public DbSet<ImageSlider> ImageSlider { get; set; }
+
         public DbSet<ItemType> ItemType { get; set; }
 
         public DbSet<Location> Location { get; set; }
@@ -143,6 +145,11 @@ namespace SCSS.Data.EF
             });
 
             modelBuilder.Entity<Feedback>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+            });
+
+            modelBuilder.Entity<ImageSlider>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
             });
@@ -258,14 +265,14 @@ namespace SCSS.Data.EF
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        if (entry.Entity is BaseEntity)
+                        if (entry.Entity is BaseEntity addBaseEntity)
                         {
-                            entry.CurrentValues["CreatedTime"] = DateTime.Now;
-                            entry.CurrentValues["CreatedBy"] = accountId;                          
+                            addBaseEntity.CreatedTime = DateTime.Now;
+                            addBaseEntity.CreatedBy = accountId;                          
                         }
-                        if (entry.Entity is Account)
+                        if (entry.Entity is Account addAccountEntity)
                         {
-                            entry.CurrentValues["CreatedTime"] = DateTime.Now;
+                            addAccountEntity.CreatedTime = DateTime.Now;
                         }
                         break;
 
@@ -277,10 +284,10 @@ namespace SCSS.Data.EF
                         break;
 
                     case EntityState.Modified:
-                        if (entry.Entity is BaseEntity)
+                        if (entry.Entity is BaseEntity modifyBaseEntity)
                         {
-                            entry.CurrentValues["UpdatedTime"] = DateTime.Now;
-                            entry.CurrentValues["UpdatedBy"] = accountId; // Custom
+                            modifyBaseEntity.UpdatedTime = DateTime.Now;
+                            modifyBaseEntity.UpdatedBy = accountId; // Custom
                         }                         
                         break;
                 }

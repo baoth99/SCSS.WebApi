@@ -9,12 +9,14 @@ namespace SCSS.Utilities.Constants
     public enum FileS3Path
     {
         AdminCategoryImages,
-        AccountImages
+        AccountImages,
+        ImageSliderImages
     }
 
     public enum PrefixFileName
     {
         AdminCategory,
-        Account
+        Account,
+        ImageSlider
     }
 }

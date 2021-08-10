@@ -5,12 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Imlementations\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SCSS.Data.EF\SCSS.Data.EF.csproj" />
     <ProjectReference Include="..\SCSS.Data\SCSS.Data.csproj" />
     <ProjectReference Include="..\SCSS.ORM.Dapper\SCSS.ORM.Dapper.csproj" />

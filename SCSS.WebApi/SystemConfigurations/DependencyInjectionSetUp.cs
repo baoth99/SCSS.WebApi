@@ -25,11 +25,23 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddSingleton<IDapperService, DapperService>();
             services.AddScoped<IAuthSession, AuthSession>();
 
-            services.AddScoped<IStorageBlobS3Service, StorageBlobS3Service>();
+            #region Admin Application
+
             services.AddScoped<ICategoryAdminService, CategoryAdminService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUnitService, UnitService>();
             services.AddScoped<IDashboardService, DashboardService>();
+            services.AddScoped<IImageSliderService, ImageSliderService>();
+
+            #endregion
+
+            #region AWS Service
+
+            services.AddScoped<IStorageBlobS3Service, StorageBlobS3Service>();
+
+            #endregion
+
+
         }
     }
 }

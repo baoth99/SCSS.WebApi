@@ -50,7 +50,7 @@ namespace SCSS.Application.Admin.Implementations
 
         public async Task<int> GetAmountOfBookingInDay(DateTime dateTimeFrom, DateTime dateTimeTo)
         {
-            var dataQuery = _bookingRepository.GetManyAsNoTracking(x => x.CreatedTime.Value.CompareTo(dateTimeFrom) >= 0 &&
+            var dataQuery = UnitOfWork.UnitRepository.GetManyAsNoTracking(x => x.CreatedTime.Value.CompareTo(dateTimeFrom) >= 0 &&
                                                                         x.CreatedTime.Value.CompareTo(dateTimeTo) <= 0);
             return await dataQuery.CountAsync();
         }

@@ -44,6 +44,11 @@ namespace SCSS.Utilities.Configurations
             public const string ApiUrl = "ESMSService:ApiUrl";
         }
 
+        public static class Firebase
+        {
+            public const string CredentialFile = "FirebaseService:CredentialFile";
+        }
+
         public static class Twilio
         {
             public const string AccountSID = "Twilio:AccountSID";

@@ -8,6 +8,8 @@ namespace SCSS.WebApi.SystemConstants
         private const string Account = "account/admin";
         private const string Unit = "unit";
         private const string Data = "data";
+        private const string ImageSlider = "image-slider";
+
 
         public static class HubApiUrl
         {
@@ -19,6 +21,12 @@ namespace SCSS.WebApi.SystemConstants
         public static class DashboardApiUrl
         {
             public const string Dashboard = "dashboard";
+        }
+
+        public static class ImageSliderApiUrl
+        {
+            public const string Create = ImageSlider + "/create";
+
         }
 
         public static class CategoryAdminApiUrl

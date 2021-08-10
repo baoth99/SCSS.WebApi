@@ -31,7 +31,7 @@ namespace SCSS.AWSService.Implementations
                 ContentType = file.ContentType,
             };
 
-            var result = await _amazonS3.PutObjectAsync(putRequest);
+            await _amazonS3.PutObjectAsync(putRequest);
 
             return $"{path}/{fileName}";
         }

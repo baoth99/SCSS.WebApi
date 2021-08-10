@@ -3,6 +3,7 @@ using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.DependencyInjection;
 using SCSS.FirebaseService.Implementations;
 using SCSS.FirebaseService.Interfaces;
+using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
 using System;
 
@@ -16,7 +17,7 @@ namespace SCSS.WebApi.SystemConfigurations
             {
                 throw new ArgumentException(nameof(services));
             }
-            Environment.SetEnvironmentVariable(CommonConstants.GoogleCredentials, "scss-e0dfc-firebase-adminsdk-i33yy-555ad9cd95.json");
+            Environment.SetEnvironmentVariable(CommonConstants.GoogleCredentials, AppSettingValues.FirebaseCredentialFile);
 
             FirebaseApp.Create(new AppOptions()
             {
@@ -24,6 +25,14 @@ namespace SCSS.WebApi.SystemConfigurations
             });
 
             services.AddScoped<IFCMService, FCMService>();
+
+
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = AppSettingValues.RedisConnectionString;
+                
+            });
+
         }
     }
 }

@@ -40,5 +40,7 @@ namespace SCSS.Utilities.Configurations
         public static string TwilioAuthToken => ConfigurationHelper.GetValue<string>(AppSettingKeys.Twilio.AuthToken);
 
         public static string TwilioPhoneNumber => ConfigurationHelper.GetValue<string>(AppSettingKeys.Twilio.PhoneNumber);
+
+        public static string FirebaseCredentialFile => ConfigurationHelper.GetValue<string>(AppSettingKeys.Firebase.CredentialFile);
     }
 }
