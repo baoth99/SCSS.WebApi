@@ -32,6 +32,12 @@ namespace SCSS.Utilities.Constants
         public const string GoogleCredentials = "GOOGLE_APPLICATION_CREDENTIALS";
     }
 
+
+    public class RegularExpression
+    {
+        public const string PhoneRegex = @"(84|0[3|5|7|8|9])+([0-9]{8})\b";
+    }
+
     public class ImageFileConstants
     {
         public const string PNG = ".png";

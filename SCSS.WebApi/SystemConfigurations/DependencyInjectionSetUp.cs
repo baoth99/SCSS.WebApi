@@ -1,13 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SCSS.Application.Admin.Implementations;
-using SCSS.Application.Admin.Interfaces;
-using SCSS.AWSService.Implementations;
-using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.ORM.Dapper.Implementations;
 using SCSS.ORM.Dapper.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using System;
+
 
 namespace SCSS.WebApi.SystemConfigurations
 {
@@ -27,19 +24,32 @@ namespace SCSS.WebApi.SystemConfigurations
 
             #region Admin Application
 
-            services.AddScoped<ICategoryAdminService, CategoryAdminService>();
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IUnitService, UnitService>();
-            services.AddScoped<IDashboardService, DashboardService>();
-            services.AddScoped<IImageSliderService, ImageSliderService>();
+            services.AddScoped<SCSS.Application.Admin.Interfaces.ICategoryAdminService, SCSS.Application.Admin.Implementations.CategoryAdminService>();
+            services.AddScoped<SCSS.Application.Admin.Interfaces.IAccountService, SCSS.Application.Admin.Implementations.AccountService>();
+            services.AddScoped<SCSS.Application.Admin.Interfaces.IUnitService, SCSS.Application.Admin.Implementations.UnitService>();
+            services.AddScoped<SCSS.Application.Admin.Interfaces.IDashboardService, SCSS.Application.Admin.Implementations.DashboardService>();
+            services.AddScoped<SCSS.Application.Admin.Interfaces.IImageSliderService, SCSS.Application.Admin.Implementations.ImageSliderService>();
 
             #endregion
 
-            #region AWS Service
+            #region Collector Application
 
-            services.AddScoped<IStorageBlobS3Service, StorageBlobS3Service>();
 
             #endregion
+
+
+            #region Dealer Application
+
+
+
+            #endregion
+
+
+            #region Seller Application
+
+            services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IAccountService, SCSS.Application.ScrapSeller.Imlementations.AccountService>();
+
+            #endregion           
 
 
         }

@@ -4,6 +4,9 @@ using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
 using SCSS.Utilities.AuthSessionConfig;
+using SCSS.Utilities.BaseResponse;
+using SCSS.Utilities.Constants;
+using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using System;
 using System.Collections.Generic;
@@ -30,18 +33,35 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
         #endregion
 
+        #region Constructor
+
         public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession) : base(unitOfWork, userAuthSession)
         {
             _accountRepository = unitOfWork.AccountRepository;
             _roleRepository = unitOfWork.RoleRepository;
         }
 
+        #endregion
+
 
         #region Register Seller Account
 
         public async Task<BaseApiResponseModel> Register(AccountRegistrationModel model)
         {
-            return null;
+            var entity = new Account()
+            {
+                Name = model.Name,
+                UserName = model.UserName,
+                Gender = model.Gender,
+                DeviceId = model.DeviceId,
+                Phone = model.UserName
+            };
+
+            var dictionary = CommonUtils.ObjToDictionary<AccountRegistrationModel>(model);
+
+            //var res = await HttpClientHelper.IDHttpClientPost(IdentityServer4Route.RegisterSeller, UserAuthSession.UserSession.ClientId, dictionary);
+
+            return BaseApiResponse.OK(dictionary);
         }
 
         #endregion

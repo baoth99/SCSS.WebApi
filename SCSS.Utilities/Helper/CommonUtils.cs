@@ -22,7 +22,7 @@ namespace SCSS.Utilities.Helper
         public static Dictionary<string, string> ObjToDictionary<T>(T obj) where T : class
         {
             var data = obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                    .ToDictionary(prop => prop.Name, prop => (string)prop.GetValue(obj, null));
+                                    .ToDictionary(prop => prop.Name, prop => prop.GetValue(obj, null).ToString());
 
             return data;
         }

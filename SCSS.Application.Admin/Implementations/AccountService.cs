@@ -106,6 +106,7 @@ namespace SCSS.Application.Admin.Implementations
             {
                 return BaseApiResponse.NotFound();
             }
+
             var dictionary = new Dictionary<string, string>()
             {
                 {"id", model.Id.ToString() },

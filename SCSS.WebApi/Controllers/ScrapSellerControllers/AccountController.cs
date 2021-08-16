@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SCSS.Application.ScrapSeller.Interfaces;
+using SCSS.Application.ScrapSeller.Models.AccountModels;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
@@ -17,14 +19,18 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
     {
         #region Services
 
-
+        /// <summary>
+        /// The account service
+        /// </summary>
+        private readonly IAccountService _accountService;
 
         #endregion
 
         #region Constructor
 
-        public AccountController()
+        public AccountController(IAccountService accountService)
         {
+            _accountService = accountService;
         }
 
         #endregion
@@ -37,9 +43,9 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapSellerApiUrlDefinition.AccountApiUrl.RegisterSellerAccount)]
-        public async Task<BaseApiResponseModel> RegisterScrapSellerAccount()
+        public async Task<BaseApiResponseModel> RegisterScrapSellerAccount(AccountRegistrationModel model)
         {
-            return BaseApiResponse.OK();
+            return await _accountService.Register(model);
         }
 
         #endregion

@@ -36,14 +36,6 @@ namespace SCSS.Utilities.Configurations
             public const string S3SecretKey = "AWSService:S3SecretKey";
         }
 
-        public static class ESMS
-        {
-            public const string ApiKey = "ESMSService:ApiKey";
-            public const string SecrectKey = "ESMSService:SecretKey";
-            public const string BrandName = "ESMSService:BrandName";
-            public const string ApiUrl = "ESMSService:ApiUrl";
-        }
-
         public static class Firebase
         {
             public const string CredentialFile = "FirebaseService:CredentialFile";
@@ -51,9 +43,9 @@ namespace SCSS.Utilities.Configurations
 
         public static class Twilio
         {
-            public const string AccountSID = "Twilio:AccountSID";
-            public const string AuthToken = "Twilio:AuthToken";
-            public const string PhoneNumber = "Twilio:PhoneNumber";
+            public const string AccountSID = "TwilioService:AccountSID";
+            public const string AuthToken = "TwilioService:AuthToken";
+            public const string PhoneNumber = "TwilioService:PhoneNumber";
         }
     }
 }

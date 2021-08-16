@@ -27,14 +27,6 @@ namespace SCSS.Utilities.Configurations
 
         public static string AWSS3BucketName => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.S3BucketName);
 
-        public static string ESMSApiKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.ESMS.ApiKey);
-
-        public static string ESMSApiSecret => ConfigurationHelper.GetValue<string>(AppSettingKeys.ESMS.SecrectKey);
-
-        public static string ESMSBrandName => ConfigurationHelper.GetValue<string>(AppSettingKeys.ESMS.BrandName);
-
-        public static string ESMSApiUrl => ConfigurationHelper.GetValue<string>(AppSettingKeys.ESMS.ApiUrl);
-
         public static string TwilioAccountSID => ConfigurationHelper.GetValue<string>(AppSettingKeys.Twilio.AccountSID);
 
         public static string TwilioAuthToken => ConfigurationHelper.GetValue<string>(AppSettingKeys.Twilio.AuthToken);
