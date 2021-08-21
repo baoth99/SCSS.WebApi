@@ -47,5 +47,11 @@ namespace SCSS.Utilities.Configurations
             public const string AuthToken = "TwilioService:AuthToken";
             public const string PhoneNumber = "TwilioService:PhoneNumber";
         }
+
+        public static class GoongMap
+        {
+            public const string GoongApiKey = "GoongMapService:ApiKey";
+            public const string GoongApiURL = "GoongMapService:ApiURL";
+        }
     }
 }

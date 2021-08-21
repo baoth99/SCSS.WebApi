@@ -36,6 +36,7 @@ namespace SCSS.Utilities.Constants
     public class RegularExpression
     {
         public const string PhoneRegex = @"(84|0[3|5|7|8|9])+([0-9]{8})\b";
+        public const string EmailRegex = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
     }
 
     public class ImageFileConstants

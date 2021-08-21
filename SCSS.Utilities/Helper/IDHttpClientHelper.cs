@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace SCSS.Utilities.Helper
 {
-    public class HttpClientHelper
+    public class IDHttpClientHelper
     {
-        public static HttpClient GetHttpClient(string clientId)
+        private static HttpClient GetHttpClient(string clientId)
         {
             HttpClientHandler clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
@@ -51,7 +51,6 @@ namespace SCSS.Utilities.Helper
                 };              
                 return responseModel;
             }
-
             return null;
         }
     }

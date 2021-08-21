@@ -13,5 +13,6 @@
         public const string MaxLength = "IET0001";
         public const string AccountStatus = "IACCS001";
         public const string PhoneRegex = "IPR0001";
+        public const string DatetTime = "DT0001";
     }
 }

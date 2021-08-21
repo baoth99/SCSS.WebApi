@@ -2,10 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using SCSS.Utilities.Configurations;
+using SCSS.Utilities.Constants;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
 
 
 namespace SCSS.WebApi.SystemConfigurations
@@ -27,42 +28,33 @@ namespace SCSS.WebApi.SystemConfigurations
                 {
                     #region Add Swagger Doc
 
-                    c.SwaggerDoc("v1", new OpenApiInfo
+                    foreach (var item in SwaggerDefinition.Swagger)
                     {
-                        Title = "SCSS.WebApi.Admin",
-                        Description = "SCSS.WebApi for Admin Role",
-                        Version = "v1",
-                    });
-                    c.SwaggerDoc("v2", new OpenApiInfo
-                    {
-                        Title = "SCSS.WebApi.Seller",
-                        Description = "SCSS.WebApi for Seller Role",
-                        Version = "v2"
-                    });
-                    c.SwaggerDoc("v3", new OpenApiInfo
-                    {
-                        Title = "SCSS.WebApi.Dealer",
-                        Description = "SCSS.WebApi for Dealer Role",
-                        Version = "v3"
-                    });
-                    c.SwaggerDoc("v4", new OpenApiInfo
-                    {
-                        Title = "SCSS.WebApi.Dealer",
-                        Description = "SCSS.WebApi for Collector Role",
-                        Version = "v4"
-                    });
+                        c.SwaggerDoc(item.Version, new OpenApiInfo
+                        {
+                            Title = item.Title,
+                            Description = item.Description,
+                            Version = item.Version,
+                            Contact = new OpenApiContact() { 
+                                Email = item.ContactEmail,
+                                Name = item.ContactName
+                            },
+                            License = new OpenApiLicense()
+                            {
+                                Name = item.LicenseName,
+                                Url = item.LicenseUrl
+                            },
+                            TermsOfService = item.TermsOfService
+                        });
+                    }
 
                     #endregion
 
                     c.ResolveConflictingActions(a => a.First());
                     c.OperationFilter<VersionFromParameter>();
                     c.DocumentFilter<VersionWithExactValueInPath>();
+                  
 
-                    if (ConfigurationHelper.IsDevelopment)
-                    {
-                        
-                    }
-                    
                     if (ConfigurationHelper.IsProduction || ConfigurationHelper.IsTesting)
                     {
                         var securityScheme = new OpenApiSecurityScheme()
@@ -108,10 +100,10 @@ namespace SCSS.WebApi.SystemConfigurations
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SCSS.WebApi.Admin v1");
-                    c.SwaggerEndpoint("/swagger/v2/swagger.json", "SCSS.WebApi.Seller v2");
-                    c.SwaggerEndpoint("/swagger/v3/swagger.json", "SCSS.WebApi.Dealer v3");
-                    c.SwaggerEndpoint("/swagger/v4/swagger.json", "SCSS.WebApi.Collector v4");
+                    foreach (var item in SwaggerDefinition.Swagger)
+                    {
+                        c.SwaggerEndpoint(item.UrlDefination, $"{item.Title} {item.Version}");
+                    }
                 });
             }   
         }
@@ -125,7 +117,25 @@ namespace SCSS.WebApi.SystemConfigurations
             {
                 var versionParameter = operation.Parameters.Single(p => p.Name == "ver");
                 operation.Parameters.Remove(versionParameter);
-            }   
+            }
+
+            if (ConfigurationHelper.IsDevelopment)
+            {
+                if (operation.Parameters == null)
+                    operation.Parameters = new List<OpenApiParameter>();
+
+                var accountIdHeader = new OpenApiParameter
+                {
+                    Name = "AccountId",
+                    In = ParameterLocation.Header,
+                    Required = true,
+                    Schema = new OpenApiSchema
+                    {
+                        Type = "string"
+                    }
+                };
+                operation.Parameters.Add(accountIdHeader);
+            }
         }
     }
 

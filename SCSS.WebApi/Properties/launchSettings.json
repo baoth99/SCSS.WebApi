@@ -14,7 +14,7 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development" //Production, Testing
+        "ASPNETCORE_ENVIRONMENT": "Testing" //Production, Testing, Development
       }
     },
     "SCSS.WebApi": {

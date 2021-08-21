@@ -17,7 +17,10 @@ namespace SCSS.Utilities.Constants
 
         public static readonly List<string> FileS3PathCollection = new List<string>()
         {
-            FileS3Path.AccountImages.ToString(),
+            FileS3Path.AdminAccountImages.ToString(),
+            FileS3Path.CollectorAccountImages.ToString(),
+            FileS3Path.DealerAccountImages.ToString(),
+            FileS3Path.SellerAccountImages.ToString(),
             FileS3Path.AdminCategoryImages.ToString(),
         };
 
@@ -42,6 +45,12 @@ namespace SCSS.Utilities.Constants
         {
             AccountCategoryStatus.DISABLED,
             AccountCategoryStatus.ENABLED
+        };
+
+        public static readonly List<int> GenderCollection = new List<int>()
+        {
+            Gender.FEMALE,
+            Gender.MALE
         };
     }
 

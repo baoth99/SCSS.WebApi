@@ -4,17 +4,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SCSS.Validations.ValidationAttributes.CommonValidations
 {
-    public class AccountStatusAttribute : ValidationAttribute
+    public class GenderAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var status = value as int?;
+            var gender = value as int?;
 
-            if (!CollectionConstants.AccountStatusCollection.Contains(status.Value))
+            if (!CollectionConstants.GenderCollection.Contains(gender.GetValueOrDefault()))
             {
                 return new ValidationResult(InvalidTextCode.AccountStatus);
             }
-
             return ValidationResult.Success;
         }
     }

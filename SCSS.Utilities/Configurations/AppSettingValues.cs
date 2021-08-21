@@ -34,5 +34,9 @@ namespace SCSS.Utilities.Configurations
         public static string TwilioPhoneNumber => ConfigurationHelper.GetValue<string>(AppSettingKeys.Twilio.PhoneNumber);
 
         public static string FirebaseCredentialFile => ConfigurationHelper.GetValue<string>(AppSettingKeys.Firebase.CredentialFile);
+
+        public static string GoongMapApiKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.GoongMap.GoongApiKey);
+
+        public static string GoongMapApiURL => ConfigurationHelper.GetValue<string>(AppSettingKeys.GoongMap.GoongApiURL);
     }
 }

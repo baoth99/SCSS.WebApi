@@ -10,6 +10,8 @@ namespace SCSS.Application.ScrapSeller.Models.AccountModels
 {
     public class AccountRegistrationModel
     {
+        public string RegisterToken { get; set; }
+
         [ValidateRegex(RegularExpression.PhoneRegex)]
         public string UserName { get; set; } // Phone
 
@@ -18,6 +20,7 @@ namespace SCSS.Application.ScrapSeller.Models.AccountModels
         [TextUtil(255, false)]
         public string Name { get; set; }
 
+        [Gender]
         public int Gender { get; set; }
 
         public string DeviceId { get; set; }

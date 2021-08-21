@@ -113,7 +113,7 @@ namespace SCSS.Application.Admin.Implementations
                 {"status", model.Status.ToString() }
             };
 
-            var res = await HttpClientHelper.IDHttpClientPost(IdentityServer4Route.ChangStatus,UserAuthSession.UserSession.ClientId, dictionary);
+            var res = await IDHttpClientHelper.IDHttpClientPost(IdentityServer4Route.ChangStatus,UserAuthSession.UserSession.ClientId, dictionary);
 
             if (res == null)
             {

@@ -37,12 +37,18 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
 
         #region Register Scrap Seller Account
 
+        /// <summary>
+        /// Registers the scrap seller account.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapSellerApiUrlDefinition.AccountApiUrl.RegisterSellerAccount)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> RegisterScrapSellerAccount(AccountRegistrationModel model)
         {
             return await _accountService.Register(model);
@@ -52,15 +58,20 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
 
         #region Update Scrap Seller Profile
 
+        /// <summary>
+        /// Updates the scrap seller account.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Unauthorized)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapSellerApiUrlDefinition.AccountApiUrl.UpdateSellerAccount)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> UpdateScrapSellerAccount()
+        public async Task<BaseApiResponseModel> UpdateScrapSellerAccount(AccountUpdateProfileModel model)
         {
-            return null;
+            return await _accountService.UpdateAccount(model);
         }
 
         #endregion
