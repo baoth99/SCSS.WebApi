@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace SCSS.WebApi.SignalR.AdminHubs.Hubs
 {
+
     public class AmountOfBookingHub : BaseAdminHub<IAmountOfBookingHub>
     {
         #region Services

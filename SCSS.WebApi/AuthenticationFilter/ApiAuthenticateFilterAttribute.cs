@@ -104,6 +104,7 @@ namespace SCSS.WebApi.AuthenticationFilter
             {
                 //Get Token in Header
                 context.HttpContext.Request.Headers.TryGetValue("Authorization", out StringValues tokenVal);
+
                 var token = tokenVal.ToString().Split(" ").Last();
 
                 var authSessionModel = JwtManager.ValidateToken(token);

@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace SCSS.WebApi.SystemConfigurations
 {
     internal static class SwaggerGenSetUp
@@ -22,8 +21,6 @@ namespace SCSS.WebApi.SystemConfigurations
 
             if (AppSettingValues.UseSwaggerUI)
             {
-                
-
                 services.AddSwaggerGen(c =>
                 {
                     #region Add Swagger Doc
@@ -53,7 +50,6 @@ namespace SCSS.WebApi.SystemConfigurations
                     c.ResolveConflictingActions(a => a.First());
                     c.OperationFilter<VersionFromParameter>();
                     c.DocumentFilter<VersionWithExactValueInPath>();
-                  
 
                     if (ConfigurationHelper.IsProduction || ConfigurationHelper.IsTesting)
                     {

@@ -3,7 +3,7 @@ namespace SCSS.WebApi.SystemConstants
 {
     public class AdminApiUrlDefinition
     {
-        private const string Hub = "hubs/admin";
+        private const string Hub = "/hubs/admin";
         private const string AdminCategory = "admin-category";
         private const string Account = "account/admin";
         private const string Unit = "unit";

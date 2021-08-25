@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
 using SCSS.WebApi.AuthenticationFilter;
@@ -33,11 +31,12 @@ namespace SCSS.WebApi.SystemConfigurations
             .AddIdentityServerAuthentication(option =>
             {
                 option.Authority = AppSettingValues.Authority;
-                option.RequireHttpsMetadata = false;
+                option.RequireHttpsMetadata = BooleanConstants.FALSE;
                 option.ApiName = AppSettingValues.ApiName;
                 option.ApiSecret = AppSettingValues.ApiSecret;
 
                 option.SupportedTokens = SupportedTokens.Jwt;
+
                 option.JwtBearerEvents = new JwtBearerEvents()
                 {
                     OnAuthenticationFailed = (context) =>
@@ -46,54 +45,44 @@ namespace SCSS.WebApi.SystemConfigurations
                         var result = exceptionType.ToString();
                         context.Response.ContentType = ApplicationRestfulApi.ApplicationProduce;
                         context.Response.ContentLength = result.Length;
-                        context.Response.Body.Write(Encoding.UTF8.GetBytes(result),0, result.Length);
+                        context.Response.Body.Write(Encoding.UTF8.GetBytes(result), 0, result.Length);
                         context.Response.StatusCode = HttpStatusCodes.Unauthorized;
                         return Task.CompletedTask;
                     },
-                    //OnMessageReceived = context =>
-                    //{
-                    //    var accessToken = context.Request.Query["access_token"].ToString();
-
-                    //    // If the request is for our hub...
-                    //    var path = context.HttpContext.Request.Path;
-                    //    if (!string.IsNullOrEmpty(accessToken) &&
-                    //        (path.StartsWithSegments("/hubs")))
-                    //    {
-                    //        // Read the token out of the query string
-                    //        context.Token = accessToken;
-                    //    }
-                    //    return Task.CompletedTask;
-                    //},
                     OnTokenValidated = (context) =>
-                    {                     
+                    {
                         return Task.CompletedTask;
                     },
                 };
-            });
-            services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<JwtBearerOptions>,ConfigureJwtBearerOptions>());
+            }); 
+
         }
-    }
 
-    public class ConfigureJwtBearerOptions : IPostConfigureOptions<JwtBearerOptions>
-    {
-        public void PostConfigure(string name, JwtBearerOptions options)
+        public static void UseAuthenticationSetUp(this IApplicationBuilder app)
         {
-            var originalOnMessageReceived = options.Events.OnMessageReceived;
-            options.Events.OnMessageReceived = async context =>
+            if (app == null)
             {
-                await originalOnMessageReceived(context);
-                if (string.IsNullOrEmpty(context.Token))
-                {
-                    var accessToken = context.Request.Query["access_token"].ToString();
-                    var path = context.HttpContext.Request.Path;
+                throw new ArgumentException(nameof(app));
+            }
 
-                    if (!string.IsNullOrEmpty(accessToken) &&
-                        path.StartsWithSegments("/hubs"))
+            if (ConfigurationHelper.IsProduction || ConfigurationHelper.IsTesting)
+            {
+                app.Use(async (context, next) =>
+                {
+                    if (context.Request.Path.Value.StartsWith("/hubs/"))
                     {
-                        context.Token = accessToken;
+                        var accessToken = context.Request.Query["access_token"].ToString();
+
+                        if (!string.IsNullOrEmpty(accessToken))
+                        {
+                            context.Request.Headers.Add("Authorization", new string[] { "Bearer " + accessToken });
+                        }
                     }
-                }
-            };
+                    await next();
+                });
+            }
+
+            app.UseAuthentication();
         }
     }
 }
