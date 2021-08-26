@@ -58,6 +58,41 @@ namespace SCSS.AWSService.Implementations
         }
 
 
+        public async Task<FileViewModel> GetFileByUrl(string filepath)
+        {
+            var path = filepath.Split("/")[0];
+
+            if (!CollectionConstants.FileS3PathCollection.Contains(path))
+            {
+                return null;
+            }
+            var file = filepath.Split("/")[1];
+
+            if (!CollectionConstants.ImageExtensions.Contains(Path.GetExtension(file.ToLower())))
+            {
+                return null;
+            }
+
+            var request = new GetObjectRequest()
+            {
+                BucketName = AppSettingValues.AWSS3BucketName,
+                Key = filepath
+            };
+
+            var response = await _amazonS3.GetObjectAsync(request);
+
+            var stream = response.ResponseStream;
+            var base64 = stream.ToBase64();
+
+            var fileResponse = new FileViewModel()
+            {
+                Extension = Path.GetExtension(filepath).ToLower().Substring(1),
+                Base64 = base64
+            };
+
+            return fileResponse;
+        }
+
         public async Task<BaseApiResponseModel> GetImage(string filepath)
         {
             

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SCSS.Utilities.Constants
+﻿namespace SCSS.Utilities.Constants
 {
     public enum FileS3Path
     {
@@ -31,6 +25,11 @@ namespace SCSS.Utilities.Constants
         SellerAccount,
         DealerAccount,
         CollectorAccount,
+        ImageSlider
+    }
+
+    public enum CacheRedisKey
+    {
         ImageSlider
     }
 }

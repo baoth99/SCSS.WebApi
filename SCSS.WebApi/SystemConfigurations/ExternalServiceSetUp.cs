@@ -36,6 +36,14 @@ namespace SCSS.WebApi.SystemConfigurations
                 Credential = GoogleCredential.GetApplicationDefault(),
             });
 
+
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = AppSettingValues.RedisConnectionString;
+
+            });
+
+
             #region DI for External Service
 
             // Firebase
@@ -46,15 +54,11 @@ namespace SCSS.WebApi.SystemConfigurations
 
             // AWS
             services.AddScoped<IStorageBlobS3Service, StorageBlobS3Service>();
+            services.AddScoped<ICacheService, CacheService>();
 
             #endregion
 
 
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = AppSettingValues.RedisConnectionString;
-                
-            });
 
         }
     }

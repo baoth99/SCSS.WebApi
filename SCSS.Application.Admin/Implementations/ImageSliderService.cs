@@ -13,8 +13,9 @@ using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.Admin.Implementations
@@ -38,18 +39,26 @@ namespace SCSS.Application.Admin.Implementations
         /// </summary>
         private readonly IStorageBlobS3Service _storageBlobS3Service;
 
+
+        /// <summary>
+        /// The cache service
+        /// </summary>
+        private readonly ICacheService _cacheService;
+
         #endregion
 
         #region Constructor
 
-        public ImageSliderService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, IStorageBlobS3Service storageBlobS3Service) : base(unitOfWork, userAuthSession)
+        public ImageSliderService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, 
+                                  IStorageBlobS3Service storageBlobS3Service,
+                                  ICacheService cacheService) : base(unitOfWork, userAuthSession)
         {
             _imageSliderRepository = unitOfWork.ImageSliderRepository;
             _storageBlobS3Service = storageBlobS3Service;
+            _cacheService = cacheService;
         }
 
         #endregion
-
 
         #region Create New Image
 
@@ -60,16 +69,13 @@ namespace SCSS.Application.Admin.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> CreateNewImage(ImageSliderCreateModel model)
         {
-            string imageUrl = string.Empty;
-
             if (model.Image != null)
             {
                 var fileName = CommonUtils.GetFileName(PrefixFileName.ImageSlider, model.Image.FileName);
-                imageUrl = await _storageBlobS3Service.UploadFile(model.Image, fileName, FileS3Path.ImageSliderImages);
-
+                string imageUrl = await _storageBlobS3Service.UploadFile(model.Image, fileName, FileS3Path.ImageSliderImages);
                 var entity = new ImageSlider()
                 {
-                    Name = model.Image.FileName,
+                    Name = Path.GetFileNameWithoutExtension(model.Image.FileName),
                     ImageUrl = imageUrl,
                     IsSelected = BooleanConstants.FALSE
                 };
@@ -84,9 +90,12 @@ namespace SCSS.Application.Admin.Implementations
 
         #endregion
 
-
         #region Get Image Slider
 
+        /// <summary>
+        /// Gets the image slider.
+        /// </summary>
+        /// <returns></returns>
         public async Task<BaseApiResponseModel> GetImageSlider()
         {
             var dataQuery = _imageSliderRepository.GetAllAsNoTracking().Select(x => new ImageSliderViewModel()
@@ -131,6 +140,96 @@ namespace SCSS.Application.Admin.Implementations
             };
 
             return BaseApiResponse.OK(resData);
+        }
+
+        #endregion
+
+        #region Add Images to show
+
+        /// <summary>
+        /// Actives the image.
+        /// </summary>
+        /// <param name="activeList">The active list.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> ChangeSelectedImages(List<ActiveImageSliderModel> list)
+        {
+            var selectedItems = list.Join(_imageSliderRepository.GetAllAsNoTracking(), x => x.Id, y => y.Id,
+                                        (x, y) =>
+                                        {
+                                            y.IsSelected = x.IsSelected;
+                                            return y;
+                                        }).ToList();
+
+            _imageSliderRepository.UpdateRange(selectedItems);
+
+            await UnitOfWork.CommitAsync();
+
+            await SaveCache();
+            
+            return BaseApiResponse.OK();
+        }
+
+        #endregion
+
+        #region Get Images
+
+        /// <summary>
+        /// Gets the images.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> GetImages()
+        {
+            var cacheData = await _cacheService.GetCacheData(CacheRedisKey.ImageSlider);
+
+            if (cacheData == null)
+            {
+                await SaveCache();
+                cacheData = await _cacheService.GetCacheData(CacheRedisKey.ImageSlider);
+            }
+
+            var listData = cacheData.ToList<string>();
+
+            if (listData.Count > 0)
+            {
+                var result = listData.Select(x => x.ToBitmap());
+                return BaseApiResponse.OK(result);
+            }
+
+            return BaseApiResponse.OK(CollectionConstants.Empty<Bitmap>());
+
+        }
+
+        #endregion
+
+        #region Save Data to Cache
+
+        /// <summary>
+        /// Saves the cache data.
+        /// </summary>
+        private async Task SaveCache()
+        {
+            var selectedList = _imageSliderRepository.GetManyAsNoTracking(x => x.IsSelected).Select(x => x.ImageUrl).ToList();
+
+            if (selectedList.Count > 0)
+            {
+                var imgCache = new List<string>();
+
+                foreach (var item in selectedList)
+                {
+                    var image = await _storageBlobS3Service.GetFileByUrl(item);
+                    imgCache.Add(image.Base64);
+                }
+
+                if (imgCache.Count > 0)
+                {
+                    var cacheData = imgCache.ToJson();
+                    await _cacheService.SetCacheData(CacheRedisKey.ImageSlider, cacheData);
+                }
+            }
+            else
+            {
+                await _cacheService.RemoveCacheData(CacheRedisKey.ImageSlider);
+            }
         }
 
         #endregion

@@ -15,5 +15,9 @@ namespace SCSS.Application.Admin.Interfaces
         Task<BaseApiResponseModel> GetImageSlider();
 
         Task<BaseApiResponseModel> GetImageSliderDetail(Guid id);
+
+        Task<BaseApiResponseModel> ChangeSelectedImages(List<ActiveImageSliderModel> activeList);
+
+        Task<BaseApiResponseModel> GetImages();
     }
 }

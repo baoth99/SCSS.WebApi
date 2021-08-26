@@ -22,6 +22,7 @@ namespace SCSS.Utilities.Constants
             FileS3Path.DealerAccountImages.ToString(),
             FileS3Path.SellerAccountImages.ToString(),
             FileS3Path.AdminCategoryImages.ToString(),
+            FileS3Path.ImageSliderImages.ToString()
         };
 
 
@@ -52,10 +53,13 @@ namespace SCSS.Utilities.Constants
             Gender.FEMALE,
             Gender.MALE
         };
+
+        public static List<T> Empty<T>() => Enumerable.Empty<T>().ToList();
     }
 
     public class DictionaryConstants
-    {
+    {      
+
         public static readonly Dictionary<string, int> AccountStatusCollection = new Dictionary<string, int>()
         {
             {AccountRoleConstants.ADMIN, AccountRole.ADMIN },

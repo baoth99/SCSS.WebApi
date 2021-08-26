@@ -5,6 +5,7 @@ using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConstants;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SCSS.WebApi.Controllers.AdminControllers
@@ -49,5 +50,64 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         }
 
         #endregion
+
+        #region Get List Images Slider
+
+        /// <summary>
+        /// Gets the list.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.ImageSliderApiUrl.GetList)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetList()
+        {
+            return await _imageSliderService.GetImageSlider();
+        }
+
+        #endregion
+
+        #region Change Selected Images
+
+        /// <summary>
+        /// Changes the selected images.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <returns></returns>
+        [HttpPut]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.ImageSliderApiUrl.ChangeItem)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> ChangeSelectedImages([FromBody] List<ActiveImageSliderModel> list)
+        {
+            return await _imageSliderService.ChangeSelectedImages(list);
+        }
+
+        #endregion
+
+        #region Get Images
+
+        /// <summary>
+        /// Gets the images.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.ImageSliderApiUrl.GetImages)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetImages()
+        {
+            return await _imageSliderService.GetImages();
+        }
+
+        #endregion
+
     }
 }
