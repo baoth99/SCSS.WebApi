@@ -50,7 +50,6 @@ namespace SCSS.WebApi.SystemConfigurations
             #endregion
 
 
-
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = AppSettingValues.RedisConnectionString;
