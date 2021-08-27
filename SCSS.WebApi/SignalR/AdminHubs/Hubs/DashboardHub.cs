@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
-using SCSS.Application.Admin.Interfaces;
+﻿using SCSS.Application.Admin.Interfaces;
 using SCSS.Utilities.Constants;
 using SCSS.WebApi.SignalR.AdminHubs.IHubs;
 using System.Threading.Tasks;
 
 namespace SCSS.WebApi.SignalR.AdminHubs.Hubs
 {
+
     public class AmountOfBookingHub : BaseAdminHub<IAmountOfBookingHub>
     {
         #region Services

@@ -1,4 +1,5 @@
 ﻿using SCSS.Utilities.Constants;
+using SCSS.Utilities.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,15 +9,16 @@ using System.Threading.Tasks;
 
 namespace SCSS.Validations.ValidationAttributes.CommonValidations
 {
-    public class AccountStatusAttribute : ValidationAttribute
+    public class DateTimeValidationAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var status = value as int?;
+            var dateTimeString = value as string;
 
-            if (!CollectionConstants.AccountStatusCollection.Contains(status.Value))
+            var dateTime = dateTimeString.ToDateTime();
+            if (dateTime == null)
             {
-                return new ValidationResult(InvalidTextCode.AccountStatus);
+                return new ValidationResult(InvalidTextCode.DatetTime);
             }
 
             return ValidationResult.Success;

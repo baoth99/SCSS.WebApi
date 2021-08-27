@@ -26,6 +26,8 @@ namespace SCSS.Data.EF.UnitOfWork
 
         IRepository<Feedback> FeedbackRepository { get; }
 
+        IRepository<ImageSlider> ImageSliderRepository { get; }
+
         IRepository<ItemType> ItemTypeRepository { get; }
 
         IRepository<Location> LocationRepository { get; }

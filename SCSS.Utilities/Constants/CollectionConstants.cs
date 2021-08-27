@@ -17,8 +17,12 @@ namespace SCSS.Utilities.Constants
 
         public static readonly List<string> FileS3PathCollection = new List<string>()
         {
-            FileS3Path.AccountImages.ToString(),
+            FileS3Path.AdminAccountImages.ToString(),
+            FileS3Path.CollectorAccountImages.ToString(),
+            FileS3Path.DealerAccountImages.ToString(),
+            FileS3Path.SellerAccountImages.ToString(),
             FileS3Path.AdminCategoryImages.ToString(),
+            FileS3Path.ImageSliderImages.ToString()
         };
 
 
@@ -43,10 +47,19 @@ namespace SCSS.Utilities.Constants
             AccountCategoryStatus.DISABLED,
             AccountCategoryStatus.ENABLED
         };
+
+        public static readonly List<int> GenderCollection = new List<int>()
+        {
+            Gender.FEMALE,
+            Gender.MALE
+        };
+
+        public static List<T> Empty<T>() => Enumerable.Empty<T>().ToList();
     }
 
     public class DictionaryConstants
-    {
+    {      
+
         public static readonly Dictionary<string, int> AccountStatusCollection = new Dictionary<string, int>()
         {
             {AccountRoleConstants.ADMIN, AccountRole.ADMIN },

@@ -34,21 +34,36 @@ namespace SCSS.Utilities.Configurations
             public const string S3BucketName = "AWSService:S3BucketName";
             public const string S3AccessKey = "AWSService:S3AccessKey";
             public const string S3SecretKey = "AWSService:S3SecretKey";
+
+            public const string CloudWatchAccessKey = "AWSService:CloudWatchAccessKey";
+            public const string CloudWatchSecrectKey = "AWSService:CloudWatchSecrectKey";
+            public const string CloudWatchLogGroup = "AWSService:CloudWatchLogGroup";
+
+            public const string Region = "AWSService:Region";
+
         }
 
-        public static class ESMS
+        public static class Firebase
         {
-            public const string ApiKey = "ESMSService:ApiKey";
-            public const string SecrectKey = "ESMSService:SecretKey";
-            public const string BrandName = "ESMSService:BrandName";
-            public const string ApiUrl = "ESMSService:ApiUrl";
+            public const string CredentialFile = "FirebaseService:CredentialFile";
         }
 
         public static class Twilio
         {
-            public const string AccountSID = "Twilio:AccountSID";
-            public const string AuthToken = "Twilio:AuthToken";
-            public const string PhoneNumber = "Twilio:PhoneNumber";
+            public const string AccountSID = "TwilioService:AccountSID";
+            public const string AuthToken = "TwilioService:AuthToken";
+            public const string PhoneNumber = "TwilioService:PhoneNumber";
+        }
+
+        public static class GoongMap
+        {
+            public const string GoongApiKey = "GoongMapService:ApiKey";
+            public const string GoongApiURL = "GoongMapService:ApiURL";
+        }
+
+        public static class Logging
+        {
+            public const string Config = "Logging:Config";
         }
     }
 }

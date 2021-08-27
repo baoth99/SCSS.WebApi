@@ -15,8 +15,14 @@ namespace SCSS.Utilities.Helper
 
         public static byte[] ReadToByte(string subFolder, string fileName)
         {
-            string filePath = "";
+            string filePath = GetFilePathAppData(subFolder, fileName);
             return File.ReadAllBytes(filePath);
+        }
+
+        public static string GetFileConfig(string fileName)
+        {
+            return $"{ContentRootPath}\\" +
+                   $"{fileName}";
         }
 
         public static string GetFilePathAppData(string subFolder, string fileName)

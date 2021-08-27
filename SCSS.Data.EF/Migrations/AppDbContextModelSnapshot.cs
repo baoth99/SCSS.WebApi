@@ -179,6 +179,9 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ScrapImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("SellerAccountId")
                         .HasColumnType("uniqueidentifier");
 
@@ -468,6 +471,44 @@ namespace SCSS.Data.EF.Migrations
                     b.ToTable("Feedback");
                 });
 
+            modelBuilder.Entity("SCSS.Data.Entities.ImageSlider", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("newsequentialid()");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSelected")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("ImageSlider");
+                });
+
             modelBuilder.Entity("SCSS.Data.Entities.ItemType", b =>
                 {
                     b.Property<Guid>("Id")
@@ -711,7 +752,7 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<decimal?>("Amount")
                         .HasColumnType("decimal(15,2)");
 
-                    b.Property<Guid?>("CollectorDealerId")
+                    b.Property<Guid?>("CollectorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CreatedBy")

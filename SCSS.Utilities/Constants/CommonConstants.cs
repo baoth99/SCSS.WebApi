@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SCSS.Utilities.Constants
 {
@@ -30,6 +27,13 @@ namespace SCSS.Utilities.Constants
         public const string ContentType = "Content-Type";
         public const string Null = "N/A";
         public const string GoogleCredentials = "GOOGLE_APPLICATION_CREDENTIALS";
+    }
+
+
+    public class RegularExpression
+    {
+        public const string PhoneRegex = @"(84|0[3|5|7|8|9])+([0-9]{8})\b";
+        public const string EmailRegex = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
     }
 
     public class ImageFileConstants
@@ -77,4 +81,6 @@ namespace SCSS.Utilities.Constants
         public const int DEALER = 3;
         public const int COLLECTOR = 4;
     }
+
+
 }

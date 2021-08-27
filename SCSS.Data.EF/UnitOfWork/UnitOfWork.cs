@@ -46,6 +46,8 @@ namespace SCSS.Data.EF.UnitOfWork
 
         private IRepository<Feedback> _feedbackRepository;
 
+        private IRepository<ImageSlider> _imageSliderRepository;
+
         private IRepository<ItemType> _itemTypeRepository;
 
         private IRepository<Location> _locationRepository;
@@ -105,6 +107,8 @@ namespace SCSS.Data.EF.UnitOfWork
         public IRepository<CollectDealTransactionDetail> CollectDealTransactionDetailRepository => _collectDealTransactionDetailRepository ??= (_collectDealTransactionDetailRepository = new Repository<CollectDealTransactionDetail>(AppDbContext));
 
         public IRepository<Feedback> FeedbackRepository => _feedbackRepository ??= (_feedbackRepository = new Repository<Feedback>(AppDbContext));
+
+        public IRepository<ImageSlider> ImageSliderRepository => _imageSliderRepository ??= (_imageSliderRepository = new Repository<ImageSlider>(AppDbContext));
 
         public IRepository<ItemType> ItemTypeRepository => _itemTypeRepository ??= (_itemTypeRepository = new Repository<ItemType>(AppDbContext));
 

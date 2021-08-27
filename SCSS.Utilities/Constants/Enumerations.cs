@@ -1,20 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SCSS.Utilities.Constants
+﻿namespace SCSS.Utilities.Constants
 {
     public enum FileS3Path
     {
         AdminCategoryImages,
-        AccountImages
+        AdminAccountImages,
+        SellerAccountImages,
+        DealerAccountImages,
+        CollectorAccountImages,
+        ImageSliderImages
+    }
+
+    public enum RoleEnum
+    {
+        Admin,
+        Collector,
+        Dealer,
+        Seller
     }
 
     public enum PrefixFileName
     {
         AdminCategory,
-        Account
+        AdminAccount,
+        SellerAccount,
+        DealerAccount,
+        CollectorAccount,
+        ImageSlider
+    }
+
+    public enum CacheRedisKey
+    {
+        ImageSlider
     }
 }

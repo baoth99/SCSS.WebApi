@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SCSS.Application.Admin.Interfaces;
 using SCSS.Application.Admin.Models.AccountModels;
+using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
@@ -12,6 +13,7 @@ using SCSS.Utilities.ResponseModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.Admin.Implementations
@@ -34,7 +36,7 @@ namespace SCSS.Application.Admin.Implementations
 
         #region Constructor
 
-        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession) : base(unitOfWork, userAuthSession)
+        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
         {
             _accountRepository = unitOfWork.AccountRepository;
             _roleRepository = unitOfWork.RoleRepository;
@@ -46,8 +48,41 @@ namespace SCSS.Application.Admin.Implementations
 
         public async Task<BaseApiResponseModel> Search(SearchAccountRequestModel model)
         {
-            var dataQuery = _accountRepository.GetAllAsNoTracking().ToList();
-            return BaseApiResponse.OK(dataQuery);
+            var dataQuery = _accountRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.Name) || x.Name.Contains(model.Name)) &&
+                                                                        (ValidatorUtil.IsBlank(model.Phone) || x.Phone.Contains(model.Phone)) &&
+                                                                        (ValidatorUtil.IsBlank(model.Email) || x.Email.Contains(model.Email)) &&
+                                                                        (model.Status == 0 || x.Status == model.Status) &&
+                                                                        (model.Gender == 0 || x.Gender == model.Gender) &&
+                                                                        (ValidatorUtil.IsBlank(model.IdCard) | x.IdCard.Contains(model.IdCard)))
+                                               .Join(_roleRepository.GetManyAsNoTracking(x => (model.Role == 0 || x.Key == model.Role)), x => x.RoleId, y => y.Id,
+                                               (x, y) => new
+                                               {
+                                                   x.Id,
+                                                   x.Name,
+                                                   x.Phone,
+                                                   x.Gender,
+                                                   x.Status,
+                                                   Role = y.Key,
+                                                   x.TotalPoint,
+                                                   x.CreatedTime
+                                               }).Where(x => x.Role != AccountRole.ADMIN).OrderBy("CreatedTime DESC");
+
+
+            var totalRecord = await dataQuery.CountAsync();
+
+            var dataRes = dataQuery.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize).Select(x => new AccountViewResponseModel()
+            {
+                Id = x.Id,
+                Gender = x.Gender,
+                Name = x.Name,
+                Phone = x.Phone,
+                Role = x.Role,
+                Status = x.Status,
+                TotalPoint = x.TotalPoint
+            }).ToList();
+
+
+            return BaseApiResponse.OK(resData: dataRes, totalRecord: totalRecord);
         }
 
         #endregion
@@ -106,13 +141,14 @@ namespace SCSS.Application.Admin.Implementations
             {
                 return BaseApiResponse.NotFound();
             }
+
             var dictionary = new Dictionary<string, string>()
             {
                 {"id", model.Id.ToString() },
                 {"status", model.Status.ToString() }
             };
 
-            var res = await HttpClientHelper.IDHttpClientPost(IdentityServer4Route.ChangStatus,UserAuthSession.UserSession.ClientId, dictionary);
+            var res = await IDHttpClientHelper.IDHttpClientPost(IdentityServer4Route.ChangStatus,UserAuthSession.UserSession.ClientId, dictionary);
 
             if (res == null)
             {

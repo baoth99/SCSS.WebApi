@@ -111,6 +111,12 @@ namespace SCSS.WebApi
 
             #endregion
 
+            #region Logging SetUp
+
+            services.AddLoggingSetUp();
+
+            #endregion
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -127,14 +133,14 @@ namespace SCSS.WebApi
             }
 
             app.UseCors(option => option
+                .AllowAnyHeader()
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader()
             );
 
             app.UseSwaggerGenSetUp();
 
-            app.UseAuthentication();
+            app.UseAuthenticationSetUp();
 
             app.UseExceptionHandlerSetUp();
 

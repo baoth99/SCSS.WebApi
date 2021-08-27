@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SCSS.Utilities.Constants
+﻿namespace SCSS.Utilities.Constants
 {
     public class InvalidFileCode
     {
@@ -15,10 +9,10 @@ namespace SCSS.Utilities.Constants
 
     public class InvalidTextCode
     {
-        public const string Empty = "ET0001";
-        public const string MaxLength = "ET0001";
-        public const string AccountStatus = "ACCS001";
+        public const string Empty = "IET0001";
+        public const string MaxLength = "IET0001";
+        public const string AccountStatus = "IACCS001";
+        public const string PhoneRegex = "IPR0001";
+        public const string DatetTime = "DT0001";
     }
-
-
 }

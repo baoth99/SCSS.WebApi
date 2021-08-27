@@ -17,5 +17,7 @@ namespace SCSS.AWSService.Interfaces
         Task<FileViewModel> GetFile(string fileName, FileS3Path path);
 
         Task<BaseApiResponseModel> GetImage(string filepath);
+
+        Task<FileViewModel> GetFile(string filepath);
     }
 }

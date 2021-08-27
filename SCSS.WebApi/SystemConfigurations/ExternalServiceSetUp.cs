@@ -1,10 +1,16 @@
 ﻿using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.DependencyInjection;
+using SCSS.AWSService.Implementations;
+using SCSS.AWSService.Interfaces;
 using SCSS.FirebaseService.Implementations;
 using SCSS.FirebaseService.Interfaces;
+using SCSS.TwilioService.Implementations;
+using SCSS.TwilioService.Interfaces;
+using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
 using System;
+using Twilio;
 
 namespace SCSS.WebApi.SystemConfigurations
 {
@@ -16,14 +22,44 @@ namespace SCSS.WebApi.SystemConfigurations
             {
                 throw new ArgumentException(nameof(services));
             }
-            Environment.SetEnvironmentVariable(CommonConstants.GoogleCredentials, "scss-e0dfc-firebase-adminsdk-i33yy-555ad9cd95.json");
+            // Set Environment Variable for Firebase
+            Environment.SetEnvironmentVariable(CommonConstants.GoogleCredentials, AppSettingValues.FirebaseCredentialFile);
 
+            // Connect to Twilio Service
+            string accountSid = AppSettingValues.TwilioAccountSID;
+            string authToken = AppSettingValues.TwilioAuthToken;
+            TwilioClient.Init(accountSid, authToken);
+
+            // Connect to Firebase Service
             FirebaseApp.Create(new AppOptions()
             {
                 Credential = GoogleCredential.GetApplicationDefault(),
             });
 
+            // Connect to redis
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = AppSettingValues.RedisConnectionString;
+
+            });
+           
+
+            #region DI for External Service
+
+            // Firebase
             services.AddScoped<IFCMService, FCMService>();
+
+            // Twilio
+            services.AddScoped<ISMSService, SMSService>();
+
+            // AWS
+            services.AddScoped<IStorageBlobS3Service, StorageBlobS3Service>();
+            services.AddScoped<ICacheService, CacheService>();
+
+            #endregion
+
+
+
         }
     }
 }

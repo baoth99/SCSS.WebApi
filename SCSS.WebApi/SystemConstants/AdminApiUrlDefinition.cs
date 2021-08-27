@@ -3,11 +3,13 @@ namespace SCSS.WebApi.SystemConstants
 {
     public class AdminApiUrlDefinition
     {
-        private const string Hub = "hubs/admin";
+        private const string Hub = "/hubs/admin";
         private const string AdminCategory = "admin-category";
         private const string Account = "account/admin";
         private const string Unit = "unit";
         private const string Data = "data";
+        private const string ImageSlider = "image-slider";
+
 
         public static class HubApiUrl
         {
@@ -19,6 +21,15 @@ namespace SCSS.WebApi.SystemConstants
         public static class DashboardApiUrl
         {
             public const string Dashboard = "dashboard";
+        }
+
+        public static class ImageSliderApiUrl
+        {
+            public const string Create = ImageSlider + "/create";
+            public const string GetList = ImageSlider + "/list";
+            public const string GetImages = ImageSlider + "/images";
+            public const string ChangeItem = ImageSlider + "/change";
+
         }
 
         public static class CategoryAdminApiUrl

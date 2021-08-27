@@ -27,18 +27,27 @@ namespace SCSS.Utilities.Configurations
 
         public static string AWSS3BucketName => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.S3BucketName);
 
-        public static string ESMSApiKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.ESMS.ApiKey);
+        public static string AWSRegion => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.Region);
 
-        public static string ESMSApiSecret => ConfigurationHelper.GetValue<string>(AppSettingKeys.ESMS.SecrectKey);
+        public static string AWSCloudWatchAccessKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.CloudWatchAccessKey);
 
-        public static string ESMSBrandName => ConfigurationHelper.GetValue<string>(AppSettingKeys.ESMS.BrandName);
+        public static string AWSCloudWatchSecrectKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.CloudWatchSecrectKey);
 
-        public static string ESMSApiUrl => ConfigurationHelper.GetValue<string>(AppSettingKeys.ESMS.ApiUrl);
+        public static string AWSCloudWatchLogGroup => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.CloudWatchLogGroup);
 
         public static string TwilioAccountSID => ConfigurationHelper.GetValue<string>(AppSettingKeys.Twilio.AccountSID);
 
         public static string TwilioAuthToken => ConfigurationHelper.GetValue<string>(AppSettingKeys.Twilio.AuthToken);
 
         public static string TwilioPhoneNumber => ConfigurationHelper.GetValue<string>(AppSettingKeys.Twilio.PhoneNumber);
+
+        public static string FirebaseCredentialFile => ConfigurationHelper.GetValue<string>(AppSettingKeys.Firebase.CredentialFile);
+
+        public static string GoongMapApiKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.GoongMap.GoongApiKey);
+
+        public static string GoongMapApiURL => ConfigurationHelper.GetValue<string>(AppSettingKeys.GoongMap.GoongApiURL);
+
+        public static string LoggingConfig => ConfigurationHelper.GetValue<string>(AppSettingKeys.Logging.Config);
+
     }
 }

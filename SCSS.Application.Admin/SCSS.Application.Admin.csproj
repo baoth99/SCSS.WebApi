@@ -18,4 +18,8 @@
     <ProjectReference Include="..\SCSS.Validations\SCSS.Validations.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\DashboardModels\" />
+  </ItemGroup>
+
 </Project>

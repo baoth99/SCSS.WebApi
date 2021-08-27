@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SCSS.Application.Admin.Interfaces;
 using SCSS.Application.Admin.Models.UnitModels;
+using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
@@ -41,7 +42,7 @@ namespace SCSS.Application.Admin.Implementations
         /// </summary>
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
-        public UnitService(IUnitOfWork unitOfWork, IAuthSession userAuthSession) : base(unitOfWork, userAuthSession)
+        public UnitService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
         {
             _unitRepository = UnitOfWork.UnitRepository;
             _accountRepository = UnitOfWork.AccountRepository;

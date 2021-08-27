@@ -13,7 +13,7 @@ namespace SCSS.Data.Entities
         public Guid Id { get; set; }
 
         [ForeignKey("Account")]
-        public Guid? CollectorDealerId { get; set; }
+        public Guid? CollectorId { get; set; }
 
         public decimal? Amount { get; set; }
 

@@ -18,7 +18,6 @@ namespace SCSS.Data.Entities
         [MaxLength(255)]
         public string DealerName { get; set; }
 
-
         [Column(TypeName = "VARCHAR(50)")]
         public string UserName { get; set; }
 
