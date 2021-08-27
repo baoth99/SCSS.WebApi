@@ -5,7 +5,6 @@ using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
-using SCSS.FirebaseService.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
@@ -14,10 +13,8 @@ using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.Admin.Implementations
@@ -55,8 +52,8 @@ namespace SCSS.Application.Admin.Implementations
 
         #region Constructor
 
-        public CategoryAdminService(IUnitOfWork unitOfWork, IAuthSession userAuthSession,
-                                    IStorageBlobS3Service storageBlobS3Service) : base(unitOfWork, userAuthSession)
+        public CategoryAdminService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
+                                    IStorageBlobS3Service storageBlobS3Service) : base(unitOfWork, userAuthSession, logger)
         {
             _categoryAdminRepository = unitOfWork.CategoryAdminRepository;
             _storageBlobS3Service = storageBlobS3Service;

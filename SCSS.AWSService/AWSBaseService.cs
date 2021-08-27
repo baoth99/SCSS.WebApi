@@ -1,21 +1,57 @@
 ﻿using Amazon;
-using Amazon.S3;
-using SCSS.Utilities.Configurations;
+using SCSS.AWSService.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SCSS.AWSService
 {
-    public class AWSBaseService
+    public class AWSBaseService : IDisposable
     {
-        protected readonly IAmazonS3 _amazonS3;
+        protected ILoggerService Logger { get; private set; }
 
-        public AWSBaseService()
+        #region Disposed
+
+        /// <summary>
+        /// The disposed
+        /// </summary>
+        private bool Disposed = false;
+
+        #endregion
+
+        #region Constructor
+
+        public AWSBaseService(ILoggerService logger)
         {
-            _amazonS3 = new AmazonS3Client(AppSettingValues.AWSS3AccessKey, AppSettingValues.AWSS3SecretKey, RegionEndpoint.APSoutheast1);
+            Logger = logger;
         }
+
+        #endregion
+
+        #region IDisposable
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.Disposed)
+            {
+                if (disposing)
+                {
+                }
+            }
+            this.Disposed = true;
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }

@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SCSS.AWSService\SCSS.AWSService.csproj" />
     <ProjectReference Include="..\SCSS.Utilities\SCSS.Utilities.csproj" />
   </ItemGroup>
 

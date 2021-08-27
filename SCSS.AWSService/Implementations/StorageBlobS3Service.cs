@@ -10,122 +10,227 @@ using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
 using SCSS.Utilities.ResponseModel;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.AWSService.Implementations
 {
     public class StorageBlobS3Service : AWSBaseService ,IStorageBlobS3Service
     {
+        #region Services
 
-        public async Task<string> UploadFile(IFormFile file,string fileName , FileS3Path path)
+        /// <summary>
+        /// The amazon s3
+        /// </summary>
+        private readonly IAmazonS3 AmazonS3;
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StorageBlobS3Service"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        public StorageBlobS3Service(ILoggerService logger) : base(logger)
         {
-            var putRequest = new PutObjectRequest()
-            {
-                BucketName = AppSettingValues.AWSS3BucketName,
-                Key = $"{path}/{fileName}",
-                InputStream = file.OpenReadStream(),
-                ContentType = file.ContentType,
-            };
-
-            await _amazonS3.PutObjectAsync(putRequest);
-
-            return $"{path}/{fileName}";
+            AmazonS3 = new AmazonS3Client(AppSettingValues.AWSS3AccessKey, AppSettingValues.AWSS3SecretKey, RegionEndpoint.APSoutheast1);
         }
 
+        #endregion
+
+        #region Upload File
+
+        /// <summary>
+        /// Uploads the file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public async Task<string> UploadFile(IFormFile file, string fileName, FileS3Path path)
+        {
+            try
+            {
+                var putRequest = new PutObjectRequest()
+                {
+                    BucketName = AppSettingValues.AWSS3BucketName,
+                    Key = $"{path}/{fileName}",
+                    InputStream = file.OpenReadStream(),
+                    ContentType = file.ContentType,
+                };
+
+                await AmazonS3.PutObjectAsync(putRequest);
+                Logger.LogInfo(AWSLoggerMessage.UploadFileSuccess(fileName, path));
+
+                return $"{path}/{fileName}";
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, AWSLoggerMessage.UploadFileFail(fileName, path));
+                return string.Empty;
+            } 
+            finally
+            {
+                AmazonS3.Dispose();
+            }
+        }
+
+        #endregion
+
+        #region GetFile
+
+        /// <summary>
+        /// Gets the file.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
         public async Task<FileViewModel> GetFile(string fileName, FileS3Path path)
         {
-            var request = new GetObjectRequest()
+            try
             {
-                BucketName = AppSettingValues.AWSS3BucketName,
-                Key = $"{path}/{fileName}"
-            };
+                var request = new GetObjectRequest()
+                {
+                    BucketName = AppSettingValues.AWSS3BucketName,
+                    Key = $"{path}/{fileName}"
+                };
 
-            var response = await _amazonS3.GetObjectAsync(request);
+                var response = await AmazonS3.GetObjectAsync(request);
 
-            var stream = response.ResponseStream;
-            var base64 = stream.ToBase64();
+                var stream = response.ResponseStream;
+                var base64 = stream.ToBase64();
 
-
-            return new FileViewModel()
+                Logger.LogInfo(AWSLoggerMessage.GetFileSuccess(fileName, path));
+                return new FileViewModel()
+                {
+                    Extension = Path.GetExtension(fileName),
+                    Base64 = base64
+                };
+            }
+            catch (Exception ex)
             {
-                Extension = Path.GetExtension(fileName),
-                Base64 = base64
-            };
+                Logger.LogError(ex, AWSLoggerMessage.GetFileFail(fileName, path));
+                return null;
+            }
+            finally
+            {
+                AmazonS3.Dispose();
+            }         
         }
 
+        #endregion
 
-        public async Task<FileViewModel> GetFileByUrl(string filepath)
+        #region Get File By URL
+
+        /// <summary>
+        /// Gets the file.
+        /// </summary>
+        /// <param name="filepath">The filepath.</param>
+        /// <returns></returns>
+        public async Task<FileViewModel> GetFile(string filepath)
         {
-            var path = filepath.Split("/")[0];
-
-            if (!CollectionConstants.FileS3PathCollection.Contains(path))
+            try
             {
+                var path = filepath.Split("/")[0];
+
+                if (!CollectionConstants.FileS3PathCollection.Contains(path))
+                {
+                    return null;
+                }
+                var file = filepath.Split("/")[1];
+
+                if (!CollectionConstants.ImageExtensions.Contains(Path.GetExtension(file.ToLower())))
+                {
+                    return null;
+                }
+
+                var request = new GetObjectRequest()
+                {
+                    BucketName = AppSettingValues.AWSS3BucketName,
+                    Key = filepath
+                };
+
+                var response = await AmazonS3.GetObjectAsync(request);
+
+                var stream = response.ResponseStream;
+                var base64 = stream.ToBase64();
+
+                var fileResponse = new FileViewModel()
+                {
+                    Extension = Path.GetExtension(filepath).ToLower().Substring(1),
+                    Base64 = base64
+                };
+
+                Logger.LogInfo(AWSLoggerMessage.GetFileSuccess(filepath));
+
+                return fileResponse;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, AWSLoggerMessage.GetFileFail(filepath));
                 return null;
             }
-            var file = filepath.Split("/")[1];
-
-            if (!CollectionConstants.ImageExtensions.Contains(Path.GetExtension(file.ToLower())))
+            finally
             {
-                return null;
+                AmazonS3.Dispose();
             }
-
-            var request = new GetObjectRequest()
-            {
-                BucketName = AppSettingValues.AWSS3BucketName,
-                Key = filepath
-            };
-
-            var response = await _amazonS3.GetObjectAsync(request);
-
-            var stream = response.ResponseStream;
-            var base64 = stream.ToBase64();
-
-            var fileResponse = new FileViewModel()
-            {
-                Extension = Path.GetExtension(filepath).ToLower().Substring(1),
-                Base64 = base64
-            };
-
-            return fileResponse;
         }
 
+        #endregion
+
+        #region Get Image
+
+        /// <summary>
+        /// Gets the image.
+        /// </summary>
+        /// <param name="filepath">The filepath.</param>
+        /// <returns></returns>
         public async Task<BaseApiResponseModel> GetImage(string filepath)
         {
-            
-            var path = filepath.Split("/")[0];
-
-            if (!CollectionConstants.FileS3PathCollection.Contains(path))
+            try
             {
-                return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
+                var path = filepath.Split("/")[0];
+
+                if (!CollectionConstants.FileS3PathCollection.Contains(path))
+                {
+                    return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
+                }
+                var file = filepath.Split("/")[1];
+
+                if (!CollectionConstants.ImageExtensions.Contains(Path.GetExtension(file.ToLower())))
+                {
+                    return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
+                }
+
+                var request = new GetObjectRequest()
+                {
+                    BucketName = AppSettingValues.AWSS3BucketName,
+                    Key = filepath
+                };
+
+                var response = await AmazonS3.GetObjectAsync(request);
+
+                var stream = response.ResponseStream;
+                var base64 = stream.ToBase64();
+                var fileResponse = new FileViewModel()
+                {
+                    Extension = Path.GetExtension(filepath).ToLower().Substring(1),
+                    Base64 = base64
+                };
+
+                Logger.LogInfo(AWSLoggerMessage.GetFileSuccess(filepath));
+
+                return BaseApiResponse.OK(fileResponse);
             }
-            var file = filepath.Split("/")[1];
-
-            if (!CollectionConstants.ImageExtensions.Contains(Path.GetExtension(file.ToLower())))
+            catch (Exception ex)
             {
-                return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
+                Logger.LogError(ex, AWSLoggerMessage.GetFileFail(filepath));
+                return BaseApiResponse.Error();
             }
-
-            var request = new GetObjectRequest()
-            {
-                BucketName = AppSettingValues.AWSS3BucketName,
-                Key = filepath
-            };
-
-            var response = await _amazonS3.GetObjectAsync(request);
-
-            var stream = response.ResponseStream;
-            var base64 = stream.ToBase64();
-            var fileResponse = new FileViewModel()
-            {
-                Extension = Path.GetExtension(filepath).ToLower().Substring(1),
-                Base64 = base64
-            };
-
-            return BaseApiResponse.OK(fileResponse);
         }
+
+        #endregion
+
     }
 }

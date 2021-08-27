@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SCSS.Application.Admin.Interfaces;
+using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
@@ -36,7 +37,7 @@ namespace SCSS.Application.Admin.Implementations
 
         #region Constructor
 
-        public DashboardService(IUnitOfWork unitOfWork, IAuthSession userAuthSession) : base(unitOfWork, userAuthSession)
+        public DashboardService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
         {
             _bookingRepository = unitOfWork.BookingRepository;
             _sellCollectTransactionRepository = unitOfWork.SellCollectTransactionRepository;

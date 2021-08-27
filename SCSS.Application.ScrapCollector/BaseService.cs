@@ -1,4 +1,5 @@
-﻿using SCSS.Data.EF.UnitOfWork;
+﻿using SCSS.AWSService.Interfaces;
+using SCSS.Data.EF.UnitOfWork;
 using SCSS.Utilities.AuthSessionConfig;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,15 @@ namespace SCSS.Application.ScrapCollector
         /// </value>
         protected IAuthSession UserAuthSession { get; private set; }
 
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        /// <value>
+        /// The logger.
+        /// </value>
+        protected ILoggerService Logger { get; private set; }
+
+
         #region Constructor
 
         /// <summary>
@@ -33,10 +43,12 @@ namespace SCSS.Application.ScrapCollector
         /// </summary>
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
-        public BaseService(IUnitOfWork unitOfWork, IAuthSession userAuthSession)
+        /// <param name="logger">The logger.</param>
+        public BaseService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger)
         {
             UnitOfWork = unitOfWork;
             UserAuthSession = userAuthSession;
+            Logger = logger;
         }
 
         #endregion

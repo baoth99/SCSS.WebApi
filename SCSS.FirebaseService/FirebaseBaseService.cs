@@ -1,17 +1,21 @@
-﻿using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SCSS.AWSService.Interfaces;
 
 namespace SCSS.FirebaseService
 {
     public class FirebaseBaseService
     {
-        public FirebaseBaseService()
-        {           
+        /// <summary>
+        /// Gets the service.
+        /// </summary>
+        /// <value>
+        /// The service.
+        /// </value>
+        protected ILoggerService Logger { get; private set; }
+
+
+        public FirebaseBaseService(ILoggerService logger)
+        {
+            Logger = logger;
         }
     }
 }

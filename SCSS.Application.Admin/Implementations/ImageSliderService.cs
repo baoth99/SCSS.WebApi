@@ -49,9 +49,9 @@ namespace SCSS.Application.Admin.Implementations
 
         #region Constructor
 
-        public ImageSliderService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, 
+        public ImageSliderService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
                                   IStorageBlobS3Service storageBlobS3Service,
-                                  ICacheService cacheService) : base(unitOfWork, userAuthSession)
+                                  ICacheService cacheService) : base(unitOfWork, userAuthSession, logger)
         {
             _imageSliderRepository = unitOfWork.ImageSliderRepository;
             _storageBlobS3Service = storageBlobS3Service;
@@ -216,7 +216,7 @@ namespace SCSS.Application.Admin.Implementations
 
                 foreach (var item in selectedList)
                 {
-                    var image = await _storageBlobS3Service.GetFileByUrl(item);
+                    var image = await _storageBlobS3Service.GetFile(item);
                     imgCache.Add(image.Base64);
                 }
 

@@ -1,10 +1,6 @@
-﻿using SCSS.Data.EF.UnitOfWork;
+﻿using SCSS.AWSService.Interfaces;
+using SCSS.Data.EF.UnitOfWork;
 using SCSS.Utilities.AuthSessionConfig;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapDealer
 {
@@ -26,6 +22,14 @@ namespace SCSS.Application.ScrapDealer
         /// </value>
         protected IAuthSession UserAuthSession { get; private set; }
 
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        /// <value>
+        /// The logger.
+        /// </value>
+        protected ILoggerService Logger { get; private set; }
+
         #region Constructor
 
         /// <summary>
@@ -33,10 +37,12 @@ namespace SCSS.Application.ScrapDealer
         /// </summary>
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
-        public BaseService(IUnitOfWork unitOfWork, IAuthSession userAuthSession)
+        /// <param name="logger">The logger.</param>
+        public BaseService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger)
         {
             UnitOfWork = unitOfWork;
             UserAuthSession = userAuthSession;
+            Logger = logger;
         }
 
         #endregion

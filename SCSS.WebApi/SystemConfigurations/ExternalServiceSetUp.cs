@@ -36,13 +36,13 @@ namespace SCSS.WebApi.SystemConfigurations
                 Credential = GoogleCredential.GetApplicationDefault(),
             });
 
-
+            // Connect to redis
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = AppSettingValues.RedisConnectionString;
 
             });
-
+           
 
             #region DI for External Service
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SCSS.AWSService.Implementations
 {
-    public class CacheService : IDisposable, ICacheService
+    public class CacheService : AWSBaseService, ICacheService
     {
         #region Services
 
@@ -18,22 +18,14 @@ namespace SCSS.AWSService.Implementations
 
         #endregion
 
-        #region Disposed
-
-        /// <summary>
-        /// The disposed
-        /// </summary>
-        private bool Disposed = false;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CacheService"/> class.
         /// </summary>
+        /// <param name="logger">The logger.</param>
         /// <param name="distributedCache">The distributed cache.</param>
-        public CacheService(IDistributedCache distributedCache)
+        public CacheService(ILoggerService logger, IDistributedCache distributedCache) : base(logger)
         {
             _distributedCache = distributedCache;
         }
@@ -56,10 +48,12 @@ namespace SCSS.AWSService.Implementations
 
                 // Set new Cache
                 await _distributedCache.SetStringAsync(key.ToString(), data);
+
+                Logger.LogInfo(CacheLoggerMessage.SetCacheSuccess(key));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Logger.LogError(ex, CacheLoggerMessage.SetCacheFail(key));
             }
         }
 
@@ -77,9 +71,9 @@ namespace SCSS.AWSService.Implementations
                 // Set new Cache
                 await _distributedCache.SetAsync(key.ToString(), data);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Logger.LogError(ex, CacheLoggerMessage.SetCacheFail(key));
             }
         }
 
@@ -105,9 +99,10 @@ namespace SCSS.AWSService.Implementations
 
                 return data;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Logger.LogError(ex, CacheLoggerMessage.GetCacheFail(key));
+                return null;
             }
         }
 
@@ -133,10 +128,10 @@ namespace SCSS.AWSService.Implementations
 
                 return data;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Logger.LogError(ex, CacheLoggerMessage.GetCacheFail(key));
+                return null;
             }
         }
 
@@ -144,37 +139,20 @@ namespace SCSS.AWSService.Implementations
 
         #region Remove Cache Data
 
+        /// <summary>
+        /// Removes the cache data.
+        /// </summary>
+        /// <param name="key">The key.</param>
         public async Task RemoveCacheData(CacheRedisKey key)
         {
-            await _distributedCache.RemoveAsync(key.ToString());
-        }
-
-        #endregion
-
-        #region IDisposable
-
-        /// <summary>
-        /// Releases unmanaged and - optionally - managed resources.
-        /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.Disposed)
+            try
             {
-                if (disposing)
-                {
-                }
+                await _distributedCache.RemoveAsync(key.ToString());
             }
-            this.Disposed = true;
-        }
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, CacheLoggerMessage.RemoveCacheFail(key));
+            }           
         }
 
         #endregion

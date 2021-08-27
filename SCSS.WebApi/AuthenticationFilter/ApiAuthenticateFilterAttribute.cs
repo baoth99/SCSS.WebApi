@@ -114,7 +114,7 @@ namespace SCSS.WebApi.AuthenticationFilter
                 var accountInfo = account.Data as AccountDetailViewModel;
                 if (accountInfo.Status == AccountStatus.BANNING)
                 {
-                    context.ActionFilterResult(SystemMessageCode.BlockAccountException, "Account is block", HttpStatusCodes.Unauthorized);
+                    context.ActionFilterResult(SystemMessageCode.BlockAccountException, "Account is blocked", HttpStatusCodes.Unauthorized);
                     return;
                 }
                 if (accountInfo.Status == AccountStatus.NOT_APPROVED)

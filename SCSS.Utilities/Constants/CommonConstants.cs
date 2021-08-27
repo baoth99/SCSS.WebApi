@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SCSS.Utilities.Constants
 {
@@ -84,4 +81,6 @@ namespace SCSS.Utilities.Constants
         public const int DEALER = 3;
         public const int COLLECTOR = 4;
     }
+
+
 }
