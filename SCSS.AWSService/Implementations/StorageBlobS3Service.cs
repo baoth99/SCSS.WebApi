@@ -70,10 +70,6 @@ namespace SCSS.AWSService.Implementations
                 Logger.LogError(ex, AWSLoggerMessage.UploadFileFail(fileName, path));
                 return string.Empty;
             } 
-            finally
-            {
-                AmazonS3.Dispose();
-            }
         }
 
         #endregion
@@ -112,11 +108,7 @@ namespace SCSS.AWSService.Implementations
             {
                 Logger.LogError(ex, AWSLoggerMessage.GetFileFail(fileName, path));
                 return null;
-            }
-            finally
-            {
-                AmazonS3.Dispose();
-            }         
+            }     
         }
 
         #endregion
@@ -170,10 +162,6 @@ namespace SCSS.AWSService.Implementations
             {
                 Logger.LogError(ex, AWSLoggerMessage.GetFileFail(filepath));
                 return null;
-            }
-            finally
-            {
-                AmazonS3.Dispose();
             }
         }
 

@@ -28,6 +28,7 @@ namespace SCSS.WebApi.SystemConstants
             public const string Create = ImageSlider + "/create";
             public const string GetList = ImageSlider + "/list";
             public const string GetImages = ImageSlider + "/images";
+            public const string GetImageDetail = ImageSlider + "/detail";
             public const string ChangeItem = ImageSlider + "/change";
 
         }

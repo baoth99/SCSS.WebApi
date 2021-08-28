@@ -5,6 +5,7 @@ using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConstants;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -90,7 +91,7 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #endregion
 
-        #region Get Images
+        #region Get Images By Web
 
         /// <summary>
         /// Gets the images.
@@ -104,7 +105,27 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> GetImages()
         {
-            return await _imageSliderService.GetImages();
+            return await _imageSliderService.GetImages(isWeb: true);
+        }
+
+        #endregion
+
+        #region Get Image Detail
+
+        /// <summary>
+        /// Gets the image detail.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.ImageSliderApiUrl.GetImageDetail)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetImageDetail([FromQuery] Guid id)
+        {
+            return await _imageSliderService.GetImageSliderDetail(id);
         }
 
         #endregion

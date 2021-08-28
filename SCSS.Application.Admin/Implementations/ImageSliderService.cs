@@ -2,6 +2,7 @@
 using SCSS.Application.Admin.Interfaces;
 using SCSS.Application.Admin.Models.ImageSliderModels;
 using SCSS.AWSService.Interfaces;
+using SCSS.AWSService.Models;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
@@ -101,7 +102,6 @@ namespace SCSS.Application.Admin.Implementations
             var dataQuery = _imageSliderRepository.GetAllAsNoTracking().Select(x => new ImageSliderViewModel()
             {
                 Id = x.Id,
-                ImageUrl = x.ImageUrl,
                 IsSelected = x.IsSelected,
                 Name = x.Name
             });
@@ -122,19 +122,19 @@ namespace SCSS.Application.Admin.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> GetImageSliderDetail(Guid id)
         {
-            if (_imageSliderRepository.IsExisted(x => x.Id.Equals(id)))
+            if (!_imageSliderRepository.IsExisted(x => x.Id.Equals(id)))
             {
                 return BaseApiResponse.NotFound();
             }
             var dataQuery = _imageSliderRepository.GetById(id);
 
-            var fileViewModel = await _storageBlobS3Service.GetImage(dataQuery.ImageUrl);
+            var fileViewModel = await _storageBlobS3Service.GetFile(dataQuery.ImageUrl);
 
             var resData = new ImageSliderViewDetailModel()
             {
                 Id = dataQuery.Id,
                 Name = dataQuery.Name,
-                Image = fileViewModel.Data,
+                Image = fileViewModel,
                 IsSelected = dataQuery.IsSelected,
                 CreatedTime = dataQuery.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
             };
@@ -144,7 +144,7 @@ namespace SCSS.Application.Admin.Implementations
 
         #endregion
 
-        #region Add Images to show
+        #region Changes Images to show
 
         /// <summary>
         /// Actives the image.
@@ -177,7 +177,7 @@ namespace SCSS.Application.Admin.Implementations
         /// Gets the images.
         /// </summary>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> GetImages()
+        public async Task<BaseApiResponseModel> GetImages(bool isWeb = false)
         {
             var cacheData = await _cacheService.GetCacheData(CacheRedisKey.ImageSlider);
 
@@ -187,11 +187,16 @@ namespace SCSS.Application.Admin.Implementations
                 cacheData = await _cacheService.GetCacheData(CacheRedisKey.ImageSlider);
             }
 
-            var listData = cacheData.ToList<string>();
+            var listData = cacheData.ToList<FileViewModel>();
 
             if (listData.Count > 0)
             {
-                var result = listData.Select(x => x.ToBitmap());
+                if (isWeb)
+                {
+                    return BaseApiResponse.OK(listData);
+                }
+                var result = listData.Select(x => x.Base64.ToBitmap());
+
                 return BaseApiResponse.OK(result);
             }
 
@@ -212,12 +217,12 @@ namespace SCSS.Application.Admin.Implementations
 
             if (selectedList.Count > 0)
             {
-                var imgCache = new List<string>();
+                var imgCache = new List<FileViewModel>();
 
                 foreach (var item in selectedList)
                 {
                     var image = await _storageBlobS3Service.GetFile(item);
-                    imgCache.Add(image.Base64);
+                    imgCache.Add(image);
                 }
 
                 if (imgCache.Count > 0)

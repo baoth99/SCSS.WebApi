@@ -12,8 +12,6 @@ namespace SCSS.Application.Admin.Models.ImageSliderModels
 
         public string Name { get; set; }
 
-        public string ImageUrl { get; set; }
-
         public bool IsSelected { get; set; }
 
     }

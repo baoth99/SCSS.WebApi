@@ -18,6 +18,6 @@ namespace SCSS.Application.Admin.Interfaces
 
         Task<BaseApiResponseModel> ChangeSelectedImages(List<ActiveImageSliderModel> activeList);
 
-        Task<BaseApiResponseModel> GetImages();
+        Task<BaseApiResponseModel> GetImages(bool isWeb = false);
     }
 }
