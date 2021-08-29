@@ -34,4 +34,9 @@ namespace SCSS.Utilities.Constants
         public static string SendSMSFail(string phoneTo) => $"Send SMS to {phoneTo} error";
 
     }
+
+    public class FirebaseLoggerMessage
+    {
+
+    }
 }

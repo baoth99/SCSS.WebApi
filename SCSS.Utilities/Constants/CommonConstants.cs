@@ -29,6 +29,10 @@ namespace SCSS.Utilities.Constants
         public const string GoogleCredentials = "GOOGLE_APPLICATION_CREDENTIALS";
     }
 
+    public class DefaultConstant
+    {
+        public const float TotalPoint = 0;
+    }
 
     public class RegularExpression
     {
@@ -82,5 +86,11 @@ namespace SCSS.Utilities.Constants
         public const int COLLECTOR = 4;
     }
 
-
+    public class ClientIdConstant
+    {
+        public const string SellerMobileApp = "SCSS-Seller-Mobile";
+        public const string CollectorMobileApp = "SCSS-Collector-Mobile";
+        public const string DealerMobileApp = "SCSS-Dealer-Mobile";
+        public const string WebAdmin = "SCSS-WebAdmin-FrontEnd";
+    }
 }

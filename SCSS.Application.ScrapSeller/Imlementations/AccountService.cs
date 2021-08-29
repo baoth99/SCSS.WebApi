@@ -77,7 +77,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 {"registertoken", model.RegisterToken }
             };
 
-            var res = await IDHttpClientHelper.IDHttpClientPost(IdentityServer4Route.RegisterSeller, UserAuthSession.UserSession.ClientId, dictionary);
+            var res = await IDHttpClientHelper.IDHttpClientPost(IdentityServer4Route.RegisterSeller, ClientIdConstant.SellerMobileApp, dictionary);
 
             if (res == null)
             {
@@ -94,7 +94,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 DeviceId = model.DeviceId,
                 Phone = model.UserName,
                 RoleId = role.Id,
-                Status = AccountStatus.ACTIVE
+                Status = AccountStatus.ACTIVE,
+                TotalPoint = DefaultConstant.TotalPoint
             };
 
             _accountRepository.Insert(entity);

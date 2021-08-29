@@ -25,11 +25,15 @@ namespace SCSS.Utilities.Extensions
 
         public static List<T> ToList<T>(this string jsonString)
         {
-            return jsonString != null ? JsonConvert.DeserializeObject<List<T>>(jsonString) : CollectionConstants.Empty<T>();
+            return !string.IsNullOrEmpty(jsonString) ? JsonConvert.DeserializeObject<List<T>>(jsonString) : CollectionConstants.Empty<T>();
         }
 
         public static Bitmap ToBitmap(this string base64String)
         {
+            if (string.IsNullOrEmpty(base64String))
+            {
+                return null;
+            }
             byte[] byteBuffer = Convert.FromBase64String(base64String);
             var memoryStream = new MemoryStream(byteBuffer);
 
@@ -41,7 +45,7 @@ namespace SCSS.Utilities.Extensions
             }
             catch (Exception)
             {
-                throw;
+                return null;
             }
             finally
             {

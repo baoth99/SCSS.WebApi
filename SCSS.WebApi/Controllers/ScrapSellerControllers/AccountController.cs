@@ -48,7 +48,6 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapSellerApiUrlDefinition.AccountApiUrl.RegisterSellerAccount)]
-        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> RegisterScrapSellerAccount(AccountRegistrationModel model)
         {
             return await _accountService.Register(model);
