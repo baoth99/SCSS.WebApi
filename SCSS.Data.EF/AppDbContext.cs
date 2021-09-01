@@ -43,6 +43,8 @@ namespace SCSS.Data.EF
         // Add Dbset here
         public DbSet<Account> Account { get; set; }
 
+        public DbSet<DealerInformation> DealerInformation { get; set; }
+
         public DbSet<AccountCategory> MyProperty { get; set; }
 
         public DbSet<Booking> Booking { get; set; }
@@ -111,6 +113,11 @@ namespace SCSS.Data.EF
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.HasIndex(e => e.Phone).IsUnique();
+            });
+
+            modelBuilder.Entity<DealerInformation>(entity =>
+            {
+                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
             });
 
             modelBuilder.Entity<AccountCategory>(entity =>

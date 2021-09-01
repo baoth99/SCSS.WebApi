@@ -14,6 +14,8 @@ namespace SCSS.Data.EF.UnitOfWork
 
         IRepository<Account> AccountRepository { get; }
 
+        IRepository<DealerInformation> DealerInformationRepository { get; }
+
         IRepository<AccountCategory> AccountCategoryRepository { get; }
 
         IRepository<Booking> BookingRepository { get; }

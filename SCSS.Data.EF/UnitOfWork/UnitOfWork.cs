@@ -3,9 +3,6 @@ using SCSS.Data.EF.Repositories;
 using SCSS.Data.Entities;
 using SCSS.Utilities.Configurations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.Data.EF.UnitOfWork
@@ -33,6 +30,8 @@ namespace SCSS.Data.EF.UnitOfWork
         #region Private variable Repositories
 
         private IRepository<Account> _accountRepository;
+
+        private IRepository<DealerInformation> _dealerInformationRepository;
 
         private IRepository<AccountCategory> _accountCategoryRepository;
 
@@ -95,6 +94,8 @@ namespace SCSS.Data.EF.UnitOfWork
         #region Publish Access Repositories
 
         public IRepository<Account> AccountRepository => _accountRepository ??= (_accountRepository = new Repository<Account>(AppDbContext));
+
+        public IRepository<DealerInformation> DealerInformationRepository => _dealerInformationRepository ??= (_dealerInformationRepository = new Repository<DealerInformation>(AppDbContext));
 
         public IRepository<AccountCategory> AccountCategoryRepository => _accountCategoryRepository ??= (_accountCategoryRepository = new Repository<AccountCategory>(AppDbContext));
 
