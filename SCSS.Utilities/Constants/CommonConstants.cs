@@ -1,6 +1,4 @@
 ﻿using System;
-
-
 namespace SCSS.Utilities.Constants
 {
     public class BooleanConstants
@@ -13,7 +11,6 @@ namespace SCSS.Utilities.Constants
     {
         public static DateTime DATEFROM = DateTime.Now.Date;
         public static DateTime DATETO = DateTime.Now.Date.AddHours(24);
-
     }
 
     public class DateTimeFormat
