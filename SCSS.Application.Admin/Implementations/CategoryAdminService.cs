@@ -206,7 +206,7 @@ namespace SCSS.Application.Admin.Implementations
                                                                                             Unit = x.UnitName,
                                                                                             CreatedTime = x.CreatedTime,
                                                                                             CreatedBy = y.Name
-                                                                                        }).OrderBy("CreatedTime DESC");
+                                                                                        }).OrderBy(DefaultSort.CreatedTimeDESC);
 
 
 

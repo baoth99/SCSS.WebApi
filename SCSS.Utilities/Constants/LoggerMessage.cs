@@ -16,6 +16,12 @@ namespace SCSS.Utilities.Constants
         public static string GetFileFail(string filepath) => $"Get File with {filepath} error";
     }
 
+
+    public class AccountRegistrationLoggerMessage
+    {
+        public static string RegistrationSuccess(string phone, string role) => $"{role} Account with {phone} sign up successfully";
+    }
+
     public class CacheLoggerMessage
     {
         public static string SetCacheFail(CacheRedisKey key) => $"Set data with key '{key}' into redis error";

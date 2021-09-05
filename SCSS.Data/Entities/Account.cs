@@ -39,6 +39,8 @@ namespace SCSS.Data.Entities
         [Column(TypeName = "VARCHAR(255)")]
         public string IdCard { get; set; }
 
+        public Guid? ManagedBy { get; set; }
+
         public float? TotalPoint { get; set; }
 
         public int? Status { get; set; }

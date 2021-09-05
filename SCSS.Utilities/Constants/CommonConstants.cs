@@ -17,10 +17,12 @@ namespace SCSS.Utilities.Constants
     {
         public const string Format01 = "MM-dd-yyyy-hh:mm:tt";
         public const string DD_MM_yyyy_time = "dd/MM/yyyy hh:mm tt";
+        public const string DD_MM_yyyy = "dd/MM/yyyy";
     }
 
     public class CommonConstants
     {
+        public const int Zero = 0;
         public const string ContentType = "Content-Type";
         public const string Null = "N/A";
         public const string GoogleCredentials = "GOOGLE_APPLICATION_CREDENTIALS";
@@ -89,5 +91,10 @@ namespace SCSS.Utilities.Constants
         public const string CollectorMobileApp = "SCSS-Collector-Mobile";
         public const string DealerMobileApp = "SCSS-Dealer-Mobile";
         public const string WebAdmin = "SCSS-WebAdmin-FrontEnd";
+    }
+
+    public class DefaultSort
+    {
+        public const string CreatedTimeDESC = "CreatedTime DESC";
     }
 }

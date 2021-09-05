@@ -97,7 +97,7 @@ namespace SCSS.Data.EF
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                 });
-            }
+            }   
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -118,6 +118,7 @@ namespace SCSS.Data.EF
             modelBuilder.Entity<DealerInformation>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+                entity.HasIndex(e => e.DealerPhone).IsUnique();
             });
 
             modelBuilder.Entity<AccountCategory>(entity =>
@@ -284,9 +285,10 @@ namespace SCSS.Data.EF
                         break;
 
                     case EntityState.Deleted:
-                        if (entry.Entity is IHasSoftDelete)
+                        if (entry.Entity is IHasSoftDelete deleteEntry)
                         {
-                            entry.CurrentValues["IsDeleted"] = BooleanConstants.TRUE;
+                            entry.State = EntityState.Modified;
+                            deleteEntry.IsDeleted = BooleanConstants.TRUE;
                         }
                         break;
 

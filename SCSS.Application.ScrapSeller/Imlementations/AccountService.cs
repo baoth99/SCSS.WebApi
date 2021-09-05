@@ -86,8 +86,11 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             var role = _roleRepository.GetManyAsNoTracking(x => x.Key == AccountRole.SELLER).FirstOrDefault();
 
+            var accId = CommonUtils.CheckGuid(res.Data as string);
+
             var entity = new Account()
             {
+                Id = accId.Value,
                 Name = model.Name,
                 UserName = model.UserName,
                 Gender = model.Gender,
@@ -102,7 +105,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             await UnitOfWork.CommitAsync();
 
-            return BaseApiResponse.OK(entity);
+            return BaseApiResponse.OK();
         }
 
         #endregion

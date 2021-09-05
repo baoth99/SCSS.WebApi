@@ -51,10 +51,10 @@ namespace SCSS.Application.Admin.Implementations
             var dataQuery = _accountRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.Name) || x.Name.Contains(model.Name)) &&
                                                                         (ValidatorUtil.IsBlank(model.Phone) || x.Phone.Contains(model.Phone)) &&
                                                                         (ValidatorUtil.IsBlank(model.Email) || x.Email.Contains(model.Email)) &&
-                                                                        (model.Status == 0 || x.Status == model.Status) &&
-                                                                        (model.Gender == 0 || x.Gender == model.Gender) &&
+                                                                        (model.Status == CommonConstants.Zero || x.Status == model.Status) &&
+                                                                        (model.Gender == CommonConstants.Zero || x.Gender == model.Gender) &&
                                                                         (ValidatorUtil.IsBlank(model.IdCard) | x.IdCard.Contains(model.IdCard)))
-                                               .Join(_roleRepository.GetManyAsNoTracking(x => (model.Role == 0 || x.Key == model.Role)), x => x.RoleId, y => y.Id,
+                                               .Join(_roleRepository.GetManyAsNoTracking(x => (model.Role == CommonConstants.Zero || x.Key == model.Role)), x => x.RoleId, y => y.Id,
                                                (x, y) => new
                                                {
                                                    x.Id,

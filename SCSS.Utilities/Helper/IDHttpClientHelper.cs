@@ -42,17 +42,32 @@ namespace SCSS.Utilities.Helper
             {
                 
                 var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<BaseApiResponseModel>(responseContent);
+                var data = JsonConvert.DeserializeObject<HttpClientReceiveModel>(responseContent);
                 var responseModel = new HttpClientResponseModel()
                 {
                     StatusCode = statusCode,
                     IsSuccess = data.IsSuccess,
-                    Data = data.Data,
+                    Data = data.ResData,
                 };              
                 return responseModel;
             }
             return null;
         }
+    }
+
+    public class HttpClientReceiveModel
+    {
+        public bool IsSuccess { get; set; }
+
+        public int? StatusCode { get; set; }
+
+        public string MsgCode { get; set; }
+
+        public string MsgDetail { get; set; }
+
+        public int? Total { get; set; }
+
+        public object ResData { get; set; }
     }
 
     public class HttpClientResponseModel

@@ -29,11 +29,12 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.Admin.Interfaces.IUnitService, SCSS.Application.Admin.Implementations.UnitService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.IDashboardService, SCSS.Application.Admin.Implementations.DashboardService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.IImageSliderService, SCSS.Application.Admin.Implementations.ImageSliderService>();
+            services.AddScoped<SCSS.Application.Admin.Interfaces.IRequestRegisterService, SCSS.Application.Admin.Implementations.RequestRegisterService>();
 
             #endregion
 
             #region Collector Application
-
+            services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IAccountService, SCSS.Application.ScrapCollector.Implementations.AccountService>();
 
             #endregion
 

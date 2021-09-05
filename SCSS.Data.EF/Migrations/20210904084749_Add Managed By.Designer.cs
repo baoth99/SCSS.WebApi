@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCSS.Data.EF;
 
 namespace SCSS.Data.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210904084749_Add Managed By")]
+    partial class AddManagedBy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -428,11 +430,14 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<DateTime?>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("DealerAccountId")
+                    b.Property<Guid>("DealerAccountId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DealerImageUrl")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("DealerMemberId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DealerName")
                         .HasMaxLength(255)

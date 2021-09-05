@@ -9,7 +9,7 @@ namespace SCSS.WebApi.SystemConstants
         private const string Unit = "unit";
         private const string Data = "data";
         private const string ImageSlider = "image-slider";
-
+        private const string RequestRegister = "request-register";
 
         public static class HubApiUrl
         {
@@ -48,6 +48,15 @@ namespace SCSS.WebApi.SystemConstants
             public const string Search = Account + "/search";
             public const string Detail = Account + "/detail";
         }
+
+        public static class RequestRegisterApiUrl
+        {
+            public const string SearchDealers = RequestRegister + "/dealers";
+            public const string SearchCollectors = RequestRegister + "/collectors";
+            public const string DealerDetail = RequestRegister + "/dealer-detail";
+            public const string CollectorDetail = RequestRegister + "/collector-detail";
+        }
+
         public static class UnitApiUrl
         {
             public const string Search = Unit + "/search";

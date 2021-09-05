@@ -11,5 +11,7 @@ namespace SCSS.Application.ScrapCollector.Interfaces
     public interface IAccountService
     {
         Task<BaseApiResponseModel> UpdateAccountInformation(AccountUpdateRequestModel model);
+
+        Task<BaseApiResponseModel> RegisterCollectorAccount(AccountRegisterRequestModel model);
     }
 }

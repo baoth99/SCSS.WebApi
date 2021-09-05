@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SCSS.Application.ScrapCollector.Interfaces;
+using SCSS.Application.ScrapCollector.Models.AccountModels;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
@@ -13,27 +15,38 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
     {
         #region Services
 
+        /// <summary>
+        /// The account service
+        /// </summary>
+        private readonly IAccountService _accountService;
+
         #endregion
 
         #region Constructor
 
-        public AccountController()
+        public AccountController(IAccountService accountService)
         {
+            _accountService = accountService;
         }
 
         #endregion
 
         #region Register Scrap Collector Account
 
+        /// <summary>
+        /// Registers the scrap collector account.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel),HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel),HttpStatusCodes.Unauthorized)]
         [Route(ScrapCollectorApiUrlDefinition.AccountApiUrl.RegisterCollectorAccount)]
-        public async Task<BaseApiResponseModel> RegisterScrapCollectorAccount()
+        public async Task<BaseApiResponseModel> RegisterScrapCollectorAccount(AccountRegisterRequestModel model)
         {
-            return null;
+            return await _accountService.RegisterCollectorAccount(model);
         }
 
         #endregion
