@@ -33,11 +33,7 @@ namespace SCSS.Data.EF.UnitOfWork
 
         private IRepository<DealerInformation> _dealerInformationRepository;
 
-        private IRepository<AccountCategory> _accountCategoryRepository;
-
         private IRepository<Booking> _bookingRepository;
-
-        private IRepository<CategoryAdmin> _categoryAdminRepository;
 
         private IRepository<CollectDealTransaction> _collectDealTransactionRepository;
 
@@ -46,8 +42,6 @@ namespace SCSS.Data.EF.UnitOfWork
         private IRepository<Feedback> _feedbackRepository;
 
         private IRepository<ImageSlider> _imageSliderRepository;
-
-        private IRepository<ItemType> _itemTypeRepository;
 
         private IRepository<Location> _locationRepository;
 
@@ -62,10 +56,6 @@ namespace SCSS.Data.EF.UnitOfWork
         private IRepository<SellCollectTransactionDetail> _sellCollectTransactionDetailRepository;
 
         private IRepository<ServiceTransaction> _serviceTransactionRepository;
-
-        private IRepository<Unit> _unitRepository;
-
-        private IRepository<CollectDealTransactionPromotion> _collectDealTransactionPromotionRepository;
 
         private IRepository<TransactionServiceFeePercent> _transactionServiceFeePercentRepository;
 
@@ -97,11 +87,7 @@ namespace SCSS.Data.EF.UnitOfWork
 
         public IRepository<DealerInformation> DealerInformationRepository => _dealerInformationRepository ??= (_dealerInformationRepository = new Repository<DealerInformation>(AppDbContext));
 
-        public IRepository<AccountCategory> AccountCategoryRepository => _accountCategoryRepository ??= (_accountCategoryRepository = new Repository<AccountCategory>(AppDbContext));
-
         public IRepository<Booking> BookingRepository => _bookingRepository ??= (_bookingRepository = new Repository<Booking>(AppDbContext));
-
-        public IRepository<CategoryAdmin> CategoryAdminRepository => _categoryAdminRepository ??= (_categoryAdminRepository = new Repository<CategoryAdmin>(AppDbContext));
 
         public IRepository<CollectDealTransaction> CollectDealTransactionRepository => _collectDealTransactionRepository ??= (_collectDealTransactionRepository = new Repository<CollectDealTransaction>(AppDbContext));
 
@@ -110,8 +96,6 @@ namespace SCSS.Data.EF.UnitOfWork
         public IRepository<Feedback> FeedbackRepository => _feedbackRepository ??= (_feedbackRepository = new Repository<Feedback>(AppDbContext));
 
         public IRepository<ImageSlider> ImageSliderRepository => _imageSliderRepository ??= (_imageSliderRepository = new Repository<ImageSlider>(AppDbContext));
-
-        public IRepository<ItemType> ItemTypeRepository => _itemTypeRepository ??= (_itemTypeRepository = new Repository<ItemType>(AppDbContext));
 
         public IRepository<Location> LocationRepository => _locationRepository ??= (_locationRepository = new Repository<Location>(AppDbContext));
 
@@ -126,10 +110,6 @@ namespace SCSS.Data.EF.UnitOfWork
         public IRepository<SellCollectTransactionDetail> SellCollectTransactionDetailRepository => _sellCollectTransactionDetailRepository ??= (_sellCollectTransactionDetailRepository = new Repository<SellCollectTransactionDetail>(AppDbContext));
 
         public IRepository<ServiceTransaction> ServiceTransactionRepository => _serviceTransactionRepository ??= (_serviceTransactionRepository = new Repository<ServiceTransaction>(AppDbContext));
-
-        public IRepository<Unit> UnitRepository => _unitRepository ??= (_unitRepository = new Repository<Unit>(AppDbContext));
-
-        public IRepository<CollectDealTransactionPromotion> CollectDealTransactionPromotionRepository => _collectDealTransactionPromotionRepository ??= (_collectDealTransactionPromotionRepository = new Repository<CollectDealTransactionPromotion>(AppDbContext));
 
         public IRepository<TransactionServiceFeePercent> TransactionServiceFeePercentRepository => _transactionServiceFeePercentRepository ??= (_transactionServiceFeePercentRepository = new Repository<TransactionServiceFeePercent>(AppDbContext));
 

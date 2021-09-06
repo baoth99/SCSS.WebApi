@@ -15,17 +15,17 @@ namespace SCSS.Data.Entities
         [ForeignKey("CollectDealTransaction")]
         public Guid? CollectDealTransactionId { get; set; }
 
-        [ForeignKey("AccountCategory")]
-        public Guid? DealerCategoryId { get; set; }
+        [ForeignKey("ScrapCategoryDetail")]
+        public Guid? DealerCategoryDetailId { get; set; }
 
         public float? Quantity { get; set; }
 
         [ForeignKey("Promotion")]
         public Guid? PromotionId { get; set; }
 
-        public decimal? Total { get; set; }
+        public long? Total { get; set; }
 
-        public decimal? BonusAmount { get; set; }
+        public long? BonusAmount { get; set; }
 
         public bool IsDeleted { get; set; }
 

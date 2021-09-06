@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace SCSS.Data.Entities
 {
     [Table("Feedback")]
@@ -30,9 +29,6 @@ namespace SCSS.Data.Entities
 
         [MaxLength(500)]
         public string SellingReview { get; set; }
-
-        [MaxLength(500)]
-        public string BuyingReview { get; set; }
 
         public bool IsDeleted { get; set; }
     }

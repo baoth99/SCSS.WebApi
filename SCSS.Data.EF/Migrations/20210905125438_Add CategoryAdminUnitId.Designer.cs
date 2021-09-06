@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCSS.Data.EF;
 
 namespace SCSS.Data.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210905125438_Add CategoryAdminUnitId")]
+    partial class AddCategoryAdminUnitId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,6 +89,95 @@ namespace SCSS.Data.EF.Migrations
                     b.ToTable("Account");
                 });
 
+            modelBuilder.Entity("SCSS.Data.Entities.AccountCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CategoryAdminId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("VARCHAR(MAX)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int?>("Status")
+                        .HasMaxLength(20)
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("UnitId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("AccountCategory");
+                });
+
+            modelBuilder.Entity("SCSS.Data.Entities.AccountCategoryUnit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AccountCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CategoryAdminUnitId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("UnitId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("AccountCategoryUnit");
+                });
+
             modelBuilder.Entity("SCSS.Data.Entities.Booking", b =>
                 {
                     b.Property<Guid>("Id")
@@ -111,9 +202,6 @@ namespace SCSS.Data.EF.Migrations
 
                     b.Property<DateTime?>("CreatedTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsBulky")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -194,6 +282,85 @@ namespace SCSS.Data.EF.Migrations
                     b.ToTable("BookingRejection");
                 });
 
+            modelBuilder.Entity("SCSS.Data.Entities.CategoryAdmin", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("VARCHAR(MAX)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("LockedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("CategoryAdmin");
+                });
+
+            modelBuilder.Entity("SCSS.Data.Entities.CategoryAdminUnit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CategoryAdminId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("UnitId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("CategoryAdminUnit");
+                });
+
             modelBuilder.Entity("SCSS.Data.Entities.CollectDealTransaction", b =>
                 {
                     b.Property<Guid>("Id")
@@ -203,8 +370,8 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<float?>("AwardPoint")
                         .HasColumnType("real");
 
-                    b.Property<long?>("BonusAmount")
-                        .HasColumnType("bigint");
+                    b.Property<decimal?>("BonusAmount")
+                        .HasColumnType("decimal(15,2)");
 
                     b.Property<Guid?>("CollectorAccountId")
                         .HasColumnType("uniqueidentifier");
@@ -221,8 +388,8 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<long?>("Total")
-                        .HasColumnType("bigint");
+                    b.Property<decimal?>("Total")
+                        .HasColumnType("decimal(15,2)");
 
                     b.Property<string>("TransactionCode")
                         .HasColumnType("VARCHAR(50)");
@@ -246,8 +413,8 @@ namespace SCSS.Data.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<long?>("BonusAmount")
-                        .HasColumnType("bigint");
+                    b.Property<decimal?>("BonusAmount")
+                        .HasColumnType("decimal(15,2)");
 
                     b.Property<Guid?>("CollectDealTransactionId")
                         .HasColumnType("uniqueidentifier");
@@ -258,7 +425,7 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<DateTime?>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("DealerCategoryDetailId")
+                    b.Property<Guid?>("DealerCategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -270,8 +437,8 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<float?>("Quantity")
                         .HasColumnType("real");
 
-                    b.Property<long?>("Total")
-                        .HasColumnType("bigint");
+                    b.Property<decimal?>("Total")
+                        .HasColumnType("decimal(15,2)");
 
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -292,9 +459,6 @@ namespace SCSS.Data.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<TimeSpan?>("CloseTime")
-                        .HasColumnType("time");
-
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -314,20 +478,11 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<string>("DealerPhone")
                         .HasColumnType("VARCHAR(255)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSubcribed")
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("LocationId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<TimeSpan?>("OpenTime")
-                        .HasColumnType("time");
 
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -354,6 +509,10 @@ namespace SCSS.Data.EF.Migrations
 
                     b.Property<Guid?>("BuyingAccountId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BuyingReview")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<Guid?>("CollectDealTransactionId")
                         .HasColumnType("uniqueidentifier");
@@ -433,6 +592,26 @@ namespace SCSS.Data.EF.Migrations
                     b.ToTable("ImageSlider");
                 });
 
+            modelBuilder.Entity("SCSS.Data.Entities.ItemType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("ItemType");
+                });
+
             modelBuilder.Entity("SCSS.Data.Entities.Location", b =>
                 {
                     b.Property<Guid>("Id")
@@ -499,11 +678,11 @@ namespace SCSS.Data.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<long?>("AppliedAmount")
-                        .HasColumnType("bigint");
+                    b.Property<decimal?>("AppliedAmount")
+                        .HasColumnType("decimal(15,2)");
 
-                    b.Property<long?>("BonusAmount")
-                        .HasColumnType("bigint");
+                    b.Property<decimal?>("BonusAmount")
+                        .HasColumnType("decimal(15,2)");
 
                     b.Property<string>("Code")
                         .HasColumnType("VARCHAR(50)");
@@ -572,77 +751,6 @@ namespace SCSS.Data.EF.Migrations
                     b.ToTable("Role");
                 });
 
-            modelBuilder.Entity("SCSS.Data.Entities.ScrapCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ScrapCategory");
-                });
-
-            modelBuilder.Entity("SCSS.Data.Entities.ScrapCategoryDetail", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<long?>("Price")
-                        .HasColumnType("bigint");
-
-                    b.Property<Guid?>("ScrapCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Unit")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ScrapCategoryDetail");
-                });
-
             modelBuilder.Entity("SCSS.Data.Entities.SellCollectTransaction", b =>
                 {
                     b.Property<Guid>("Id")
@@ -664,8 +772,8 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<long?>("Total")
-                        .HasColumnType("bigint");
+                    b.Property<decimal?>("Total")
+                        .HasColumnType("decimal(15,2)");
 
                     b.Property<string>("TransactionCode")
                         .HasColumnType("VARCHAR(50)");
@@ -689,7 +797,7 @@ namespace SCSS.Data.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CollectorCategoryDetailId")
+                    b.Property<Guid?>("CollectorCategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -701,8 +809,8 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<Guid?>("SellCollectTransactionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<long?>("Total")
-                        .HasColumnType("bigint");
+                    b.Property<decimal?>("Total")
+                        .HasColumnType("decimal(15,2)");
 
                     b.HasKey("Id");
 
@@ -711,57 +819,14 @@ namespace SCSS.Data.EF.Migrations
                     b.ToTable("SellCollectTransactionDetail");
                 });
 
-            modelBuilder.Entity("SCSS.Data.Entities.ServicePack", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<long?>("Price")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TimeUnit")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ServicePack");
-                });
-
             modelBuilder.Entity("SCSS.Data.Entities.ServiceTransaction", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<long?>("Amount")
-                        .HasColumnType("bigint");
+                    b.Property<decimal?>("Amount")
+                        .HasColumnType("decimal(15,2)");
 
                     b.Property<Guid?>("CollectorId")
                         .HasColumnType("uniqueidentifier");
@@ -789,46 +854,6 @@ namespace SCSS.Data.EF.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("ServiceTransaction");
-                });
-
-            modelBuilder.Entity("SCSS.Data.Entities.Subscription", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DealerInformationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("FromTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("ServicePackId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ToTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("Subscription");
                 });
 
             modelBuilder.Entity("SCSS.Data.Entities.TransactionAwardAmount", b =>
@@ -882,6 +907,38 @@ namespace SCSS.Data.EF.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("TransactionServiceFeePercent");
+                });
+
+            modelBuilder.Entity("SCSS.Data.Entities.Unit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Unit");
                 });
 #pragma warning restore 612, 618
         }

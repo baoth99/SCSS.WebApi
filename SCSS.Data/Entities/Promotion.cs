@@ -18,15 +18,15 @@ namespace SCSS.Data.Entities
         [Column(TypeName = "VARCHAR(50)")]
         public string Code { get; set; }
 
-        [ForeignKey("AccountCategory")]
-        public Guid? DealerCategoryId { get; set; }
-
         [ForeignKey("Account")]
         public Guid? DealerAccountId { get; set; }
 
-        public float? AppliedQuantity { get; set; }
+        [ForeignKey("ScrapCategory")]
+        public Guid? DealerCategoryId { get; set; }
 
-        public float? BonusAmount { get; set; }
+        public long? AppliedAmount { get; set; }
+
+        public long? BonusAmount { get; set; }
 
         public DateTime? FromTime { get; set; }
 

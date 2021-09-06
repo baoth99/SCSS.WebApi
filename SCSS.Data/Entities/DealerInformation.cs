@@ -26,6 +26,14 @@ namespace SCSS.Data.Entities
         [ForeignKey("Location")]
         public Guid? LocationId { get; set; }
 
+        public TimeSpan? OpenTime { get; set; }
+
+        public TimeSpan? CloseTime { get; set; }
+
+        public bool IsSubcribed { get; set; }
+
+        public bool IsActive { get; set; }
+
         public bool IsDeleted { get; set; }
     }
 }

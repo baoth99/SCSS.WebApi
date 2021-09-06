@@ -18,7 +18,7 @@ namespace SCSS.Data.Entities
         [ForeignKey("Booking")]
         public Guid? BookingId { get; set; }
 
-        public decimal? Total { get; set; }
+        public long? Total { get; set; }
 
         public float? AwardPoint { get; set; }
 

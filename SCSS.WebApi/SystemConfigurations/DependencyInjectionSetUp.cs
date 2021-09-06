@@ -24,9 +24,7 @@ namespace SCSS.WebApi.SystemConfigurations
 
             #region Admin Application
 
-            services.AddScoped<SCSS.Application.Admin.Interfaces.ICategoryAdminService, SCSS.Application.Admin.Implementations.CategoryAdminService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.IAccountService, SCSS.Application.Admin.Implementations.AccountService>();
-            services.AddScoped<SCSS.Application.Admin.Interfaces.IUnitService, SCSS.Application.Admin.Implementations.UnitService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.IDashboardService, SCSS.Application.Admin.Implementations.DashboardService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.IImageSliderService, SCSS.Application.Admin.Implementations.ImageSliderService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.IRequestRegisterService, SCSS.Application.Admin.Implementations.RequestRegisterService>();

@@ -21,9 +21,9 @@ namespace SCSS.Data.Entities
         [ForeignKey("Account")]
         public Guid? CollectorAccountId { get; set; }
 
-        public decimal? Total { get; set; }
+        public long? Total { get; set; }
 
-        public decimal? BonusAmount { get; set; }
+        public long? BonusAmount { get; set; }
 
         public float? AwardPoint { get; set; }
 

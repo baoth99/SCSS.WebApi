@@ -45,11 +45,7 @@ namespace SCSS.Data.EF
 
         public DbSet<DealerInformation> DealerInformation { get; set; }
 
-        public DbSet<AccountCategory> MyProperty { get; set; }
-
         public DbSet<Booking> Booking { get; set; }
-
-        public DbSet<CategoryAdmin> CategoryAdmin { get; set; }
 
         public DbSet<CollectDealTransaction> CollectDealTransaction { get; set; }
 
@@ -59,8 +55,6 @@ namespace SCSS.Data.EF
 
         public DbSet<ImageSlider> ImageSlider { get; set; }
 
-        public DbSet<ItemType> ItemType { get; set; }
-
         public DbSet<Location> Location { get; set; }
 
         public DbSet<Notification> Notification { get; set; }
@@ -69,15 +63,19 @@ namespace SCSS.Data.EF
 
         public DbSet<Role> Role { get; set; }
 
+        public DbSet<ScrapCategory> ScrapCategory { get; set; }
+
+        public DbSet<ScrapCategoryDetail> ScrapCategoryDetail { get; set; }
+
         public DbSet<SellCollectTransaction> SellCollectTransaction { get; set; }
 
         public DbSet<SellCollectTransactionDetail> SellCollectTransactionDetail { get; set; }
 
+        public DbSet<ServicePack> ServicePack { get; set; }
+
+        public DbSet<Subscription> Subscription { get; set; }
+
         public DbSet<ServiceTransaction> ServiceTransaction { get; set; }
-
-        public DbSet<Unit> Unit { get; set; }
-
-        public DbSet<CollectDealTransactionPromotion> CollectDealTransactionPromotion { get; set; }
 
         public DbSet<TransactionServiceFeePercent> TransactionServiceFeePercent { get; set; }
 
@@ -107,7 +105,6 @@ namespace SCSS.Data.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             #region Entities Config
 
             modelBuilder.Entity<Account>(entity =>
@@ -117,119 +114,22 @@ namespace SCSS.Data.EF
 
             modelBuilder.Entity<DealerInformation>(entity =>
             {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
                 entity.HasIndex(e => e.DealerPhone).IsUnique();
-            });
-
-            modelBuilder.Entity<AccountCategory>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
             });
 
             modelBuilder.Entity<Booking>(entity =>
             {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
                 entity.Property(e => e.CollectorAccountId).IsConcurrencyToken();
                 entity.Property(e => e.Status).IsConcurrencyToken();
-            });
-
-            modelBuilder.Entity<CategoryAdmin>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-            });
-
-            modelBuilder.Entity<CollectDealTransaction>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.BonusAmount).HasColumnType("decimal(15,2)");
-                entity.Property(e => e.Total).HasColumnType("decimal(15,2)");
-            });
-
-            modelBuilder.Entity<CollectDealTransactionDetail>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.BonusAmount).HasColumnType("decimal(15,2)");
-                entity.Property(e => e.Total).HasColumnType("decimal(15,2)");
-            });
-
-            modelBuilder.Entity<Feedback>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-            });
-
-            modelBuilder.Entity<ImageSlider>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-            });
-
-            modelBuilder.Entity<ItemType>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-            });
+            });         
 
             modelBuilder.Entity<Location>(entity =>
             {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
                 entity.Property(e => e.Latitude).HasColumnType("decimal(8,6)");
                 entity.Property(e => e.Longitude).HasColumnType("decimal(9,6)");
             });
 
-            modelBuilder.Entity<Notification>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-            });
-
-            modelBuilder.Entity<Promotion>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-            });
-
             modelBuilder.Entity<Role>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-            });
-
-            modelBuilder.Entity<SellCollectTransaction>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.Total).HasColumnType("decimal(15,2)");
-            });
-
-            modelBuilder.Entity<SellCollectTransactionDetail>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.Total).HasColumnType("decimal(15,2)");
-            });
-
-            modelBuilder.Entity<ServiceTransaction>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.Amount).HasColumnType("decimal(15,2)");
-
-            });
-
-            modelBuilder.Entity<Unit>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-            });
-
-            modelBuilder.Entity<CollectDealTransactionPromotion>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-                entity.Property(e => e.BonusAmount).HasColumnType("decimal(15,2)");
-            });
-
-            modelBuilder.Entity<TransactionServiceFeePercent>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-            });
-
-            modelBuilder.Entity<TransactionAwardAmount>(entity =>
-            {
-                entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
-            });
-
-            modelBuilder.Entity<BookingRejection>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
             });
@@ -290,13 +190,23 @@ namespace SCSS.Data.EF
                             entry.State = EntityState.Modified;
                             deleteEntry.IsDeleted = BooleanConstants.TRUE;
                         }
+                        if (entry.Entity is ScrapCategory scrapCategoryEntry)
+                        {
+                            entry.State = EntityState.Modified;
+                            scrapCategoryEntry.IsDeleted = BooleanConstants.TRUE;
+                        }
+                        if (entry.Entity is ScrapCategoryDetail scrapCategoryDetailEntry)
+                        {
+                            entry.State = EntityState.Modified;
+                            scrapCategoryDetailEntry.IsDeleted = BooleanConstants.TRUE;
+                        }
                         break;
 
                     case EntityState.Modified:
                         if (entry.Entity is BaseEntity modifyBaseEntity)
                         {
                             modifyBaseEntity.UpdatedTime = DateTime.Now;
-                            modifyBaseEntity.UpdatedBy = accountId; // Custom
+                            modifyBaseEntity.UpdatedBy = accountId; 
                         }                         
                         break;
                 }

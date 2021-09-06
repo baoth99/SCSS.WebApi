@@ -12,11 +12,7 @@ namespace SCSS.Data.EF.UnitOfWork
 
         IRepository<DealerInformation> DealerInformationRepository { get; }
 
-        IRepository<AccountCategory> AccountCategoryRepository { get; }
-
         IRepository<Booking> BookingRepository { get; }
-
-        IRepository<CategoryAdmin> CategoryAdminRepository { get; }
 
         IRepository<CollectDealTransaction> CollectDealTransactionRepository { get; }
 
@@ -25,8 +21,6 @@ namespace SCSS.Data.EF.UnitOfWork
         IRepository<Feedback> FeedbackRepository { get; }
 
         IRepository<ImageSlider> ImageSliderRepository { get; }
-
-        IRepository<ItemType> ItemTypeRepository { get; }
 
         IRepository<Location> LocationRepository { get; }
 
@@ -41,10 +35,6 @@ namespace SCSS.Data.EF.UnitOfWork
         IRepository<SellCollectTransactionDetail> SellCollectTransactionDetailRepository { get; }
 
         IRepository<ServiceTransaction> ServiceTransactionRepository { get; }
-
-        IRepository<Unit> UnitRepository { get; }
-
-        IRepository<CollectDealTransactionPromotion> CollectDealTransactionPromotionRepository { get; }
 
         IRepository<TransactionServiceFeePercent> TransactionServiceFeePercentRepository { get;  }
 

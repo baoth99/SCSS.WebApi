@@ -33,6 +33,8 @@ namespace SCSS.Data.Entities
         [ForeignKey("Account")]
         public Guid? CollectorAccountId { get; set; }
 
+        public bool IsBulky { get; set; }
+
         public string ScrapImageUrl { get; set; }
 
         public string Note { get; set; }

@@ -20,11 +20,6 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         private readonly IAccountService _accountService;
 
         /// <summary>
-        /// The category admin service
-        /// </summary>
-        private readonly ICategoryAdminService _categoryAdminService;
-
-        /// <summary>
         /// The storage BLOB s3 service
         /// </summary>
         private readonly IStorageBlobS3Service _storageBlobS3Service;
@@ -33,30 +28,10 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #region Constructor
 
-        public DataController(IAccountService accountService, ICategoryAdminService categoryAdminService, IStorageBlobS3Service storageBlobS3Service)
+        public DataController(IAccountService accountService, IStorageBlobS3Service storageBlobS3Service)
         {
             _accountService = accountService;
-            _categoryAdminService = categoryAdminService;
             _storageBlobS3Service = storageBlobS3Service;
-        }
-
-        #endregion
-
-        #region Unit List
-
-        /// <summary>
-        /// Units the list.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminApiUrlDefinition.AdminDataApiUrl.Unit)]
-        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> UnitList()
-        {
-            return await _categoryAdminService.GetUnitList();
         }
 
         #endregion

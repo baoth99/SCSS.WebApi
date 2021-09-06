@@ -2,11 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace SCSS.Data.Entities
 {
-    [Table("CategoryAdmin")]
-    public class CategoryAdmin : BaseEntity, IHasSoftDelete
+    [Table("ScrapCategory")]
+    public class ScrapCategory : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -15,19 +14,10 @@ namespace SCSS.Data.Entities
         [MaxLength(100)]
         public string Name { get; set; }
 
-        [Column(TypeName = "VARCHAR(MAX)")]
         public string ImageUrl { get; set; }
 
-        [ForeignKey("Unit")]
-        public Guid? UnitId { get; set; }
-
-        [MaxLength(500)]
-        public string Description { get; set; }
-
-        public bool IsLocked { get; set; }
-
         [ForeignKey("Account")]
-        public Guid? LockedBy { get; set; }
+        public Guid? AccountId { get; set; }
 
         public bool IsDeleted { get; set; }
     }
