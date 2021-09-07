@@ -21,7 +21,7 @@ namespace SCSS.Utilities.Constants
             FileS3Path.CollectorAccountImages.ToString(),
             FileS3Path.DealerAccountImages.ToString(),
             FileS3Path.SellerAccountImages.ToString(),
-            FileS3Path.AdminCategoryImages.ToString(),
+            FileS3Path.ScrapCategoryImages.ToString(),
             FileS3Path.ImageSliderImages.ToString()
         };
 

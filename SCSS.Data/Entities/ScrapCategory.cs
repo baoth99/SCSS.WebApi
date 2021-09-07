@@ -19,6 +19,6 @@ namespace SCSS.Data.Entities
         [ForeignKey("Account")]
         public Guid? AccountId { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public int? Status { get; set; }
     }
 }

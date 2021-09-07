@@ -190,16 +190,6 @@ namespace SCSS.Data.EF
                             entry.State = EntityState.Modified;
                             deleteEntry.IsDeleted = BooleanConstants.TRUE;
                         }
-                        if (entry.Entity is ScrapCategory scrapCategoryEntry)
-                        {
-                            entry.State = EntityState.Modified;
-                            scrapCategoryEntry.IsDeleted = BooleanConstants.TRUE;
-                        }
-                        if (entry.Entity is ScrapCategoryDetail scrapCategoryDetailEntry)
-                        {
-                            entry.State = EntityState.Modified;
-                            scrapCategoryDetailEntry.IsDeleted = BooleanConstants.TRUE;
-                        }
                         break;
 
                     case EntityState.Modified:
@@ -207,7 +197,12 @@ namespace SCSS.Data.EF
                         {
                             modifyBaseEntity.UpdatedTime = DateTime.Now;
                             modifyBaseEntity.UpdatedBy = accountId; 
-                        }                         
+                        }
+                        if (entry.Entity is Account updateAccountEntity)
+                        {
+                            updateAccountEntity.UpdatedBy = accountId;
+                            updateAccountEntity.UpdatedTime = DateTime.Now;
+                        }
                         break;
                 }
             }

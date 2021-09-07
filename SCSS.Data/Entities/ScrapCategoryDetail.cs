@@ -18,6 +18,6 @@ namespace SCSS.Data.Entities
 
         public long? Price { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public int? Status { get; set; }
     }
 }

@@ -14,6 +14,8 @@ namespace SCSS.Application.Admin.Models.AccountModels
 
         public string Email { get; set; }
 
+        public string Address { get; set; }
+
         public string IdCard { get; set; }
 
         public int Gender { get; set; }

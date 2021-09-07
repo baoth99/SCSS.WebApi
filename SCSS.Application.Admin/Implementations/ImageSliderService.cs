@@ -128,13 +128,19 @@ namespace SCSS.Application.Admin.Implementations
             }
             var dataQuery = _imageSliderRepository.GetById(id);
 
-            var fileViewModel = await _storageBlobS3Service.GetFile(dataQuery.ImageUrl);
+            var fileResultModel = await _storageBlobS3Service.GetFile(dataQuery.ImageUrl);
+
+            var fileResponse = new FileResponseModel()
+            {
+                Base64 = fileResultModel.Stream.ToBase64(),
+                Extension = fileResultModel.Extension
+            };
 
             var resData = new ImageSliderViewDetailModel()
             {
                 Id = dataQuery.Id,
                 Name = dataQuery.Name,
-                Image = fileViewModel,
+                Image = fileResponse,
                 IsSelected = dataQuery.IsSelected,
                 CreatedTime = dataQuery.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
             };
@@ -187,7 +193,7 @@ namespace SCSS.Application.Admin.Implementations
                 cacheData = await _cacheService.GetCacheData(CacheRedisKey.ImageSlider);
             }
 
-            var listData = cacheData.ToList<FileViewModel>();
+            var listData = cacheData.ToList<FileResponseModel>();
 
             if (listData.Count > 0)
             {
@@ -217,11 +223,16 @@ namespace SCSS.Application.Admin.Implementations
 
             if (selectedList.Count > 0)
             {
-                var imgCache = new List<FileViewModel>();
+                var imgCache = new List<FileResponseModel>();
 
                 foreach (var item in selectedList)
                 {
-                    var image = await _storageBlobS3Service.GetFile(item);
+                    var file = await _storageBlobS3Service.GetFile(item);
+                    var image = new FileResponseModel()
+                    {
+                        Extension = file.Extension,
+                        Base64 = file.Stream.ToBase64()
+                    };
                     imgCache.Add(image);
                 }
 

@@ -15,7 +15,9 @@ namespace SCSS.WebApi.Controllers.AdminControllers
     {
         #region Services
 
-        
+        /// <summary>
+        /// The account service
+        /// </summary>
         private readonly IAccountService _accountService;
 
         #endregion

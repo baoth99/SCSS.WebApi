@@ -1,9 +1,5 @@
 ﻿using SCSS.AWSService.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SCSS.Application.Admin.Models.ImageSliderModels
 {
@@ -17,6 +13,6 @@ namespace SCSS.Application.Admin.Models.ImageSliderModels
 
         public bool IsSelected { get; set; }
 
-        public FileViewModel Image { get; set; }      
+        public FileResponseModel Image { get; set; }      
     }
 }

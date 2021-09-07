@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SCSS.Utilities.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,7 @@ namespace SCSS.Utilities.Helper
         {
             return "data:image/jpeg;base64,";
         }
+
+        public static string GetString(string val) => string.IsNullOrEmpty(val) ? CommonConstants.Null : val;
     }
 }

@@ -82,7 +82,7 @@ namespace SCSS.AWSService.Implementations
         /// <param name="fileName">Name of the file.</param>
         /// <param name="path">The path.</param>
         /// <returns></returns>
-        public async Task<FileViewModel> GetFile(string fileName, FileS3Path path)
+        public async Task<FileResultModel> GetFile(string fileName, FileS3Path path)
         {
             try
             {
@@ -95,13 +95,12 @@ namespace SCSS.AWSService.Implementations
                 var response = await AmazonS3.GetObjectAsync(request);
 
                 var stream = response.ResponseStream;
-                var base64 = stream.ToBase64();
 
                 Logger.LogInfo(AWSLoggerMessage.GetFileSuccess(fileName, path));
-                return new FileViewModel()
+                return new FileResultModel()
                 {
                     Extension = Path.GetExtension(fileName),
-                    Base64 = base64
+                    Stream = stream
                 };
             }
             catch (Exception ex)
@@ -120,7 +119,7 @@ namespace SCSS.AWSService.Implementations
         /// </summary>
         /// <param name="filepath">The filepath.</param>
         /// <returns></returns>
-        public async Task<FileViewModel> GetFile(string filepath)
+        public async Task<FileResultModel> GetFile(string filepath)
         {
             try
             {
@@ -146,12 +145,11 @@ namespace SCSS.AWSService.Implementations
                 var response = await AmazonS3.GetObjectAsync(request);
 
                 var stream = response.ResponseStream;
-                var base64 = stream.ToBase64();
 
-                var fileResponse = new FileViewModel()
+                var fileResponse = new FileResultModel()
                 {
                     Extension = Path.GetExtension(filepath).ToLower().Substring(1),
-                    Base64 = base64
+                    Stream = stream
                 };
 
                 Logger.LogInfo(AWSLoggerMessage.GetFileSuccess(filepath));
@@ -201,13 +199,15 @@ namespace SCSS.AWSService.Implementations
 
                 var stream = response.ResponseStream;
                 var base64 = stream.ToBase64();
-                var fileResponse = new FileViewModel()
+
+                var fileResponse = new FileResponseModel()
                 {
                     Extension = Path.GetExtension(filepath).ToLower().Substring(1),
                     Base64 = base64
                 };
 
                 Logger.LogInfo(AWSLoggerMessage.GetFileSuccess(filepath));
+
 
                 return BaseApiResponse.OK(fileResponse);
             }

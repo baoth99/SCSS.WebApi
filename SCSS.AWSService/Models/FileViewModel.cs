@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace SCSS.AWSService.Models
 {
-    public class FileViewModel
+    public class FileResultModel
+    {
+        public string Extension { get; set; }
+
+        public Stream Stream { get; set; }
+    }
+
+
+    public class FileResponseModel
     {
         public string Extension { get; set; }
 

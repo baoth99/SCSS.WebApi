@@ -22,7 +22,7 @@ namespace SCSS.Application.Admin.Models.AccountModels
 
         public string Address { get; set; }
 
-        public DateTime? BirthDate { get; set; }
+        public string BirthDate { get; set; }
 
         public string Image { get; set; }
 
@@ -34,7 +34,7 @@ namespace SCSS.Application.Admin.Models.AccountModels
 
         public float? TotalPoint { get; set; }
 
-        public DateTime? CreatedTime { get; set; }
+        public string CreatedTime { get; set; }
 
         public int? Status { get; set; }
     }

@@ -51,11 +51,19 @@ namespace SCSS.Data.EF.UnitOfWork
 
         private IRepository<Role> _roleRepository;
 
+        private IRepository<ScrapCategory> _scrapCategoryRepository;
+
+        private IRepository<ScrapCategoryDetail> _scrapCategoryDetailRepository;
+
         private IRepository<SellCollectTransaction> _sellCollectTransactionRepository;
 
         private IRepository<SellCollectTransactionDetail> _sellCollectTransactionDetailRepository;
 
+        private IRepository<ServicePack> _servicePackRepository;
+
         private IRepository<ServiceTransaction> _serviceTransactionRepository;
+
+        private IRepository<Subscription> _subscriptionRepository;
 
         private IRepository<TransactionServiceFeePercent> _transactionServiceFeePercentRepository;
 
@@ -105,11 +113,19 @@ namespace SCSS.Data.EF.UnitOfWork
 
         public IRepository<Role> RoleRepository => _roleRepository ??= (_roleRepository = new Repository<Role>(AppDbContext));
 
+        public IRepository<ScrapCategory> ScrapCategoryRepository => _scrapCategoryRepository ??= (_scrapCategoryRepository = new Repository<ScrapCategory>(AppDbContext));
+
+        public IRepository<ScrapCategoryDetail> ScrapCategoryDetailRepository => _scrapCategoryDetailRepository ??= (_scrapCategoryDetailRepository = new Repository<ScrapCategoryDetail>(AppDbContext));
+
         public IRepository<SellCollectTransaction> SellCollectTransactionRepository => _sellCollectTransactionRepository ??= (_sellCollectTransactionRepository = new Repository<SellCollectTransaction>(AppDbContext));
 
         public IRepository<SellCollectTransactionDetail> SellCollectTransactionDetailRepository => _sellCollectTransactionDetailRepository ??= (_sellCollectTransactionDetailRepository = new Repository<SellCollectTransactionDetail>(AppDbContext));
 
+        public IRepository<ServicePack> ServicePackRepository => _servicePackRepository ??= (_servicePackRepository = new Repository<ServicePack>(AppDbContext));
+
         public IRepository<ServiceTransaction> ServiceTransactionRepository => _serviceTransactionRepository ??= (_serviceTransactionRepository = new Repository<ServiceTransaction>(AppDbContext));
+
+        public IRepository<Subscription> SubscriptionRepository => _subscriptionRepository ??= (_subscriptionRepository = new Repository<Subscription>(AppDbContext));
 
         public IRepository<TransactionServiceFeePercent> TransactionServiceFeePercentRepository => _transactionServiceFeePercentRepository ??= (_transactionServiceFeePercentRepository = new Repository<TransactionServiceFeePercent>(AppDbContext));
 

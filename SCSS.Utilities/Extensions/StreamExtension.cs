@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.Internal;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,21 @@ namespace SCSS.Utilities.Extensions
                 memoryStream.Dispose();
             }
             
+        }
+        public static Bitmap ToBitmap(this Stream stream)
+        {
+            try
+            {
+                return new Bitmap(stream);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                stream.Dispose();
+            }
         }
     }
 }

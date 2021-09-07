@@ -2,7 +2,7 @@
 {
     public enum FileS3Path
     {
-        AdminCategoryImages,
+        ScrapCategoryImages,
         AdminAccountImages,
         SellerAccountImages,
         DealerAccountImages,
@@ -20,7 +20,6 @@
 
     public enum PrefixFileName
     {
-        AdminCategory,
         AdminAccount,
         SellerAccount,
         DealerAccount,

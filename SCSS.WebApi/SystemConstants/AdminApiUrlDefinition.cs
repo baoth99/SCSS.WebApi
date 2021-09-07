@@ -6,8 +6,15 @@ namespace SCSS.WebApi.SystemConstants
         private const string Hub = "/hubs/admin";
         private const string Account = "account/admin";
         private const string Data = "data";
+        private const string ScrapCategory = "scrap-category";
         private const string ImageSlider = "image-slider";
         private const string RequestRegister = "request-register";
+
+        public static class ScrapCategoryUrl
+        {
+            public const string Search = ScrapCategory + "/search";
+            public const string Detail = ScrapCategory + "/detail";
+        }
 
         public static class HubApiUrl
         {

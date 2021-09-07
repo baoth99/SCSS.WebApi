@@ -30,11 +30,19 @@ namespace SCSS.Data.EF.UnitOfWork
 
         IRepository<Role> RoleRepository { get; }
 
+        IRepository<ScrapCategory> ScrapCategoryRepository { get; }
+
+        IRepository<ScrapCategoryDetail> ScrapCategoryDetailRepository { get; }
+
         IRepository<SellCollectTransaction> SellCollectTransactionRepository { get; }
 
         IRepository<SellCollectTransactionDetail> SellCollectTransactionDetailRepository { get; }
 
+        IRepository<ServicePack> ServicePackRepository { get; }
+
         IRepository<ServiceTransaction> ServiceTransactionRepository { get; }
+
+        IRepository<Subscription> SubscriptionRepository { get; }
 
         IRepository<TransactionServiceFeePercent> TransactionServiceFeePercentRepository { get;  }
 

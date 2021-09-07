@@ -46,11 +46,19 @@ namespace SCSS.Utilities.Constants
         public const string JPG = ".jpg";
     }
 
+    public class ScrapCategoryConstant
+    {
+        public const int ALL = 0;
+        public const int ACTIVE = 1;
+        public const int DEACTIVE = 2;
+    }
+
     public class AccountStatus
     {
         public const int NOT_APPROVED = 1;
         public const int ACTIVE = 2;
         public const int BANNING = 3;
+        public const int REJECT = 4;
     }
 
     public class Gender

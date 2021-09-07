@@ -8,6 +8,7 @@ using SCSS.Data.Entities;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
+using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using System;
@@ -46,31 +47,39 @@ namespace SCSS.Application.Admin.Implementations
 
         #region Search Account
 
+        /// <summary>
+        /// Searches the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         public async Task<BaseApiResponseModel> Search(SearchAccountRequestModel model)
         {
-            var dataQuery = _accountRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.Name) || x.Name.Contains(model.Name)) &&
-                                                                        (ValidatorUtil.IsBlank(model.Phone) || x.Phone.Contains(model.Phone)) &&
-                                                                        (ValidatorUtil.IsBlank(model.Email) || x.Email.Contains(model.Email)) &&
-                                                                        (model.Status == CommonConstants.Zero || x.Status == model.Status) &&
-                                                                        (model.Gender == CommonConstants.Zero || x.Gender == model.Gender) &&
-                                                                        (ValidatorUtil.IsBlank(model.IdCard) | x.IdCard.Contains(model.IdCard)))
-                                               .Join(_roleRepository.GetManyAsNoTracking(x => (model.Role == CommonConstants.Zero || x.Key == model.Role)), x => x.RoleId, y => y.Id,
-                                               (x, y) => new
-                                               {
-                                                   x.Id,
-                                                   x.Name,
-                                                   x.Phone,
-                                                   x.Gender,
-                                                   x.Status,
-                                                   Role = y.Key,
-                                                   x.TotalPoint,
-                                                   x.CreatedTime
-                                               }).Where(x => x.Role != AccountRole.ADMIN).OrderBy("CreatedTime DESC");
+            var dataQuery = _accountRepository.GetManyAsNoTracking(x => (x.Status == AccountStatus.ACTIVE || x.Status == AccountStatus.BANNING));
+
+            var data = dataQuery.Where(x => (ValidatorUtil.IsBlank(model.Name) || x.Name.Contains(model.Name)) &&
+                                            (ValidatorUtil.IsBlank(model.Phone) || x.Phone.Contains(model.Phone)) &&
+                                            (ValidatorUtil.IsBlank(model.Email) || x.Email.Contains(model.Email)) &&
+                                            (ValidatorUtil.IsBlank(model.Address) || x.Address.Contains(model.Address)) &&
+                                            (model.Status == CommonConstants.Zero || x.Status == model.Status) &&
+                                            (model.Gender == CommonConstants.Zero || x.Gender == model.Gender) &&
+                                            (ValidatorUtil.IsBlank(model.IdCard) | x.IdCard.Contains(model.IdCard)))
+                                            .Join(_roleRepository.GetManyAsNoTracking(x => (model.Role == CommonConstants.Zero || x.Key == model.Role)), x => x.RoleId, y => y.Id,
+                                            (x, y) => new
+                                            {
+                                                x.Id,
+                                                x.Name,
+                                                x.Phone,
+                                                x.Gender,
+                                                x.Status,
+                                                Role = y.Key,
+                                                x.TotalPoint,
+                                                x.CreatedTime
+                                            }).Where(x => x.Role != AccountRole.ADMIN).OrderBy(DefaultSort.CreatedTimeDESC);
 
 
-            var totalRecord = await dataQuery.CountAsync();
+            var totalRecord = await data.CountAsync();
 
-            var dataRes = dataQuery.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize).Select(x => new AccountViewResponseModel()
+            var dataRes = data.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize).Select(x => new AccountViewResponseModel()
             {
                 Id = x.Id,
                 Gender = x.Gender,
@@ -107,14 +116,14 @@ namespace SCSS.Application.Admin.Implementations
                                                                                              {
                                                                                                  Id = x.Id,
                                                                                                  UserName = x.UserName,
-                                                                                                 Address = x.Address,
-                                                                                                 BirthDate = x.BirthDate,
-                                                                                                 CreatedTime = x.CreatedTime,
-                                                                                                 Email = x.Email,
+                                                                                                 Address = StringUtils.GetString(x.Address),
+                                                                                                 BirthDate = x.BirthDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
+                                                                                                 CreatedTime = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
+                                                                                                 Email = StringUtils.GetString(x.Email),
                                                                                                  Gender = x.Gender,
-                                                                                                 IdCard = x.IdCard,
+                                                                                                 IdCard = StringUtils.GetString(x.IdCard),
                                                                                                  Image = x.ImageUrl,
-                                                                                                 Name = x.Name,
+                                                                                                 Name = StringUtils.GetString(x.Name),
                                                                                                  Phone = x.Phone,
                                                                                                  RoleKey = y.Key,
                                                                                                  RoleName = y.Name,
