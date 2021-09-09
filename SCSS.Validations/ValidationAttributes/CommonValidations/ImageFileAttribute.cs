@@ -11,14 +11,13 @@ namespace SCSS.Validations.ValidationAttributes.CommonValidations
         {
             if (value == null)
             {
-                return ValidationResult.Success;
+                return new ValidationResult(InvalidFileCode.Null);
             }
 
             var imageFile = value as IFormFile;
 
-            
-
             var extension = Path.GetExtension(imageFile.FileName);
+
             if (!CollectionConstants.ImageExtensions.Contains(extension.ToLower()))
             {
                 return new ValidationResult(InvalidFileCode.Extension);

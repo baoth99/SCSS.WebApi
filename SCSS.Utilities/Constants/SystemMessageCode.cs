@@ -96,5 +96,13 @@ namespace SCSS.Utilities.Constants
         /// </value>
         public static string NotApproveAccountException => "300010";
 
+
+        /// <summary>
+        /// Gets the duplicate data.
+        /// </summary>
+        /// <value>
+        /// The duplicate data.
+        /// </value>
+        public static string DuplicateData => "300011";
     }
 }

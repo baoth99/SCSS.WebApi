@@ -152,21 +152,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
             }
 
-            var imageName = string.Empty;
-
-            // Get Image Name
-            if (model.Image != null)
-            {
-                imageName = CommonUtils.GetFileName(PrefixFileName.SellerAccount, model.Image.FileName);
-            }
-
-            if (model.IsDeleteImg)
-            {
-                imageName = string.Empty;
-            }
-
             // Send Data to IdentityServer4
-
             var dictionary = new Dictionary<string, string>()
             {
                 {"id", model.Id.ToString() },
@@ -175,7 +161,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 {"gender", model.Gender.ToString() },
                 {"address", model.Address },
                 {"bithdate", model.BirthDate },
-                {"image", imageName == string.Empty ? string.Empty : $"{FileS3Path.SellerAccountImages}/{imageName}" },
+                {"image", model.ImageUrl},
                 {"idcard", model.IDCard }
             };
 
@@ -186,27 +172,18 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             {
                 return BaseApiResponse.Error(SystemMessageCode.OtherException);
             }
-
-            var imageUrl = string.Empty;
-
-            if (model.Image != null)
-            {
-                imageUrl = await _storageBlobS3Service.UploadFile(model.Image, imageName, FileS3Path.SellerAccountImages);
-            }
-
             entity.Name = model.Name;
             entity.Email = model.Email;
             entity.Gender = model.Gender;
             entity.BirthDate = model.BirthDate.ToDateTime();
             entity.Address = model.Address;
-            entity.ImageUrl = imageUrl;
+            entity.ImageUrl = model.ImageUrl;
             entity.IdCard = model.IDCard;
             entity.DeviceId = model.DeviceID;
 
             _accountRepository.Update(entity);
 
             await UnitOfWork.CommitAsync();
-
 
             return BaseApiResponse.OK();
         }

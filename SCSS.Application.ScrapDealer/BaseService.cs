@@ -4,7 +4,7 @@ using SCSS.Utilities.AuthSessionConfig;
 
 namespace SCSS.Application.ScrapDealer
 {
-    internal class BaseService
+    public class BaseService
     {
         /// <summary>
         /// Gets the unit of work.

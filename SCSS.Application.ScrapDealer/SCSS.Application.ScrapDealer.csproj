@@ -5,12 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Implementations\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SCSS.AWSService\SCSS.AWSService.csproj" />
     <ProjectReference Include="..\SCSS.Data.EF\SCSS.Data.EF.csproj" />
     <ProjectReference Include="..\SCSS.Data\SCSS.Data.csproj" />
@@ -18,6 +12,12 @@
     <ProjectReference Include="..\SCSS.ORM.Dapper\SCSS.ORM.Dapper.csproj" />
     <ProjectReference Include="..\SCSS.Utilities\SCSS.Utilities.csproj" />
     <ProjectReference Include="..\SCSS.Validations\SCSS.Validations.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Implementations\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

@@ -27,6 +27,10 @@ namespace SCSS.Utilities.Extensions
             }
             return dictionary;
         }
+        private static void ThrowExceptionWhenSourceArgumentIsNull()
+        {
+            throw new ArgumentNullException("Source", "Unable to convert object to a dictionary. The source object is null.");
+        }
 
         private static void AddPropertyToDictionary<T>(PropertyDescriptor property, object source, Dictionary<string, T> dictionary)
         {
@@ -35,9 +39,14 @@ namespace SCSS.Utilities.Extensions
                 dictionary.Add(property.Name, (T)value);
         }
 
-        private static void ThrowExceptionWhenSourceArgumentIsNull()
+        
+
+
+        public static object GetPropertyValue(this object obj, string propertyName)
         {
-            throw new ArgumentNullException("Source", "Unable to convert object to a dictionary. The source object is null.");
+            return obj.GetType().GetProperties()
+               .Single(pi => pi.Name == propertyName)
+               .GetValue(obj, null);
         }
     }
 }

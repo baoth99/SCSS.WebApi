@@ -15,5 +15,6 @@ namespace SCSS.Utilities.Helper
         }
 
         public static string GetString(string val) => string.IsNullOrEmpty(val) ? CommonConstants.Null : val;
+
     }
 }

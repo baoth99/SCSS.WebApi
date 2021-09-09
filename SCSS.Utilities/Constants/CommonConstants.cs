@@ -46,7 +46,7 @@ namespace SCSS.Utilities.Constants
         public const string JPG = ".jpg";
     }
 
-    public class ScrapCategoryConstant
+    public class ScrapCategoryStatus
     {
         public const int ALL = 0;
         public const int ACTIVE = 1;

@@ -114,7 +114,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion
 
-
         #region Update Account Information
 
         public async Task<BaseApiResponseModel> UpdateAccountInformation(AccountUpdateRequestModel model)

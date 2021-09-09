@@ -67,7 +67,7 @@ namespace SCSS.Application.Admin.Implementations
         public async Task<BaseApiResponseModel> SearchScrapCategory(ScrapCategorySearchModel model)
         {
             var dataQuery = _scrapCategoryRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.Name) || x.Name.Contains(model.Name)) &&
-                                                                              (model.Status == ScrapCategoryConstant.ALL || x.Status == model.Status))
+                                                                              (model.Status == ScrapCategoryStatus.ALL || x.Status == model.Status))
                                                     .Join(_accountRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.CreatedBy) || x.Name.Contains(model.CreatedBy)) &&
                                                                                                       (ValidatorUtil.IsBlank(model.PhoneCreatedBy) || x.Phone.Contains(model.PhoneCreatedBy))),
                                                                                                  x => x.AccountId, y => y.Id, (x, y) => new

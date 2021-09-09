@@ -33,7 +33,9 @@ namespace SCSS.WebApi.SystemConfigurations
             #endregion
 
             #region Collector Application
+
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IAccountService, SCSS.Application.ScrapCollector.Implementations.AccountService>();
+            services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IScrapCategoryService, SCSS.Application.ScrapCollector.Implementations.ScrapCategoryService>();
 
             #endregion
 

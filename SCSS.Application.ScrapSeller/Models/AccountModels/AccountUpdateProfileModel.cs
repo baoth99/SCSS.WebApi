@@ -22,8 +22,7 @@ namespace SCSS.Application.ScrapSeller.Models.AccountModels
 
         public string Address { get; set; }
 
-        [ImageFile]
-        public IFormFile Image { get; set; }
+        public string ImageUrl { get; set; }
 
         public bool IsDeleteImg { get; set; }
 

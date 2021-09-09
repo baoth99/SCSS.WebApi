@@ -24,7 +24,8 @@
         SellerAccount,
         DealerAccount,
         CollectorAccount,
-        ImageSlider
+        ImageSlider,
+        ScrapCategory
     }
 
     public enum CacheRedisKey

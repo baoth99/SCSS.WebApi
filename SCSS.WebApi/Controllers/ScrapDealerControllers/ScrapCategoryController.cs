@@ -13,10 +13,10 @@ using SCSS.WebApi.SystemConstants;
 using System;
 using System.Threading.Tasks;
 
-namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
+namespace SCSS.WebApi.Controllers.ScrapDealerControllers
 {
-    [ApiVersion(ApiVersions.ApiVersionV4)]
-    public class ScrapCategoryController : BaseScrapCollectorController
+    [ApiVersion(ApiVersions.ApiVersionV3)]
+    public class ScrapCategoryController : BaseScrapDealerController
     {
         #region Services
 
@@ -58,7 +58,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapCollectorApiUrlDefinition.ScrapCategoryUrl.UploadImage)]
+        [Route(ScrapDealerApiUrlDefinition.ScrapCategoryUrl.UploadImage)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> UploadScrapCategoryImage([FromForm] ImageUploadModel model)
         {
@@ -102,7 +102,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapCollectorApiUrlDefinition.ScrapCategoryUrl.Create)]
+        [Route(ScrapDealerApiUrlDefinition.ScrapCategoryUrl.Create)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> CreateScrapCategory([FromBody] ScrapCategoryCreateModel model)
         {
@@ -122,7 +122,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapCollectorApiUrlDefinition.ScrapCategoryUrl.Update)]
+        [Route(ScrapDealerApiUrlDefinition.ScrapCategoryUrl.Update)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> UpdateScrapCategory([FromBody] ScrapCategoryUpdateModel model)
         {
@@ -141,7 +141,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapCollectorApiUrlDefinition.ScrapCategoryUrl.Get)]
+        [Route(ScrapDealerApiUrlDefinition.ScrapCategoryUrl.Get)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> GetScrapCategories()
         {
@@ -161,9 +161,9 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapCollectorApiUrlDefinition.ScrapCategoryUrl.GetDetail)]
+        [Route(ScrapDealerApiUrlDefinition.ScrapCategoryUrl.GetDetail)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetScrapCategoryDetail([FromQuery] Guid id)
+        public async Task<BaseApiResponseModel> GetScrapCategoryDetail(Guid id)
         {
             return await _scrapCategoryService.GetScrapCategoryDetail(id);
         }

@@ -102,7 +102,7 @@ namespace SCSS.Utilities.BaseResponse
         /// <param name="msgDetail">The MSG detail.</param>
         /// <param name="resData">The resource data.</param>
         /// <returns></returns>
-        public static BaseApiResponseModel Error(string msgCode, string msgDetail, object resData)
+        public static BaseApiResponseModel Error(string msgCode, object resData, string msgDetail = null)
         {
             int? totalRecord = null;
             if (resData is ICollection col)
