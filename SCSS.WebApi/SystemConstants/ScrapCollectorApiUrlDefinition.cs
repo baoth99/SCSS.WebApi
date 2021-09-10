@@ -17,6 +17,7 @@ namespace SCSS.WebApi.SystemConstants
             public const string Create = ScrapCategory + "/create";
             public const string Get = ScrapCategory + "/get";
             public const string GetDetail = ScrapCategory + "/get-detail";
+            public const string CheckName = ScrapCategory + "/check-name";
             public const string Update = ScrapCategory + "/update";
             public const string UploadImage = ScrapCategory + "/upload-image";
             public const string GetImage = ScrapCategory + "/get-image";

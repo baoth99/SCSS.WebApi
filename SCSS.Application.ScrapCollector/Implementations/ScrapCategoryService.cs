@@ -49,6 +49,26 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion
 
+        #region Check Duplicate Scrap Category Name
+
+        /// <summary>
+        /// Checks the name of the scrap category.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> CheckScrapCategoryName(string name)
+        {
+            var isDuplicate = await IsDuplicateSCName(name);
+            if (isDuplicate)
+            {
+                return BaseApiResponse.Error(SystemMessageCode.DuplicateData);
+            }
+
+            return BaseApiResponse.OK();
+        }
+
+        #endregion
+
         #region Create New Scrap Category
 
         /// <summary>
@@ -58,7 +78,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> CreateScrapCategory(ScrapCategoryCreateModel model)
         {
-            if (_scrapCategoryRepository.IsExisted(x => x.Name.Equals(model.Name)))
+            var isDuplicate = await IsDuplicateSCName(model.Name);
+
+            if (isDuplicate)
             {
                 return BaseApiResponse.Error(SystemMessageCode.DuplicateData);
             }
@@ -115,11 +137,19 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
             }
 
-            var duplicateSCDetails = model.Details.GroupBy(x => x.Unit).Where(x => x.Count() > 1).Select(x => x.Key);
+            var duplicateSCDetails = model.Details.Where(x => x.Status == ScrapCategoryStatus.ACTIVE).GroupBy(x => x.Unit).Where(x => x.Count() > 1).Select(x => x.Key);
 
             if (duplicateSCDetails.Any())
             {
                 return BaseApiResponse.Error(msgCode: SystemMessageCode.DataInvalid, resData: duplicateSCDetails.ToList());
+            }
+
+            var duplicateInsertSCDetails = model.Details.Where(x => x.Status == ScrapCategoryStatus.ACTIVE &&
+                                                              ValidatorUtil.IsBlank(x.Id)).GroupBy(x => x.Unit).Where(x => x.Count() > 1).Select(x => x.Key);
+
+            if (duplicateSCDetails.Any())
+            {
+                return BaseApiResponse.Error(msgCode: SystemMessageCode.DataInvalid, resData: duplicateInsertSCDetails.ToList());
             }
 
             SCEntity.Name = model.Name;
@@ -145,15 +175,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
             // Insert New Scrap Category Detail
             // Get Insert Scrap Category Detail
             var newSCDetailsParam = model.Details.Where(x => ValidatorUtil.IsBlank(x.Id)).ToList();
-            // Check Insert Scrap Category Detail existed
-            newSCDetailsParam.ForEach(x =>
-            {
-                var enitty = _scrapCategoryDetailRepository.Get(y => (y.Unit == x.Unit) && (y.Price == x.Price) && (y.ScrapCategoryId == SCEntity.Id));
-                if (enitty != null)
-                {
-                    newSCDetailsParam.Remove(x);
-                }
-            });
 
             // Insert 
             if (newSCDetailsParam.Any())
@@ -294,9 +315,33 @@ namespace SCSS.Application.ScrapCollector.Implementations
             scrapCategoryEntity.Status = ScrapCategoryStatus.DEACTIVE;
             _scrapCategoryRepository.Update(scrapCategoryEntity);
 
+            var SCDetailEntities = _scrapCategoryDetailRepository.GetManyAsNoTracking(x => x.ScrapCategoryId.Equals(scrapCategoryEntity.Id) && x.Status == ScrapCategoryStatus.ACTIVE).ToList();
+            foreach (var item in SCDetailEntities)
+            {
+                item.Status = ScrapCategoryStatus.DEACTIVE;
+            }
+
+            _scrapCategoryDetailRepository.UpdateRange(SCDetailEntities);
+
             await UnitOfWork.CommitAsync();
 
             return BaseApiResponse.OK();
+        }
+
+        #endregion
+
+        #region Check Duplicate SC Name
+
+        /// <summary>
+        /// Determines whether [is duplicate sc name] [the specified name].
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        ///   <c>true</c> if [is duplicate sc name] [the specified name]; otherwise, <c>false</c>.
+        /// </returns>
+        private async Task<bool> IsDuplicateSCName(string name)
+        {
+            return await _scrapCategoryRepository.IsExistedAsync(x => x.Name.Equals(name) && x.Status == ScrapCategoryStatus.ACTIVE);
         }
 
         #endregion

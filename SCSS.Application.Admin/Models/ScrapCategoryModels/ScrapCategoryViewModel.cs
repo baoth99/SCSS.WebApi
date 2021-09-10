@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SCSS.Application.Admin.Models.ScrapCategoryModels
 {
@@ -16,8 +12,9 @@ namespace SCSS.Application.Admin.Models.ScrapCategoryModels
 
         public int? Status { get; set; }
 
+        public int? Role { get; set; }
+
         public string CreatedTime { get; set; }
 
-        public string UpdatedTime { get; set; }
     }
 }

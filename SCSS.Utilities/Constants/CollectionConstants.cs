@@ -42,12 +42,6 @@ namespace SCSS.Utilities.Constants
             BookingStatus.COMPLETED
         };
 
-        public static readonly List<int> AccountCategoryStatusCollection = new List<int>()
-        {
-            AccountCategoryStatus.DISABLED,
-            AccountCategoryStatus.ENABLED
-        };
-
         public static readonly List<int> GenderCollection = new List<int>()
         {
             Gender.FEMALE,

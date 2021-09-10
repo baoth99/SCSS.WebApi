@@ -80,6 +80,16 @@ namespace SCSS.Data.EF.Repositories
         bool IsExisted(Expression<Func<T, bool>> predicate);
 
         /// <summary>
+        /// Determines whether [is existed asynchronous] [the specified predicate].
+        /// </summary>
+        /// <param name="predicate">The predicate.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified predicate is existed; otherwise, <c>false</c>.
+        /// </returns>
+        Task<bool> IsExistedAsync(Expression<Func<T, bool>> predicate);
+
+
+        /// <summary>
         /// Inserts the specified entity.
         /// </summary>
         /// <param name="entity">The entity.</param>

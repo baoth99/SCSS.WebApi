@@ -15,6 +15,7 @@
         public static class ScrapCategoryUrl
         {
             public const string Create = ScrapCategory + "/create";
+            public const string CheckName = ScrapCategory + "/check-name";
             public const string Get = ScrapCategory + "/get";
             public const string GetDetail = ScrapCategory + "/get-detail";
             public const string Update = ScrapCategory + "/update";

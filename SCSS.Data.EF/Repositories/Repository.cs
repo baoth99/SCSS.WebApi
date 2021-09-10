@@ -181,6 +181,22 @@ namespace SCSS.Data.EF.Repositories
 
         #endregion
 
+        #region IsExistedAsync
+
+        /// <summary>
+        /// Determines whether [is existed asynchronous] [the specified predicate].
+        /// </summary>
+        /// <param name="predicate">The predicate.</param>
+        /// <returns>
+        /// <c>true</c> if the specified predicate is existed; otherwise, <c>false</c>.
+        /// </returns>
+        public async Task<bool> IsExistedAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await DbSet.AnyAsync(predicate);
+        }
+
+        #endregion
+
         #region Insert
 
         /// <summary>

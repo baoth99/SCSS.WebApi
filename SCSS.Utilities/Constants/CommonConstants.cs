@@ -79,11 +79,6 @@ namespace SCSS.Utilities.Constants
         public const int COMPLETED = 5;
     }
 
-    public class AccountCategoryStatus
-    {
-        public const int DISABLED = 1;
-        public const int ENABLED = 2;
-    }
 
     public class AccountRole
     {

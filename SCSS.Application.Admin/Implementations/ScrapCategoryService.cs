@@ -38,6 +38,16 @@ namespace SCSS.Application.Admin.Implementations
         /// </summary>
         private readonly IRepository<Account> _accountRepository;
 
+        /// <summary>
+        /// The role repository
+        /// </summary>
+        private readonly IRepository<Role> _roleRepository;
+
+        /// <summary>
+        /// The dealer information repository
+        /// </summary>
+        private readonly IRepository<DealerInformation> _dealerInformationRepository;
+
         #endregion
 
         #region Constructor
@@ -48,11 +58,13 @@ namespace SCSS.Application.Admin.Implementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        /// <param name="storageBlobS3Service">The storage BLOB s3 service.</param>
         public ScrapCategoryService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
         {
             _scrapCategoryRepository = unitOfWork.ScrapCategoryRepository;
+            _scrapCategoryDetailRepository = unitOfWork.ScrapCategoryDetailRepository;
             _accountRepository = unitOfWork.AccountRepository;
+            _roleRepository = unitOfWork.RoleRepository;
+            _dealerInformationRepository = unitOfWork.DealerInformationRepository;
         }
 
         #endregion
@@ -72,13 +84,22 @@ namespace SCSS.Application.Admin.Implementations
                                                                                                       (ValidatorUtil.IsBlank(model.PhoneCreatedBy) || x.Phone.Contains(model.PhoneCreatedBy))),
                                                                                                  x => x.AccountId, y => y.Id, (x, y) => new
                                                                                                  {
+                                                                                                     RoleId = y.RoleId,
                                                                                                      ScrapCategoryId = x.Id,
                                                                                                      ScrapCategoryName = x.Name,
                                                                                                      x.Status,
                                                                                                      x.CreatedTime,
-                                                                                                     x.UpdatedTime,
                                                                                                      CreatedBy = y.Name,
-                                                                                                 }).OrderBy(DefaultSort.CreatedTimeDESC);
+                                                                                                 }).Join(_roleRepository.GetManyAsNoTracking(x => model.Role == CommonConstants.Zero || x.Key == model.Role), 
+                                                                                                        x => x.RoleId, y => y.Id, (x, y) => new
+                                                                                                        {
+                                                                                                            x.ScrapCategoryId,
+                                                                                                            x.ScrapCategoryName,
+                                                                                                            x.CreatedBy,
+                                                                                                            x.Status,
+                                                                                                            x.CreatedTime,
+                                                                                                            Role = y.Key
+                                                                                                        }).OrderBy(DefaultSort.CreatedTimeDESC);
 
             var totalRecord = await dataQuery.CountAsync();
 
@@ -89,7 +110,7 @@ namespace SCSS.Application.Admin.Implementations
                 CreatedBy = x.CreatedBy,
                 Status = x.Status,
                 CreatedTime = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
-                UpdatedTime = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time)
+                Role = x.Role
             }).ToList();
 
             return BaseApiResponse.OK(resData: dataRes, totalRecord: totalRecord);
@@ -115,29 +136,67 @@ namespace SCSS.Application.Admin.Implementations
 
             var account = _accountRepository.GetById(scrapCategory.AccountId);
 
-            var scrapCategoryDetails = _scrapCategoryDetailRepository.GetManyAsNoTracking(x => x.ScrapCategoryId.Equals(id))
+            // Get Scrap Category Details
+            var scrapCategoryDetails = _scrapCategoryDetailRepository.GetManyAsNoTracking(x => x.ScrapCategoryId.Equals(id)).OrderByDescending(x => x.CreatedTime)
                                                                     .Select(x => new ScrapCategoryDetailViewItemModel()
                                                                     {
                                                                         Unit = x.Unit,
                                                                         Price = x.Price,
-                                                                        Status = x.Status
+                                                                        Status = x.Status,
+                                                                        UpdatedTime = x.UpdatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time)
                                                                     }).ToList();
-
-            var dataResult = new ScrapCategoryViewDetailModel()
+            // Check Role
+            var role = _roleRepository.GetById(account.RoleId);
+            // If Collector
+            if (role.Name.Equals(AccountRoleConstants.COLLECTOR))
             {
-                Name = scrapCategory.Name,
-                ImageUrl = scrapCategory.ImageUrl,
-                CreatedBy = account.Name,
-                CreatedTime = scrapCategory.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
-                UpdatedTime = scrapCategory.UpdatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
-                Items = scrapCategoryDetails,
-                Status = scrapCategory.Status
-            };
+                var dataResult = new CollectorScrapCategoryViewDetailModel()
+                {
+                    Name = scrapCategory.Name,
+                    ImageUrl = scrapCategory.ImageUrl,
+                    CreatedBy = account.Name,
+                    CreatedTime = scrapCategory.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
+                    UpdatedTime = scrapCategory.UpdatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
+                    Role = role.Key,
+                    Items = scrapCategoryDetails,
+                    Status = scrapCategory.Status
+                };
 
-            return BaseApiResponse.OK(dataResult);
+                return BaseApiResponse.OK(dataResult);
+            }
+
+            // If Dealer
+            if (role.Name.Equals(AccountRoleConstants.DEALER))
+            {
+                var dealer = await _dealerInformationRepository.GetAsyncAsNoTracking(x => x.DealerAccountId.Equals(account.Id));
+                var dealerManagerId = account.ManagedBy;
+                string manageBy = string.Empty;
+
+                if (!ValidatorUtil.IsBlank(dealerManagerId))
+                {
+                    var dealerManager = _dealerInformationRepository.GetAsNoTracking(x => x.DealerAccountId.Equals(dealerManagerId));
+                    manageBy = dealerManager.DealerName;
+                }
+                var dataResult = new DealerScrapCategoryViewDetailModel()
+                {
+                    Name = scrapCategory.Name,
+                    DealerName = dealer.DealerName,
+                    ManageBy = manageBy,
+                    ImageUrl = scrapCategory.ImageUrl,
+                    CreatedBy = account.Name,
+                    CreatedTime = scrapCategory.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
+                    UpdatedTime = scrapCategory.UpdatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
+                    Items = scrapCategoryDetails,
+                    Role = role.Key,
+                    Status = scrapCategory.Status
+                };
+
+                return BaseApiResponse.OK(dataResult);
+            }
+
+            return BaseApiResponse.Error();
         }
 
         #endregion
-
     }
 }

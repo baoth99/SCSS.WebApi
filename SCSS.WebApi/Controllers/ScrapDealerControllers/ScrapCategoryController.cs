@@ -91,6 +91,26 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
 
         #endregion
 
+        #region Check Duplicate Scrap Category Name
+
+        /// <summary>
+        /// Checks the name of the scrap category.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapDealerApiUrlDefinition.ScrapCategoryUrl.CheckName)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> CheckScrapCategoryName([FromQuery] string name)
+        {
+            return await _scrapCategoryService.CheckScrapCategoryName(name);
+        }
+
+        #endregion
+
         #region Create New Scrap Category
 
         /// <summary>

@@ -8,6 +8,14 @@ namespace SCSS.Application.ScrapCollector.Interfaces
     public interface IScrapCategoryService
     {
         /// <summary>
+        /// Checks the name of the scrap category.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> CheckScrapCategoryName(string name);
+
+
+        /// <summary>
         /// Creates the scrap category.
         /// </summary>
         /// <param name="model">The model.</param>
