@@ -172,7 +172,7 @@ namespace SCSS.AWSService.Implementations
         /// </summary>
         /// <param name="filepath">The filepath.</param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> GetImage(string filepath)
+        public async Task<FileResponseModel> GetImage(string filepath)
         {
             try
             {
@@ -180,13 +180,13 @@ namespace SCSS.AWSService.Implementations
 
                 if (!CollectionConstants.FileS3PathCollection.Contains(path))
                 {
-                    return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
+                    return null;
                 }
                 var file = filepath.Split("/")[1];
 
                 if (!CollectionConstants.ImageExtensions.Contains(Path.GetExtension(file.ToLower())))
                 {
-                    return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
+                    return null;
                 }
 
                 var request = new GetObjectRequest()
@@ -209,12 +209,12 @@ namespace SCSS.AWSService.Implementations
                 Logger.LogInfo(AWSLoggerMessage.GetFileSuccess(filepath));
 
 
-                return BaseApiResponse.OK(fileResponse);
+                return fileResponse;
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, AWSLoggerMessage.GetFileFail(filepath));
-                return BaseApiResponse.Error();
+                return null;
             }
         }
 

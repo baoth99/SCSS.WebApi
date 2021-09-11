@@ -34,7 +34,7 @@ namespace SCSS.WebApi.SystemConfigurations
                     policy =>
                     {
                         policy.RequireClaim(PolicyScopeConstants.SCOPE, PolicyScopeConstants.DEALER);
-                        policy.RequireRole(AccountRoleConstants.DEALER);
+                        policy.RequireRole(AccountRoleConstants.DEALER, AccountRoleConstants.DEALER_MEMBER);
                     });
                 options.AddPolicy(SystemPolicy.CollectorPolicy,
                     policy =>

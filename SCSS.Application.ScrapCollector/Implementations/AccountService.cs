@@ -10,10 +10,8 @@ using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapCollector.Implementations
@@ -61,7 +59,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> RegisterCollectorAccount(AccountRegisterRequestModel model)
+        public async Task<BaseApiResponseModel> RegisterCollectorAccount(CollectorAccountRegisterRequestModel model)
         {
             var dictionary = new Dictionary<string, string>()
             {
@@ -116,7 +114,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #region Update Account Information
 
-        public async Task<BaseApiResponseModel> UpdateAccountInformation(AccountUpdateRequestModel model)
+        public async Task<BaseApiResponseModel> UpdateAccountInformation(CollectorAccountUpdateRequestModel model)
         {
             var entity = _accountRepository.GetById(model.Id);
             if (entity == null)

@@ -21,6 +21,18 @@ namespace SCSS.Utilities.Configurations
 
         public static string ApiSecret => ConfigurationHelper.GetValue<string>(AppSettingKeys.IdentityServer.ApiSecret);
 
+        public static string ID4ChangeStatusUrl => ConfigurationHelper.GetValue<string>(AppSettingKeys.IdentityServer.ChangeStatus);
+
+        public static string ID4UpdateUrl => ConfigurationHelper.GetValue<string>(AppSettingKeys.IdentityServer.Update);
+
+        public static string ID4RegisterDealerUrl => ConfigurationHelper.GetValue<string>(AppSettingKeys.IdentityServer.RegisterDealer);
+
+        public static string ID4RegisterDealerMemberUrl => ConfigurationHelper.GetValue<string>(AppSettingKeys.IdentityServer.RegisterDealerMember);
+
+        public static string ID4RegisterCollectorUrl => ConfigurationHelper.GetValue<string>(AppSettingKeys.IdentityServer.RegisterCollector);
+
+        public static string ID4RegisterSellerUrl => ConfigurationHelper.GetValue<string>(AppSettingKeys.IdentityServer.RegisterSeller);
+
         public static string AWSS3AccessKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.S3AccessKey);
 
         public static string AWSS3SecretKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.S3SecretKey);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapCollector.Models.AccountModels
 {
-    public class AccountUpdateRequestModel
+    public class CollectorAccountUpdateRequestModel
     {
         public Guid Id { get; set; }
 

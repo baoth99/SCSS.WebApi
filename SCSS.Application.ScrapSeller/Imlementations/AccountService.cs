@@ -34,22 +34,18 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
         #endregion
 
-        #region Services
-
-        /// <summary>
-        /// The storage BLOB s3 service
-        /// </summary>
-        private readonly IStorageBlobS3Service _storageBlobS3Service;
-
-        #endregion
-
         #region Constructor
 
-        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, IStorageBlobS3Service storageBlobS3Service, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccountService"/> class.
+        /// </summary>
+        /// <param name="unitOfWork">The unit of work.</param>
+        /// <param name="userAuthSession">The user authentication session.</param>
+        /// <param name="logger">The logger.</param>
+        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
         {
             _accountRepository = unitOfWork.AccountRepository;
             _roleRepository = unitOfWork.RoleRepository;
-            _storageBlobS3Service = storageBlobS3Service;
         }
 
         #endregion
@@ -146,7 +142,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> UpdateAccount(AccountUpdateProfileModel model)
         {
-            var entity = _accountRepository.GetById(model.Id);
+            var id = UserAuthSession.UserSession.Id;
+            var entity = _accountRepository.GetById(id);
             if (entity == null)
             {
                 return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
@@ -155,7 +152,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             // Send Data to IdentityServer4
             var dictionary = new Dictionary<string, string>()
             {
-                {"id", model.Id.ToString() },
+                {"id", id.ToString() },
                 {"name", model.Name },
                 {"email", model.Email },
                 {"gender", model.Gender.ToString() },

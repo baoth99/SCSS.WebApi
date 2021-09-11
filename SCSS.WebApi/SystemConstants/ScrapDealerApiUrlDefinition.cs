@@ -4,13 +4,18 @@
     {
         private const string Account = "dealer/account";
         private const string ScrapCategory = "scrap-category";
-
+        private const string DealerInformation = "dealer-information";
         public static class AccountApiUrl
         {
             public const string RegisterDealerAccount = Account + "/register";
             public const string UpdateDealerAccount = Account + "/update";
+            public const string UploadImage = Account + "/upload-image";
         }
 
+        public static class DealerInformationApiUrl
+        {
+            public const string UploadImage = DealerInformation + "/upload-image";
+        }
 
         public static class ScrapCategoryUrl
         {

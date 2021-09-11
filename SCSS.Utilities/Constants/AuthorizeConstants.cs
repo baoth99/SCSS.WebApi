@@ -31,16 +31,17 @@ namespace SCSS.Utilities.Constants
         public const string SELLER = "Seller";
         public const string COLLECTOR = "Collector";
         public const string DEALER = "Dealer";
+        public const string DEALER_MEMBER = "DealerMember";
     }
 
     public class IdentityServer4Route
     {
-        public static string Authority = AppSettingValues.Authority + "api/identity/";
-        public static string ChangStatus = Authority + "account/change-status";
-        public static string Update = Authority + "account/update";
-        public static string RegisterDealer = Authority + "account/register/dealer";
-        public static string RegisterCollector = Authority + "account/register/collector";
-        public static string RegisterSeller = Authority + "account/register/seller";
+        public static string ChangStatus => AppSettingValues.ID4ChangeStatusUrl;
+        public static string Update => AppSettingValues.ID4UpdateUrl;
+        public static string RegisterDealer => AppSettingValues.ID4RegisterDealerUrl;
+        public static string RegisterDealerMember => AppSettingValues.ID4RegisterDealerMemberUrl;
+        public static string RegisterCollector => AppSettingValues.ID4RegisterCollectorUrl;
+        public static string RegisterSeller => AppSettingValues.ID4RegisterSellerUrl;
     }
 
     public class IdentityServer4Constant

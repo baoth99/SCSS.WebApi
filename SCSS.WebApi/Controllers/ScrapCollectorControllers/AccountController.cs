@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SCSS.Application.Admin.Models;
 using SCSS.Application.ScrapCollector.Interfaces;
 using SCSS.Application.ScrapCollector.Models.AccountModels;
+using SCSS.AWSService.Interfaces;
+using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
+using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConstants;
@@ -20,13 +24,24 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         /// </summary>
         private readonly IAccountService _accountService;
 
+        /// <summary>
+        /// The storage BLOB s3 service
+        /// </summary>
+        private readonly IStorageBlobS3Service _storageBlobS3Service;
+
         #endregion
 
         #region Constructor
 
-        public AccountController(IAccountService accountService)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccountController"/> class.
+        /// </summary>
+        /// <param name="accountService">The account service.</param>
+        /// <param name="storageBlobS3Service">The storage BLOB s3 service.</param>
+        public AccountController(IAccountService accountService, IStorageBlobS3Service storageBlobS3Service)
         {
             _accountService = accountService;
+            _storageBlobS3Service = storageBlobS3Service;
         }
 
         #endregion
@@ -44,9 +59,31 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ProducesResponseType(typeof(ErrorResponseModel),HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel),HttpStatusCodes.Unauthorized)]
         [Route(ScrapCollectorApiUrlDefinition.AccountApiUrl.RegisterCollectorAccount)]
-        public async Task<BaseApiResponseModel> RegisterScrapCollectorAccount(AccountRegisterRequestModel model)
+        public async Task<BaseApiResponseModel> RegisterScrapCollectorAccount(CollectorAccountRegisterRequestModel model)
         {
             return await _accountService.RegisterCollectorAccount(model);
+        }
+
+        #endregion
+
+        #region Upload Dealer Account Image
+
+        /// <summary>
+        /// Uploads the dealer account image.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapCollectorApiUrlDefinition.AccountApiUrl.UploadImage)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> UploadDealerAccountImage([FromForm] ImageUploadModel model)
+        {
+            var fileName = CommonUtils.GetFileName(PrefixFileName.CollectorAccount, model.Image.FileName);
+            var imageUrl = await _storageBlobS3Service.UploadFile(model.Image, fileName, FileS3Path.CollectorAccountImages);
+            return BaseApiResponse.OK(imageUrl);
         }
 
         #endregion

@@ -9,11 +9,12 @@ namespace SCSS.WebApi.SystemConstants
         private const string ScrapCategory = "scrap-category";
         private const string ImageSlider = "image-slider";
         private const string RequestRegister = "request-register";
-
+        private const string DealerInformation = "dealer-information";
         public static class ScrapCategoryUrl
         {
             public const string Search = ScrapCategory + "/search";
             public const string Detail = ScrapCategory + "/detail";
+            public const string Image = ScrapCategory + "/image";
         }
 
         public static class HubApiUrl
@@ -37,7 +38,6 @@ namespace SCSS.WebApi.SystemConstants
             public const string ChangeItem = ImageSlider + "/change";
 
         }
-
         public static class AccountApiUrl
         {
             public const string ChangeStatus = Account + "/change-status";
@@ -57,6 +57,12 @@ namespace SCSS.WebApi.SystemConstants
         {
             public const string Role = Data + "/roles";
             public const string Image = Data + "/image";
+        }
+
+        public static class DealerInformationUrl
+        {
+            public const string Search = DealerInformation + "/search";
+            public const string GetDetail = DealerInformation + "/detail";
         }
     }
 }

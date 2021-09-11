@@ -3,7 +3,7 @@ using SCSS.Validations.ValidationAttributes.CommonValidations;
 
 namespace SCSS.Application.ScrapCollector.Models.AccountModels
 {
-    public class AccountRegisterRequestModel
+    public class CollectorAccountRegisterRequestModel
     {
         [ValidateRegex(RegularExpression.PhoneRegex)]
         public string Phone { get; set; }

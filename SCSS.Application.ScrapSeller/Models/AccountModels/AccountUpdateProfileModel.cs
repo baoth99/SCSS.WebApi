@@ -7,8 +7,6 @@ namespace SCSS.Application.ScrapSeller.Models.AccountModels
 {
     public class AccountUpdateProfileModel
     {
-        public Guid Id { get; set; }
-
         public string Name { get; set; }
 
         [ValidateRegex(RegularExpression.EmailRegex)]
@@ -23,8 +21,6 @@ namespace SCSS.Application.ScrapSeller.Models.AccountModels
         public string Address { get; set; }
 
         public string ImageUrl { get; set; }
-
-        public bool IsDeleteImg { get; set; }
 
         public string IDCard { get; set; }
 

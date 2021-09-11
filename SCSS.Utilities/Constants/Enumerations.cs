@@ -6,6 +6,7 @@
         AdminAccountImages,
         SellerAccountImages,
         DealerAccountImages,
+        DealerInformationImages,
         CollectorAccountImages,
         ImageSliderImages
     }
@@ -15,6 +16,7 @@
         Admin,
         Collector,
         Dealer,
+        DealerMember,
         Seller
     }
 
@@ -23,6 +25,7 @@
         AdminAccount,
         SellerAccount,
         DealerAccount,
+        DealerInformation,
         CollectorAccount,
         ImageSlider,
         ScrapCategory

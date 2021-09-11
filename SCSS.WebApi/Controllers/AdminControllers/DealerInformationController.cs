@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SCSS.Application.Admin.Interfaces;
-using SCSS.Application.Admin.Models.ScrapCategoryModels;
+using SCSS.Application.Admin.Models.DealerInformationModels;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
@@ -11,34 +11,31 @@ using System.Threading.Tasks;
 namespace SCSS.WebApi.Controllers.AdminControllers
 {
     [ApiVersion(ApiVersions.ApiVersionV1)]
-    public class ScrapCategoryController : BaseAdminController
+    public class DealerInformationController : BaseAdminController
     {
         #region Services
 
         /// <summary>
-        /// The scrap category service
+        /// The dealer information service
         /// </summary>
-        private readonly IScrapCategoryService _scrapCategoryService;
+        private readonly IDealerInformationService _dealerInformationService;
 
         #endregion
 
         #region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ScrapCategoryController"/> class.
-        /// </summary>
-        /// <param name="scrapCategoryService">The scrap category service.</param>
-        public ScrapCategoryController(IScrapCategoryService scrapCategoryService)
+        public DealerInformationController(IDealerInformationService dealerInformationService)
         {
-            _scrapCategoryService = scrapCategoryService;            
+            _dealerInformationService = dealerInformationService;
         }
 
         #endregion
 
-        #region Search Scrap Category
+
+        #region Search Dealer Information
 
         /// <summary>
-        /// Searches the scrap category.
+        /// Searches the specified model.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
@@ -46,19 +43,19 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminApiUrlDefinition.ScrapCategoryUrl.Search)]
+        [Route(AdminApiUrlDefinition.DealerInformationUrl.Search)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> SearchScrapCategory([FromQuery] ScrapCategorySearchModel model)
+        public async Task<BaseApiResponseModel> Search([FromQuery] DealerInformationSearchModel model)
         {
-            return await _scrapCategoryService.SearchScrapCategory(model);
+            return await _dealerInformationService.Search(model);
         }
 
         #endregion
 
-        #region Get Scrap Category Detail
+        #region Get Dealer Information Detail
 
         /// <summary>
-        /// Gets the scrap category.
+        /// Gets the detail.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
@@ -66,14 +63,13 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminApiUrlDefinition.ScrapCategoryUrl.Detail)]
+        [Route(AdminApiUrlDefinition.DealerInformationUrl.GetDetail)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetScrapCategory([FromQuery] Guid id)
+        public async Task<BaseApiResponseModel> GetDetail([FromQuery] Guid id)
         {
-            return await _scrapCategoryService.GetScrapCategory(id);
+            return await _dealerInformationService.GetDetail(id);
         }
 
         #endregion
-
     }
 }

@@ -131,7 +131,7 @@ namespace SCSS.Application.Admin.Implementations
             {
                 return BaseApiResponse.NotFound(SystemMessageCode.NotFound);
             }
-
+            
             var scrapCategory = await _scrapCategoryRepository.GetAsyncAsNoTracking(x => x.Id.Equals(id));
 
             var account = _accountRepository.GetById(scrapCategory.AccountId);

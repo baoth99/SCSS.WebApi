@@ -15,13 +15,13 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> UpdateAccountInformation(AccountUpdateRequestModel model);
+        Task<BaseApiResponseModel> UpdateAccountInformation(CollectorAccountUpdateRequestModel model);
 
         /// <summary>
         /// Registers the collector account.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> RegisterCollectorAccount(AccountRegisterRequestModel model);
+        Task<BaseApiResponseModel> RegisterCollectorAccount(CollectorAccountRegisterRequestModel model);
     }
 }

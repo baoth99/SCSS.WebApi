@@ -4,10 +4,12 @@
     {
         private const string Account = "seller/account";
         private const string ImageSlider = "image-slider";
+
         public static class AccountApiUrl
         {
             public const string RegisterSellerAccount = Account + "/register";
             public const string UpdateSellerAccount = Account + "/update";
+            public const string UploadImage = Account + "/upload-image";
         }
 
         public static class ImageSliderApiUrl

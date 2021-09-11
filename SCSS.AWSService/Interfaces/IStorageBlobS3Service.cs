@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SCSS.AWSService.Models;
 using SCSS.Utilities.Constants;
-using SCSS.Utilities.ResponseModel;
 using System.Threading.Tasks;
 
 namespace SCSS.AWSService.Interfaces
@@ -30,7 +29,7 @@ namespace SCSS.AWSService.Interfaces
         /// </summary>
         /// <param name="filepath">The filepath.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> GetImage(string filepath);
+        Task<FileResponseModel> GetImage(string filepath);
 
         /// <summary>
         /// Gets the file.

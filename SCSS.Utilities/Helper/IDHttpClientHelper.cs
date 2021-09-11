@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
 using System;
@@ -34,7 +35,9 @@ namespace SCSS.Utilities.Helper
 
             var httpContent = new FormUrlEncodedContent(parameters);
 
-            var httpResponse = await httpClient.PostAsync(url, httpContent);
+            var ID4ApiUrl = AppSettingValues.Authority + url;
+
+            var httpResponse = await httpClient.PostAsync(ID4ApiUrl, httpContent);
 
             var statusCode = (int)httpResponse.StatusCode;
 

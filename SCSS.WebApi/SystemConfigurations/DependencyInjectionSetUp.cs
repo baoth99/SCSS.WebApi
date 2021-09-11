@@ -29,6 +29,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.Admin.Interfaces.IDashboardService, SCSS.Application.Admin.Implementations.DashboardService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.IImageSliderService, SCSS.Application.Admin.Implementations.ImageSliderService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.IRequestRegisterService, SCSS.Application.Admin.Implementations.RequestRegisterService>();
+            services.AddScoped<SCSS.Application.Admin.Interfaces.IDealerInformationService, SCSS.Application.Admin.Implementations.DealerInformationService>();
 
             #endregion
 
@@ -42,7 +43,8 @@ namespace SCSS.WebApi.SystemConfigurations
 
             #region Dealer Application
 
-
+            services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IAccountService, SCSS.Application.ScrapDealer.Implementations.AccountService>();
+            services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.ISubscriptionService, SCSS.Application.ScrapDealer.Implementations.SubscriptionService>();
 
             #endregion
 
@@ -52,8 +54,6 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IAccountService, SCSS.Application.ScrapSeller.Imlementations.AccountService>();
 
             #endregion           
-
-
         }
     }
 }

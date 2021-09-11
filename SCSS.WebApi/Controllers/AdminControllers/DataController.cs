@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SCSS.Application.Admin.Interfaces;
 using SCSS.AWSService.Interfaces;
+using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
+using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConstants;
@@ -28,6 +30,11 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataController"/> class.
+        /// </summary>
+        /// <param name="accountService">The account service.</param>
+        /// <param name="storageBlobS3Service">The storage BLOB s3 service.</param>
         public DataController(IAccountService accountService, IStorageBlobS3Service storageBlobS3Service)
         {
             _accountService = accountService;
@@ -55,12 +62,12 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #endregion
 
-        #region Image
+        #region Get Images Base64 String
 
         /// <summary>
         /// Gets the image.
         /// </summary>
-        /// <param name="image">The image.</param>
+        /// <param name="imageUrl">The image URL.</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
@@ -68,10 +75,11 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(AdminApiUrlDefinition.AdminDataApiUrl.Image)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetImage(string image)
+        public async Task<BaseApiResponseModel> GetImage([FromQuery] string imageUrl)
         {
-            var res = await _storageBlobS3Service.GetImage(image);
-            return res;
+            var file = await _storageBlobS3Service.GetImage(imageUrl);
+            var imageBase64 = StringUtils.ImageBase64(file.Base64, file.Extension);
+            return BaseApiResponse.OK(imageBase64);
         }
 
         #endregion

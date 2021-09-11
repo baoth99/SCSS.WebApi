@@ -27,6 +27,12 @@ namespace SCSS.Utilities.Configurations
             public const string Authority = "IdentityServer:Authority";
             public const string ApiName = "IdentityServer:ApiName";
             public const string ApiSecret = "IdentityServer:ApiSecret";
+            public const string ChangeStatus = "IdentityServer:ChangStatus";
+            public const string Update = "IdentityServer:Update";
+            public const string RegisterDealer = "IdentityServer:RegisterDealer";
+            public const string RegisterDealerMember = "IdentityServer:RegisterDealerMember";
+            public const string RegisterCollector = "IdentityServer:RegisterCollector";
+            public const string RegisterSeller = "IdentityServer:RegisterSeller";
         }
 
         public static class AWSService

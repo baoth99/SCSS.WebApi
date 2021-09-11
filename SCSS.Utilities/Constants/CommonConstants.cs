@@ -79,6 +79,11 @@ namespace SCSS.Utilities.Constants
         public const int COMPLETED = 5;
     }
 
+    public class DealerType
+    {
+        public const int LEADER = 1;
+        public const int MEMBER = 2;
+    }
 
     public class AccountRole
     {
@@ -86,6 +91,7 @@ namespace SCSS.Utilities.Constants
         public const int SELLER = 2;
         public const int DEALER = 3;
         public const int COLLECTOR = 4;
+        public const int DEALER_MEMBER = 5;
     }
 
     public class ClientIdConstant

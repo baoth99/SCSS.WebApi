@@ -10,6 +10,8 @@ namespace SCSS.WebApi.SystemConstants
         {
             public const string RegisterCollectorAccount = Account + "/register";
             public const string UpdateCollectorAccount = Account + "/update";
+            public const string UploadImage = Account + "/upload-image";
+
         }
 
         public static class ScrapCategoryUrl
