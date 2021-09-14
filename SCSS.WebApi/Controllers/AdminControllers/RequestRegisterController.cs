@@ -95,5 +95,25 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #endregion
 
+        #region Get Dealer Request Register Detail
+
+        /// <summary>
+        /// Gets the dealer request register.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.RequestRegisterApiUrl.DealerDetail)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetDealerRequestRegister([FromQuery] Guid id)
+        {
+            return await _requestRegisterService.GetDealerRequestRegister(id);
+        }
+
+        #endregion
+
     }
 }

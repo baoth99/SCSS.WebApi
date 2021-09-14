@@ -141,7 +141,6 @@ namespace SCSS.AWSService.Implementations
                     BucketName = AppSettingValues.AWSS3BucketName,
                     Key = filepath
                 };
-
                 var response = await AmazonS3.GetObjectAsync(request);
 
                 var stream = response.ResponseStream;

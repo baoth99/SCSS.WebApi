@@ -21,5 +21,7 @@ namespace SCSS.Application.Admin.Models.RequestRegisterModels
 
         public int Status { get; set; }
 
+        public int DealerType { get; set; }
+
     }
 }

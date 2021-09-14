@@ -24,9 +24,4 @@ namespace SCSS.Application.Admin.Models.RequestRegisterModels
         public string RegisterTime { get; set; }
 
     }
-
-    public class DealerRequestRegisterViewDetailModel
-    {
-
-    }
 }

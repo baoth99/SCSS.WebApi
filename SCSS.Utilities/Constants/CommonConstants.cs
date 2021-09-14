@@ -20,6 +20,11 @@ namespace SCSS.Utilities.Constants
         public const string DD_MM_yyyy = "dd/MM/yyyy";
     }
 
+    public class TimeSpanFormat
+    {
+        public const string HH_MM_TT = "hh:mm tt";
+    }
+
     public class CommonConstants
     {
         public const int Zero = 0;

@@ -22,6 +22,7 @@ namespace SCSS.Utilities.Constants
             FileS3Path.DealerAccountImages.ToString(),
             FileS3Path.SellerAccountImages.ToString(),
             FileS3Path.ScrapCategoryImages.ToString(),
+            FileS3Path.DealerInformationImages.ToString(),
             FileS3Path.ImageSliderImages.ToString()
         };
 

@@ -49,6 +49,11 @@ namespace SCSS.Utilities.Helper
             return DictionaryConstants.AccountStatusCollection[role];
         }
 
+        public static int GetDealerType(Guid? managedBy)
+        {
+            return ValidatorUtil.IsNull(managedBy) ? DealerType.LEADER : DealerType.MEMBER; // Leader is 1, Member is 1;
+        }
+
         public static string GetFileName(PrefixFileName prefix, string fileNameEx)
         {
             return $"{prefix}-{DateTime.Now.ToString(DateTimeFormat.Format01)}-{fileNameEx.ToLower()}";

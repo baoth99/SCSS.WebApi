@@ -17,5 +17,14 @@ namespace SCSS.Utilities.Extensions
             }
             return dateTime.Value.ToString(format);
         }
+
+        public static string ToStringFormat(this TimeSpan? timeSpan, string format)
+        {
+            if (!timeSpan.HasValue)
+            {
+                return CommonConstants.Null;
+            }
+            return timeSpan.Value.ToString(format);
+        }
     }
 }

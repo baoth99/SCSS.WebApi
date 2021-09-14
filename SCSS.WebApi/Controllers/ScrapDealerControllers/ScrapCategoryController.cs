@@ -85,6 +85,10 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         public async Task<BaseApiResponseModel> GetScrapCategoryImage([FromQuery] string imageUrl)
         {
             var file = await _storageBlobService.GetFile(imageUrl);
+            if (file == null)
+            {
+                return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
+            }
             var image = file.Stream.ToBitmap();
             return BaseApiResponse.OK(image);
         }

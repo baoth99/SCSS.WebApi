@@ -39,9 +39,14 @@ namespace SCSS.Application.Admin.Implementations
 
         #endregion
 
-
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DealerInformationService"/> class.
+        /// </summary>
+        /// <param name="unitOfWork">The unit of work.</param>
+        /// <param name="userAuthSession">The user authentication session.</param>
+        /// <param name="logger">The logger.</param>
         public DealerInformationService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
         {
             _accountRepository = unitOfWork.AccountRepository;
@@ -76,7 +81,7 @@ namespace SCSS.Application.Admin.Implementations
                                                                                       x.DealerAccountId
                                                                                   });
             // Get Dealer Information and Dealer Manager Name by request manager name
-            var dataQuery = dealerDataQuery.Join(_accountRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.ManagedBy) || x.Name.Contains(model.ManagedBy))),
+            var dataQuery = dealerDataQuery.Join(_accountRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.ManagedBy) || x.Name.Contains(model.ManagedBy)) && x.Status == AccountStatus.ACTIVE),
                                                 x => x.DealerAccountId, y => y.Id, (x, y) => new
                                                 {
                                                     DealerId = x.Id,
@@ -99,14 +104,14 @@ namespace SCSS.Application.Admin.Implementations
             if (model.DealerType == DealerType.LEADER)
             {
                 // Dealer Type is Leader when ManagedBy Field is blank
-                dataQuery = dataQuery.Where(x => !ValidatorUtil.IsBlank(x.ManagedBy));
+                dataQuery = dataQuery.Where(x => (x.ManagedBy == null));
             }
 
             // Check Dealer Type is Member
             if (model.DealerType == DealerType.MEMBER)
             {
                 // Dealer Type is Member when ManagedBy Field is not blank
-                dataQuery = dataQuery.Where(x => ValidatorUtil.IsBlank(x.ManagedBy));
+                dataQuery = dataQuery.Where(x => (x.ManagedBy != null));
             }
 
             var totalRecord = await dataQuery.CountAsync();
@@ -118,7 +123,7 @@ namespace SCSS.Application.Admin.Implementations
                                             Id = x.DealerId,
                                             DealerName = x.DealerName,
                                             DealerPhone = x.DealerPhone,
-                                            DealerType = ValidatorUtil.IsBlank(x.ManagedBy), // Leader is true, Member is false
+                                            DealerType = CommonUtils.GetDealerType(x.ManagedBy), // Leader is One, Member is Two
                                             CreatedTime = x.DealerCreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
                                             ManagedBy = x.Name,
                                             IsSubcribed = x.IsDealerSubcribe,
@@ -129,7 +134,6 @@ namespace SCSS.Application.Admin.Implementations
         }
 
         #endregion
-
 
         #region Get Dealer Information Detail
 
@@ -145,12 +149,51 @@ namespace SCSS.Application.Admin.Implementations
                 return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
             }
 
+            var dealerInfo = await _dealerInformationRepository.GetByIdAsync(id);
 
+            var dealerAccount = _accountRepository.GetById(dealerInfo.DealerAccountId);
 
-            return BaseApiResponse.OK();
+            var dealerLocation = _locationRepository.GetById(dealerInfo.LocationId);
+
+            var dealerRole = await UnitOfWork.RoleRepository.GetByIdAsync(dealerAccount.RoleId);
+
+            var resData = new DealerInformationDetailViewModel()
+            {
+                AccountId = dealerAccount.Id,
+                AccountName = dealerAccount.Name,
+                AccountPhone = dealerAccount.Phone,
+                AccountRole = dealerRole.Key,
+                // Dealer Information
+                DealerId = dealerInfo.Id,
+                DealerName = dealerInfo.DealerName,
+                DealerPhone = dealerInfo.DealerPhone,
+                DealerAddress = dealerLocation.Address,
+                DealerLatitude = dealerLocation.Latitude,
+                DealerLongtitude = dealerLocation.Longitude,
+                DealerImageUrl = dealerInfo.DealerImageUrl,
+                DealerCreatedTime = dealerInfo.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
+                DealerOpenTime = dealerInfo.OpenTime.ToStringFormat(TimeSpanFormat.HH_MM_TT),
+                DealerCloseTime = dealerInfo.CloseTime.ToStringFormat(TimeSpanFormat.HH_MM_TT),
+                DealerIsSubcribed = dealerInfo.IsSubcribed,
+                DealerIsActive = dealerInfo.IsActive,
+                DealerType = ValidatorUtil.IsNull(dealerAccount.ManagedBy) ? DealerType.LEADER : DealerType.MEMBER,
+            };
+
+            if (resData.DealerType == DealerType.MEMBER)
+            {
+                var leaderInfo = _accountRepository.GetManyAsNoTracking(x => x.Id.Equals(dealerAccount.ManagedBy))
+                                                        .Join(_dealerInformationRepository.GetAllAsNoTracking(), x => x.Id, y => y.DealerAccountId,
+                                                                (x, y) => new LeaderInformationModel()
+                                                                {
+                                                                    AccountId = x.Id,
+                                                                    DealerId = y.Id
+                                                                }).FirstOrDefault();
+                resData.Leader = leaderInfo;
+            }
+            return BaseApiResponse.OK(resData);
         }
 
-        #endregion
+        #endregion Get Dealer Information Detail
 
     }
 }

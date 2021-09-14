@@ -165,6 +165,20 @@ namespace SCSS.Data.EF.Repositories
 
         #endregion
 
+        #region GetByIdAsync
+
+        /// <summary>
+        /// Gets the by identifier asynchronous.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        public virtual async Task<T> GetByIdAsync(object id)
+        {
+            return await DbSet.FindAsync(id);
+        }
+
+        #endregion
+
         #region IsExisted
 
         /// <summary>
@@ -212,6 +226,21 @@ namespace SCSS.Data.EF.Repositories
 
         #endregion
 
+        #region InsertAsync
+
+        /// <summary>
+        /// Inserts the asynchronous.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        public virtual async Task<T> InsertAsync(T entity)
+        {
+            await DbSet.AddAsync(entity);
+            return entity;
+        }
+
+        #endregion
+
         #region InsertRange
 
         /// <summary>
@@ -221,6 +250,19 @@ namespace SCSS.Data.EF.Repositories
         public virtual void InsertRange(List<T> entities)
         {
             DbSet.AddRange(entities);
+        }
+
+        #endregion
+
+        #region InsertRangeAsync
+
+        /// <summary>
+        /// Inserts the range asynchronous.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        public virtual async Task InsertRangeAsync(List<T> entities)
+        {
+            await DbSet.AddRangeAsync(entities);
         }
 
         #endregion

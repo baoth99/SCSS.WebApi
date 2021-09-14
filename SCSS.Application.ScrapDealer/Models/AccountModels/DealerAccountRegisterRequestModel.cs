@@ -45,6 +45,5 @@ namespace SCSS.Application.ScrapDealer.Models.AccountModels
 
         public decimal? Longitude { get; set; }
 
-        
     }
 }

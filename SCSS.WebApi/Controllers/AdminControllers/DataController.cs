@@ -78,7 +78,12 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         public async Task<BaseApiResponseModel> GetImage([FromQuery] string imageUrl)
         {
             var file = await _storageBlobS3Service.GetImage(imageUrl);
+            if (file == null)
+            {
+                return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
+            }
             var imageBase64 = StringUtils.ImageBase64(file.Base64, file.Extension);
+
             return BaseApiResponse.OK(imageBase64);
         }
 

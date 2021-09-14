@@ -95,7 +95,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 {"registertoken", model.RegisterToken }
             };
 
-            var IDServer4Route = ValidatorUtil.IsBlank(model.ManageBy) ? IdentityServer4Route.RegisterDealer : IdentityServer4Route.RegisterDealerMember;
+            var IDServer4Route = ValidatorUtil.IsNull(model.ManageBy) ? IdentityServer4Route.RegisterDealer : IdentityServer4Route.RegisterDealerMember;
 
             var res = await IDHttpClientHelper.IDHttpClientPost(IDServer4Route, ClientIdConstant.DealerMobileApp, dictionary);
 
@@ -105,7 +105,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
             }
 
             // Get Role, If model.ManageBy is not null, role Key is Dealer Member, In Contrast model.ManageBy is null, role Key is Dealer
-            var roleKey = ValidatorUtil.IsBlank(model.ManageBy) ? AccountRole.DEALER : AccountRole.DEALER_MEMBER;
+            var roleKey = ValidatorUtil.IsNull(model.ManageBy) ? AccountRole.DEALER : AccountRole.DEALER_MEMBER;
 
             var role = _roleRepository.GetManyAsNoTracking(x => x.Key == roleKey).FirstOrDefault();
 
@@ -129,7 +129,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
             };
 
             // Check Dealer is branch, If model.ManageBy is not null, this dealer is branch
-            if (ValidatorUtil.IsBlank(model.ManageBy))
+            if (!ValidatorUtil.IsBlank(model.ManageBy))
             {
                 accountEntity.ManagedBy = model.ManageBy;
             }

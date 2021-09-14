@@ -71,6 +71,13 @@ namespace SCSS.Data.EF.Repositories
         T GetById(object id);
 
         /// <summary>
+        /// Gets the by identifier asynchronous.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        Task<T> GetByIdAsync(object id);
+
+        /// <summary>
         /// Determines whether the specified predicate is existed.
         /// </summary>
         /// <param name="predicate">The predicate.</param>
@@ -97,10 +104,24 @@ namespace SCSS.Data.EF.Repositories
         T Insert(T entity);
 
         /// <summary>
+        /// Inserts the asynchronous.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        Task<T> InsertAsync(T entity);
+
+        /// <summary>
         /// Inserts the range.
         /// </summary>
         /// <param name="entities">The entities.</param>
         void InsertRange(List<T> entities);
+
+        /// <summary>
+        /// Inserts the range asynchronous.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <returns></returns>
+        Task InsertRangeAsync(List<T> entities);
 
         /// <summary>
         /// Updates the specified enity.

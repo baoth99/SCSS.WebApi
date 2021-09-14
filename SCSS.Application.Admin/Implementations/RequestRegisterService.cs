@@ -15,7 +15,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.Admin.Implementations
@@ -39,16 +38,27 @@ namespace SCSS.Application.Admin.Implementations
         /// </summary>
         private readonly IRepository<DealerInformation> _dealerInformationRepository;
 
-        #endregion
+        /// <summary>
+        /// The location repository
+        /// </summary>
+        private readonly IRepository<Location> _locationRepository;
 
+        #endregion
 
         #region Contructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestRegisterService"/> class.
+        /// </summary>
+        /// <param name="unitOfWork">The unit of work.</param>
+        /// <param name="userAuthSession">The user authentication session.</param>
+        /// <param name="logger">The logger.</param>
         public RequestRegisterService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
         {
             _accountRepository = UnitOfWork.AccountRepository;
             _roleRepository = UnitOfWork.RoleRepository;
             _dealerInformationRepository = UnitOfWork.DealerInformationRepository;
+            _locationRepository = unitOfWork.LocationRepository;
         }
 
         #endregion
@@ -104,9 +114,10 @@ namespace SCSS.Application.Admin.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> SearchDealerRequestRegister(DealerRequestRegisterSearchModel model)
         {
-            var role = _roleRepository.Get(x => x.Key.Equals(AccountRole.DEALER));
+            var roleDealer = _roleRepository.Get(x => x.Key.Equals(AccountRole.DEALER));
+            var roleDealerMember = _roleRepository.Get(x => x.Key.Equals(AccountRole.DEALER_MEMBER));
 
-            var data = _accountRepository.GetManyAsNoTracking(x => (x.RoleId == role.Id) &&
+            var data = _accountRepository.GetManyAsNoTracking(x => (x.RoleId == roleDealer.Id || x.RoleId == roleDealerMember.Id) &&
                                                                     (x.Status == AccountStatus.NOT_APPROVED || x.Status == AccountStatus.BANNING));
 
             var dataQuery = data.Where(x => (ValidatorUtil.IsBlank(model.Phone) || x.Phone.Contains(model.Phone)) &&
@@ -129,6 +140,7 @@ namespace SCSS.Application.Admin.Implementations
                                                             x.Id,
                                                             x.Phone,
                                                             x.DealerName,
+                                                            x.ManagedBy,
                                                             AccountName = x.Name,
                                                             x.Gender,
                                                             x.CreatedTime,
@@ -143,12 +155,34 @@ namespace SCSS.Application.Admin.Implementations
                                                             x.Gender,
                                                             x.CreatedTime,
                                                             x.Status,
-                                                            ManagedBy = y.DealerName
-                                                        }).OrderBy(DefaultSort.CreatedTimeDESC);
+                                                            ManagedBy = y.DealerName,
+                                                            ManagedById = x. ManagedBy
+                                                        });
+
+            // Check dataQuery is Empty !!
+            if (!dataQuery.Any())
+            {
+                return BaseApiResponse.OK(totalRecord: CommonConstants.Zero, resData: CollectionConstants.Empty<DealerRequestRegisterViewModel>());
+            }
+
+            // Check Dealer Type is Leader
+            if (model.DealerType == DealerType.LEADER)
+            {
+                // Dealer Type is Leader when ManagedBy Field is blank
+                dataQuery = dataQuery.Where(x => x.ManagedById == null);
+            }
+
+            if (model.DealerType == DealerType.MEMBER)
+            {
+                // Dealer Type is Member when ManagedBy Field is not blank
+                dataQuery = dataQuery.Where(x => x.ManagedById != null);
+            }
+
+            var test = dataQuery.ToList();
 
             var totalRecord = await dataQuery.CountAsync();
 
-            var dataRes = dataQuery.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize).Select(x => new DealerRequestRegisterViewModel()
+            var dataRes = dataQuery.OrderByDescending(x => x.CreatedTime).Skip((model.Page - 1) * model.PageSize).Take(model.PageSize).Select(x => new DealerRequestRegisterViewModel()
             {
                 Id = x.Id,
                 Gender = x.Gender,
@@ -201,14 +235,68 @@ namespace SCSS.Application.Admin.Implementations
 
         #region Get Dealer Request Register
 
+        /// <summary>
+        /// Gets the dealer request register.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         public async Task<BaseApiResponseModel> GetDealerRequestRegister(Guid id)
         {
-            if (!_accountRepository.IsExisted(x => x.Id.Equals(id)))
+            if (!_accountRepository.IsExisted(x => x.Id.Equals(id) && (x.Status == AccountStatus.NOT_APPROVED || x.Status == AccountStatus.REJECT)))
             {
                 return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
             }
 
-            return BaseApiResponse.OK();
+            // Get Dealer Account Information by Id
+            var accountInfo = await _accountRepository.GetAsync(x => x.Id.Equals(id));
+
+            // Get Dealer Information by DealerAccountId
+            var dealerInfo = _dealerInformationRepository.Get(x => x.DealerAccountId.Equals(accountInfo.Id));
+
+            // Get Dealer Location by Id
+            var dealerLocation = _locationRepository.GetById(dealerInfo.LocationId);
+
+            var dealerInfoResult = new DealerInformationRequestViewModel()
+            {
+                DealerName = dealerInfo.DealerName,
+                DealerPhone = dealerInfo.DealerPhone,
+                DealerAddress = dealerLocation.Address,
+                DealerImageUrl = dealerInfo.DealerImageUrl,
+                DealerLatitude = dealerLocation.Latitude,
+                DealerLongitude = dealerLocation.Longitude
+            };
+
+            var dataResult = new DealerRequestRegisterViewDetailModel()
+            {
+                Id = accountInfo.Id,
+                AccountName = accountInfo.Name,
+                AccountPhone = accountInfo.Phone,
+                AccountAddress = accountInfo.Address,
+                BirthDate = accountInfo.BirthDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy), 
+                AccountStatus = accountInfo.Status,
+                Gender = accountInfo.Gender,
+                IDCard = accountInfo.IdCard,
+                DealerInformation = dealerInfoResult,
+                DealerType = ValidatorUtil.IsNull(accountInfo.ManagedBy) ? DealerType.LEADER : DealerType.MEMBER // Dealer Type is Leader when ManagedBy Field is NULL
+            };
+
+            // Check Dealer type
+            if (dataResult.DealerType == DealerType.MEMBER)
+            {
+                var dealerLeaderInfo = _accountRepository.GetManyAsNoTracking(x => x.Id.Equals(accountInfo.ManagedBy))
+                                                            .Join(_dealerInformationRepository.GetAllAsNoTracking(), x => x.Id, y => y.DealerAccountId,
+                                                                    (x, y) => new DealerLeaderViewDetailModel()
+                                                                    {
+                                                                        DealerId = y.Id,
+                                                                        DealerName = y.DealerName,
+                                                                        ManagerId = x.Id,
+                                                                        ManagerName = x.Name,
+                                                                        ManagerPhone = x.Phone
+                                                                    }).FirstOrDefault();
+                dataResult.DealerLeader = dealerLeaderInfo;
+            }
+            
+            return BaseApiResponse.OK(dataResult);
         }
 
         #endregion
