@@ -69,32 +69,6 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
 
         #endregion
 
-        #region Get Scrap Category Image
-
-        /// <summary>
-        /// Gets the scrap category image.
-        /// </summary>
-        /// <param name="imageUrl">The image URL.</param>
-        /// <returns></returns>
-        [HttpGet]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapCollectorApiUrlDefinition.ScrapCategoryUrl.GetImage)]
-        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetScrapCategoryImage([FromQuery] string imageUrl)
-        {
-            var file = await _storageBlobService.GetFile(imageUrl);
-            if (file == null)
-            {
-                return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
-            }
-            var image = file.Stream.ToBitmap();
-            return BaseApiResponse.OK(image);
-        }
-
-        #endregion
-
         #region Check Duplicate Scrap Category Name
 
         /// <summary>

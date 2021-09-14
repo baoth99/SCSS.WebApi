@@ -146,7 +146,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             var entity = _accountRepository.GetById(id);
             if (entity == null)
             {
-                return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
+                return BaseApiResponse.NotFound();
             }
 
             // Send Data to IdentityServer4

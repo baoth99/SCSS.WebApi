@@ -88,8 +88,8 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 {"email", string.Empty },
                 {"gender", model.Gender.ToString() },
                 {"phone", model.Phone },
-                {"address", model.Address },
-                {"birthdate", model.BirthDate },
+                {"address", model.Address }, // Yes
+                {"birthdate", model.BirthDate }, 
                 {"image", string.Empty },
                 {"idcard", model.IDCard },
                 {"registertoken", model.RegisterToken }
@@ -172,5 +172,61 @@ namespace SCSS.Application.ScrapDealer.Implementations
         }
 
         #endregion Register Scrap Dealer Account
+
+        #region Update Dealer Account
+
+        /// <summary>
+        /// Updates the dealer account.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> UpdateDealerAccount(DealerAccountUpdateRequestModel model)
+        {
+            var id = UserAuthSession.UserSession.Id;
+
+            var entity = _accountRepository.GetById(id);
+
+            if (entity == null)
+            {
+                return BaseApiResponse.NotFound();
+            }
+
+            // Send Data to IdentityServer4
+            var dictionary = new Dictionary<string, string>()
+            {
+                {"id", id.ToString() },
+                {"email", model.Email },
+                {"name", model.Name },
+                {"gender", model.Gender.ToString() },
+                {"address", entity.Address },
+                {"bithdate", model.BirthDate },
+                {"image", model.ImageUrl},
+                {"idcard", entity.IdCard },
+            };
+
+            // Update in ID4
+            var res = await IDHttpClientHelper.IDHttpClientPost(IdentityServer4Route.Update, ClientIdConstant.DealerMobileApp, dictionary);
+
+            // Check Response from ID4
+            if (res == null)
+            {
+                return BaseApiResponse.Error(SystemMessageCode.OtherException);
+            }
+
+            entity.Name = model.Name;
+            entity.Email = model.Email;
+            entity.Gender = model.Gender;
+            entity.BirthDate = model.BirthDate.ToDateTime();
+            entity.ImageUrl = model.ImageUrl;
+
+            _accountRepository.Update(entity);
+
+            await UnitOfWork.CommitAsync();
+
+            return BaseApiResponse.OK();
+        }
+
+        #endregion
+
     }
 }

@@ -6,6 +6,18 @@ namespace SCSS.Application.ScrapDealer.Interfaces
 {
     public interface IAccountService
     {
+        /// <summary>
+        /// Registers the dealer account.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         Task<BaseApiResponseModel> RegisterDealerAccount(DealerAccountRegisterRequestModel model);
+
+        /// <summary>
+        /// Updates the dealer account.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> UpdateDealerAccount(DealerAccountUpdateRequestModel model);
     }
 }

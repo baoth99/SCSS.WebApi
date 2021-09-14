@@ -5,6 +5,13 @@
         private const string Account = "dealer/account";
         private const string ScrapCategory = "scrap-category";
         private const string DealerInformation = "dealer-information";
+
+
+        public static class DataApiUrl
+        {
+            public const string GetImage = "image/get";
+        }
+
         public static class AccountApiUrl
         {
             public const string RegisterDealerAccount = Account + "/register";

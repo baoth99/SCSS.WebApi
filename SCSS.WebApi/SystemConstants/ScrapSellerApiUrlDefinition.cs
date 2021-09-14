@@ -5,6 +5,11 @@
         private const string Account = "seller/account";
         private const string ImageSlider = "image-slider";
 
+        public static class DataApiUrl
+        {
+            public const string GetImage = "image/get";
+        }
+
         public static class AccountApiUrl
         {
             public const string RegisterSellerAccount = Account + "/register";

@@ -14,6 +14,11 @@ namespace SCSS.WebApi.SystemConstants
 
         }
 
+        public static class DataApiUrl
+        {
+            public const string GetImage = "image/get";
+        }
+
         public static class ScrapCategoryUrl
         {
             public const string Create = ScrapCategory + "/create";
@@ -22,7 +27,6 @@ namespace SCSS.WebApi.SystemConstants
             public const string CheckName = ScrapCategory + "/check-name";
             public const string Update = ScrapCategory + "/update";
             public const string UploadImage = ScrapCategory + "/upload-image";
-            public const string GetImage = ScrapCategory + "/get-image";
             public const string Remove = ScrapCategory + "/remove";
         }
     }

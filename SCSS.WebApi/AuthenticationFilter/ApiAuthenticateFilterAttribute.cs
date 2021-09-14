@@ -149,7 +149,7 @@ namespace SCSS.WebApi.AuthenticationFilter
                                 context.Result = new UnauthorizedObjectResult("Permission denied, wrong credentials or user not be allowed access.");
                                 break;
                             case HttpStatusCodes.NotFound:
-                                context.Result = new NotFoundObjectResult("The Record not found.");
+                                context.Result = new NotFoundObjectResult("Data not found.");
                                 break;
                             case HttpStatusCodes.Forbidden:
                                 context.Result = new StatusCodeResult(HttpStatusCodes.Forbidden);
