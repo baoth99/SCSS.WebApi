@@ -26,5 +26,29 @@ namespace SCSS.Utilities.Extensions
             }
             return timeSpan.Value.ToString(format);
         }
+
+        public static bool IsCompareDateTime(this DateTime? dateTime1, DateTime? dateTime2)
+        {
+            var res = dateTime1.Value.CompareTo(dateTime2.Value);
+            return res >= 0;
+        }
+
+        public static bool IsCompareDateTimeGreaterThan(this DateTime? dateTime1, DateTime? dateTime2)
+        {
+            var res = dateTime1.Value.CompareTo(dateTime2.Value);
+            return res > 0;
+        }
+
+        public static bool IsCompareDateTimeLessThan(this DateTime? dateTime1, DateTime? dateTime2)
+        {
+            var res = dateTime1.Value.CompareTo(dateTime2.Value);
+            return res < 0;
+        }
+
+        public static bool IsCompareDateTimeEqual(this DateTime? dateTime1, DateTime? dateTime2)
+        {
+            var res = dateTime1.Value.CompareTo(dateTime2.Value);
+            return res == 0;
+        }
     }
 }

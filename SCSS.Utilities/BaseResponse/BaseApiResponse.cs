@@ -1,11 +1,6 @@
 ﻿using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SCSS.Utilities.BaseResponse
 {
@@ -156,6 +151,10 @@ namespace SCSS.Utilities.BaseResponse
 
         #region BaseApiResponseModel-Unauthorized
 
+        /// <summary>
+        /// Unauthorizeds this instance.
+        /// </summary>
+        /// <returns></returns>
         public static BaseApiResponseModel Unauthorized()
         {
             return new BaseApiResponseModel()
@@ -164,6 +163,25 @@ namespace SCSS.Utilities.BaseResponse
                 StatusCode = HttpStatusCodes.Unauthorized,
                 MessageCode = SystemMessageCode.Unauthorized,
                 MessageDetail = "An error occurred processing your authentication."
+            };
+        }
+
+        #endregion
+
+        #region BaseApiResponseModel-Forbidden
+
+        /// <summary>
+        /// Forbiddens this instance.
+        /// </summary>
+        /// <returns></returns>
+        public static BaseApiResponseModel Forbidden()
+        {
+            return new BaseApiResponseModel()
+            {
+                IsSuccess = BooleanConstants.FALSE,
+                StatusCode = HttpStatusCodes.Forbidden,
+                MessageCode = SystemMessageCode.Forbidden,
+                MessageDetail = "An error occurred processing your authorization."
             };
         }
 

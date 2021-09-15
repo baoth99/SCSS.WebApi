@@ -29,7 +29,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// </summary>
         private readonly IStorageBlobS3Service _storageBlobS3Service;
 
-        #endregion
+        #endregion Services
 
         #region Constructor
 
@@ -44,7 +44,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
             _storageBlobS3Service = storageBlobS3Service;
         }
 
-        #endregion
+        #endregion Constructor
 
         #region Upload Dealer Account Image
 
@@ -66,29 +66,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
             return BaseApiResponse.OK(imageUrl);
         }
 
-        #endregion
-
-        #region Upload Dealer Information Image        
-
-        /// <summary>
-        /// Uploads the dealer information image.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <returns></returns>
-        [HttpPost]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapDealerApiUrlDefinition.DealerInformationApiUrl.UploadImage)]
-        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> UploadDealerInformationImage([FromForm] ImageUploadModel model)
-        {
-            var fileName = CommonUtils.GetFileName(PrefixFileName.DealerInformation, model.Image.FileName);
-            var imageUrl = await _storageBlobS3Service.UploadFile(model.Image, fileName, FileS3Path.DealerInformationImages);
-            return BaseApiResponse.OK(imageUrl);
-        }
-
-        #endregion
+        #endregion Upload Dealer Account Image
 
         #region Register Scrap Dealer Account
 
@@ -108,21 +86,26 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
             return await _accountService.RegisterDealerAccount(model);
         }
 
-        #endregion
+        #endregion Register Scrap Dealer Account
 
         #region Update Scrap Dealer Account
 
+        /// <summary>
+        /// Updates the dealer account.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.AccountApiUrl.UpdateDealerAccount)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> UpdateDealerAccount()
+        public async Task<BaseApiResponseModel> UpdateDealerAccount([FromBody] DealerAccountUpdateRequestModel model)
         {
-            return BaseApiResponse.OK();
+            return await _accountService.UpdateDealerAccount(model);
         }
 
-        #endregion
+        #endregion Update Scrap Dealer Account
     }
 }

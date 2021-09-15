@@ -88,7 +88,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 {"email", string.Empty },
                 {"gender", model.Gender.ToString() },
                 {"phone", model.Phone },
-                {"address", model.Address }, // Yes
+                {"address", model.Address }, 
                 {"birthdate", model.BirthDate }, 
                 {"image", string.Empty },
                 {"idcard", model.IDCard },
@@ -227,6 +227,5 @@ namespace SCSS.Application.ScrapDealer.Implementations
         }
 
         #endregion
-
     }
 }

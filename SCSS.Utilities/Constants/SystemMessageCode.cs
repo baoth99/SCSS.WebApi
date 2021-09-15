@@ -25,6 +25,14 @@ namespace SCSS.Utilities.Constants
         public static string Unauthorized => "300001";
 
         /// <summary>
+        /// Gets the forbidden.
+        /// </summary>
+        /// <value>
+        /// The forbidden.
+        /// </value>
+        public static string Forbidden => "300002";
+
+        /// <summary>
         /// Gets the bad request.
         /// </summary>
         /// <value>

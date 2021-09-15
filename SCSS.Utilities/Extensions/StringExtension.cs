@@ -52,5 +52,10 @@ namespace SCSS.Utilities.Extensions
                 memoryStream.Close();
             }
         }
+
+        public static string RemoveWhiteSpace(this string input)
+        {
+            return input.Replace(SignConstant.WHITE_SPACE, SignConstant.NO_WHITE_SPACE);
+        }
     }
 }

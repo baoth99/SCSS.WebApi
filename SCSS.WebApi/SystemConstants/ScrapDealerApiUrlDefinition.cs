@@ -5,7 +5,7 @@
         private const string Account = "dealer/account";
         private const string ScrapCategory = "scrap-category";
         private const string DealerInformation = "dealer-information";
-
+        private const string Promotion = "promotion";
 
         public static class DataApiUrl
         {
@@ -19,9 +19,20 @@
             public const string UploadImage = Account + "/upload-image";
         }
 
+        public static class PromotionApiUrl
+        {
+            public const string GetPromotions = Promotion + "/get";
+            public const string GetPromotionDetail = Promotion + "/get-detail";
+            public const string CreateNewPromotion = Promotion + "/create";
+        }
+
         public static class DealerInformationApiUrl
         {
             public const string UploadImage = DealerInformation + "/upload-image";
+            public const string GetDealerInformation = DealerInformation + "/get";
+            public const string GetDealerBranchInformation = DealerInformation + "/get-branchs";
+            public const string GetDealerBranchInformationDetail = DealerInformation + "/get-branch-detail";
+            public const string ChangeDealerStatus = DealerInformation + "/change-status";
         }
 
         public static class ScrapCategoryUrl

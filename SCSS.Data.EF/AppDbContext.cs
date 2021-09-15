@@ -208,7 +208,7 @@ namespace SCSS.Data.EF
             }
         }
 
-        #endregion
+        #endregion Before SaveChanges
 
     }
 

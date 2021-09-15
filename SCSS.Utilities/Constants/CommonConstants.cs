@@ -23,6 +23,7 @@ namespace SCSS.Utilities.Constants
     public class TimeSpanFormat
     {
         public const string HH_MM_TT = "hh:mm tt";
+        public const string HH_MM = "hh:mm";
     }
 
     public class CommonConstants
@@ -64,6 +65,13 @@ namespace SCSS.Utilities.Constants
         public const int ACTIVE = 2;
         public const int BANNING = 3;
         public const int REJECT = 4;
+    }
+
+    public class PromotionStatus
+    {
+        public const int NOW = 1;
+        public const int END = 2;
+        public const int FUTURE = 3;
     }
 
     public class Gender
@@ -110,5 +118,22 @@ namespace SCSS.Utilities.Constants
     public class DefaultSort
     {
         public const string CreatedTimeDESC = "CreatedTime DESC";
+    }
+
+    public class SignConstant
+    {
+        public const string NO_WHITE_SPACE = "";
+        public const string WHITE_SPACE = " ";
+        public const string COMMA = ",";
+        public const string DOT = ".";
+        public const string COLON = ":";
+        public const string SEMICOLON = ":";
+        public const string EXCLAMATION_MARK = "!";
+        public const string HYPHEN = "-";
+    }
+
+    public class Globalization
+    {
+        public const string VN_CULTURE = "vi-VN";
     }
 }

@@ -13,5 +13,15 @@ namespace SCSS.Utilities.Extensions
         {
             return JsonConvert.SerializeObject(list);
         }
+
+        public static string ToStringFormat(this List<string> list, string sign)
+        {
+            return String.Join(sign, list);
+        }
+
+        public static string ToStringFormat(this IEnumerable<string> enumerable, string sign)
+        {
+            return String.Join(sign, enumerable.ToList());
+        }
     }
 }

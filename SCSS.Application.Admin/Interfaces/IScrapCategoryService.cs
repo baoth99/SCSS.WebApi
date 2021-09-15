@@ -20,5 +20,6 @@ namespace SCSS.Application.Admin.Interfaces
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
         Task<BaseApiResponseModel> GetScrapCategory(Guid id);
+
     }
 }

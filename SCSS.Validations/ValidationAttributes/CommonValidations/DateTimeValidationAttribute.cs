@@ -18,7 +18,29 @@ namespace SCSS.Validations.ValidationAttributes.CommonValidations
             var dateTime = dateTimeString.ToDateTime();
             if (dateTime == null)
             {
-                return new ValidationResult(InvalidTextCode.DatetTime);
+                return new ValidationResult(InvalidTextCode.DateTime);
+            }
+
+            return ValidationResult.Success;
+        }
+    }
+
+
+    public class DateTimeValidationWithNowAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            var dateTimeString = value as string;
+
+            var dateTime = dateTimeString.ToDateTime();
+            if (dateTime == null)
+            {
+                return new ValidationResult(InvalidTextCode.DateTime);
+            }
+
+            if (dateTime.IsCompareDateTimeLessThan(DateTime.Now.Date))
+            {
+                return new ValidationResult(InvalidTextCode.DateTimeNow);
             }
 
             return ValidationResult.Success;

@@ -60,7 +60,8 @@ namespace SCSS.Utilities.Constants
             {AccountRoleConstants.ADMIN, AccountRole.ADMIN },
             {AccountRoleConstants.SELLER, AccountRole.SELLER },
             {AccountRoleConstants.DEALER, AccountRole.DEALER },
-            {AccountRoleConstants.COLLECTOR, AccountRole.COLLECTOR }
+            {AccountRoleConstants.COLLECTOR, AccountRole.COLLECTOR },
+            {AccountRoleConstants.DEALER_MEMBER, AccountRole.DEALER_MEMBER }
         };
 
     }

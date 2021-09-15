@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SCSS.Application.Admin.Interfaces;
 using SCSS.AWSService.Interfaces;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
@@ -6,9 +7,6 @@ using SCSS.Utilities.Extensions;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConstants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SCSS.WebApi.Controllers.ScrapDealerControllers
@@ -23,13 +21,19 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// </summary>
         private readonly IStorageBlobS3Service _storageBlobS3Service;
 
+        /// <summary>
+        /// The scrap category service
+        /// </summary>
+        private readonly IScrapCategoryService _scrapCategoryService;
+
         #endregion
 
         #region Constructor
 
-        public DataController(IStorageBlobS3Service storageBlobS3Service)
+        public DataController(IStorageBlobS3Service storageBlobS3Service, IScrapCategoryService scrapCategoryService)
         {
             _storageBlobS3Service = storageBlobS3Service;
+            _scrapCategoryService = scrapCategoryService;
         }
 
 
@@ -60,5 +64,6 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         }
 
         #endregion
+        
     }
 }
