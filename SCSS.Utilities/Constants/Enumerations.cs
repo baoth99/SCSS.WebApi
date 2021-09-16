@@ -8,7 +8,8 @@
         DealerAccountImages,
         DealerInformationImages,
         CollectorAccountImages,
-        ImageSliderImages
+        ImageSliderImages,
+        ScrapCollectingRequestImages,
     }
 
     public enum RoleEnum
@@ -28,7 +29,8 @@
         DealerInformation,
         CollectorAccount,
         ImageSlider,
-        ScrapCategory
+        ScrapCategory,
+        ScrapCollectingRequest
     }
 
     public enum CacheRedisKey

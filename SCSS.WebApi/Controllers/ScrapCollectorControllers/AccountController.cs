@@ -102,5 +102,11 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         }
 
         #endregion
+
+        #region Update DeviceId
+
+
+
+        #endregion
     }
 }

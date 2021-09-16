@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCSS.Data.EF;
 
 namespace SCSS.Data.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210916075611_Remove ItemType in Booking")]
+    partial class RemoveItemTypeinBooking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,6 +87,110 @@ namespace SCSS.Data.EF.Migrations
                         .HasFilter("[Phone] IS NOT NULL");
 
                     b.ToTable("Account");
+                });
+
+            modelBuilder.Entity("SCSS.Data.Entities.Booking", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BookingCode")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<DateTime?>("BookingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CancelReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CollectorAccountId")
+                        .IsConcurrencyToken()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsBulky")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("LocationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ScrapImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("SellerAccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("Status")
+                        .IsConcurrencyToken()
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan?>("TimeFrom")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan?>("TimeTo")
+                        .HasColumnType("time");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Booking");
+                });
+
+            modelBuilder.Entity("SCSS.Data.Entities.BookingRejection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BookingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CollectorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("BookingRejection");
                 });
 
             modelBuilder.Entity("SCSS.Data.Entities.CollectDealTransaction", b =>
@@ -177,110 +283,6 @@ namespace SCSS.Data.EF.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("CollectDealTransactionDetail");
-                });
-
-            modelBuilder.Entity("SCSS.Data.Entities.CollectingRequest", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CancelReason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CollectingRequestCode")
-                        .HasColumnType("VARCHAR(50)");
-
-                    b.Property<DateTime?>("CollectingRequestDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CollectorAccountId")
-                        .IsConcurrencyToken()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsBulky")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("LocationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ScrapImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("SellerAccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Status")
-                        .IsConcurrencyToken()
-                        .HasColumnType("int");
-
-                    b.Property<TimeSpan?>("TimeFrom")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan?>("TimeTo")
-                        .HasColumnType("time");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("CollectingRequest");
-                });
-
-            modelBuilder.Entity("SCSS.Data.Entities.CollectingRequestRejection", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CollectingRequestId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CollectorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Reason")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("CollectingRequestRejection");
                 });
 
             modelBuilder.Entity("SCSS.Data.Entities.DealerInformation", b =>
@@ -649,7 +651,7 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<float?>("AwardPoint")
                         .HasColumnType("real");
 
-                    b.Property<Guid?>("CollectingRequestId")
+                    b.Property<Guid?>("BookingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CreatedBy")

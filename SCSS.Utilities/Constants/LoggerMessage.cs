@@ -43,6 +43,7 @@ namespace SCSS.Utilities.Constants
 
     public class FirebaseLoggerMessage
     {
-
+        public static string PushNotificationSuccess => $"Notification was pushed successfully !";
+        public static string PushNotificationFail => $"Notification was pushed fail !";
     }
 }

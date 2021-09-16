@@ -1,4 +1,5 @@
-﻿using SCSS.Validations.ValidationAttributes.CommonValidations;
+﻿using SCSS.Utilities.Constants;
+using SCSS.Validations.ValidationAttributes.CommonValidations;
 using System;
 
 namespace SCSS.Application.ScrapDealer.Models.PromotionModels
@@ -13,10 +14,10 @@ namespace SCSS.Application.ScrapDealer.Models.PromotionModels
 
         public long? BonusAmount { get; set; }
 
-        [DateTimeValidationWithNow]
+        [DateTimeValidation(isCompareToNow: BooleanConstants.TRUE)]
         public string AppliedFromTime { get; set; }
 
-        [DateTimeValidationWithNow]
+        [DateTimeValidation(isCompareToNow: BooleanConstants.TRUE)]
         public string AppliedToTime { get; set; }
     }
 

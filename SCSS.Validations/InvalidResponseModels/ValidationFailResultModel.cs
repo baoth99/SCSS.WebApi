@@ -20,7 +20,7 @@ namespace SCSS.Validations.InvalidResponseModels
             Data = modelState.Keys
                     .SelectMany(key => modelState[key].Errors.Select(x => new ValidationError(key, x.ErrorMessage)))
                     .ToList();
-            Total = 0;
+            Total = modelState.Count;
         }
     }
 

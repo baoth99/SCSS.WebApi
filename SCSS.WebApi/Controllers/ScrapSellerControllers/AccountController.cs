@@ -107,5 +107,11 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         }
 
         #endregion
+
+        #region Update DeviceId
+
+
+
+        #endregion
     }
 }

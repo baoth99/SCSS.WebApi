@@ -11,6 +11,8 @@ namespace SCSS.Utilities.Constants
     {
         public static DateTime DATEFROM = DateTime.Now.Date;
         public static DateTime DATETO = DateTime.Now.Date.AddHours(24);
+        public static DateTime DATE_NOW = DateTime.Now.Date;
+        public static TimeSpan TIMESPAN_NOW = DateTime.Now.TimeOfDay;
     }
 
     public class DateTimeFormat
@@ -83,7 +85,7 @@ namespace SCSS.Utilities.Constants
         public const string FEMALE_TEXT = "Female";
     }
 
-    public class BookingStatus
+    public class CollectingRequestStatus
     {
         public const int PENDING = 1;
         public const int CANCEL_BY_SELLER = 2;
@@ -132,8 +134,32 @@ namespace SCSS.Utilities.Constants
         public const string HYPHEN = "-";
     }
 
+    public class RequestScrapCollecting
+    {
+        public const int SevenDays = 7;
+        public const double FifteenMinutes = 15;
+    }
+
     public class Globalization
     {
         public const string VN_CULTURE = "vi-VN";
+    }
+
+    public class DateCodeFormat
+    {
+        public const string DDMMYYYY = "{0}{1}{2}";
+        public const string DDMM = "{0}{1}";
+    }
+
+    public class TimeSpanCodeFormat
+    {
+        public const string HHMMSS = "{0}{1}{2}";
+        public const string HHMM = "{0}{1}";
+    }
+
+    public class GenerationCodeFormat
+    {
+        public const string COLLECTING_REQUEST_CODE = "SCR{0}{1}{2}{3}";
+        public const string PROMOTION_CODE = "{0}-{1}{2}{3}";
     }
 }

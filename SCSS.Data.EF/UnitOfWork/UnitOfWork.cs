@@ -33,7 +33,7 @@ namespace SCSS.Data.EF.UnitOfWork
 
         private IRepository<DealerInformation> _dealerInformationRepository;
 
-        private IRepository<Booking> _bookingRepository;
+        private IRepository<CollectingRequest> _collectingRequestRepository;
 
         private IRepository<CollectDealTransaction> _collectDealTransactionRepository;
 
@@ -69,7 +69,7 @@ namespace SCSS.Data.EF.UnitOfWork
 
         private IRepository<TransactionAwardAmount> _transactionAwardAmountRepository;
 
-        private IRepository<BookingRejection> _bookingRejectionRepository;
+        private IRepository<CollectingRequestRejection> _collectingRequestRejectionRepository;
 
         #endregion
 
@@ -95,7 +95,7 @@ namespace SCSS.Data.EF.UnitOfWork
 
         public IRepository<DealerInformation> DealerInformationRepository => _dealerInformationRepository ??= (_dealerInformationRepository = new Repository<DealerInformation>(AppDbContext));
 
-        public IRepository<Booking> BookingRepository => _bookingRepository ??= (_bookingRepository = new Repository<Booking>(AppDbContext));
+        public IRepository<CollectingRequest> CollectingRequestRepository => _collectingRequestRepository ??= (_collectingRequestRepository = new Repository<CollectingRequest>(AppDbContext));
 
         public IRepository<CollectDealTransaction> CollectDealTransactionRepository => _collectDealTransactionRepository ??= (_collectDealTransactionRepository = new Repository<CollectDealTransaction>(AppDbContext));
 
@@ -131,7 +131,7 @@ namespace SCSS.Data.EF.UnitOfWork
 
         public IRepository<TransactionAwardAmount> TransactionAwardAmountRepository => _transactionAwardAmountRepository ??= (_transactionAwardAmountRepository = new Repository<TransactionAwardAmount>(AppDbContext));
 
-        public IRepository<BookingRejection> BookingRejectionRepository => _bookingRejectionRepository ??= (_bookingRejectionRepository = new Repository<BookingRejection>(AppDbContext));
+        public IRepository<CollectingRequestRejection> CollectingRequestRejectionRepository => _collectingRequestRejectionRepository ??= (_collectingRequestRejectionRepository = new Repository<CollectingRequestRejection>(AppDbContext));
 
         #endregion
 

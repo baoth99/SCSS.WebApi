@@ -15,7 +15,7 @@ namespace SCSS.Application.ScrapSeller.Models.AccountModels
         [Gender]
         public int Gender { get; set; }
 
-        [DateTimeValidation]
+        [DateTimeValidation(isCompareToNow: BooleanConstants.FALSE)]
         public string BirthDate { get; set; }
 
         public string Address { get; set; }

@@ -16,7 +16,7 @@ namespace SCSS.WebApi.SystemConfigurations
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<AmountOfBookingHub>(AdminApiUrlDefinition.HubApiUrl.AmountBooking);
+                endpoints.MapHub<AmountOfCollectingRequestHub>(AdminApiUrlDefinition.HubApiUrl.AmountCollectingRequest);
                 endpoints.MapHub<AmountOfTransactionHub>(AdminApiUrlDefinition.HubApiUrl.AmountTransaction);
                 endpoints.MapControllers();
             });

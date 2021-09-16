@@ -4,6 +4,7 @@
     {
         private const string Account = "seller/account";
         private const string ImageSlider = "image-slider";
+        private const string CollectingRequest = "collecting-request";
 
         public static class DataApiUrl
         {
@@ -20,6 +21,13 @@
         public static class ImageSliderApiUrl
         {
             public const string GetImageSlider = ImageSlider + "/images";
+        }
+
+        public static class CollectingRequestApiUrl
+        {
+            public const string RequestCollecting = CollectingRequest + "/request";
+            public const string CancelCollectingRequest = CollectingRequest + "/cancel";
+            public const string UploadCollectingRequestImg = CollectingRequest + "/upload-img";
         }
 
     }

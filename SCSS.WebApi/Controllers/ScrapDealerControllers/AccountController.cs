@@ -107,5 +107,11 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         }
 
         #endregion Update Scrap Dealer Account
+
+        #region Update DeviceId
+
+
+
+        #endregion
     }
 }

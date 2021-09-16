@@ -15,8 +15,8 @@ namespace SCSS.Data.Entities
         [Column(TypeName = "VARCHAR(50)")]
         public string TransactionCode { get; set; }
 
-        [ForeignKey("Booking")]
-        public Guid? BookingId { get; set; }
+        [ForeignKey("CollectingRequest")]
+        public Guid? CollectingRequestId { get; set; }
 
         public long? Total { get; set; }
 

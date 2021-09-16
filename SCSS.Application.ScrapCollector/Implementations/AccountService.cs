@@ -121,6 +121,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             {
                 return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
             }
+            // TODO
 
             return null;
         }
@@ -128,5 +129,31 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion
 
+        #region Update DeviceId
+
+        /// <summary>
+        /// Updates the device identifier.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> UpdateDeviceId(CollectorAccountUpdateDeviceIdModel model)
+        {
+            var entity = _accountRepository.GetById(model.Id);
+
+            if (entity == null)
+            {
+                return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
+            }
+
+            entity.DeviceId = model.DeviceId;
+
+            _accountRepository.Update(entity);
+
+            await UnitOfWork.CommitAsync();
+
+            return BaseApiResponse.OK();
+        }
+
+        #endregion
     }
 }

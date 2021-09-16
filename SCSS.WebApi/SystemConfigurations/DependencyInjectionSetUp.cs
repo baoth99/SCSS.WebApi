@@ -54,6 +54,7 @@ namespace SCSS.WebApi.SystemConfigurations
             #region Seller Application
 
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IAccountService, SCSS.Application.ScrapSeller.Imlementations.AccountService>();
+            services.AddScoped<SCSS.Application.ScrapSeller.Interfaces. ICollectingRequestService, SCSS.Application.ScrapSeller.Imlementations.CollectingRequestService>();
 
             #endregion           
         }

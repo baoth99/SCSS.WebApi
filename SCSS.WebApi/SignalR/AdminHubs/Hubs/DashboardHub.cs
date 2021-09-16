@@ -6,35 +6,42 @@ using System.Threading.Tasks;
 namespace SCSS.WebApi.SignalR.AdminHubs.Hubs
 {
 
-    public class AmountOfBookingHub : BaseAdminHub<IAmountOfBookingHub>
+    public class AmountOfCollectingRequestHub : BaseAdminHub<IAmountOfCollectingRequestHub>
     {
         #region Services
 
+        /// <summary>
+        /// The dashboard service
+        /// </summary>
         private readonly IDashboardService _dashboardService;
 
         #endregion
 
         #region Constructor
 
-        public AmountOfBookingHub(IDashboardService dashboardService)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AmountOfCollectingRequestHub"/> class.
+        /// </summary>
+        /// <param name="dashboardService">The dashboard service.</param>
+        public AmountOfCollectingRequestHub(IDashboardService dashboardService)
         {
             _dashboardService = dashboardService;
         }
 
         #endregion
 
-        #region Get Amount Of Booking In Day
+        #region Get Amount Of Collecting Request In Day
 
         /// <summary>
-        /// Gets the amount of booking in day.
+        /// Gets the amount of collecting request in day.
         /// </summary>
         /// <param name="amount">The amount.</param>
-        public async Task GetAmountOfBookingInDay(int amount)
+        public async Task GetAmountOfCollectingRequestInDay(int amount)
         {
-            await Clients.All.GetAmountOfBookingInDay(amount);
+            await Clients.All.GetAmountOfCollectingRequestInDay(amount);
         }
 
-        #endregion
+        #endregion Get Amount Of Collecting Request In Day
 
         #region On Connected Async
 
@@ -43,8 +50,8 @@ namespace SCSS.WebApi.SignalR.AdminHubs.Hubs
         /// </summary>
         public async override Task OnConnectedAsync()
         {
-            var amount = await _dashboardService.GetAmountOfBookingInDay(DateTimeInDay.DATEFROM, DateTimeInDay.DATETO);
-            await GetAmountOfBookingInDay(amount);
+            var amount = await _dashboardService.GetAmountOfCollectingRequestInDay(DateTimeInDay.DATEFROM, DateTimeInDay.DATETO);
+            await GetAmountOfCollectingRequestInDay(amount);
         }
 
         #endregion On Connected Async

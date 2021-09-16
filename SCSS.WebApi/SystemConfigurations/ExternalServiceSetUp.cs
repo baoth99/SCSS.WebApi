@@ -1,4 +1,5 @@
 ﻿using FirebaseAdmin;
+using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.DependencyInjection;
 using SCSS.AWSService.Implementations;
@@ -56,10 +57,9 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<IStorageBlobS3Service, StorageBlobS3Service>();
             services.AddScoped<ICacheService, CacheService>();
 
+            // Goong Map
+
             #endregion
-
-
-
         }
     }
 }

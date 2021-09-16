@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace SCSS.Data.Entities
 {
-    [Table("BookingRejection")]
-    public class BookingRejection : BaseEntity, IHasSoftDelete
+    [Table("CollectingRequestRejection")]
+    public class CollectingRequestRejection : BaseEntity, IHasSoftDelete
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        [ForeignKey("Booking")]
-        public Guid? BookingId { get; set; }
+        [ForeignKey("CollectingRequest")]
+        public Guid? CollectingRequestId { get; set; }
 
         [ForeignKey("Account")]
         public Guid? CollectorId { get; set; }

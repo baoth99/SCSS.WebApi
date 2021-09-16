@@ -135,13 +135,13 @@ namespace SCSS.Application.ScrapDealer.Implementations
             // Get Promotion Amount of Dealer
             var promotionAmount = await _promotionRepository.GetManyAsNoTracking(x => x.DealerAccountId.Equals(accountId)).CountAsync();
 
-            var fromDateTime = string.Format("{0}{1}", fromDateTimeVal.Day, fromDateTimeVal.Month);
-            var fromToTime = string.Format("{0}{1}", toDateTimeVal.Day, toDateTimeVal.Month);
+            var fromDateTime = fromDateTimeVal.ToDateCode(DateCodeFormat.DDMM);
+            var fromToTime = toDateTimeVal.ToDateCode(DateCodeFormat.DDMM);
 
-            var promotionCode = string.Format("{0}-{1}{2}{3}", scrapCategoryName, 
-                                                                    fromDateTime,
-                                                                    fromToTime,
-                                                                    promotionAmount);
+            var promotionCode = string.Format(GenerationCodeFormat.PROMOTION_CODE, scrapCategoryName, 
+                                                                fromDateTime,
+                                                                fromToTime,
+                                                                promotionAmount);
             return promotionCode;
         }
 

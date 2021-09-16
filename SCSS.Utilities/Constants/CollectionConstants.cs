@@ -34,13 +34,13 @@ namespace SCSS.Utilities.Constants
             ImageFileConstants.PNG
         };
 
-        public static readonly List<int> BookingStatusCollection = new List<int>()
+        public static readonly List<int> CollectingRequestStatusCollection = new List<int>()
         {
-            BookingStatus.PENDING,
-            BookingStatus.CANCEL_BY_SELLER,
-            BookingStatus.CANCEL_BY_COLLECTOR,
-            BookingStatus.APPROVED,
-            BookingStatus.COMPLETED
+            CollectingRequestStatus.PENDING,
+            CollectingRequestStatus.CANCEL_BY_SELLER,
+            CollectingRequestStatus.CANCEL_BY_COLLECTOR,
+            CollectingRequestStatus.APPROVED,
+            CollectingRequestStatus.COMPLETED
         };
 
         public static readonly List<int> GenderCollection = new List<int>()

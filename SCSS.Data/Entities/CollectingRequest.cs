@@ -5,24 +5,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SCSS.Data.Entities
 {
-    [Table("Booking")]
-    public class Booking : BaseEntity, IHasSoftDelete
+    [Table("CollectingRequest")]
+    public class CollectingRequest : BaseEntity, IHasSoftDelete
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
         [Column(TypeName = "VARCHAR(50)")]
-        public string BookingCode { get; set; }
+        public string CollectingRequestCode { get; set; }
 
-        public DateTime? BookingDate { get; set; }
+        public DateTime? CollectingRequestDate { get; set; }
 
         public TimeSpan? TimeFrom { get; set; }
 
         public TimeSpan? TimeTo { get; set; }
-
-        [ForeignKey("ItemType")]
-        public Guid? ItemTypeId { get; set; }
 
         [ForeignKey("Location")]
         public Guid? LocationId { get; set; }

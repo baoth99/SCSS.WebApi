@@ -227,5 +227,32 @@ namespace SCSS.Application.ScrapDealer.Implementations
         }
 
         #endregion
+
+        #region  Update DeviceId
+
+        /// <summary>
+        /// Updates the device identifier.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> UpdateDeviceId(DealerAccountUpdateDeviceIdModel model)
+        {
+            var entity = _accountRepository.GetById(model.Id);
+
+            if (entity == null)
+            {
+                return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
+            }
+
+            entity.DeviceId = model.DeviceId;
+
+            _accountRepository.Update(entity);
+
+            await UnitOfWork.CommitAsync();
+
+            return BaseApiResponse.OK();
+        }
+
+        #endregion  Update DeviceId
     }
 }

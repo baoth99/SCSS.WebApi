@@ -19,9 +19,9 @@ namespace SCSS.Application.Admin.Implementations
         #region Repositories
 
         /// <summary>
-        /// The booking repository
+        /// The collecting request repository
         /// </summary>
-        private readonly IRepository<Booking> _bookingRepository;
+        private readonly IRepository<CollectingRequest> _collectingRequestRepository;
 
         /// <summary>
         /// The sell collect transaction repository
@@ -39,7 +39,7 @@ namespace SCSS.Application.Admin.Implementations
 
         public DashboardService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
         {
-            _bookingRepository = unitOfWork.BookingRepository;
+            _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _sellCollectTransactionRepository = unitOfWork.SellCollectTransactionRepository;
             _accountRepository = unitOfWork.AccountRepository;
 
@@ -47,16 +47,14 @@ namespace SCSS.Application.Admin.Implementations
 
         #endregion
 
-        #region Get Amount Of Booking In Day
+        #region Get Amount Of Collecting Request In Day
 
-        public async Task<int> GetAmountOfBookingInDay(DateTime dateTimeFrom, DateTime dateTimeTo)
+        public async Task<int> GetAmountOfCollectingRequestInDay(DateTime dateTimeFrom, DateTime dateTimeTo)
         {     
             return 4;
         }
 
         #endregion
-
-
 
         public Task<int> GetAmountOfNewUser()
         {

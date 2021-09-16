@@ -20,7 +20,7 @@ namespace SCSS.WebApi.SystemConstants
         public static class HubApiUrl
         {
             public const string AmountNewAccount = Hub + "/amount/new-user";
-            public const string AmountBooking = Hub + "/amount/booking";
+            public const string AmountCollectingRequest = Hub + "/amount/collecting-request";
             public const string AmountTransaction = Hub + "/amount/transaction";
         }
 

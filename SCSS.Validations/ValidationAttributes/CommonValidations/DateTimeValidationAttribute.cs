@@ -1,7 +1,5 @@
 ﻿using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -11,14 +9,30 @@ namespace SCSS.Validations.ValidationAttributes.CommonValidations
 {
     public class DateTimeValidationAttribute : ValidationAttribute
     {
+        private readonly bool _isCompareToNow;
+
+        public DateTimeValidationAttribute(bool isCompareToNow)
+        {
+            _isCompareToNow = isCompareToNow;
+        }
+
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var dateTimeString = value as string;
 
             var dateTime = dateTimeString.ToDateTime();
+
             if (dateTime == null)
             {
                 return new ValidationResult(InvalidTextCode.DateTime);
+            }
+
+            if (_isCompareToNow)
+            {
+                if (dateTime.IsCompareDateTimeLessThan(DateTimeInDay.DATE_NOW))
+                {
+                    return new ValidationResult(InvalidTextCode.DateTimeNow);
+                }
             }
 
             return ValidationResult.Success;
@@ -26,21 +40,32 @@ namespace SCSS.Validations.ValidationAttributes.CommonValidations
     }
 
 
-    public class DateTimeValidationWithNowAttribute : ValidationAttribute
+    public class TimeSpanValidationAttribute : ValidationAttribute
     {
+        private readonly bool _isCompareToNow;
+
+        public TimeSpanValidationAttribute(bool isCompareToNow)
+        {
+            _isCompareToNow = isCompareToNow;
+        }
+
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var dateTimeString = value as string;
+            var timeSpanString = value as string;
 
-            var dateTime = dateTimeString.ToDateTime();
-            if (dateTime == null)
+            var timeSpan = timeSpanString.ToTimeSpan();
+
+            if (timeSpan == null)
             {
-                return new ValidationResult(InvalidTextCode.DateTime);
+                return new ValidationResult(InvalidTextCode.TimeSpan);
             }
 
-            if (dateTime.IsCompareDateTimeLessThan(DateTime.Now.Date))
+            if (_isCompareToNow)
             {
-                return new ValidationResult(InvalidTextCode.DateTimeNow);
+                if (timeSpan.IsCompareTimeSpanLessThan(DateTimeInDay.TIMESPAN_NOW.StripMilliseconds()))
+                {
+                    return new ValidationResult(InvalidTextCode.DateTimeNow);
+                }
             }
 
             return ValidationResult.Success;

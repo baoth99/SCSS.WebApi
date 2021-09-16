@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 
 namespace SCSS.WebApi.SignalR.AdminHubs.IHubs
 {
-    public interface IAmountOfBookingHub
+    public interface IAmountOfCollectingRequestHub
     {
         /// <summary>
-        /// Gets the amount of booking in day.
+        /// Gets the amount of collecting request in day.
         /// </summary>
         /// <param name="amount">The amount.</param>
         /// <returns></returns>
-        Task GetAmountOfBookingInDay(int amount);
+        Task GetAmountOfCollectingRequestInDay(int amount);
     }
 
     public interface IAmountOfTransactionHub
