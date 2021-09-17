@@ -59,6 +59,10 @@ namespace SCSS.Utilities.Configurations
 
         public static string GoongMapApiURL => ConfigurationHelper.GetValue<string>(AppSettingKeys.GoongMap.GoongApiURL);
 
+        public static string GoongDistanceMatrixEndpoint => ConfigurationHelper.GetValue<string>(AppSettingKeys.GoongMap.GoongDistanceMatrix);
+
+        public static string GoongDirectionEndpoint => ConfigurationHelper.GetValue<string>(AppSettingKeys.GoongMap.GoongDirection);
+
         public static string LoggingConfig => ConfigurationHelper.GetValue<string>(AppSettingKeys.Logging.Config);
 
     }

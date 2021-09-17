@@ -57,5 +57,10 @@ namespace SCSS.Utilities.Extensions
         {
             return input.Replace(SignConstant.WHITE_SPACE, SignConstant.NO_WHITE_SPACE);
         }
+
+        public static T ToMapperObject<T>(this string jsonString)
+        {
+            return JsonConvert.DeserializeObject<T>(jsonString);
+        }
     }
 }

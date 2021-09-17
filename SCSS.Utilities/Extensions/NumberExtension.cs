@@ -17,5 +17,10 @@ namespace SCSS.Utilities.Extensions
 
             return string.Format("{0} vnđ", result);
         }
+
+        public static float KilometerToMeter(this float val)
+        {
+            return val == NumberConstant.Zero ? NumberConstant.Zero : val * NumberConstant.OneThousand;
+        }
     }
 }

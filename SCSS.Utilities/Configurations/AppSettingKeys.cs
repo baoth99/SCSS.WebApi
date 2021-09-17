@@ -65,6 +65,8 @@ namespace SCSS.Utilities.Configurations
         {
             public const string GoongApiKey = "GoongMapService:ApiKey";
             public const string GoongApiURL = "GoongMapService:ApiURL";
+            public const string GoongDistanceMatrix = "GoongMapService:DistanceMatrix";
+            public const string GoongDirection = "GoongMapService:Direction";
         }
 
         public static class Logging

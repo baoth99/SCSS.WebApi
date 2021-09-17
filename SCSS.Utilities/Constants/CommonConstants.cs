@@ -1,6 +1,13 @@
 ﻿using System;
 namespace SCSS.Utilities.Constants
 {
+
+    public class NumberConstant
+    {
+        public const int Zero = 0;
+        public const int OneThousand = 1000;
+    }
+
     public class BooleanConstants
     {
         public const bool TRUE = true;
@@ -132,6 +139,7 @@ namespace SCSS.Utilities.Constants
         public const string SEMICOLON = ":";
         public const string EXCLAMATION_MARK = "!";
         public const string HYPHEN = "-";
+        public const string PERCENT = "%";
     }
 
     public class RequestScrapCollecting
@@ -145,21 +153,4 @@ namespace SCSS.Utilities.Constants
         public const string VN_CULTURE = "vi-VN";
     }
 
-    public class DateCodeFormat
-    {
-        public const string DDMMYYYY = "{0}{1}{2}";
-        public const string DDMM = "{0}{1}";
-    }
-
-    public class TimeSpanCodeFormat
-    {
-        public const string HHMMSS = "{0}{1}{2}";
-        public const string HHMM = "{0}{1}";
-    }
-
-    public class GenerationCodeFormat
-    {
-        public const string COLLECTING_REQUEST_CODE = "SCR{0}{1}{2}{3}";
-        public const string PROMOTION_CODE = "{0}-{1}{2}{3}";
-    }
 }

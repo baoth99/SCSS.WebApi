@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SCSS.Application.Admin.Interfaces;
+using SCSS.FirebaseService.Interfaces;
+using SCSS.FirebaseService.Models;
+using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
+using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConstants;
 using System;
@@ -15,6 +19,9 @@ namespace SCSS.WebApi.Controllers.AdminControllers
     {
         #region Services
 
+        /// <summary>
+        /// The dashboard service
+        /// </summary>
         private readonly IDashboardService _dashboardService;
 
         #endregion
@@ -27,5 +34,6 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         }
 
         #endregion
+
     }
 }

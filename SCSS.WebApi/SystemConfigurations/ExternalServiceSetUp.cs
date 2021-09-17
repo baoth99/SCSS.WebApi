@@ -6,6 +6,8 @@ using SCSS.AWSService.Implementations;
 using SCSS.AWSService.Interfaces;
 using SCSS.FirebaseService.Implementations;
 using SCSS.FirebaseService.Interfaces;
+using SCSS.MapService.Implementations;
+using SCSS.MapService.Interfaces;
 using SCSS.TwilioService.Implementations;
 using SCSS.TwilioService.Interfaces;
 using SCSS.Utilities.Configurations;
@@ -58,6 +60,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<ICacheService, CacheService>();
 
             // Goong Map
+            services.AddScoped<IMapDistanceMatrixService, MapDistanceMatrixService>();
 
             #endregion
         }

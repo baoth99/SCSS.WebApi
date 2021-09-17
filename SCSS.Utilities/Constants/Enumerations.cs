@@ -37,4 +37,13 @@
     {
         ImageSlider
     }
+
+    public enum Vehicle
+    {
+        car,
+        bike,
+        taxi,
+        truck,
+        hd // for ride hailing vehicles
+    }
 }

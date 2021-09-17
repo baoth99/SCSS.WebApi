@@ -276,5 +276,24 @@ namespace SCSS.Utilities.Extensions
         }
 
         #endregion
+
+        #region Get Day Of Week
+
+        /// <summary>
+        /// Gets the day of week.
+        /// </summary>
+        /// <param name="dateTime">The date time.</param>
+        /// <returns></returns>
+        public static int? GetDayOfWeek(this DateTime? dateTime)
+        {
+            if (!dateTime.HasValue)
+            {
+                return null;
+            }
+            var dayOfWeek = dateTime.Value.DayOfWeek;
+            return (int)dayOfWeek;
+        }
+
+        #endregion
     }
 }

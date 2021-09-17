@@ -11,6 +11,9 @@ namespace SCSS.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
+        [MaxLength(155)]
+        public string AddressName { get; set; }
+
         [MaxLength(255)]
         public string Address { get; set; }
 

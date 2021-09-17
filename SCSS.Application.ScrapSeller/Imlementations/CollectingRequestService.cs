@@ -69,7 +69,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             if (errorList.Any())
             {
-                return BaseApiResponse.Error(SystemMessageCode.DataInvalid,errorList);
+                return BaseApiResponse.Error(SystemMessageCode.DataInvalid, errorList);
             }
 
             var sellerAccountId = UserAuthSession.UserSession.Id;
@@ -78,6 +78,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             var locationEntity = new Location()
             {
                 Address = model.Address,
+                AddressName = model.AddressName,
                 Latitude = model.Latitude,
                 Longitude = model.Longtitude
             };

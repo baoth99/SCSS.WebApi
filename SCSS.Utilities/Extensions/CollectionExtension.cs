@@ -16,12 +16,12 @@ namespace SCSS.Utilities.Extensions
 
         public static string ToStringFormat(this List<string> list, string sign)
         {
-            return String.Join(sign, list);
+            return string.Join(sign, list);
         }
 
         public static string ToStringFormat(this IEnumerable<string> enumerable, string sign)
         {
-            return String.Join(sign, enumerable.ToList());
+            return string.Join(sign, enumerable.ToList());
         }
     }
 }
