@@ -16,6 +16,7 @@
         {
             public const string RegisterDealerAccount = Account + "/register";
             public const string UpdateDealerAccount = Account + "/update";
+            public const string UpdateDeviceId = Account + "/device-id";
             public const string UploadImage = Account + "/upload-image";
         }
 

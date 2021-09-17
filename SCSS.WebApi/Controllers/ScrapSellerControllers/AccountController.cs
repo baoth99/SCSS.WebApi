@@ -110,7 +110,21 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
 
         #region Update DeviceId
 
-
+        /// <summary>
+        /// Updates the device identifier.
+        /// </summary>
+        /// <param name="deviceId">The device identifier.</param>
+        /// <returns></returns>
+        [HttpPut]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapSellerApiUrlDefinition.AccountApiUrl.UpdateDeviceId)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> UpdateDeviceId([FromBody] string deviceId)
+        {
+            return await _accountService.UpdateDeviceId(deviceId);
+        }
 
         #endregion
     }
