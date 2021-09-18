@@ -111,9 +111,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                 x.DistanceVal,
                                                                 x.DistanceText,
                                                                 SellerName = y.Name,
-                                                            }).OrderBy(x => x.DistanceVal).AsQueryable();
+                                                            }).OrderBy(x => x.DistanceVal);
 
-            var totalRecord = await receivingData.CountAsync();
+            var totalRecord = receivingData.Count();
 
             var dataResult = receivingData.Select(x => new CollectingRequestReceivingViewModel()
             {

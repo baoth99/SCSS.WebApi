@@ -131,7 +131,7 @@ namespace SCSS.Utilities.Constants
         public const string CreatedTimeDESC = "CreatedTime DESC";
     }
 
-    public class SignConstant
+    public class MarkConstant
     {
         public const string NO_WHITE_SPACE = "";
         public const string WHITE_SPACE = " ";
@@ -142,6 +142,7 @@ namespace SCSS.Utilities.Constants
         public const string EXCLAMATION_MARK = "!";
         public const string HYPHEN = "-";
         public const string PERCENT = "%";
+        public const string SLASH = "|";
     }
 
     public class RequestScrapCollecting

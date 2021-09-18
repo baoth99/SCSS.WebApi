@@ -131,7 +131,7 @@ namespace SCSS.MapService
         private string GetDestinationCoordinates(List<DestinationCoordinateModel> destinationItems)
         {
             var destinationCoordinates =  destinationItems.Select(x => string.Format(GoongMapRestApiFormat.DestinationCoordinate, x.DestinationLatitude, x.DestinationLongtitude));
-            return destinationCoordinates.ToStringFormat(SignConstant.PERCENT);
+            return destinationCoordinates.ToStringFormat(MarkConstant.SLASH);
         }
 
         #endregion

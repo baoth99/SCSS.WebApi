@@ -220,9 +220,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                         x.Latitude,
                                                         x.Longitude,
                                                         SellerName = y.Name
-                                                    }).OrderBy(x => x.DistanceVal).AsQueryable();
+                                                    }).OrderBy(x => x.DistanceVal);
 
-            var totalRecord = await collectingRequestData.CountAsync();
+            var totalRecord = collectingRequestData.Count();
 
             // Convert query data  to response data
             var resData = collectingRequestData.Select(x => new CollectingRequestViewModel()

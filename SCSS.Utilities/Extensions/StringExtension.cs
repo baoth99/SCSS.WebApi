@@ -55,12 +55,23 @@ namespace SCSS.Utilities.Extensions
 
         public static string RemoveWhiteSpace(this string input)
         {
-            return input.Replace(SignConstant.WHITE_SPACE, SignConstant.NO_WHITE_SPACE);
+            return input.Replace(MarkConstant.WHITE_SPACE, MarkConstant.NO_WHITE_SPACE);
         }
 
         public static T ToMapperObject<T>(this string jsonString)
         {
             return JsonConvert.DeserializeObject<T>(jsonString);
+        }
+
+        public static string RemoveSignVietnameseString(this string str)
+        {
+            var vietnameseSigns = CollectionConstants.VietnameseSigns;
+            for (int i = 1; i < vietnameseSigns.Length; i++)
+            {
+                for (int j = 0; j < vietnameseSigns[i].Length; j++)
+                    str = str.Replace(vietnameseSigns[i][j], vietnameseSigns[0][i - 1]);
+            }
+            return str;
         }
     }
 }

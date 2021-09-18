@@ -56,7 +56,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel),HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel),HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel),HttpStatusCodes.Unauthorized)]
         [Route(ScrapCollectorApiUrlDefinition.AccountApiUrl.RegisterCollectorAccount)]
         public async Task<BaseApiResponseModel> RegisterScrapCollectorAccount(CollectorAccountRegisterRequestModel model)
@@ -75,7 +75,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapCollectorApiUrlDefinition.AccountApiUrl.UploadImage)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
@@ -97,7 +97,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapCollectorApiUrlDefinition.AccountApiUrl.UpdateCollectorAccount)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
@@ -117,7 +117,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapCollectorApiUrlDefinition.AccountApiUrl.UpdateDeviceId)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]

@@ -41,7 +41,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapCollectorApiUrlDefinition.DataApiUrl.GetImage)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]

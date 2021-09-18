@@ -5,6 +5,7 @@ namespace SCSS.WebApi.SystemConstants
     {
         private const string ScrapCategory = "scrap-category";
         private const string Account = "collector/account";
+        private const string DealerInformation = "dealer-info";
         private const string CollectingRequest = "collecting-request";
         private const string Hub = "/hubs/collector";
         public static class AccountApiUrl
@@ -20,6 +21,11 @@ namespace SCSS.WebApi.SystemConstants
         {
             public const string CollectingRequest = Hub;
             
+        }
+
+        public static class DealerInformationApiUrl
+        {
+            public const string Search = DealerInformation + "/search";
         }
 
         public static class CollectingRequestApiUrl
