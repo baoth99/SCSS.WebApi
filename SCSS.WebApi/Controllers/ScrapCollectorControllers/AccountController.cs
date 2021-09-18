@@ -90,15 +90,20 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
 
         #region Update Scrap Collector Account
 
+        /// <summary>
+        /// Updates the scrap collector account.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapCollectorApiUrlDefinition.AccountApiUrl.UpdateCollectorAccount)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> UpdateScrapCollectorAccount()
+        public async Task<BaseApiResponseModel> UpdateScrapCollectorAccount([FromBody] CollectorAccountUpdateRequestModel model)
         {
-            return null;
+            return await _accountService.UpdateAccountInformation(model);
         }
 
         #endregion

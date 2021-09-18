@@ -29,8 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AppData\SqlCommands\" />
     <Folder Include="BackgroundTasks\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="AppData\SqlCommands\CollectorCommands\CollectingRequestCommands\GetCollectingRequestSQL.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

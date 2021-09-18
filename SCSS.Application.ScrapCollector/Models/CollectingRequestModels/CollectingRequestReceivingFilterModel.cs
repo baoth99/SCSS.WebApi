@@ -1,6 +1,7 @@
-﻿namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
+﻿
+namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
 {
-    public class CollectingRequestFilterModel
+    public class CollectingRequestReceivingFilterModel
     {
         public int ScreenSize { get; set; }
 
@@ -9,5 +10,6 @@
         public decimal? OriginLongtitude { get; set; }
 
         public string FilterDate { get; set; }
+
     }
 }

@@ -6,6 +6,8 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
     {
         public Guid Id { get; set; }
 
+        public string CollectingRequestCode { get; set; }
+
         public string SellerName { get; set; }
 
         // Date
@@ -29,5 +31,7 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
         public bool IsBulky { get; set; }
 
         public float Distance { get; set; }
+
+        public string DistanceText { get; set; }
     }
 }

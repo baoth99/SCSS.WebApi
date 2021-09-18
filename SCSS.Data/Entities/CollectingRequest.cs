@@ -28,6 +28,7 @@ namespace SCSS.Data.Entities
         public Guid? SellerAccountId { get; set; }
 
         [ForeignKey("Account")]
+        [ConcurrencyCheck]
         public Guid? CollectorAccountId { get; set; }
 
         public bool IsBulky { get; set; }
@@ -38,6 +39,7 @@ namespace SCSS.Data.Entities
 
         public string CancelReason { get; set; }
 
+        [ConcurrencyCheck]
         public int? Status { get; set; }
 
         public bool IsDeleted { get; set; }

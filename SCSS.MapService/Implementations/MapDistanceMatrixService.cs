@@ -33,8 +33,13 @@ namespace SCSS.MapService.Implementations
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public async Task<List<DistanceMatrixCoordinateResponseModel>> GetDistanceFromOriginToMultiDestinationsCR(DistanceMatrixCoordinateRequestModel model)
+        public async Task<List<DistanceMatrixCoordinateResponseModel>> GetDistanceFromOriginToMultiDestinations(DistanceMatrixCoordinateRequestModel model)
         {
+            if (!model.DestinationItems.Any())
+            {
+                return CollectionConstants.Empty<DistanceMatrixCoordinateResponseModel>();
+            }
+
             // Get Request URL 
             var requestUri = GetDistanceMatrixEndpoint(model);
 

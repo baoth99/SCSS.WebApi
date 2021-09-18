@@ -14,6 +14,15 @@ namespace SCSS.Utilities.Extensions
             return JsonConvert.SerializeObject(list);
         }
 
+        public static string ToJson<K, V>(this Dictionary<K, V> dictionary)
+        {
+            if (!dictionary.Any() || dictionary == null)
+            {
+                return null;
+            }
+            return JsonConvert.SerializeObject(dictionary);
+        }
+
         public static string ToStringFormat(this List<string> list, string sign)
         {
             return string.Join(sign, list);

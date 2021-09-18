@@ -1,16 +1,15 @@
 ﻿using System;
 
+
 namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
 {
-    public class CollectingRequestDetailViewModel
+    public class CollectingRequestReceivingViewModel
     {
         public Guid Id { get; set; }
 
         public string CollectingRequestCode { get; set; }
 
         public string SellerName { get; set; }
-
-        public string ScrapImageUrl { get; set; }
 
         // Date
         public int? DayOfWeek { get; set; }
@@ -22,17 +21,14 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
         public string ToTime { get; set; }
 
         // Location
-
         public string CollectingAddressName { get; set; }
 
         public string CollectingAddress { get; set; }
 
-        public decimal? Latitude { get; set; }
-
-        public decimal? Longtitude { get; set; }
-
         public bool IsBulky { get; set; }
 
-        public string Note { get; set; }
+        public float Distance { get; set; }
+
+        public string DistanceText { get; set; }
     }
 }

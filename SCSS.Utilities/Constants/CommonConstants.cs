@@ -5,6 +5,7 @@ namespace SCSS.Utilities.Constants
     public class NumberConstant
     {
         public const int Zero = 0;
+        public const int Ten = 10;
         public const int OneThousand = 1000;
     }
 
@@ -99,6 +100,7 @@ namespace SCSS.Utilities.Constants
         public const int CANCEL_BY_COLLECTOR = 3;
         public const int APPROVED = 4;
         public const int COMPLETED = 5;
+        public const int CANCEL_BY_SYSTEM = 6;
     }
 
     public class DealerType

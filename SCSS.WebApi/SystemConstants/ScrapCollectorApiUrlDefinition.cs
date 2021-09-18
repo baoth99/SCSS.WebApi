@@ -5,7 +5,8 @@ namespace SCSS.WebApi.SystemConstants
     {
         private const string ScrapCategory = "scrap-category";
         private const string Account = "collector/account";
-
+        private const string CollectingRequest = "collecting-request";
+        private const string Hub = "/hubs/collector";
         public static class AccountApiUrl
         {
             public const string RegisterCollectorAccount = Account + "/register";
@@ -13,6 +14,23 @@ namespace SCSS.WebApi.SystemConstants
             public const string UpdateDeviceId = Account + "/device-id";
             public const string UploadImage = Account + "/upload-image";
 
+        }
+
+        public static class HubApiUrl
+        {
+            public const string CollectingRequest = Hub;
+            
+        }
+
+        public static class CollectingRequestApiUrl
+        {
+            public const string Get = CollectingRequest + "/get";
+            public const string Detail = CollectingRequest + "/detail";
+            public const string Receive = CollectingRequest + "/receive";
+            public const string Reject = CollectingRequest + "/reject";
+            public const string GetReceivedList = CollectingRequest + "/receive/get";
+            public const string GetReceivedDetail = CollectingRequest + "/receive/detail";
+            public const string Cancel = CollectingRequest + "/cancel";
         }
 
         public static class DataApiUrl

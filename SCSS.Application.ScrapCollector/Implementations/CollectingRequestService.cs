@@ -18,10 +18,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using SCSS.FirebaseService.Models;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace SCSS.Application.ScrapCollector.Implementations
 {
-    public class CollectingRequestService : BaseService, ICollectingRequestService
+    public partial class CollectingRequestService : BaseService, ICollectingRequestService
     {
         #region Repositories
 
@@ -101,17 +103,21 @@ namespace SCSS.Application.ScrapCollector.Implementations
         {
             var filterDate = model.FilterDate.ToDateTime();
 
-            if (filterDate.IsCompareDateTimeLessThan(DateTimeInDay.DATE_NOW))
+            if (filterDate != null)
             {
-                filterDate = DateTimeInDay.DATE_NOW;
+                if (filterDate.IsCompareDateTimeLessThan(DateTimeInDay.DATE_NOW))
+                {
+                    filterDate = DateTimeInDay.DATE_NOW;
+                }
             }
 
-            var collectingRequestdataQuery = _collectingRequestRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(filterDate) || x.CollectingRequestDate.IsCompareDateTimeEqual(filterDate)) &&
-                                                                                                    x.Status == CollectingRequestStatus.PENDING && ValidatorUtil.IsNull(x.CollectorAccountId))                                                       
+            var collectingRequestdataQuery = _collectingRequestRepository.GetMany(x => (ValidatorUtil.IsBlank(filterDate) || x.CollectingRequestDate.Value.Date.CompareTo(filterDate.Value.Date) == NumberConstant.Zero) &&
+                                                                                                    x.Status == CollectingRequestStatus.PENDING && x.CollectorAccountId == null)                                                       
                                                         .Join(_locationRepository.GetAll(), x => x.LocationId, y => y.Id,
                                                                 (x, y) => new
                                                                 {
                                                                     CollectingRequestId = x.Id,
+                                                                    x.CollectingRequestCode,
                                                                     x.CollectingRequestDate,
                                                                     x.SellerAccountId,
                                                                     x.TimeFrom,
@@ -127,11 +133,13 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 return BaseApiResponse.OK(CollectionConstants.Empty<CollectingRequestViewModel>());
             }
 
+            // Get Collecting Request List is pending that Collector rejected
             var collectingRequestRejection = _collectingRequestRejectionRepository.GetManyAsNoTracking(x => x.CollectorId.Equals(UserAuthSession.UserSession.Id))
                                                                                   .Join(collectingRequestdataQuery, x => x.CollectingRequestId, y => y.CollectingRequestId,
                                                                                        (x, y) => new
                                                                                        {
                                                                                            y.CollectingRequestId,
+                                                                                           y.CollectingRequestCode,
                                                                                            y.CollectingRequestDate,
                                                                                            y.SellerAccountId,
                                                                                            y.TimeFrom,
@@ -142,8 +150,10 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                            y.Longitude,
                                                                                            y.IsBulky
                                                                                        });
+            // Check if [collectingRequestRejection] is any 
             if (collectingRequestRejection.Any())
             {
+                // Exclude [collectingRequestRejection] from [collectingRequestdataQuery] List
                 collectingRequestdataQuery = collectingRequestdataQuery.Except(collectingRequestRejection);
             }
 
@@ -162,25 +172,26 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             var mapDistanceMatrixCoordinate = new DistanceMatrixCoordinateRequestModel()
             {
-                OriginLatitude = model.GeocodeLatitude.Value,
-                OriginLongtitude = model.GeocodeLongtitude.Value,
+                OriginLatitude = model.OriginLatitude.Value,
+                OriginLongtitude = model.OriginLongtitude.Value,
                 DestinationItems = destinationCoordinateRequest,
                 Vehicle = Vehicle.hd
             };
 
             // Call to Goong Map Service to get distance between collector location and collecting request location
-            var destinationDistancesRes = await _mapDistanceMatrixService.GetDistanceFromOriginToMultiDestinationsCR(mapDistanceMatrixCoordinate);
+            var destinationDistancesRes = await _mapDistanceMatrixService.GetDistanceFromOriginToMultiDestinations(mapDistanceMatrixCoordinate);
 
-            // Sort the distance list ascending 
-            var destinationDistancesSort = destinationDistancesRes.OrderBy(x => x.DistanceVal).Take(model.ScreenSize);
 
             // Get Seller Role 
             var sellerRoleId = UnitOfWork.RoleRepository.Get(x => x.Key.Equals(AccountRole.SELLER)).Id;
 
-            var collectingRequestData = destinationDistancesSort.Join(collectingRequestdataQuery, x => x.DestinationId, y => y.CollectingRequestId,
+            model.ScreenSize = model.ScreenSize <= NumberConstant.Zero ? NumberConstant.Ten : model.ScreenSize;
+
+            var collectingRequestData = destinationDistancesRes.Take(model.ScreenSize).Join(collectingRequestdataQuery, x => x.DestinationId, y => y.CollectingRequestId,
                                                    (x, y) => new
                                                    {
                                                        y.CollectingRequestId,
+                                                       y.CollectingRequestCode,
                                                        y.CollectingRequestDate,
                                                        y.TimeFrom,
                                                        y.TimeTo,
@@ -197,28 +208,33 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                     (x, y) => new
                                                     {
                                                         x.CollectingRequestId,
+                                                        x.CollectingRequestCode,
                                                         CollectingAddress = x.Address,
                                                         CollectingRequestAddressName = x.AddressName,
                                                         x.CollectingRequestDate,
-                                                        Distance = x.DistanceVal,
+                                                        x.DistanceVal,
+                                                        x.DistanceText,
                                                         FromTime = x.TimeFrom,
                                                         ToTime = x.TimeTo,
                                                         x.IsBulky,
                                                         x.Latitude,
                                                         x.Longitude,
                                                         SellerName = y.Name
-                                                    }).AsQueryable();
+                                                    }).OrderBy(x => x.DistanceVal).AsQueryable();
 
             var totalRecord = await collectingRequestData.CountAsync();
 
+            // Convert query data  to response data
             var resData = collectingRequestData.Select(x => new CollectingRequestViewModel()
             {
                 Id = x.CollectingRequestId,
+                CollectingRequestCode = x.CollectingRequestCode,
                 CollectingAddress = x.CollectingAddress,
                 CollectingAddressName = x.CollectingRequestAddressName,
                 CollectingRequestDate = x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
                 DayOfWeek = x.CollectingRequestDate.GetDayOfWeek(),
-                Distance = x.Distance,
+                Distance = x.DistanceVal,
+                DistanceText = x.DistanceText,
                 FromTime = x.FromTime.ToStringFormat(TimeSpanFormat.HH_MM),
                 ToTime = x.ToTime.ToStringFormat(TimeSpanFormat.HH_MM),
                 IsBulky = x.IsBulky,
@@ -239,55 +255,87 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> ReceiveCollectingRequest(Guid id)
+        public async Task<Tuple<Guid?, Guid, string>> ReceiveCollectingRequest(Guid id)
         {
             var collectingRequestEntity = _collectingRequestRepository.GetAsNoTracking(x => x.Id.Equals(id) &&
                                                                                             x.Status == CollectingRequestStatus.PENDING &&
-                                                                                            ValidatorUtil.IsNull(x.CollectorAccountId));
+                                                                                            x.CollectorAccountId == null);
             if (collectingRequestEntity == null)
             {
-                return BaseApiResponse.NotFound();
+                return null;
             }
 
             collectingRequestEntity.CollectorAccountId = UserAuthSession.UserSession.Id;
             collectingRequestEntity.Status = CollectingRequestStatus.APPROVED;
-
             _collectingRequestRepository.Update(collectingRequestEntity);
 
-            if (!_collectingRequestRepository.IsExisted(x => x.Id.Equals(id) && x.Status == CollectingRequestStatus.PENDING && ValidatorUtil.IsNull(x.CollectorAccountId)))
+            try
             {
-                return BaseApiResponse.NotFound();
+                await UnitOfWork.CommitAsync();
+                return new Tuple<Guid?, Guid, string>(collectingRequestEntity.SellerAccountId, id, collectingRequestEntity.CollectingRequestCode);
+
             }
-
-            await UnitOfWork.CommitAsync();
-
-            await SendNotificationToSeller(collectingRequestEntity.SellerAccountId);
-
-            return BaseApiResponse.OK();
+            catch (Exception)
+            {
+                return null;
+            }
         }
+
+        #endregion Receive the Collecting Request
+
+        #region Send Notification To Seller
 
         /// <summary>
         /// Sends the notification to seller.
         /// </summary>
         /// <param name="sellerId">The seller identifier.</param>
-        private async Task SendNotificationToSeller(Guid? sellerId)
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> SendNotificationToSeller(Guid? sellerId, string collectingRequestCode)
+        {
+            string title = NotificationMessage.CollectingRequestReceviedTitle(collectingRequestCode);
+            string body = ""; // TODO: Body
+            await SendAndSaveNotification(sellerId, title, body);
+            return BaseApiResponse.OK();
+        }
+
+        #endregion
+
+        #region Send And Save Notification
+
+        /// <summary>
+        /// Sends the and save notification.
+        /// </summary>
+        /// <param name="sellerId">The seller identifier.</param>
+        /// <param name="title">The title.</param>
+        /// <param name="body">The body.</param>
+        /// <param name="dictionaryData">The dictionary data.</param>
+        private async Task SendAndSaveNotification(Guid? sellerId, string title, string body, Dictionary<string, string> dictionaryData = null)
         {
             var sellerAccount = _accountRepository.GetById(sellerId);
 
-            // TODO:
             var notificationMessage = new NotificationRequestModel()
             {
-                Title = "",
-                Body = "",
+                Title = title,
+                Body = body,
                 DeviceId = sellerAccount.DeviceId
             };
+
+            if (dictionaryData != null)
+            {
+                if (dictionaryData.Any())
+                {
+                    var data = new ReadOnlyDictionary<string, string>(dictionaryData);
+                    notificationMessage.Data = data;
+                }
+            }
+
             await _FCMService.PushNotification(notificationMessage);
 
             var notificationEntity = new Notification()
             {
                 Title = notificationMessage.Title,
                 Body = notificationMessage.Body,
-                // TODO: DataCustom
+                DataCustom = dictionaryData.ToJson<string, string>(),
                 AccountId = sellerId,
                 IsRead = BooleanConstants.FALSE
             };
@@ -296,7 +344,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             await UnitOfWork.CommitAsync();
         }
-
 
         #endregion
 
@@ -333,13 +380,49 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion
 
-        #region View Collecting Request Detail
+        #region View Collecting Request Detail to Receive
 
+        /// <summary>
+        /// Gets the collecting request detail.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         public async Task<BaseApiResponseModel> GetCollectingRequestDetail(Guid id)
         {
-            return BaseApiResponse.OK();
-        }
+            var collectingRequestEntity = await _collectingRequestRepository.GetAsyncAsNoTracking(x => x.Id.Equals(id) &&
+                                                                                                       x.Status == CollectingRequestStatus.PENDING &&
+                                                                                                       x.CollectorAccountId == null);
 
+            if (collectingRequestEntity == null)
+            {
+                return BaseApiResponse.NotFound();
+            }
+
+            var locationEntity = _locationRepository.GetById(collectingRequestEntity.LocationId);
+            var accountSellerName = _accountRepository.GetById(collectingRequestEntity.SellerAccountId).Name;
+
+            var responseEntity = new CollectingRequestDetailViewModel()
+            {
+                Id = collectingRequestEntity.Id,
+                CollectingRequestCode = collectingRequestEntity.CollectingRequestCode,
+                ScrapImageUrl = collectingRequestEntity.ScrapImageUrl,
+                SellerName = accountSellerName,
+                // Date
+                DayOfWeek = collectingRequestEntity.CollectingRequestDate.GetDayOfWeek(),
+                CollectingRequestDate = collectingRequestEntity.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
+                FromTime = collectingRequestEntity.TimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
+                ToTime = collectingRequestEntity.TimeTo.ToStringFormat(TimeSpanFormat.HH_MM),
+                // Location
+                CollectingAddress = locationEntity.Address,
+                CollectingAddressName = locationEntity.AddressName,
+                Latitude = locationEntity.Latitude,
+                Longtitude = locationEntity.Longitude,
+                IsBulky = collectingRequestEntity.IsBulky,
+                Note = collectingRequestEntity.Note,
+            };
+
+            return BaseApiResponse.OK(responseEntity);
+        }
 
         #endregion
     }

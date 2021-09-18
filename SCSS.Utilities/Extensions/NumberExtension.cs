@@ -22,5 +22,10 @@ namespace SCSS.Utilities.Extensions
         {
             return val == NumberConstant.Zero ? NumberConstant.Zero : val * NumberConstant.OneThousand;
         }
+
+        public static float MeterToKilometer(this float val)
+        {
+            return val == NumberConstant.Zero ? NumberConstant.Zero : (val / NumberConstant.OneThousand);
+        }
     }
 }

@@ -151,7 +151,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             // Get Collecting Request from ID, sellerAccountId and Status = CollectingRequestStatus.PENDING (1)
             var collectingRequestEntity = await _collectingRequestRepository.GetAsyncAsNoTracking(x => x.Id.Equals(model.Id) &&
                                                                                                  x.SellerAccountId.Equals(UserAuthSession.UserSession.Id) &&
-                                                                                                 x.Status == CollectingRequestStatus.PENDING);
+                                                                                                 x.Status == CollectingRequestStatus.PENDING &&
+                                                                                                 x.CollectorAccountId == null);
 
             // Check Collecting Request existed
             if (collectingRequestEntity == null)
@@ -163,10 +164,16 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             collectingRequestEntity.Status = CollectingRequestStatus.CANCEL_BY_SELLER;
             collectingRequestEntity.CancelReason = model.CancelReason;
 
-            _collectingRequestRepository.Update(collectingRequestEntity);
-
-            // Commit Data to Database
-            await UnitOfWork.CommitAsync();
+            try
+            {
+                _collectingRequestRepository.Update(collectingRequestEntity);
+                // Commit Data to Database
+                await UnitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                return BaseApiResponse.Error();
+            }
 
             return BaseApiResponse.OK();
         }

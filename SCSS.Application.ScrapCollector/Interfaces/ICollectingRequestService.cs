@@ -1,9 +1,6 @@
 ﻿using SCSS.Application.ScrapCollector.Models.CollectingRequestModels;
 using SCSS.Utilities.ResponseModel;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapCollector.Interfaces
@@ -22,7 +19,14 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> ReceiveCollectingRequest(Guid id);
+        Task<Tuple<Guid?, Guid, string>> ReceiveCollectingRequest(Guid id);
+
+        /// <summary>
+        /// Sends the notification to seller.
+        /// </summary>
+        /// <param name="sellerId">The seller identifier.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> SendNotificationToSeller(Guid? sellerId, string collectingRequestCode);
 
         /// <summary>
         /// Rejects the collecting request.
@@ -37,5 +41,27 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
         Task<BaseApiResponseModel> GetCollectingRequestDetail(Guid id);
+
+        /// <summary>
+        /// Gets the collecting request received list.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetCollectingRequestReceivedList(CollectingRequestReceivingFilterModel model);
+
+        /// <summary>
+        /// Gets the collecting request detail received.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetCollectingRequestDetailReceived(Guid id);
+
+        /// <summary>
+        /// Cancels the collecting request received.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> CancelCollectingRequestReceived(CollectingRequestReceivedCancelModel model);
+
     }
 }

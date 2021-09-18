@@ -226,7 +226,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
             return BaseApiResponse.OK();
         }
 
-        #endregion
+        #endregion Update Dealer Account
 
         #region  Update DeviceId
 

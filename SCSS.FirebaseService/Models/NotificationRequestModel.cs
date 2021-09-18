@@ -12,7 +12,7 @@ namespace SCSS.FirebaseService.Models
 
         public string Body { get; set; }
 
-        public IReadOnlyDictionary<string, string> Data { get; set; } = null ;
+        public IReadOnlyDictionary<string, string> Data { get; set; }
 
         public string DeviceId { get; set; }
 

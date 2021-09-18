@@ -114,18 +114,54 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #region Update Account Information
 
+        /// <summary>
+        /// Updates the account information.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         public async Task<BaseApiResponseModel> UpdateAccountInformation(CollectorAccountUpdateRequestModel model)
         {
-            var entity = _accountRepository.GetById(model.Id);
+            var id = UserAuthSession.UserSession.Id;
+
+            var entity = _accountRepository.GetById(id);
+
             if (entity == null)
             {
-                return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
+                return BaseApiResponse.NotFound();
             }
-            // TODO
+            // Send Data to IdentityServer4
+            var dictionary = new Dictionary<string, string>()
+            {
+                {"id", id.ToString() },
+                {"email", model.Email },
+                {"name", model.Name },
+                {"gender", model.Gender.ToString() },
+                {"address", entity.Address },
+                {"bithdate", model.BirthDate },
+                {"image", model.ImageUrl},
+                {"idcard", entity.IdCard },
+            };
+            // Update in ID4
+            var res = await IDHttpClientHelper.IDHttpClientPost(IdentityServer4Route.Update, ClientIdConstant.CollectorMobileApp, dictionary);
 
-            return null;
+            // Check Response from ID4
+            if (res == null)
+            {
+                return BaseApiResponse.Error(SystemMessageCode.OtherException);
+            }
+
+            entity.Name = model.Name;
+            entity.Email = model.Email;
+            entity.Gender = model.Gender;
+            entity.BirthDate = model.BirthDate.ToDateTime();
+            entity.ImageUrl = model.ImageUrl;
+
+            _accountRepository.Update(entity);
+
+            await UnitOfWork.CommitAsync();
+
+            return BaseApiResponse.OK();
         }
-
 
         #endregion
 
