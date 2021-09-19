@@ -48,7 +48,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.DataApiUrl.GetImage)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]

@@ -30,6 +30,8 @@ namespace SCSS.Data.Entities
 
         public TimeSpan? CloseTime { get; set; }
 
+        public float Rating { get; set; }
+
         public bool IsSubcribed { get; set; }
 
         public bool IsActive { get; set; }

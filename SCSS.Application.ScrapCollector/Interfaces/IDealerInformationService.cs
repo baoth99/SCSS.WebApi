@@ -7,8 +7,18 @@ namespace SCSS.Application.ScrapCollector.Interfaces
 {
     public interface IDealerInformationService
     {
+        /// <summary>
+        /// Searches the dealer information.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         Task<BaseApiResponseModel> SearchDealerInfo(DealerInformationFilterModel model);
 
-        Task<BaseApiResponseModel> GetDealerInformationDetail(Guid id);
+        /// <summary>
+        /// Gets the dealer information detail.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetDealerInformationDetail(Guid id);    
     }
 }

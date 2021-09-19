@@ -55,7 +55,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.ScrapCategoryUrl.UploadImage)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
@@ -77,7 +77,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.ScrapCategoryUrl.CheckName)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
@@ -97,7 +97,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.ScrapCategoryUrl.Create)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
@@ -117,7 +117,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.ScrapCategoryUrl.Update)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
@@ -136,7 +136,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.ScrapCategoryUrl.Get)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
@@ -156,7 +156,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.ScrapCategoryUrl.GetDetail)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
@@ -176,7 +176,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapCollectorApiUrlDefinition.ScrapCategoryUrl.Remove)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]

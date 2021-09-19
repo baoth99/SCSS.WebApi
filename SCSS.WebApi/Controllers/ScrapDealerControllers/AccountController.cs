@@ -55,7 +55,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.AccountApiUrl.UploadImage)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
@@ -78,7 +78,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.AccountApiUrl.RegisterDealerAccount)]
         public async Task<BaseApiResponseModel> RegisterScrapDealerAccount([FromForm] DealerAccountRegisterRequestModel model)
@@ -97,7 +97,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.AccountApiUrl.UpdateDealerAccount)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
@@ -117,7 +117,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.AccountApiUrl.UpdateDeviceId)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]

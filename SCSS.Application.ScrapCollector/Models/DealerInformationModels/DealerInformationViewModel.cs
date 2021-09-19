@@ -4,7 +4,7 @@ namespace SCSS.Application.ScrapCollector.Models.DealerInformationModels
 {
     public class DealerInformationViewModel
     {
-        public Guid Id { get; set; }
+        public Guid DealerId { get; set; }
 
         public string DealerName { get; set; }
 

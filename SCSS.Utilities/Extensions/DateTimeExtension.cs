@@ -1,6 +1,7 @@
 ﻿using SCSS.Utilities.Constants;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace SCSS.Utilities.Extensions
             {
                 return CommonConstants.Null;
             }
-            return dateTime.Value.ToString(format);
+            return dateTime.Value.ToString(format, CultureInfo.GetCultureInfo(Globalization.VN_CULTURE));
         }
 
         #endregion
@@ -31,18 +32,19 @@ namespace SCSS.Utilities.Extensions
         #region TimeSpan ToStringFormat
 
         /// <summary>
-        /// Converts to stringformat.
+        /// Converts to stringtimespanformat.
         /// </summary>
         /// <param name="timeSpan">The time span.</param>
         /// <param name="format">The format.</param>
+        /// <param name="culture">The culture.</param>
         /// <returns></returns>
-        public static string ToStringFormat(this TimeSpan? timeSpan, string format)
+        public static string ToStringFormat(this TimeSpan? timeSpan, string format, string culture = Globalization.VN_CULTURE)
         {
             if (!timeSpan.HasValue)
             {
                 return CommonConstants.Null;
             }
-            return timeSpan.Value.ToString(format);
+            return timeSpan.Value.ToString(format, CultureInfo.GetCultureInfo(culture));
         }
 
         #endregion
@@ -237,6 +239,20 @@ namespace SCSS.Utilities.Extensions
         public static TimeSpan? StripMilliseconds(this TimeSpan time)
         {
             return new TimeSpan(time.Hours, time.Minutes, 00);
+        }
+
+        #endregion
+
+        #region TimeSpan Strip Milliseconds
+
+        /// <summary>
+        /// Strips the milliseconds.
+        /// </summary>
+        /// <param name="time">The time.</param>
+        /// <returns></returns>
+        public static DateTime? StripSecondAndMilliseconds(this DateTime dateTime)
+        {
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 00, 00);
         }
 
         #endregion

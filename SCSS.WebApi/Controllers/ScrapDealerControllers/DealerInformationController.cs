@@ -54,7 +54,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.DealerInformationApiUrl.UploadImage)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
@@ -76,7 +76,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.DealerInformationApiUrl.GetDealerInformation)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
@@ -95,7 +95,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.DealerInformationApiUrl.GetDealerBranchInformation)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
@@ -115,7 +115,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.DealerInformationApiUrl.GetDealerBranchInformationDetail)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
@@ -135,7 +135,7 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.DealerInformationApiUrl.ChangeDealerStatus)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]

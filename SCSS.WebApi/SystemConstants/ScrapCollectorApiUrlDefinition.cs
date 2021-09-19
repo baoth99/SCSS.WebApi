@@ -8,24 +8,27 @@ namespace SCSS.WebApi.SystemConstants
         private const string DealerInformation = "dealer-info";
         private const string CollectingRequest = "collecting-request";
         private const string Hub = "/hubs/collector";
+
+
         public static class AccountApiUrl
         {
             public const string RegisterCollectorAccount = Account + "/register";
             public const string UpdateCollectorAccount = Account + "/update";
             public const string UpdateDeviceId = Account + "/device-id";
             public const string UploadImage = Account + "/upload-image";
-
         }
 
         public static class HubApiUrl
         {
             public const string CollectingRequest = Hub;
-            
         }
 
         public static class DealerInformationApiUrl
         {
             public const string Search = DealerInformation + "/search";
+            public const string Detail = DealerInformation + "/detail";
+            public const string DealerPromotion = DealerInformation + "/promotions";
+            public const string DealerPromotionDetail = DealerInformation + "/promotion-detail";
         }
 
         public static class CollectingRequestApiUrl

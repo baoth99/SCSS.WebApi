@@ -130,7 +130,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
             var toDateTimeVal = paramModel.ToDateTime.Value;
 
             // 
-            var scrapCategoryName = paramModel.ScrapCategoryName.RemoveWhiteSpace().ToUpper();
+            var scrapCategoryName = paramModel.ScrapCategoryName.RemoveWhiteSpace().RemoveSignVietnameseString().ToUpper();
 
             // Get Promotion Amount of Dealer
             var promotionAmount = await _promotionRepository.GetManyAsNoTracking(x => x.DealerAccountId.Equals(accountId)).CountAsync();
@@ -184,8 +184,8 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 AppliedScrapCategoryImageUrl = x.AppliedScrapCategoryImageUrl,
                 AppliedAmount = x.AppliedAmount,
                 BonusAmount = x.BonusAmount,
-                AppliedFromTime = x.FromTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
-                AppliedToTime = x.ToTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time)
+                AppliedFromTime = x.FromTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
+                AppliedToTime = x.ToTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy)
             }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
@@ -221,8 +221,8 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 AppliedAmount = promotion.AppliedAmount,
                 BonusAmount = promotion.BonusAmount,
                 AppliedScrapCategory = promotionScrapCategory.Name,
-                AppliedFromTime = promotion.FromTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
-                AppliedToTime = promotion.ToTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time)
+                AppliedFromTime = promotion.FromTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
+                AppliedToTime = promotion.ToTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy)
             };
 
             return BaseApiResponse.OK(dataResult);

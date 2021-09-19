@@ -20,20 +20,22 @@ namespace SCSS.Utilities.Constants
         public static DateTime DATEFROM = DateTime.Now.Date;
         public static DateTime DATETO = DateTime.Now.Date.AddHours(24);
         public static DateTime DATE_NOW = DateTime.Now.Date;
+        public static DateTime DATETIME_NOW = DateTime.Now;
         public static TimeSpan TIMESPAN_NOW = DateTime.Now.TimeOfDay;
     }
 
     public class DateTimeFormat
     {
-        public const string Format01 = "MM-dd-yyyy-hh:mm:tt";
-        public const string DD_MM_yyyy_time = "dd/MM/yyyy hh:mm tt";
-        public const string DD_MM_yyyy = "dd/MM/yyyy";
+        public const string Format01 = @"MM-dd-yyyy-hh:mm:tt";
+        public const string DD_MM_yyyy_time = @"dd/MM/yyyy hh:mm tt";
+        public const string DD_MM_yyyy = @"dd/MM/yyyy";
     }
 
     public class TimeSpanFormat
     {
-        public const string HH_MM_TT = "hh:mm tt";
-        public const string HH_MM = "hh:mm";
+        public const string HH_MM_TT = @"hh\:mm";
+        public const string HH_MM = @"hh\:mm";
+        public const string HH_MM_SS = @"hh\:mm\:ss";
     }
 
     public class CommonConstants

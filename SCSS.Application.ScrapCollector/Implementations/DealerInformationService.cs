@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SCSS.Application.ScrapCollector.Interfaces;
+﻿using SCSS.Application.ScrapCollector.Interfaces;
 using SCSS.Application.ScrapCollector.Models.DealerInformationModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
@@ -16,8 +15,8 @@ using SCSS.Utilities.ResponseModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace SCSS.Application.ScrapCollector.Implementations
 {
@@ -80,7 +79,18 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> SearchDealerInfo(DealerInformationFilterModel model)
         {
-            var dealerDataQuery = _dealerInformationRepository.GetAll().Join(_locationRepository.GetAllAsNoTracking(), x => x.LocationId, y => y.Id,
+            var dealerDataQuery = _dealerInformationRepository.GetAll().Join(_accountRepository.GetManyAsNoTracking(x => x.Status == AccountStatus.ACTIVE), x => x.DealerAccountId, y => y.Id,
+                                                                                  (x, y) => new
+                                                                                  {
+                                                                                      x.Id,
+                                                                                      x.DealerName,
+                                                                                      x.IsActive,
+                                                                                      x.LocationId,
+                                                                                      x.DealerImageUrl,
+                                                                                      x.OpenTime,
+                                                                                      x.CloseTime
+                                                                                  }) 
+                                                                        .Join(_locationRepository.GetAllAsNoTracking(), x => x.LocationId, y => y.Id,
                                                                                   (x, y) => new
                                                                                   {
                                                                                       DealerId = x.Id,
@@ -95,9 +105,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                       x.OpenTime,
                                                                                       x.CloseTime,
                                                                                   })
-                                                                              .Where(x => (ValidatorUtil.IsBlank(model.SearchWord) || 
-                                                                                           x.UnSignDealerAddress.ToLower().Contains(model.SearchWord.ToLower()) ||
-                                                                                           x.UnSignDealerName.ToLower().Contains(model.SearchWord.ToLower()))).ToList();
+                                                                         .Where(x => (ValidatorUtil.IsBlank(model.SearchWord) || 
+                                                                                      x.UnSignDealerAddress.ToLower().Contains(model.SearchWord.ToLower()) ||
+                                                                                      x.UnSignDealerName.ToLower().Contains(model.SearchWord.ToLower()))).ToList();
 
 
             if (!dealerDataQuery.Any())
@@ -143,7 +153,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             var dataResult = dealerData.Select(x => new DealerInformationViewModel()
             {
-                Id =  x.DealerId,
+                DealerId =  x.DealerId,
                 DealerName = x.DealerName,
                 DealerAddress = x.DealerAddress,
                 DealerImageUrl = x.DealerImageUrl,
@@ -164,9 +174,37 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #region Get Dealer Information Detail
 
+        /// <summary>
+        /// Gets the dealer information detail.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         public async Task<BaseApiResponseModel> GetDealerInformationDetail(Guid id)
         {
-            return BaseApiResponse.OK();
+            var dealerInformation = await _dealerInformationRepository.GetByIdAsync(id);
+
+            if (dealerInformation == null)
+            {
+                return BaseApiResponse.NotFound();
+            }
+
+            var location = _locationRepository.GetById(dealerInformation.LocationId);
+
+            var dataResult = new DealerInformationDetailViewModel()
+            {
+                DealerId = dealerInformation.Id,
+                Rating = dealerInformation.Rating,
+                DealerName = dealerInformation.DealerName,
+                OpenTime = dealerInformation.OpenTime.ToStringFormat(TimeSpanFormat.HH_MM),
+                CloseTime = dealerInformation.CloseTime.ToStringFormat(TimeSpanFormat.HH_MM),
+                DealerPhone = dealerInformation.DealerPhone,
+                DealerAddress = location.Address,
+                DealerImageUrl = dealerInformation.DealerImageUrl,
+                Latitude = location.Latitude,
+                Longtitude = location.Longitude,
+            };
+
+            return BaseApiResponse.OK(dataResult);
         }
 
         #endregion

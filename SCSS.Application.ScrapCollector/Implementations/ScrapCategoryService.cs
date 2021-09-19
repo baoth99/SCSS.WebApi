@@ -340,7 +340,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </returns>
         private async Task<bool> IsDuplicateSCName(string name)
         {
-            return await _scrapCategoryRepository.IsExistedAsync(x => x.Name.Equals(name) && x.Status == ScrapCategoryStatus.ACTIVE);
+            return await _scrapCategoryRepository.IsExistedAsync(x => x.Name.Equals(name) && x.Status == ScrapCategoryStatus.ACTIVE && x.AccountId.Equals(UserAuthSession.UserSession.Id));
         }
 
         #endregion
