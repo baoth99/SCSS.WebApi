@@ -49,6 +49,13 @@ namespace SCSS.Utilities.Constants
             Gender.MALE
         };
 
+        public static int[] PromotionStatusCollection => new int[2]
+        {
+            PromotionStatus.ACTIVE,
+            PromotionStatus.DEACTIVE
+        };
+            
+
         public static readonly string[] VietnameseSigns = new string[]
         {
             "aAeEoOuUiIdDyY",

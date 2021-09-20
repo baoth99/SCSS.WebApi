@@ -107,7 +107,8 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 FromTime = promotionFromTime,
                 ToTime = promotionToTime,
                 DealerCategoryId = model.PromotionScrapCategoryId,
-                DealerAccountId = dealerAccountId
+                DealerAccountId = dealerAccountId,
+                Status = PromotionStatus.ACTIVE
             };
 
             var entityResult = _promotionRepository.Insert(entity);
@@ -171,6 +172,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                                                         x.BonusAmount,
                                                         x.FromTime,
                                                         x.ToTime,
+                                                        x.Status
                                                     });
 
             var totalRecord = await dataQuery.CountAsync();
@@ -185,7 +187,8 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 AppliedAmount = x.AppliedAmount,
                 BonusAmount = x.BonusAmount,
                 AppliedFromTime = x.FromTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
-                AppliedToTime = x.ToTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy)
+                AppliedToTime = x.ToTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
+                Status = x.Status
             }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
@@ -227,6 +230,12 @@ namespace SCSS.Application.ScrapDealer.Implementations
 
             return BaseApiResponse.OK(dataResult);
         }
+
+        #endregion
+
+        #region Active/DeActive Promotion
+
+        // TODO:
 
         #endregion
     }

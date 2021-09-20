@@ -81,9 +81,8 @@ namespace SCSS.Utilities.Constants
 
     public class PromotionStatus
     {
-        public const int NOW = 1;
-        public const int END = 2;
-        public const int FUTURE = 3;
+        public const int ACTIVE = 1;
+        public const int DEACTIVE = 2;
     }
 
     public class Gender

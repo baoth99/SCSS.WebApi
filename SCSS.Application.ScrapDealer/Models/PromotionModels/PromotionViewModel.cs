@@ -22,5 +22,7 @@ namespace SCSS.Application.ScrapDealer.Models.PromotionModels
 
         public string AppliedToTime { get; set; }
 
+        public int? Status { get; set; }
+
     }
 }

@@ -18,6 +18,8 @@
         public const string TimeSpan = "TS0001";
         public const string DateTimeNow = "DTN0001";
         public const string TimeSpanNow = "TSN001";
+        public const string StatusInvalid = "STI001";
+
     }
 
     public class InvalidScrapCategory

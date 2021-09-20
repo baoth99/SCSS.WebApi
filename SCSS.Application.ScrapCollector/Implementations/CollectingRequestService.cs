@@ -273,7 +273,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
             {
                 await UnitOfWork.CommitAsync();
                 return new Tuple<Guid?, Guid, string>(collectingRequestEntity.SellerAccountId, id, collectingRequestEntity.CollectingRequestCode);
-
             }
             catch (Exception)
             {
