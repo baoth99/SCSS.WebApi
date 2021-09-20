@@ -15,6 +15,13 @@ namespace SCSS.Utilities.Constants
             AccountStatus.BANNING,
         };
 
+        public static readonly List<int> CollectingRequestHistory = new List<int>()
+        {
+            CollectingRequestStatus.COMPLETED,
+            CollectingRequestStatus.CANCEL_BY_COLLECTOR,
+            CollectingRequestStatus.CANCEL_BY_SYSTEM
+        };
+
         public static readonly List<string> FileS3PathCollection = new List<string>()
         {
             FileS3Path.AdminAccountImages.ToString(),

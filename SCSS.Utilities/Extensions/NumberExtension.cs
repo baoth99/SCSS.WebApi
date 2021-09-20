@@ -27,5 +27,10 @@ namespace SCSS.Utilities.Extensions
         {
             return val == NumberConstant.Zero ? NumberConstant.Zero : (val / NumberConstant.OneThousand);
         }
+
+        public static int ToIntValue(this int? val)
+        {
+            return val.HasValue ? val.Value : NumberConstant.Zero;
+        }
     }
 }

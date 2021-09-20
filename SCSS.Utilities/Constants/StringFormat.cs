@@ -20,8 +20,9 @@ namespace SCSS.Utilities.Constants
 
     public class GenerationCodeFormat
     {
-        public const string COLLECTING_REQUEST_CODE = "SCR{0}{1}{2}{3}";
+        public const string COLLECTING_REQUEST_CODE = "SCR-{0}{1}{2}{3}";
         public const string PROMOTION_CODE = "KM-{0}-{1}{2}{3}";
+        public const string SELL_COLLECT_TRASACTION_CODE = "SCT-{0}{1}";
     }
 
     public class GoongMapRestApiFormat

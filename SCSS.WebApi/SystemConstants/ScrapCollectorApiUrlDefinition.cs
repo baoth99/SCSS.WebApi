@@ -8,7 +8,7 @@ namespace SCSS.WebApi.SystemConstants
         private const string DealerInformation = "dealer-info";
         private const string CollectingRequest = "collecting-request";
         private const string Hub = "/hubs/collector";
-
+        private const string SellCollectTransaction = "transaction/sell-colect";
 
         public static class AccountApiUrl
         {
@@ -29,6 +29,14 @@ namespace SCSS.WebApi.SystemConstants
             public const string Detail = DealerInformation + "/detail";
             public const string DealerPromotion = DealerInformation + "/promotions";
             public const string DealerPromotionDetail = DealerInformation + "/promotion-detail";
+        }
+
+        public static class SellCollectTransactionApiUrl
+        {
+            public const string GetTransactionInfoReview = SellCollectTransaction + "/info-review";
+            public const string CreateTransaction = SellCollectTransaction + "/create";
+            public const string GetTransactionHistories = SellCollectTransaction + "/histories";
+            public const string GetTransactionHistoryDetail = SellCollectTransaction + "/history-detail";
         }
 
         public static class CollectingRequestApiUrl

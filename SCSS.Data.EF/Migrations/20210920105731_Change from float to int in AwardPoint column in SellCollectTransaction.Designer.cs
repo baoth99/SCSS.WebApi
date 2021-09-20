@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCSS.Data.EF;
 
 namespace SCSS.Data.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210920105731_Change from float to int in AwardPoint column in SellCollectTransaction")]
+    partial class ChangefromfloattointinAwardPointcolumninSellCollectTransaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -683,6 +685,9 @@ namespace SCSS.Data.EF.Migrations
 
                     b.Property<long?>("Total")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("TransactionCode")
+                        .HasColumnType("VARCHAR(50)");
 
                     b.Property<long?>("TransactionServiceFee")
                         .HasColumnType("bigint");

@@ -29,6 +29,7 @@ namespace SCSS.Utilities.Constants
         public const string Format01 = @"MM-dd-yyyy-hh:mm:tt";
         public const string DD_MM_yyyy_time = @"dd/MM/yyyy hh:mm tt";
         public const string DD_MM_yyyy = @"dd/MM/yyyy";
+        public const string DDMMyyyyhhmmss = @"ddMMyyyyhhmmss";
     }
 
     public class TimeSpanFormat
@@ -102,6 +103,12 @@ namespace SCSS.Utilities.Constants
         public const int APPROVED = 4;
         public const int COMPLETED = 5;
         public const int CANCEL_BY_SYSTEM = 6;
+    }
+
+    public class TransactionType
+    {
+        public const int SELL_COLLECT = 1;
+        public const int COLLECT_DEAL = 2;
     }
 
     public class DealerType

@@ -20,6 +20,9 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         /// </summary>
         private readonly IDealerInformationService _dealerInformationService;
 
+        /// <summary>
+        /// The dealer promotion service
+        /// </summary>
         private readonly IDealerPromotionService _dealerPromotionService;
 
         #endregion

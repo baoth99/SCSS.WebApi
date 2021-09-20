@@ -6,18 +6,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SCSS.Data.Entities
 {
     [Table("TransactionAwardAmount")]
-    public class TransactionAwardAmount : IHasSoftDelete
+    public class TransactionAwardAmount : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
+        public int? AppliedObject { get; set; }
+
+        public long? AppliedAmount { get; set; }
+
         public float? Amount { get; set; }
 
-        public bool IsDeleted { get; set; }
-
-        public DateTime? CreatedTime { get; set; }
-
-        public Guid? CreatedBy { get; set; }
+        public bool IsActive { get; set; }
+        
     }
 }

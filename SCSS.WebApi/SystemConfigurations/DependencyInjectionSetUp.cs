@@ -28,6 +28,8 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.Admin.Interfaces.IImageSliderService, SCSS.Application.Admin.Implementations.ImageSliderService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.IRequestRegisterService, SCSS.Application.Admin.Implementations.RequestRegisterService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.IDealerInformationService, SCSS.Application.Admin.Implementations.DealerInformationService>();
+            services.AddScoped<SCSS.Application.Admin.Interfaces.ITransactionAwardAmountService, SCSS.Application.Admin.Implementations.TransactionAwardAmountService>();
+            services.AddScoped<SCSS.Application.Admin.Interfaces.ITransactionServiceFeeService, SCSS.Application.Admin.Implementations.TransactionServiceFeeService>();
 
             #endregion Admin Application
 
@@ -38,6 +40,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.ICollectingRequestService, SCSS.Application.ScrapCollector.Implementations.CollectingRequestService>();
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IDealerInformationService, SCSS.Application.ScrapCollector.Implementations.DealerInformationService>();
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IDealerPromotionService, SCSS.Application.ScrapCollector.Implementations.DealerPromotionService>();
+            services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.ISellCollectTransactionService, SCSS.Application.ScrapCollector.Implementations.SellCollectTransactionService>();
 
             #endregion Collector Application
 

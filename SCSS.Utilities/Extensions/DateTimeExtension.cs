@@ -49,6 +49,7 @@ namespace SCSS.Utilities.Extensions
 
         #endregion
 
+
         #region Compare DateTime Greater Or Equal
 
         /// <summary>
@@ -311,5 +312,6 @@ namespace SCSS.Utilities.Extensions
         }
 
         #endregion
+        
     }
 }

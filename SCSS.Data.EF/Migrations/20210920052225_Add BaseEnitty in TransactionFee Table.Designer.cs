@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCSS.Data.EF;
 
 namespace SCSS.Data.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210920052225_Add BaseEnitty in TransactionFee Table")]
+    partial class AddBaseEnittyinTransactionFeeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -666,8 +668,8 @@ namespace SCSS.Data.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("AwardPoint")
-                        .HasColumnType("int");
+                    b.Property<float?>("AwardPoint")
+                        .HasColumnType("real");
 
                     b.Property<Guid?>("CollectingRequestId")
                         .HasColumnType("uniqueidentifier");
@@ -684,8 +686,8 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<long?>("Total")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("TransactionServiceFee")
-                        .HasColumnType("bigint");
+                    b.Property<string>("TransactionCode")
+                        .HasColumnType("VARCHAR(50)");
 
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -860,28 +862,18 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<float?>("Amount")
                         .HasColumnType("real");
 
-                    b.Property<long?>("AppliedAmount")
-                        .HasColumnType("bigint");
-
-                    b.Property<int?>("AppliedObject")
-                        .HasColumnType("int");
-
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedTime")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.ToTable("TransactionAwardAmount");
                 });

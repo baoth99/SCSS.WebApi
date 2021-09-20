@@ -22,5 +22,15 @@ namespace SCSS.Utilities.Helper
             var betweenMinutes = time2.Value.Subtract(time1.Value).TotalMinutes;
             return betweenMinutes > minutes;
         }
+
+
+        #region GetDateTime Trasaction History
+
+        public static DateTime? GetTransactionHistoryDate(int status, DateTime? transactionDate, DateTime? cancelTransactionDate)
+        {
+            return status == CollectingRequestStatus.COMPLETED ? transactionDate : cancelTransactionDate;
+        }
+
+        #endregion
     }
 }

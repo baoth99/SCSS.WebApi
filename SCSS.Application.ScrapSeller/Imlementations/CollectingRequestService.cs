@@ -123,8 +123,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <returns></returns>
         private async Task<string> GenerateCollectingRequestCode(DateTime collectingRequestDate, TimeSpan fromTime, TimeSpan toTime)
         {
-            var sellerAccountId = UserAuthSession.UserSession.Id;
-            var collectingRequestCount = await _collectingRequestRepository.GetManyAsNoTracking(x => x.SellerAccountId.Equals(sellerAccountId)).CountAsync();
+            var collectingRequestCount = await _collectingRequestRepository.GetAllAsNoTracking().CountAsync();
 
             string collectingRequestDateCode = collectingRequestDate.ToDateCode(DateCodeFormat.DDMMYYYY);
             string fromTimeCode = fromTime.ToTimeSpanCode(TimeSpanCodeFormat.HHMM);
