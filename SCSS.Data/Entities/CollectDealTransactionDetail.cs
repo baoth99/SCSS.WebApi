@@ -25,6 +25,8 @@ namespace SCSS.Data.Entities
 
         public long? Total { get; set; }
 
+        public long? Price { get; set; }
+
         public long? BonusAmount { get; set; }
 
         public bool IsDeleted { get; set; }
