@@ -24,17 +24,4 @@ namespace SCSS.Application.ScrapCollector.Models.SellCollectTransactionModels
 
         public long? Price { get; set; }
     }
-
-    public class PushAndSaveNotificationModel
-    {
-        public Guid? SellerId { get; set; }
-
-        public string DeviceId { get; set; }
-
-        public string Title { get; set; }
-
-        public string Body { get; set; }
-
-        public Dictionary<string, string> DictionaryData { get; set; }
-    }
 }

@@ -127,5 +127,25 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         }
 
         #endregion
+
+        #region Get Dealer Information Detail
+
+        /// <summary>
+        /// Gets the dealer account detail.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapDealerApiUrlDefinition.AccountApiUrl.InfoDetail)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetDealerAccountDetail()
+        {
+            return await _accountService.GetDealerAccountInfo();
+        }
+
+
+        #endregion
     }
 }

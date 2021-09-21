@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SCSS.Application.ScrapCollector.Models.CollectingRequestModels;
+﻿using SCSS.Application.ScrapCollector.Models.CollectingRequestModels;
+using SCSS.Application.ScrapCollector.Models.NotificationModels;
 using SCSS.MapService.Models;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
@@ -217,12 +217,29 @@ namespace SCSS.Application.ScrapCollector.Implementations
             }
            
             // Push Notification to notice seller that their collecting request was canceled by collector
-            var sellerId = collectingRequestEntity.SellerAccountId;
-            
-            string title = NotificationMessage.CollectingRequestCancelTitle(collectingRequestEntity.CollectingRequestCode);
-            // TODO:
-            string body = NotificationMessage.CollectingRequestCancelBody(model.CancelReason);
-            await SendAndSaveNotification(sellerId, title, body);
+            var sellerInfo = _accountRepository.GetById(collectingRequestEntity.SellerAccountId);
+
+            var notifications = new List<NotificationCreateModel>()
+            {
+                new NotificationCreateModel()
+                {
+                    AccountId = sellerInfo.Id,
+                    Body = NotificationMessage.CollectingRequestCancelBody(model.CancelReason),
+                    Title = NotificationMessage.CollectingRequestCancelTitle(collectingRequestEntity.CollectingRequestCode),
+                    DataCustom = null, // TODO:
+                    DeviceId = sellerInfo.DeviceId
+                },
+                new NotificationCreateModel()
+                {
+                    AccountId = UserAuthSession.UserSession.Id,
+                    Body = "", // TODO:
+                    Title = "", // TODO:
+                    DataCustom = null, // TODO:
+                    DeviceId = UserAuthSession.UserSession.DeviceId
+                }
+            };
+
+            await StoreAndSendManyNotifications(notifications);
 
             return BaseApiResponse.OK();
         }

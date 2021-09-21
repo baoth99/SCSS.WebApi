@@ -15,7 +15,7 @@ namespace SCSS.Application.ScrapSeller.Interfaces
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> Register(AccountRegistrationModel model);
+        Task<BaseApiResponseModel> Register(SellerAccountRegistrationModel model);
 
         /// <summary>
         /// Updates the device identifier.
@@ -29,6 +29,12 @@ namespace SCSS.Application.ScrapSeller.Interfaces
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> UpdateAccount(AccountUpdateProfileModel model);
+        Task<BaseApiResponseModel> UpdateAccount(SellerAccountUpdateProfileModel model);
+
+        /// <summary>
+        /// Gets the seller account information.
+        /// </summary>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetSellerAccountInfo();
     }
 }

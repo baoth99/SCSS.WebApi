@@ -67,14 +67,13 @@ namespace SCSS.WebApi.AuthenticationFilter
 
                 var accountId = isValid ? accountIdVal : Guid.Empty;
 
-                var account = _accountService.GetAccountDetail(accountId).Result;
+                var accountInfo = _accountService.GetAccountDetail(accountId).Result;
 
-                if (account.StatusCode == HttpStatusCodes.NotFound)
+                if (accountInfo == null)
                 {
                     context.ActionFilterResult(SystemMessageCode.TokenException, "AccountId is not valid", HttpStatusCodes.Unauthorized);
                     return;
                 }
-                var accountInfo = account.Data as AccountDetailViewModel;
 
                 if (accountInfo.Status == AccountStatus.BANNING)
                 {
@@ -96,7 +95,8 @@ namespace SCSS.WebApi.AuthenticationFilter
                     Role = accountInfo.RoleKey,
                     Name = accountInfo.Name,
                     ClientId = "SCSS-WebAdmin-FrontEnd",
-                    Phone = accountInfo.Phone
+                    Phone = accountInfo.Phone,
+                    DeviceId = accountInfo.DeviceId,
                 };
                 _authSession.SetUserInfoSession(authSessionModel);
             }
@@ -109,9 +109,7 @@ namespace SCSS.WebApi.AuthenticationFilter
 
                 var authSessionModel = JwtManager.ValidateToken(token);
 
-                var account = _accountService.GetAccountDetail(authSessionModel.Id).Result;
-
-                var accountInfo = account.Data as AccountDetailViewModel;
+                var accountInfo = _accountService.GetAccountDetail(authSessionModel.Id).Result;
 
                 if (accountInfo.Status == AccountStatus.BANNING)
                 {
@@ -123,6 +121,7 @@ namespace SCSS.WebApi.AuthenticationFilter
                     context.ActionFilterResult(SystemMessageCode.NotApproveAccountException, "Account is not approved", HttpStatusCodes.Unauthorized);
                     return;
                 }
+                accountInfo.DeviceId = accountInfo.DeviceId;
 
                 _authSession.SetUserInfoSession(authSessionModel);
             }

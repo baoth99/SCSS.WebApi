@@ -1,14 +1,9 @@
 ﻿using SCSS.Utilities.Constants;
 using SCSS.Validations.ValidationAttributes.CommonValidations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapSeller.Models.AccountModels
 {
-    public class AccountRegistrationModel
+    public class SellerAccountRegistrationModel
     {
         public string RegisterToken { get; set; }
 

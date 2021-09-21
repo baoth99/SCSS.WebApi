@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using SCSS.Utilities.Constants;
+﻿using SCSS.Utilities.Constants;
 using SCSS.Validations.ValidationAttributes.CommonValidations;
-using System;
 
 namespace SCSS.Application.ScrapSeller.Models.AccountModels
 {
-    public class AccountUpdateProfileModel
+    public class SellerAccountUpdateProfileModel
     {
         public string Name { get; set; }
 

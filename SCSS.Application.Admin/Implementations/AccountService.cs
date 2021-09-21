@@ -5,6 +5,7 @@ using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
+using SCSS.FirebaseService.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
@@ -43,7 +44,8 @@ namespace SCSS.Application.Admin.Implementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
+        /// <param name="fcmService"></param>
+        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
         {
             _accountRepository = unitOfWork.AccountRepository;
             _roleRepository = unitOfWork.RoleRepository;
@@ -109,14 +111,14 @@ namespace SCSS.Application.Admin.Implementations
         /// </summary>
         /// <param name="Id">The identifier.</param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> GetAccountDetail(Guid Id)
+        public async Task<AccountDetailViewModel> GetAccountDetail(Guid Id)
         {
             if (!_accountRepository.IsExisted(x => x.Id.Equals(Id)))
             {
-                return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
+                return null;
             }
 
-            var account = await _accountRepository.GetManyAsNoTracking(x => x.Id.Equals(Id))
+            var accountInfo = await _accountRepository.GetManyAsNoTracking(x => x.Id.Equals(Id))
                                             .Join(_roleRepository.GetAllAsNoTracking(), x => x.RoleId, y => y.Id,
                                                                                              (x, y) => new AccountDetailViewModel
                                                                                              {
@@ -134,9 +136,10 @@ namespace SCSS.Application.Admin.Implementations
                                                                                                  RoleKey = y.Key,
                                                                                                  RoleName = y.Name,
                                                                                                  Status = x.Status,
-                                                                                                 TotalPoint = x.TotalPoint
+                                                                                                 TotalPoint = x.TotalPoint,
+                                                                                                 DeviceId = x.DeviceId
                                                                                              }).FirstOrDefaultAsync();
-            return BaseApiResponse.OK(account);
+            return accountInfo;
 
         }
 

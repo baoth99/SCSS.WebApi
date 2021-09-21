@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace SCSS.Application.Admin.Models.AccountModels
+namespace SCSS.Application.ScrapCollector.Models.AccountModels
 {
-    public class AccountDetailViewModel
+    public class CollectorAccountInfoDetailViewModel
     {
         public Guid Id { get; set; }
 
@@ -38,8 +33,5 @@ namespace SCSS.Application.Admin.Models.AccountModels
         public string CreatedTime { get; set; }
 
         public int? Status { get; set; }
-
-        [JsonIgnore]
-        public string DeviceId { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SCSS.Application.Admin.Interfaces;
 using SCSS.Application.Admin.Models.AccountModels;
+using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
@@ -24,6 +25,10 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccountController"/> class.
+        /// </summary>
+        /// <param name="accountService">The account service.</param>
         public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
@@ -73,6 +78,11 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #region Get Account Detail
 
+        /// <summary>
+        /// Gets the account detail.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
@@ -81,7 +91,13 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> GetAccountDetail([FromQuery] Guid id)
         {
-            return await _accountService.GetAccountDetail(id);
+            var accountInfo = await _accountService.GetAccountDetail(id);
+            if (accountInfo == null)
+            {
+                return BaseApiResponse.NotFound();
+            }
+            return BaseApiResponse.OK(accountInfo);
+
         }
 
         #endregion

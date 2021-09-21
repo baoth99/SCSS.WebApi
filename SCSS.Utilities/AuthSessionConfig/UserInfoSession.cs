@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SCSS.Utilities.AuthSessionConfig
 {
@@ -23,5 +19,7 @@ namespace SCSS.Utilities.AuthSessionConfig
         public string Address { get; set; }
 
         public int Role { get; set; }
+
+        public string DeviceId { get; set; }
     }
 }

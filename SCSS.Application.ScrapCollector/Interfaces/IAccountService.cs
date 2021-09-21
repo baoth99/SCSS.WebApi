@@ -30,5 +30,11 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         /// <param name="model">The model.</param>
         /// <returns></returns>
         Task<BaseApiResponseModel> UpdateDeviceId(string deviceId);
+
+        /// <summary>
+        /// Gets the collector account information.
+        /// </summary>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetCollectorAccountInfo();
     }
 }

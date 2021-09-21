@@ -10,7 +10,19 @@ namespace SCSS.WebApi.SystemConstants
         private const string ImageSlider = "image-slider";
         private const string RequestRegister = "request-register";
         private const string DealerInformation = "dealer-information";
-        public static class ScrapCategoryUrl
+        private const string TransactionAwardAmount = "transaction-award";
+        private const string TransactionServiceFee = "transaction-fee";
+        public static class TransactionAwardAmountApiUrl
+        {
+            public const string Create = TransactionAwardAmount + "/create";
+        }
+
+        public static class TransactionServiceFeeApiUrl
+        {
+            public const string Create = TransactionServiceFee + "/create";
+        }
+
+        public static class ScrapCategoryApiUrl
         {
             public const string Search = ScrapCategory + "/search";
             public const string Detail = ScrapCategory + "/detail";

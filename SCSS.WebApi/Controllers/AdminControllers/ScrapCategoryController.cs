@@ -46,7 +46,7 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminApiUrlDefinition.ScrapCategoryUrl.Search)]
+        [Route(AdminApiUrlDefinition.ScrapCategoryApiUrl.Search)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> SearchScrapCategory([FromQuery] ScrapCategorySearchModel model)
         {
@@ -66,7 +66,7 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminApiUrlDefinition.ScrapCategoryUrl.Detail)]
+        [Route(AdminApiUrlDefinition.ScrapCategoryApiUrl.Detail)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> GetScrapCategory([FromQuery] Guid id)
         {

@@ -124,7 +124,27 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         public async Task<BaseApiResponseModel> UpdateDeviceId([FromBody] string deviceId)
         {
             return await _accountService.UpdateDeviceId(deviceId);
-        }   
+        }
+
+        #endregion
+
+
+        #region Get Collector Information Detail
+
+        /// <summary>
+        /// Gets the collector account information.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapCollectorApiUrlDefinition.AccountApiUrl.InfoDetail)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetCollectorAccountInfo()
+        {
+            return await _accountService.GetCollectorAccountInfo();
+        }
 
         #endregion
     }

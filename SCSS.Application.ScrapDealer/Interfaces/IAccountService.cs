@@ -26,5 +26,12 @@ namespace SCSS.Application.ScrapDealer.Interfaces
         /// <param name="model">The model.</param>
         /// <returns></returns>
         Task<BaseApiResponseModel> UpdateDeviceId(string deviceId);
+
+        /// <summary>
+        /// Gets the dealer account information.
+        /// </summary>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetDealerAccountInfo();
+
     }
 }

@@ -240,7 +240,7 @@ namespace SCSS.Data.EF
                         if (entry.Entity is Account addAccountEntity)
                         {
                             addAccountEntity.CreatedTime = DateTime.Now;
-                        }
+                        }                       
                         break;
 
                     case EntityState.Deleted:
@@ -261,6 +261,10 @@ namespace SCSS.Data.EF
                         {
                             updateAccountEntity.UpdatedBy = accountId;
                             updateAccountEntity.UpdatedTime = DateTime.Now;
+                        }
+                        if (entry.Entity is CollectingRequest modifyCollectingRequest)
+                        {
+                            entry.State = EntityState.Modified;
                         }
                         break;
                 }

@@ -59,7 +59,7 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapSellerApiUrlDefinition.AccountApiUrl.RegisterSellerAccount)]
-        public async Task<BaseApiResponseModel> RegisterScrapSellerAccount(AccountRegistrationModel model)
+        public async Task<BaseApiResponseModel> RegisterScrapSellerAccount(SellerAccountRegistrationModel model)
         {
             return await _accountService.Register(model);
         }
@@ -101,7 +101,7 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapSellerApiUrlDefinition.AccountApiUrl.UpdateSellerAccount)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> UpdateScrapSellerAccount(AccountUpdateProfileModel model)
+        public async Task<BaseApiResponseModel> UpdateScrapSellerAccount(SellerAccountUpdateProfileModel model)
         {
             return await _accountService.UpdateAccount(model);
         }
@@ -124,6 +124,25 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         public async Task<BaseApiResponseModel> UpdateDeviceId([FromBody] string deviceId)
         {
             return await _accountService.UpdateDeviceId(deviceId);
+        }
+
+        #endregion
+
+        #region Get Collector Information Detail
+
+        /// <summary>
+        /// Gets the seller account information.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapSellerApiUrlDefinition.AccountApiUrl.InfoDetail)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetSellerAccountInfo()
+        {
+            return await _accountService.GetSellerAccountInfo();
         }
 
         #endregion

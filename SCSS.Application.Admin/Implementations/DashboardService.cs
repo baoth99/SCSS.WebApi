@@ -4,6 +4,7 @@ using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
+using SCSS.FirebaseService.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.Constants;
 using System;
@@ -37,7 +38,14 @@ namespace SCSS.Application.Admin.Implementations
 
         #region Constructor
 
-        public DashboardService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DashboardService"/> class.
+        /// </summary>
+        /// <param name="unitOfWork">The unit of work.</param>
+        /// <param name="userAuthSession">The user authentication session.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="fcmService">The FCM service.</param>
+        public DashboardService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _sellCollectTransactionRepository = unitOfWork.SellCollectTransactionRepository;

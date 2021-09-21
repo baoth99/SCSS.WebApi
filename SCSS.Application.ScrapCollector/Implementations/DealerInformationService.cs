@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SCSS.FirebaseService.Interfaces;
 
 namespace SCSS.Application.ScrapCollector.Implementations
 {
@@ -60,7 +61,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="logger">The logger.</param>
         /// <param name="mapDistanceMatrixService">The map distance matrix service.</param>
         public DealerInformationService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
-                                        IMapDistanceMatrixService mapDistanceMatrixService) : base(unitOfWork, userAuthSession, logger)
+                                        IMapDistanceMatrixService mapDistanceMatrixService, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
         {
             _dealerInformationRepository = unitOfWork.DealerInformationRepository;
             _locationRepository = unitOfWork.LocationRepository;

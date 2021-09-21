@@ -17,9 +17,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SCSS.FirebaseService.Models;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using SCSS.Application.ScrapCollector.Models.NotificationModels;
 
 namespace SCSS.Application.ScrapCollector.Implementations
 {
@@ -61,11 +60,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         private readonly IMapDistanceMatrixService _mapDistanceMatrixService;
 
-        /// <summary>
-        /// The FCM service
-        /// </summary>
-        private readonly IFCMService _FCMService;
-
         #endregion
 
         #region Constructor
@@ -79,7 +73,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="mapDistanceMatrixService">The map distance matrix service.</param>
         /// <param name="FCMService">The FCM service.</param>
         public CollectingRequestService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
-                                        IMapDistanceMatrixService mapDistanceMatrixService, IFCMService FCMService) : base(unitOfWork, userAuthSession, logger)
+                                        IMapDistanceMatrixService mapDistanceMatrixService, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _collectingRequestRejectionRepository = unitOfWork.CollectingRequestRejectionRepository;
@@ -87,7 +81,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
             _accountRepository = unitOfWork.AccountRepository;
             _notificationRepository = unitOfWork.NotificationRepository;
             _mapDistanceMatrixService = mapDistanceMatrixService;
-            _FCMService = FCMService;
         }
 
         #endregion
@@ -257,10 +250,14 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <returns></returns>
         public async Task<Tuple<Guid?, Guid, string>> ReceiveCollectingRequest(Guid id)
         {
-            var collectingRequestEntity = _collectingRequestRepository.GetAsNoTracking(x => x.Id.Equals(id) &&
-                                                                                            x.Status == CollectingRequestStatus.PENDING &&
-                                                                                            x.CollectorAccountId == null);
+            var collectingRequestEntity = _collectingRequestRepository.GetById(id);
+
             if (collectingRequestEntity == null)
+            {
+                return null;
+            }
+
+            if (collectingRequestEntity.Status != CollectingRequestStatus.PENDING || collectingRequestEntity.CollectorAccountId != null)
             {
                 return null;
             }
@@ -274,7 +271,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 await UnitOfWork.CommitAsync();
                 return new Tuple<Guid?, Guid, string>(collectingRequestEntity.SellerAccountId, id, collectingRequestEntity.CollectingRequestCode);
             }
-            catch (Exception)
+            catch (DbUpdateConcurrencyException)
             {
                 return null;
             }
@@ -282,66 +279,40 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion Receive the Collecting Request
 
-        #region Send Notification To Seller
+        #region Send Notification To User
 
         /// <summary>
         /// Sends the notification to seller.
         /// </summary>
         /// <param name="sellerId">The seller identifier.</param>
+        /// <param name="collectingRequestCode"></param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> SendNotificationToSeller(Guid? sellerId, string collectingRequestCode)
+        public async Task<BaseApiResponseModel> SendNotification(Guid? sellerId, string collectingRequestCode)
         {
-            string title = NotificationMessage.CollectingRequestReceviedTitle(collectingRequestCode);
-            string body = ""; // TODO: Body
-            await SendAndSaveNotification(sellerId, title, body);
-            return BaseApiResponse.OK();
-        }
+            var sellerInfo = _accountRepository.GetById(sellerId);
 
-        #endregion
-
-        #region Send And Save Notification
-
-        /// <summary>
-        /// Sends the and save notification.
-        /// </summary>
-        /// <param name="sellerId">The seller identifier.</param>
-        /// <param name="title">The title.</param>
-        /// <param name="body">The body.</param>
-        /// <param name="dictionaryData">The dictionary data.</param>
-        private async Task SendAndSaveNotification(Guid? sellerId, string title, string body, Dictionary<string, string> dictionaryData = null)
-        {
-            var sellerAccount = _accountRepository.GetById(sellerId);
-
-            var notificationMessage = new NotificationRequestModel()
+            var notifications = new List<NotificationCreateModel>()
             {
-                Title = title,
-                Body = body,
-                DeviceId = sellerAccount.DeviceId
-            };
-
-            if (dictionaryData != null)
-            {
-                if (dictionaryData.Any())
+                new NotificationCreateModel()
                 {
-                    var data = new ReadOnlyDictionary<string, string>(dictionaryData);
-                    notificationMessage.Data = data;
+                    AccountId = sellerInfo.Id,
+                    Title = NotificationMessage.CollectingRequestReceviedTitle(collectingRequestCode),
+                    Body = "", // TODO:
+                    DataCustom = null, // TODO:
+                    DeviceId = sellerInfo.DeviceId
+                },
+                new NotificationCreateModel()
+                {
+                    AccountId = UserAuthSession.UserSession.Id,
+                    Title = "", // TODO:
+                    Body = "", // TODO:
+                    DataCustom = null, // TODO:
+                    DeviceId = UserAuthSession.UserSession.DeviceId
                 }
-            }
-
-            await _FCMService.PushNotification(notificationMessage);
-
-            var notificationEntity = new Notification()
-            {
-                Title = notificationMessage.Title,
-                Body = notificationMessage.Body,
-                DataCustom = dictionaryData.ToJson<string, string>(),
-                AccountId = sellerId,
-                IsRead = BooleanConstants.FALSE
             };
+            await StoreAndSendManyNotifications(notifications);
 
-            _notificationRepository.Insert(notificationEntity);
-
-            await UnitOfWork.CommitAsync();
+            return BaseApiResponse.OK();
         }
 
         #endregion

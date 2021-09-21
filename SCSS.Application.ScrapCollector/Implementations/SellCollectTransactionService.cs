@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SCSS.Application.ScrapCollector.Interfaces;
+﻿using SCSS.Application.ScrapCollector.Interfaces;
+using SCSS.Application.ScrapCollector.Models.NotificationModels;
 using SCSS.Application.ScrapCollector.Models.SellCollectTransactionModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
 using SCSS.FirebaseService.Interfaces;
-using SCSS.FirebaseService.Models;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
@@ -76,16 +75,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion
 
-
-        #region Services
-
-        /// <summary>
-        /// The FCM service
-        /// </summary>
-        private readonly IFCMService _FCMService;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -94,9 +83,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        /// <param name="FCMService">The FCM service.</param>
+        /// <param name="fcmService">The FCM service.</param>
         public SellCollectTransactionService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
-                                             IFCMService FCMService) : base(unitOfWork, userAuthSession, logger)
+                                             IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
         {
             _sellCollectTransactionRepository = unitOfWork.SellCollectTransactionRepository;
             _sellCollectTransactionDetailRepository = unitOfWork.SellCollectTransactionDetailRepository;
@@ -108,7 +97,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
             _transactionServiceFeePercentRepository = unitOfWork.TransactionServiceFeePercentRepository;
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _transactionAwardAmountRepository = unitOfWork.TransactionAwardAmountRepository;
-            _FCMService = FCMService;
         }
 
         #endregion
@@ -125,7 +113,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             var collectorId = UserAuthSession.UserSession.Id;
 
             var collectingRequest = await _collectingRequestRepository.GetAsyncAsNoTracking(x => x.Id.Equals(collectingRequestId) &&
-                                                                    x.CollectorAccountId.Equals(collectingRequestId) &&
+                                                                    x.CollectorAccountId.Equals(collectorId) &&
                                                                     x.Status == CollectingRequestStatus.APPROVED);
             if (collectingRequest == null)
             {
@@ -160,13 +148,16 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> CreateCollectingTransaction(SellCollectTransactionCreateModel model)
         {
-            var collectingRequest = _collectingRequestRepository.GetAsNoTracking(x => x.Id.Equals(model.CollectingRequestId) &&
-                                                                                      x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id) &&
-                                                                                      x.Status == CollectingRequestStatus.APPROVED);
+            var collectingRequest = _collectingRequestRepository.GetById(model.CollectingRequestId);
 
             if (collectingRequest == null)
             {
                 return BaseApiResponse.NotFound();
+            }
+
+            if (!collectingRequest.CollectorAccountId.Equals(UserAuthSession.UserSession.Id) || collectingRequest.Status != CollectingRequestStatus.APPROVED )
+            {
+                return BaseApiResponse.Error();
             }
 
             var awardPoints = _transactionAwardAmountRepository.GetManyAsNoTracking(x => x.IsActive);
@@ -188,15 +179,13 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 var awardPoint = (model.Total / awardPointForSeller.AppliedAmount.Value) * awardPointForSeller.Amount.Value;
                 sellCollectTransactionEntity.AwardPoint = (int)awardPoint;
             }
-
             var insertEntity =  _sellCollectTransactionRepository.Insert(sellCollectTransactionEntity);
-
-           
 
             // Insert SellCollectTransactionDetail
             var transactionDetails = model.ScrapCategoryItems.Select(x => new SellCollectTransactionDetail()
             {
                 CollectorCategoryDetailId = x.CollectorCategoryDetailId,
+                SellCollectTransactionId = insertEntity.Id,
                 Quantity = x.Quantity,
                 Price = x.Price,
                 Total = x.Total
@@ -218,45 +207,33 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             await UnitOfWork.CommitAsync();
 
+
             // Send Notification to Seller
-            var notification = new PushAndSaveNotificationModel()
+
+            var notifications = new List<NotificationCreateModel>()
             {
-                SellerId = sellerAccount.Id,
-                Title = "", //TODO
-                Body = "", //TODO
-                DeviceId = sellerAccount.DeviceId,
-                DictionaryData = null // TODO:
+                new NotificationCreateModel()
+                {
+                    AccountId = UserAuthSession.UserSession.Id,
+                    DeviceId = UserAuthSession.UserSession.DeviceId,
+                    Title = "", // TODO:
+                    Body = "", // TODO:
+                    DataCustom = null
+                },
+                new NotificationCreateModel()
+                {
+                    AccountId = sellerAccount.Id,
+                    DeviceId = sellerAccount.DeviceId,
+                    Title = "", // TODO:
+                    Body = "", // TODO:
+                    DataCustom = null
+                }
             };
 
-            await SendAndSaveNotification(notification);
+            await StoreAndSendManyNotifications(notifications);
+
             return BaseApiResponse.OK();
         }
-
-        private async Task SendAndSaveNotification(PushAndSaveNotificationModel model)
-        {
-            var notificationMessage = new NotificationRequestModel()
-            {
-                Title = model.Title,
-                Body = model.Body,
-                DeviceId = model.DeviceId,
-                Data = model.DictionaryData // TODO:
-            };
-
-            await _FCMService.PushNotification(notificationMessage);
-
-            var notificationEntity = new Notification()
-            {
-                Title = notificationMessage.Title,
-                Body = notificationMessage.Body,
-                DataCustom = model.DictionaryData.ToJson<string, string>(),
-                AccountId = model.SellerId,
-                IsRead = BooleanConstants.FALSE
-            };
-
-            _notificationRepository.Insert(notificationEntity);
-            await UnitOfWork.CommitAsync();
-        }
-
 
         #endregion
 

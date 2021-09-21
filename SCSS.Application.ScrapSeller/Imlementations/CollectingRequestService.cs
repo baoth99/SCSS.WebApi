@@ -100,7 +100,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 IsBulky = model.IsBulky,
                 ScrapImageUrl = model.CollectingRequestImageUrl,
                 Note = model.Note,
-                LocationId = locationInsertEntity.Id
+                LocationId = locationInsertEntity.Id,
+                Status = CollectingRequestStatus.PENDING,
             };
 
             // Insert Collecting Request Entity 

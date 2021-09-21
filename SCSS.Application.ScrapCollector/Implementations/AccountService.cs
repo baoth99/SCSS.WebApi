@@ -1,9 +1,11 @@
-﻿using SCSS.Application.ScrapCollector.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SCSS.Application.ScrapCollector.Interfaces;
 using SCSS.Application.ScrapCollector.Models.AccountModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
+using SCSS.FirebaseService.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
@@ -43,7 +45,15 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #region Constructor
 
-        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, IStorageBlobS3Service storageBlobS3Service, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccountService"/> class.
+        /// </summary>
+        /// <param name="unitOfWork">The unit of work.</param>
+        /// <param name="userAuthSession">The user authentication session.</param>
+        /// <param name="storageBlobS3Service">The storage BLOB s3 service.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="fcmService">The FCM service.</param>
+        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, IStorageBlobS3Service storageBlobS3Service, ILoggerService logger, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
         {
             _accountRepository = unitOfWork.AccountRepository;
             _roleRepository = unitOfWork.RoleRepository;
@@ -189,6 +199,45 @@ namespace SCSS.Application.ScrapCollector.Implementations
             await UnitOfWork.CommitAsync();
 
             return BaseApiResponse.OK();
+        }
+
+        #endregion
+
+        #region Get Collector Account Info
+
+        /// <summary>
+        /// Gets the collector account information.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> GetCollectorAccountInfo()
+        {
+            var dealerAccountId = UserAuthSession.UserSession.Id;
+            if (!_accountRepository.IsExisted(x => x.Id.Equals(dealerAccountId)))
+            {
+                return null;
+            }
+
+            var accountInfo = await _accountRepository.GetManyAsNoTracking(x => x.Id.Equals(dealerAccountId))
+                                            .Join(_roleRepository.GetAllAsNoTracking(), x => x.RoleId, y => y.Id,
+                                                                                             (x, y) => new CollectorAccountInfoDetailViewModel
+                                                                                             {
+                                                                                                 Id = x.Id,
+                                                                                                 UserName = x.UserName,
+                                                                                                 Address = StringUtils.GetString(x.Address),
+                                                                                                 BirthDate = x.BirthDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
+                                                                                                 CreatedTime = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
+                                                                                                 Email = StringUtils.GetString(x.Email),
+                                                                                                 Gender = x.Gender,
+                                                                                                 IdCard = StringUtils.GetString(x.IdCard),
+                                                                                                 Image = x.ImageUrl,
+                                                                                                 Name = StringUtils.GetString(x.Name),
+                                                                                                 Phone = x.Phone,
+                                                                                                 RoleKey = y.Key,
+                                                                                                 RoleName = y.Name,
+                                                                                                 Status = x.Status,
+                                                                                                 TotalPoint = x.TotalPoint,
+                                                                                             }).FirstOrDefaultAsync();
+            return BaseApiResponse.OK(accountInfo);
         }
 
         #endregion

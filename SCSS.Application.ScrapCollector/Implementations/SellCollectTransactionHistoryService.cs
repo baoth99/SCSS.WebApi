@@ -73,7 +73,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> GetCollectingTransactionDetailHistory(Guid collectingRequestId)
         {
-            var collectingRequest = await _collectingRequestRepository.GetByIdAsync(collectingRequestId);
+            var collectingRequest = await _collectingRequestRepository.GetAsyncAsNoTracking(x => x.Id.Equals(collectingRequestId));
 
             if (collectingRequest == null)
             {

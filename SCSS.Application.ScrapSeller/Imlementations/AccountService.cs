@@ -1,4 +1,5 @@
-﻿using SCSS.Application.ScrapSeller.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SCSS.Application.ScrapSeller.Interfaces;
 using SCSS.Application.ScrapSeller.Models.AccountModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
@@ -10,7 +11,6 @@ using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -57,7 +57,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> Register(AccountRegistrationModel model)
+        public async Task<BaseApiResponseModel> Register(SellerAccountRegistrationModel model)
         {
             var dictionary = new Dictionary<string, string>()
             {
@@ -140,7 +140,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> UpdateAccount(AccountUpdateProfileModel model)
+        public async Task<BaseApiResponseModel> UpdateAccount(SellerAccountUpdateProfileModel model)
         {
             var id = UserAuthSession.UserSession.Id;
             var entity = _accountRepository.GetById(id);
@@ -183,6 +183,45 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             await UnitOfWork.CommitAsync();
 
             return BaseApiResponse.OK();
+        }
+
+        #endregion
+
+        #region Get Seller Account Info
+
+        /// <summary>
+        /// Gets the seller account information.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> GetSellerAccountInfo()
+        {
+            var dealerAccountId = UserAuthSession.UserSession.Id;
+            if (!_accountRepository.IsExisted(x => x.Id.Equals(dealerAccountId)))
+            {
+                return null;
+            }
+
+            var accountInfo = await _accountRepository.GetManyAsNoTracking(x => x.Id.Equals(dealerAccountId))
+                                            .Join(_roleRepository.GetAllAsNoTracking(), x => x.RoleId, y => y.Id,
+                                                                                             (x, y) => new SellerAccountInfoDetailViewModel
+                                                                                             {
+                                                                                                 Id = x.Id,
+                                                                                                 UserName = x.UserName,
+                                                                                                 Address = StringUtils.GetString(x.Address),
+                                                                                                 BirthDate = x.BirthDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
+                                                                                                 CreatedTime = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
+                                                                                                 Email = StringUtils.GetString(x.Email),
+                                                                                                 Gender = x.Gender,
+                                                                                                 IdCard = StringUtils.GetString(x.IdCard),
+                                                                                                 Image = x.ImageUrl,
+                                                                                                 Name = StringUtils.GetString(x.Name),
+                                                                                                 Phone = x.Phone,
+                                                                                                 RoleKey = y.Key,
+                                                                                                 RoleName = y.Name,
+                                                                                                 Status = x.Status,
+                                                                                                 TotalPoint = x.TotalPoint,
+                                                                                             }).FirstOrDefaultAsync();
+            return BaseApiResponse.OK(accountInfo);
         }
 
         #endregion

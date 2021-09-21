@@ -9,7 +9,7 @@ namespace SCSS.Application.Admin.Interfaces
     {
         Task<BaseApiResponseModel> Search(SearchAccountRequestModel model);
 
-        Task<BaseApiResponseModel> GetAccountDetail(Guid Id);
+        Task<AccountDetailViewModel> GetAccountDetail(Guid Id);
 
         Task<BaseApiResponseModel> ChangeStatus(AccountStatusRequestModel model);
 

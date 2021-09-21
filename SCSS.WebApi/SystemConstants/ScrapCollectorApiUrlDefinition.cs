@@ -14,6 +14,7 @@ namespace SCSS.WebApi.SystemConstants
         {
             public const string RegisterCollectorAccount = Account + "/register";
             public const string UpdateCollectorAccount = Account + "/update";
+            public const string InfoDetail = Account + "/dealer-info";
             public const string UpdateDeviceId = Account + "/device-id";
             public const string UploadImage = Account + "/upload-image";
         }
