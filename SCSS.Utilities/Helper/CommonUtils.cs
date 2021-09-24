@@ -58,5 +58,18 @@ namespace SCSS.Utilities.Helper
         {
             return $"{prefix}-{DateTimeVN.DATETIME_NOW.ToString(DateTimeFormat.Format01)}-{fileNameEx.ToLower()}";
         }
+
+
+        public static List<int> GetActivityStatus(int status)
+        {
+            return status switch
+            {
+                CollectingRequestStatus.PENDING => new List<int>() { CollectingRequestStatus.PENDING },
+                CollectingRequestStatus.APPROVED => new List<int>() { CollectingRequestStatus.APPROVED },
+                CollectingRequestStatus.COMPLETED => CollectionConstants.CompletedCRActivity,
+                _ => CollectionConstants.Empty<int>(),
+            };
+        }
+
     }
 }

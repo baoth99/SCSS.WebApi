@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapSeller.Imlementations
 {
-    public partial class CollectingRequestService : BaseService, ICollectingRequestService
+    public class CollectingRequestService : BaseService, ICollectingRequestService
     {
         #region Repositories
 
@@ -114,7 +114,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         }
 
 
-
         /// <summary>
         /// Generates the collecting request code.
         /// </summary>
@@ -149,24 +148,28 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         public async Task<BaseApiResponseModel> CancelCollectingRequest(CollectingRequestCancelModel model)
         {
             // Get Collecting Request from ID, sellerAccountId and Status = CollectingRequestStatus.PENDING (1)
-            var collectingRequestEntity = await _collectingRequestRepository.GetAsyncAsNoTracking(x => x.Id.Equals(model.Id) &&
-                                                                                                 x.SellerAccountId.Equals(UserAuthSession.UserSession.Id) &&
-                                                                                                 x.Status == CollectingRequestStatus.PENDING &&
-                                                                                                 x.CollectorAccountId == null);
+            var entity = await _collectingRequestRepository.GetByIdAsync(model.Id);
 
             // Check Collecting Request existed
-            if (collectingRequestEntity == null)
+            if (entity == null)
             {
                 return BaseApiResponse.NotFound();
             }
 
+            var errorList = ValidateCollectingRequest(entity.SellerAccountId, entity.Status, entity.CollectorAccountId);
+
+            if (errorList.Any())
+            {
+                return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
+            }
+
             // Update Status and Cancel Reason
-            collectingRequestEntity.Status = CollectingRequestStatus.CANCEL_BY_SELLER;
-            collectingRequestEntity.CancelReason = model.CancelReason;
+            entity.Status = CollectingRequestStatus.CANCEL_BY_SELLER;
+            entity.CancelReason = model.CancelReason;
 
             try
             {
-                _collectingRequestRepository.Update(collectingRequestEntity);
+                _collectingRequestRepository.Update(entity);
                 // Commit Data to Database
                 await UnitOfWork.CommitAsync();
             }
@@ -176,6 +179,36 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             }
 
             return BaseApiResponse.OK();
+        }
+
+
+
+        /// <summary>
+        /// Validates the collecting request.
+        /// </summary>
+        /// <param name="sellerAccountId">The seller account identifier.</param>
+        /// <param name="status">The status.</param>
+        /// <param name="collectorAccountId">The collector account identifier.</param>
+        /// <returns></returns>
+        private List<string> ValidateCollectingRequest(Guid? sellerAccountId, int? status, Guid? collectorAccountId)
+        {
+            var errorList = new List<string>();
+            if (!sellerAccountId.Equals(UserAuthSession.UserSession.Id))
+            {
+                errorList.Add(InvalidCollectingRequestCode.InvalidSeller);
+            }
+
+            if (status != CollectingRequestStatus.PENDING)
+            {
+                errorList.Add(InvalidCollectingRequestCode.InvalidStatus);
+            }
+
+            if (collectorAccountId != null)
+            {
+                errorList.Add(InvalidCollectingRequestCode.InvalidCollector);
+            }
+
+            return errorList;
         }
 
         #endregion      

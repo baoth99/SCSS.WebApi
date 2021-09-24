@@ -37,7 +37,6 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.Admin.Interfaces.ICollectingRequestService, SCSS.Application.Admin.Implementations.CollectingRequestService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.ICollectingRequestBackgroundService, SCSS.Application.Admin.Implementations.CollectingRequestBackgroundService>();
 
-
             #endregion Admin Application
 
             #region Collector Application
@@ -48,6 +47,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IDealerInformationService, SCSS.Application.ScrapCollector.Implementations.DealerInformationService>();
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IDealerPromotionService, SCSS.Application.ScrapCollector.Implementations.DealerPromotionService>();
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.ISellCollectTransactionService, SCSS.Application.ScrapCollector.Implementations.SellCollectTransactionService>();
+            services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IStatisticService, SCSS.Application.ScrapCollector.Implementations.StatisticService>();
 
             #endregion Collector Application
 
@@ -65,8 +65,10 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IAccountService, SCSS.Application.ScrapSeller.Imlementations.AccountService>();
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces. ICollectingRequestService, SCSS.Application.ScrapSeller.Imlementations.CollectingRequestService>();
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.INotificationService, SCSS.Application.ScrapSeller.Imlementations.NotificationService>();
+            services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IActivityService, SCSS.Application.ScrapSeller.Imlementations.ActivityService>();
 
             #endregion Seller Application           
+
 
             services.AddHostedService<TrailCollectingRequestHostedService>();
 

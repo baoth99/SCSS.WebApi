@@ -46,6 +46,7 @@ namespace SCSS.Utilities.Constants
             CollectingRequestStatus.PENDING,
             CollectingRequestStatus.CANCEL_BY_SELLER,
             CollectingRequestStatus.CANCEL_BY_COLLECTOR,
+            CollectingRequestStatus.CANCEL_BY_SYSTEM,
             CollectingRequestStatus.APPROVED,
             CollectingRequestStatus.COMPLETED
         };
@@ -83,6 +84,14 @@ namespace SCSS.Utilities.Constants
         };
 
         public static List<T> Empty<T>() => Enumerable.Empty<T>().ToList();
+
+        public static readonly List<int> CompletedCRActivity = new List<int>() 
+        { 
+            CollectingRequestStatus.COMPLETED, 
+            CollectingRequestStatus.CANCEL_BY_SELLER, 
+            CollectingRequestStatus.CANCEL_BY_COLLECTOR,
+            CollectingRequestStatus.CANCEL_BY_SYSTEM,
+        };
     }
 
     public class DictionaryConstants

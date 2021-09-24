@@ -27,6 +27,17 @@ namespace SCSS.Utilities.Extensions
             return dateTime.Value.ToString(format, CultureInfo.GetCultureInfo(Globalization.VN_CULTURE));
         }
 
+        /// <summary>
+        /// Converts to stringformat.
+        /// </summary>
+        /// <param name="dateTime">The date time.</param>
+        /// <param name="format">The format.</param>
+        /// <returns></returns>
+        public static string ToStringFormat(this DateTime dateTime, string format)
+        {
+            return dateTime.ToString(format, CultureInfo.GetCultureInfo(Globalization.VN_CULTURE));
+        }
+
         #endregion
 
         #region TimeSpan ToStringFormat
@@ -45,6 +56,17 @@ namespace SCSS.Utilities.Extensions
                 return CommonConstants.Null;
             }
             return timeSpan.Value.ToString(format, CultureInfo.GetCultureInfo(Globalization.VN_CULTURE));
+        }
+
+        /// <summary>
+        /// Converts to stringformat.
+        /// </summary>
+        /// <param name="timeSpan">The time span.</param>
+        /// <param name="format">The format.</param>
+        /// <returns></returns>
+        public static string ToStringFormat(this TimeSpan timeSpan, string format)
+        {
+            return timeSpan.ToString(format, CultureInfo.GetCultureInfo(Globalization.VN_CULTURE));
         }
 
         #endregion

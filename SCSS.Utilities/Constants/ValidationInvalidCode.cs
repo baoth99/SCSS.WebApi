@@ -37,7 +37,9 @@
         public const string LessThan15Minutes = "LT15MS";
         public const string Coordinate = "IVCDN001";
         public const string InvalidDate = "IVDATE0001";
+        public const string InvalidStatus = "IVSTATUS0001";
         public const string InvalidCollector = "IVCOL0001";
+        public const string InvalidSeller = "IVSELL0001";
         public const string InvalidTimeTo = "IVTIMETO0001";
 
 

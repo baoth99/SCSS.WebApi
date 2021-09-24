@@ -50,7 +50,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
             var file = await _storageBlobS3Service.GetFile(imageUrl);
             if (file == null)
             {
-                return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
+                return BaseApiResponse.NotFound();
             }
             var image = file.Stream.ToBitmap();
             return BaseApiResponse.OK(image);

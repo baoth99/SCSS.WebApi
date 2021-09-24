@@ -19,19 +19,6 @@ namespace SCSS.Application.ScrapSeller.Interfaces
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> CancelCollectingRequest(CollectingRequestCancelModel model);
-
-        /// <summary>
-        /// Gets the collecting requests.
-        /// </summary>
-        /// <returns></returns>
-        Task<BaseApiResponseModel> GetCollectingRequests();
-
-        /// <summary>
-        /// Gets the collecting request detail.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
-        Task<BaseApiResponseModel> GetCollectingRequestDetail(Guid id);
+        Task<BaseApiResponseModel> CancelCollectingRequest(CollectingRequestCancelModel model);      
     }
 }

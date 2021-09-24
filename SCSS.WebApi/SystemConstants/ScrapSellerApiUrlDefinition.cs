@@ -6,6 +6,8 @@
         private const string ImageSlider = "image-slider";
         private const string CollectingRequest = "collecting-request";
         private const string Notification = "notification";
+        private const string Activity = "activity";
+
         public static class DataApiUrl
         {
             public const string GetImage = "image/get";
@@ -41,6 +43,12 @@
             public const string UploadCollectingRequestImg = CollectingRequest + "/upload-img";
         }
 
+        public static class ActivityApiUrl
+        {
+            public const string Get = Activity + "/get";
+            public const string Detail = Activity + "/detail";
+
+        }
     }
 
 }

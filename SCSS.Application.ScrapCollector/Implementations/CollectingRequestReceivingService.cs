@@ -163,7 +163,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             {
                 Id = collectingRequestEntity.Id,
                 CollectingRequestCode = collectingRequestEntity.CollectingRequestCode,
-                CollectingRequestDate = collectingRequestEntity.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
+                CollectingRequestDate = collectingRequestEntity.CollectingRequestDate.ToStringFormat(DateTimeFormat.DDD_dd_MMM),
                 DayOfWeek = collectingRequestEntity.CollectingRequestDate.GetDayOfWeek(),
                 FromTime = collectingRequestEntity.TimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
                 ToTime = collectingRequestEntity.TimeTo.ToStringFormat(TimeSpanFormat.HH_MM),
