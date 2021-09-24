@@ -196,7 +196,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             //  If CollectingRequestFromTime is greater than CollectingRequestFromTime 
             if (fromTime.IsCompareTimeSpanGreaterThan(toTime))
             {
-                errorList.Add(new ValidationError("collectingRequestDate", InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
+                errorList.Add(new ValidationError(nameof(collectingRequestDate), InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
             }
 
             // Check CollectingRequestFromTime and CollectingRequestToTime in day
@@ -204,11 +204,11 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             {
                 if (fromTime.IsCompareTimeSpanLessThan(DateTimeVN.TIMESPAN_NOW.StripMilliseconds()))
                 {
-                    errorList.Add(new ValidationError("fromTime", InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
+                    errorList.Add(new ValidationError(nameof(fromTime), InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
                 }
                 if (toTime.IsCompareTimeSpanLessThan(DateTimeVN.TIMESPAN_NOW.StripMilliseconds()))
                 {
-                    errorList.Add(new ValidationError("toTime", InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
+                    errorList.Add(new ValidationError(nameof(toTime), InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
                 }
             }
 

@@ -6,6 +6,7 @@ using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
+using SCSS.Validations.InvalidResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -194,33 +195,35 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> CancelCollectingRequestReceived(CollectingRequestReceivedCancelModel model)
         {
-            var collectingRequestEntity = _collectingRequestRepository.GetById(model.Id);
+            var entity = _collectingRequestRepository.GetById(model.Id);
 
-            if (collectingRequestEntity == null)
+            if (entity == null)
             {
                 return BaseApiResponse.NotFound();
             }
 
-            if (!collectingRequestEntity.CollectorAccountId.Equals(UserAuthSession.UserSession.Id) || collectingRequestEntity.Status != CollectingRequestStatus.APPROVED)
+            var errorList = ValidateCancelCollectingRequest(entity.CollectorAccountId, entity.Status, entity.CollectingRequestDate, entity.TimeTo);
+
+            if (errorList.Any())
             {
-                return BaseApiResponse.Error(SystemMessageCode.DataNotFound);
+                return BaseApiResponse.Error(SystemMessageCode.DataInvalid, errorList);
             }
 
-            collectingRequestEntity.Status = CollectingRequestStatus.CANCEL_BY_COLLECTOR;
-            collectingRequestEntity.CancelReason = model.CancelReason;
+            entity.Status = CollectingRequestStatus.CANCEL_BY_COLLECTOR;
+            entity.CancelReason = model.CancelReason;
 
             try
             {
-                _collectingRequestRepository.Update(collectingRequestEntity);
+                _collectingRequestRepository.Update(entity);
                 await UnitOfWork.CommitAsync();
             }
             catch (Exception)
             {
                 return BaseApiResponse.Error(SystemMessageCode.SystemException);
             }
-           
+
             // Push Notification to notice seller that their collecting request was canceled by collector
-            var sellerInfo = _accountRepository.GetById(collectingRequestEntity.SellerAccountId);
+            var sellerInfo = _accountRepository.GetById(entity.SellerAccountId);
 
             var notifications = new List<NotificationCreateModel>()
             {
@@ -228,7 +231,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 {
                     AccountId = sellerInfo.Id,
                     Body = NotificationMessage.CollectingRequestCancelBody(model.CancelReason),
-                    Title = NotificationMessage.CollectingRequestCancelTitle(collectingRequestEntity.CollectingRequestCode),
+                    Title = NotificationMessage.CollectingRequestCancelTitle(entity.CollectingRequestCode),
                     DataCustom = null, // TODO:
                     DeviceId = sellerInfo.DeviceId
                 },
@@ -248,5 +251,40 @@ namespace SCSS.Application.ScrapCollector.Implementations
         }
 
         #endregion Cancel Collecting Request By Collector
+
+        #region Validate Cancel Collecting Request Received
+
+        /// <summary>
+        /// Validates the cancel collecting request.
+        /// </summary>
+        /// <param name="collectorAccountId">The collector account identifier.</param>
+        /// <param name="status">The status.</param>
+        /// <param name="collectingRequestDate">The collecting request date.</param>
+        /// <param name="timeTo">The time to.</param>
+        /// <returns></returns>
+        private List<ValidationError> ValidateCancelCollectingRequest(Guid? collectorAccountId, int? status, DateTime? collectingRequestDate, TimeSpan? timeTo)
+        {
+            var errorList = new List<ValidationError>();
+
+            if (!collectorAccountId.Equals(UserAuthSession.UserSession.Id) || status != CollectingRequestStatus.APPROVED)
+            {
+                errorList.Add(new ValidationError(nameof(collectorAccountId), InvalidCollectingRequestCode.InvalidDate));
+            }
+
+            if (!collectingRequestDate.IsCompareDateTimeEqual(DateTimeVN.DATETIME_NOW))
+            {
+                errorList.Add(new ValidationError(nameof(collectingRequestDate), InvalidCollectingRequestCode.InvalidDate));
+            }
+
+            if (timeTo.IsCompareTimeSpanGreaterOrEqual(DateTimeVN.TIMESPAN_NOW))
+            {
+                errorList.Add(new ValidationError(nameof(timeTo), InvalidCollectingRequestCode.InvalidTimeTo));
+            }
+
+            return errorList;
+
+        }
+
+        #endregion Validate Cancel Collecting Request Received
     }
 }

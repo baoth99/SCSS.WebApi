@@ -1,5 +1,6 @@
 ﻿using SCSS.Application.ScrapSeller.Models.CollectingRequestModels;
 using SCSS.Utilities.ResponseModel;
+using System;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapSeller.Interfaces
@@ -25,5 +26,12 @@ namespace SCSS.Application.ScrapSeller.Interfaces
         /// </summary>
         /// <returns></returns>
         Task<BaseApiResponseModel> GetCollectingRequests();
+
+        /// <summary>
+        /// Gets the collecting request detail.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetCollectingRequestDetail(Guid id);
     }
 }

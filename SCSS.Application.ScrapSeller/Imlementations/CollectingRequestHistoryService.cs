@@ -29,8 +29,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                                                                  x.Id,
                                                                  x.CollectingRequestCode,
                                                                  x.CollectingRequestDate,
-                                                                 x.TimeFrom,
-                                                                 x.TimeTo,
+                                                                 x.CreatedTime,
                                                                  x.Status,
                                                                  y.AddressName
                                                              });
@@ -43,12 +42,22 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 AddressName = x.AddressName,
                 CollectingRequestCode = x.CollectingRequestCode,
                 CollectingRequestDate = x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
-                FromTime = x.TimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
-                ToTime = x.TimeTo.ToStringFormat(TimeSpanFormat.HH_MM),
+                CreatedTime = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
                 Status = x.Status
             }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
+        }
+
+        #endregion
+
+
+        #region Get Collecting Request Detail 
+
+        public async Task<BaseApiResponseModel> GetCollectingRequestDetail(Guid id)
+        {
+
+            return BaseApiResponse.OK();
         }
 
         #endregion
