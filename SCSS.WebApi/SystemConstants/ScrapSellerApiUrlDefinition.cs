@@ -5,10 +5,19 @@
         private const string Account = "seller/account";
         private const string ImageSlider = "image-slider";
         private const string CollectingRequest = "collecting-request";
-
+        private const string Notification = "notification";
         public static class DataApiUrl
         {
             public const string GetImage = "image/get";
+        }
+
+        public static class NotificationApiUrl
+        {
+            public const string Get = Notification + "/get";
+            public const string GetDetail = Notification + "/get-detail";
+            public const string Read = Notification + "/read";
+
+
         }
 
         public static class AccountApiUrl

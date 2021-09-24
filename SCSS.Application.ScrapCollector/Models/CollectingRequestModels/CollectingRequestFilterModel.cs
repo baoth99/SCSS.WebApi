@@ -1,11 +1,15 @@
-﻿namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
+﻿using SCSS.Validations.ValidationAttributes;
+
+namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
 {
     public class CollectingRequestFilterModel
     {
-        public int ScreenSize { get; set; }
+        public double Radius { get; set; }
 
+        [CoordinateValidation]
         public decimal? OriginLatitude { get; set; }
 
+        [CoordinateValidation]
         public decimal? OriginLongtitude { get; set; }
 
         public string FilterDate { get; set; }

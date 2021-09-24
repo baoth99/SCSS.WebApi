@@ -98,9 +98,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             if (filterDate != null)
             {
-                if (filterDate.IsCompareDateTimeLessThan(DateTimeInDay.DATE_NOW))
+                if (filterDate.IsCompareDateTimeLessThan(DateTimeVN.DATE_NOW))
                 {
-                    filterDate = DateTimeInDay.DATE_NOW;
+                    filterDate = DateTimeVN.DATE_NOW;
                 }
             }
 
@@ -121,13 +121,14 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                     y.Longitude,
                                                                     x.IsBulky,
                                                                 });
+
             if (!collectingRequestdataQuery.Any())
             {
                 return BaseApiResponse.OK(CollectionConstants.Empty<CollectingRequestViewModel>());
             }
 
             // Get Collecting Request List is pending that Collector rejected
-            var collectingRequestRejection = _collectingRequestRejectionRepository.GetManyAsNoTracking(x => x.CollectorId.Equals(UserAuthSession.UserSession.Id))
+            var collectingRequestRejection = _collectingRequestRejectionRepository.GetManyAsNoTracking(x => (x.CollectorId.Equals(UserAuthSession.UserSession.Id)))
                                                                                   .Join(collectingRequestdataQuery, x => x.CollectingRequestId, y => y.CollectingRequestId,
                                                                                        (x, y) => new
                                                                                        {
@@ -156,12 +157,23 @@ namespace SCSS.Application.ScrapCollector.Implementations
             }
 
             // Get Destination List
-            var destinationCoordinateRequest = collectingRequestdataQuery.Select(x => new DestinationCoordinateModel()
+            // Caculate
+            model.Radius = model.Radius <= NumberConstant.Zero ? DefaultConstant.Radius : model.Radius;
+
+            var destinationCoordinateRequest = collectingRequestdataQuery.ToList().Where(x => CoordinateHelper.IsInRadius(model.OriginLatitude, model.OriginLongtitude, x.Latitude, x.Longitude, model.Radius.KilometerToMeter()))
+                                                                                .Select(x => new DestinationCoordinateModel()
+                                                                                {
+                                                                                    Id = x.CollectingRequestId,
+                                                                                    DestinationLatitude = x.Latitude.Value,
+                                                                                    DestinationLongtitude = x.Longitude.Value
+                                                                                }).ToList();
+
+            if (!destinationCoordinateRequest.Any())
             {
-                Id = x.CollectingRequestId,
-                DestinationLatitude = x.Latitude.Value,
-                DestinationLongtitude = x.Longitude.Value
-            }).ToList();
+                return BaseApiResponse.OK(CollectionConstants.Empty<CollectingRequestViewModel>());
+            }
+
+
 
             var mapDistanceMatrixCoordinate = new DistanceMatrixCoordinateRequestModel()
             {
@@ -178,9 +190,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             // Get Seller Role 
             var sellerRoleId = UnitOfWork.RoleRepository.Get(x => x.Key.Equals(AccountRole.SELLER)).Id;
 
-            model.ScreenSize = model.ScreenSize <= NumberConstant.Zero ? NumberConstant.Ten : model.ScreenSize;
-
-            var collectingRequestData = destinationDistancesRes.Take(model.ScreenSize).Join(collectingRequestdataQuery, x => x.DestinationId, y => y.CollectingRequestId,
+            var collectingRequestData = destinationDistancesRes.Join(collectingRequestdataQuery, x => x.DestinationId, y => y.CollectingRequestId,
                                                    (x, y) => new
                                                    {
                                                        y.CollectingRequestId,

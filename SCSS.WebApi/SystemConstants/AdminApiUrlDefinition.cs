@@ -12,6 +12,8 @@ namespace SCSS.WebApi.SystemConstants
         private const string DealerInformation = "dealer-information";
         private const string TransactionAwardAmount = "transaction-award";
         private const string TransactionServiceFee = "transaction-fee";
+        private const string ColletingRequest = "collecting-request";
+
         public static class TransactionAwardAmountApiUrl
         {
             public const string Create = TransactionAwardAmount + "/create";
@@ -20,6 +22,12 @@ namespace SCSS.WebApi.SystemConstants
         public static class TransactionServiceFeeApiUrl
         {
             public const string Create = TransactionServiceFee + "/create";
+        }
+
+        public static class CollectingRequestApiUrl
+        {
+            public const string Search = ColletingRequest + "/search";
+            public const string Detail = ColletingRequest + "/detail";
         }
 
         public static class ScrapCategoryApiUrl

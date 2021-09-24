@@ -65,5 +65,7 @@ namespace SCSS.Utilities.Configurations
 
         public static string LoggingConfig => ConfigurationHelper.GetValue<string>(AppSettingKeys.Logging.Config);
 
+        public static string CollectingRequestSQLCommand => ConfigurationHelper.GetValue<string>(AppSettingKeys.SQLCommand.CollectorRequestCommand);
+
     }
 }

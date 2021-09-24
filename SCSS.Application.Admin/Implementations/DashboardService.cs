@@ -59,7 +59,7 @@ namespace SCSS.Application.Admin.Implementations
 
         public async Task<int> GetAmountOfCollectingRequestInDay(DateTime dateTimeFrom, DateTime dateTimeTo)
         {     
-            return 4;
+            return 10;
         }
 
         #endregion

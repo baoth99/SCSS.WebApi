@@ -3,6 +3,8 @@ using SCSS.Data.EF.UnitOfWork;
 using SCSS.ORM.Dapper.Implementations;
 using SCSS.ORM.Dapper.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
+using SCSS.WebApi.BackgroundTasks;
+using Microsoft.AspNetCore.Hosting;
 using System;
 
 namespace SCSS.WebApi.SystemConfigurations
@@ -20,6 +22,8 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddSingleton<IDapperService, DapperService>();
             services.AddScoped<IAuthSession, AuthSession>();
 
+
+
             #region Admin Application
 
             services.AddScoped<SCSS.Application.Admin.Interfaces.IAccountService, SCSS.Application.Admin.Implementations.AccountService>();
@@ -30,6 +34,9 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.Admin.Interfaces.IDealerInformationService, SCSS.Application.Admin.Implementations.DealerInformationService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.ITransactionAwardAmountService, SCSS.Application.Admin.Implementations.TransactionAwardAmountService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.ITransactionServiceFeeService, SCSS.Application.Admin.Implementations.TransactionServiceFeeService>();
+            services.AddScoped<SCSS.Application.Admin.Interfaces.ICollectingRequestService, SCSS.Application.Admin.Implementations.CollectingRequestService>();
+            services.AddScoped<SCSS.Application.Admin.Interfaces.ICollectingRequestBackgroundService, SCSS.Application.Admin.Implementations.CollectingRequestBackgroundService>();
+
 
             #endregion Admin Application
 
@@ -57,8 +64,12 @@ namespace SCSS.WebApi.SystemConfigurations
 
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IAccountService, SCSS.Application.ScrapSeller.Imlementations.AccountService>();
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces. ICollectingRequestService, SCSS.Application.ScrapSeller.Imlementations.CollectingRequestService>();
+            services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.INotificationService, SCSS.Application.ScrapSeller.Imlementations.NotificationService>();
 
             #endregion Seller Application           
+
+            services.AddHostedService<TrailCollectingRequestHostedService>();
+
         }
     }
 }

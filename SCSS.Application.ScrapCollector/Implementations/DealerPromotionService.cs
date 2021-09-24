@@ -69,8 +69,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             // Get Promotions going on
             var promotionsGoingOn = _promotionRepository.GetMany(x => x.DealerAccountId.Equals(dealerAccountId) &&
-                                                                           x.FromTime.Value.Date.CompareTo(DateTimeInDay.DATE_NOW) <= NumberConstant.Zero &&
-                                                                           x.ToTime.Value.Date.CompareTo(DateTimeInDay.DATE_NOW) >= NumberConstant.Zero &&
+                                                                           x.FromTime.Value.Date.CompareTo(DateTimeVN.DATE_NOW) <= NumberConstant.Zero &&
+                                                                           x.ToTime.Value.Date.CompareTo(DateTimeVN.DATE_NOW) >= NumberConstant.Zero &&
                                                                            x.Status == PromotionStatus.ACTIVE);
 
             if (!promotionsGoingOn.Any())

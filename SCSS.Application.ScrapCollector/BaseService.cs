@@ -95,7 +95,6 @@ namespace SCSS.Application.ScrapCollector
             await UnitOfWork.CommitAsync();
 
             // Send Notification
-
             var notificationMessages = notifications.Select(x => new NotificationRequestModel()
             {
                 Title = x.Title,

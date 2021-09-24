@@ -117,7 +117,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             }
 
             // Get Destination List
-            var destinationCoordinateRequest = dealerDataQuery.Select(x => new DestinationCoordinateModel()
+            var destinationCoordinateRequest = dealerDataQuery.ToList().Where(x => CoordinateHelper.IsInRadius(model.OriginLatitude, model.OriginLongtitude, x.Latitude, x.Longitude, model.Radius.KilometerToMeter())).Select(x => new DestinationCoordinateModel()
             {
                 Id = x.DealerId,
                 DestinationLatitude = x.Latitude.Value,

@@ -64,7 +64,7 @@ namespace SCSS.WebApi
 
             #region Controller & Validation Behavior
 
-            services.AddControllers().AddConfigureApiValidationBehaviorOptions();
+            services.AddControllers().AddConfigureApiValidationBehaviorOptions(); 
 
             #endregion
 

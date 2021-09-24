@@ -73,5 +73,10 @@ namespace SCSS.Utilities.Configurations
         {
             public const string Config = "Logging:Config";
         }
+
+        public static class SQLCommand
+        {
+            public const string CollectorRequestCommand = "SqlCommands:CollectorRequestCommands";
+        }
     }
 }

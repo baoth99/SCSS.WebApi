@@ -50,7 +50,7 @@ namespace SCSS.WebApi.SignalR.AdminHubs.Hubs
         /// </summary>
         public async override Task OnConnectedAsync()
         {
-            var amount = await _dashboardService.GetAmountOfCollectingRequestInDay(DateTimeInDay.DATEFROM, DateTimeInDay.DATETO);
+            var amount = await _dashboardService.GetAmountOfCollectingRequestInDay(DateTimeVN.DATE_FROM, DateTimeVN.DATE_TO);
             await GetAmountOfCollectingRequestInDay(amount);
         }
 
@@ -95,7 +95,7 @@ namespace SCSS.WebApi.SignalR.AdminHubs.Hubs
         /// </summary>
         public async override Task OnConnectedAsync()
         {
-            var amount = await _dashboardService.GetAmountOfTransactionInDay(DateTimeInDay.DATEFROM, DateTimeInDay.DATETO);
+            var amount = await _dashboardService.GetAmountOfTransactionInDay(DateTimeVN.DATE_FROM, DateTimeVN.DATE_TO);
             await GetAmountOfTransactionInDay(amount);
         }
 

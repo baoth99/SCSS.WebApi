@@ -38,17 +38,16 @@ namespace SCSS.Utilities.Extensions
         /// <param name="format">The format.</param>
         /// <param name="culture">The culture.</param>
         /// <returns></returns>
-        public static string ToStringFormat(this TimeSpan? timeSpan, string format, string culture = Globalization.VN_CULTURE)
+        public static string ToStringFormat(this TimeSpan? timeSpan, string format)
         {
             if (!timeSpan.HasValue)
             {
                 return CommonConstants.Null;
             }
-            return timeSpan.Value.ToString(format, CultureInfo.GetCultureInfo(culture));
+            return timeSpan.Value.ToString(format, CultureInfo.GetCultureInfo(Globalization.VN_CULTURE));
         }
 
         #endregion
-
 
         #region Compare DateTime Greater Or Equal
 
@@ -312,6 +311,6 @@ namespace SCSS.Utilities.Extensions
         }
 
         #endregion
-        
+
     }
 }

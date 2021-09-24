@@ -10,8 +10,10 @@ namespace SCSS.Application.ScrapSeller.Models.CollectingRequestModels
 
         public string Address { get; set; }
 
+        [CoordinateValidation]
         public decimal? Latitude { get; set; }
 
+        [CoordinateValidation]
         public decimal? Longtitude { get; set; }
 
         [CollectingRequestDateValidation]

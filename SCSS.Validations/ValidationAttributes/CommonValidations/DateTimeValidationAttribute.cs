@@ -29,7 +29,7 @@ namespace SCSS.Validations.ValidationAttributes.CommonValidations
 
             if (_isCompareToNow)
             {
-                if (dateTime.IsCompareDateTimeLessThan(DateTimeInDay.DATE_NOW))
+                if (dateTime.IsCompareDateTimeLessThan(DateTimeVN.DATE_NOW))
                 {
                     return new ValidationResult(InvalidTextCode.DateTimeNow);
                 }
@@ -62,7 +62,7 @@ namespace SCSS.Validations.ValidationAttributes.CommonValidations
 
             if (_isCompareToNow)
             {
-                if (timeSpan.IsCompareTimeSpanLessThan(DateTimeInDay.TIMESPAN_NOW.StripMilliseconds()))
+                if (timeSpan.IsCompareTimeSpanLessThan(DateTimeVN.TIMESPAN_NOW.StripMilliseconds()))
                 {
                     return new ValidationResult(InvalidTextCode.DateTimeNow);
                 }

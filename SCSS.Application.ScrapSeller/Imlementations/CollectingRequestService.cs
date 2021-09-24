@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapSeller.Imlementations
 {
-    public class CollectingRequestService : BaseService, ICollectingRequestService
+    public partial class CollectingRequestService : BaseService, ICollectingRequestService
     {
         #region Repositories
 
@@ -200,13 +200,13 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             }
 
             // Check CollectingRequestFromTime and CollectingRequestToTime in day
-            if (collectingRequestDate.IsCompareDateTimeEqual(DateTimeInDay.DATE_NOW))
+            if (collectingRequestDate.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW))
             {
-                if (fromTime.IsCompareTimeSpanLessThan(DateTimeInDay.TIMESPAN_NOW.StripMilliseconds()))
+                if (fromTime.IsCompareTimeSpanLessThan(DateTimeVN.TIMESPAN_NOW.StripMilliseconds()))
                 {
                     errorList.Add(new ValidationError("fromTime", InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
                 }
-                if (toTime.IsCompareTimeSpanLessThan(DateTimeInDay.TIMESPAN_NOW.StripMilliseconds()))
+                if (toTime.IsCompareTimeSpanLessThan(DateTimeVN.TIMESPAN_NOW.StripMilliseconds()))
                 {
                     errorList.Add(new ValidationError("toTime", InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
                 }

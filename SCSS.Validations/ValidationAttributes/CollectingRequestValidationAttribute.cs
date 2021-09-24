@@ -20,7 +20,7 @@ namespace SCSS.Validations.ValidationAttributes
             }
 
             // Compare to Date Now
-            if (collectingRequestDate.IsCompareDateTimeLessThan(DateTime.Now.Date))
+            if (collectingRequestDate.IsCompareDateTimeLessThan(DateTimeVN.DATE_NOW))
             {
                 return new ValidationResult(InvalidTextCode.DateTimeNow);
             }
@@ -29,6 +29,21 @@ namespace SCSS.Validations.ValidationAttributes
             if (DateTimeUtils.IsMoreThanDays(collectingRequestDate))
             {
                 return new ValidationResult(InvalidCollectingRequestCode.MoreThan7Days);
+            }
+
+            return ValidationResult.Success;
+        }
+    }
+
+    public class CoordinateValidationAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            var val = value as decimal?;
+
+            if (!val.HasValue)
+            {
+                return new ValidationResult(InvalidCollectingRequestCode.Coordinate);
             }
 
             return ValidationResult.Success;

@@ -18,17 +18,22 @@ namespace SCSS.Utilities.Extensions
             return string.Format("{0} vnđ", result);
         }
 
-        public static float KilometerToMeter(this float val)
+        public static double KilometerToMeter(this double val)
         {
             return val == NumberConstant.Zero ? NumberConstant.Zero : val * NumberConstant.OneThousand;
         }
 
-        public static float MeterToKilometer(this float val)
+        public static double MeterToKilometer(this double val)
         {
             return val == NumberConstant.Zero ? NumberConstant.Zero : (val / NumberConstant.OneThousand);
         }
 
         public static int ToIntValue(this int? val)
+        {
+            return val.HasValue ? val.Value : NumberConstant.Zero;
+        }
+
+        public static float ToFloatValue(this float? val)
         {
             return val.HasValue ? val.Value : NumberConstant.Zero;
         }

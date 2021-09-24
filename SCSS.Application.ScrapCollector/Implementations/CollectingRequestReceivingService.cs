@@ -28,9 +28,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             if (filterDate != null)
             {
-                if (filterDate.IsCompareDateTimeLessThan(DateTimeInDay.DATE_NOW))
+                if (filterDate.IsCompareDateTimeLessThan(DateTimeVN.DATE_NOW))
                 {
-                    filterDate = DateTimeInDay.DATE_NOW;
+                    filterDate = DateTimeVN.DATE_NOW;
                 }
             }
 
@@ -194,13 +194,16 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> CancelCollectingRequestReceived(CollectingRequestReceivedCancelModel model)
         {
-            var collectingRequestEntity = await _collectingRequestRepository.GetAsyncAsNoTracking(x => x.Id.Equals(model.Id) &&
-                                                                                                       x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id) &&
-                                                                                                       x.Status == CollectingRequestStatus.APPROVED);
+            var collectingRequestEntity = _collectingRequestRepository.GetById(model.Id);
 
             if (collectingRequestEntity == null)
             {
                 return BaseApiResponse.NotFound();
+            }
+
+            if (!collectingRequestEntity.CollectorAccountId.Equals(UserAuthSession.UserSession.Id) || collectingRequestEntity.Status != CollectingRequestStatus.APPROVED)
+            {
+                return BaseApiResponse.Error(SystemMessageCode.DataNotFound);
             }
 
             collectingRequestEntity.Status = CollectingRequestStatus.CANCEL_BY_COLLECTOR;

@@ -35,5 +35,6 @@
         public const string FromTimeGreaterThanToTime = "FTGTTT";
         public const string ToTimeGreaterThanToTime = "TTGTTT";
         public const string LessThan15Minutes = "LT15MS";
+        public const string Coordinate = "IVCDN001";
     }
 }

@@ -1,13 +1,17 @@
 ﻿using System;
 namespace SCSS.Utilities.Constants
 {
-
     public class NumberConstant
     {
         public const int Zero = 0;
+        public const int NegativeOne = -1;
         public const int Ten = 10;
+        public const int TwentyFour = 24;
+        public const int Sixty = 60;
         public const int OneThousand = 1000;
     }
+
+    
 
     public class BooleanConstants
     {
@@ -15,13 +19,18 @@ namespace SCSS.Utilities.Constants
         public const bool FALSE = false;
     }
     
-    public class DateTimeInDay
+    public class DateTimeVN
     {
-        public static DateTime DATEFROM = DateTime.Now.Date;
-        public static DateTime DATETO = DateTime.Now.Date.AddHours(24);
-        public static DateTime DATE_NOW = DateTime.Now.Date;
-        public static DateTime DATETIME_NOW = DateTime.Now;
-        public static TimeSpan TIMESPAN_NOW = DateTime.Now.TimeOfDay;
+        public static DateTime DATETIME_NOW => TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfoId.SE_ASIA));
+
+        public static DateTime DATE_NOW => DATETIME_NOW.Date;
+
+        public static TimeSpan TIMESPAN_NOW => DATETIME_NOW.TimeOfDay;
+
+        public static DateTime DATE_FROM => DATETIME_NOW.Date;
+
+        public static DateTime DATE_TO => DATETIME_NOW.Date.AddHours(24);
+        
     }
 
     public class DateTimeFormat
@@ -30,6 +39,7 @@ namespace SCSS.Utilities.Constants
         public const string DD_MM_yyyy_time = @"dd/MM/yyyy hh:mm tt";
         public const string DD_MM_yyyy = @"dd/MM/yyyy";
         public const string DDMMyyyyhhmmss = @"ddMMyyyyhhmmss";
+        public const string DDD_DD_MM_yyy_HH_mm = @"ddd, dd MM yyyy lúc HH:mm";
     }
 
     public class TimeSpanFormat
@@ -50,6 +60,7 @@ namespace SCSS.Utilities.Constants
     public class DefaultConstant
     {
         public const float TotalPoint = 0;
+        public const double Radius = 5;
     }
 
     public class RegularExpression
@@ -162,6 +173,12 @@ namespace SCSS.Utilities.Constants
     public class Globalization
     {
         public const string VN_CULTURE = "vi-VN";
+    }
+
+    public class TimeZoneInfoId
+    {
+        public const string SE_ASIA = "SE Asia Standard Time";
+        public const string SINGAPORE = "Singapore Standard Time";
     }
 
 }

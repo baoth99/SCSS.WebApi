@@ -234,12 +234,12 @@ namespace SCSS.Data.EF
                     case EntityState.Added:
                         if (entry.Entity is BaseEntity addBaseEntity)
                         {
-                            addBaseEntity.CreatedTime = DateTime.Now;
+                            addBaseEntity.CreatedTime = DateTimeVN.DATETIME_NOW;
                             addBaseEntity.CreatedBy = accountId;                          
                         }
                         if (entry.Entity is Account addAccountEntity)
                         {
-                            addAccountEntity.CreatedTime = DateTime.Now;
+                            addAccountEntity.CreatedTime = DateTimeVN.DATETIME_NOW;
                         }                       
                         break;
 
@@ -254,13 +254,13 @@ namespace SCSS.Data.EF
                     case EntityState.Modified:
                         if (entry.Entity is BaseEntity modifyBaseEntity)
                         {
-                            modifyBaseEntity.UpdatedTime = DateTime.Now;
+                            modifyBaseEntity.UpdatedTime = DateTimeVN.DATETIME_NOW;
                             modifyBaseEntity.UpdatedBy = accountId; 
                         }
                         if (entry.Entity is Account updateAccountEntity)
                         {
                             updateAccountEntity.UpdatedBy = accountId;
-                            updateAccountEntity.UpdatedTime = DateTime.Now;
+                            updateAccountEntity.UpdatedTime = DateTimeVN.DATETIME_NOW;
                         }
                         if (entry.Entity is CollectingRequest modifyCollectingRequest)
                         {
