@@ -53,7 +53,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="storageBlobS3Service">The storage BLOB s3 service.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="fcmService">The FCM service.</param>
-        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, IStorageBlobS3Service storageBlobS3Service, ILoggerService logger, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
+        /// <param name="cacheService">The cache service.</param>
+        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, IStorageBlobS3Service storageBlobS3Service, ILoggerService logger, IFCMService fcmService, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
         {
             _accountRepository = unitOfWork.AccountRepository;
             _roleRepository = unitOfWork.RoleRepository;

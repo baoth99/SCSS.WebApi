@@ -2,6 +2,7 @@
 using SCSS.AWSService.Interfaces;
 using SCSS.Utilities.Constants;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SCSS.AWSService.Implementations
@@ -59,8 +60,25 @@ namespace SCSS.AWSService.Implementations
 
         #endregion
 
+        #region Set Cache Data (Dic)
+
+        public async Task SetCacheDatas(Dictionary<CacheRedisKey, string> data)
+        {
+            foreach (var item in data)
+            {
+                await SetCacheData(item.Key, item.Value);
+            }
+        }
+
+        #endregion
+
         #region Set Cache Data Byte
 
+        /// <summary>
+        /// Sets the cache data.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="data">The data.</param>
         public async Task SetCacheData(CacheRedisKey key, byte[] data)
         {
             try
@@ -76,6 +94,23 @@ namespace SCSS.AWSService.Implementations
                 Logger.LogError(ex, CacheLoggerMessage.SetCacheFail(key));
             }
         }
+
+        #endregion
+
+        #region Set Cache Data Byte (Dic)
+
+        /// <summary>
+        /// Sets the cache data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        public async Task SetCacheDatas(Dictionary<CacheRedisKey, byte[]> data)
+        {
+            foreach (var item in data)
+            {
+                await SetCacheData(item.Key, item.Value);
+            }
+        }
+
 
         #endregion
 
@@ -153,6 +188,29 @@ namespace SCSS.AWSService.Implementations
             {
                 Logger.LogError(ex, CacheLoggerMessage.RemoveCacheFail(key));
             }           
+        }
+
+        #endregion
+
+        #region Remove Cache Data (List)
+
+        /// <summary>
+        /// Removes the cache datas.
+        /// </summary>
+        /// <param name="keys">The keys.</param>
+        public async Task RemoveCacheDatas(List<CacheRedisKey> keys)
+        {
+            try
+            {
+                foreach (var item in keys)
+                {
+                    await RemoveCacheData(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                //Logger.LogError(ex, CacheLoggerMessage.RemoveCacheFail());
+            }
         }
 
         #endregion

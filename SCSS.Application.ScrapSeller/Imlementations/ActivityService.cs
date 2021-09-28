@@ -61,7 +61,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        public ActivityService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
+        /// <param name="cacheService"></param>
+        public ActivityService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _locationRepository = unitOfWork.LocationRepository;

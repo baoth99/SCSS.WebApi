@@ -33,6 +33,14 @@ namespace SCSS.Data.EF.UnitOfWork
         IRepository<CollectingRequest> CollectingRequestRepository { get; }
 
         /// <summary>
+        /// Gets the collecting request configuration repository.
+        /// </summary>
+        /// <value>
+        /// The collecting request configuration repository.
+        /// </value>
+        IRepository<CollectingRequestConfig> CollectingRequestConfigRepository { get; }
+
+        /// <summary>
         /// Gets the collect deal transaction repository.
         /// </summary>
         /// <value>
@@ -129,28 +137,12 @@ namespace SCSS.Data.EF.UnitOfWork
         IRepository<SellCollectTransactionDetail> SellCollectTransactionDetailRepository { get; }
 
         /// <summary>
-        /// Gets the service pack repository.
-        /// </summary>
-        /// <value>
-        /// The service pack repository.
-        /// </value>
-        IRepository<ServicePack> ServicePackRepository { get; }
-
-        /// <summary>
         /// Gets the service transaction repository.
         /// </summary>
         /// <value>
         /// The service transaction repository.
         /// </value>
         IRepository<ServiceTransaction> ServiceTransactionRepository { get; }
-
-        /// <summary>
-        /// Gets the subscription repository.
-        /// </summary>
-        /// <value>
-        /// The subscription repository.
-        /// </value>
-        IRepository<Subscription> SubscriptionRepository { get; }
 
         /// <summary>
         /// Gets the transaction service fee percent repository.

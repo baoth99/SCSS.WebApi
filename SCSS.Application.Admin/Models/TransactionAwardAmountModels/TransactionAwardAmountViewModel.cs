@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace SCSS.Application.Admin.Models.TransactionAwardAmountModels
 {
-    public class TransactionAwardAmountCreateModel
+    public class TransactionAwardAmountViewModel
     {
-        public int AppliedObject { get; set; }
+        public int? TransactionType { get; set; }
 
-        public long AppliedAmount { get; set; }
+        public long? AppliedAmount { get; set; }
 
         public float? Amount { get; set; }
     }

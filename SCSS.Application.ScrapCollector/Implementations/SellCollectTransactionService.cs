@@ -84,8 +84,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="fcmService">The FCM service.</param>
+        /// <param name="cacheService"></param>
         public SellCollectTransactionService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
-                                             IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
+                                             IFCMService fcmService, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
         {
             _sellCollectTransactionRepository = unitOfWork.SellCollectTransactionRepository;
             _sellCollectTransactionDetailRepository = unitOfWork.SellCollectTransactionDetailRepository;
@@ -122,8 +123,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             var sellerInfo = _accountRepository.GetById(collectingRequest.SellerAccountId);
 
-            var transactionFeePercent = _transactionServiceFeePercentRepository.GetManyAsNoTracking(x => x.TransactionType == TransactionType.SELL_COLLECT &&
-                                                                                                  x.IsActive).FirstOrDefault().Percent;
+            var transactionFeePercent = await TransactionServiceFeePercent(CacheRedisKey.SellCollectTransactionServiceFee);
 
             var dataResult = new TransactionInfoReviewViewModel()
             {
@@ -161,7 +161,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             }
 
             var awardPoints = _transactionAwardAmountRepository.GetManyAsNoTracking(x => x.IsActive);
-            var awardPointForSeller = awardPoints.Where(x => x.AppliedObject == AccountRole.SELLER).FirstOrDefault();
+            var awardPointForSeller = awardPoints.Where(x => x.TransactionType == AccountRole.SELLER).FirstOrDefault();
 
 
             var sellCollectTransactionEntity = new SellCollectTransaction()

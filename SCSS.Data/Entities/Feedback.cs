@@ -30,6 +30,14 @@ namespace SCSS.Data.Entities
         [MaxLength(500)]
         public string SellingReview { get; set; }
 
+        [MaxLength(500)]
+        public string SellingFeedback { get; set; }
+
+        [MaxLength(500)]
+        public string AdminReply { get; set; }
+
+        public int? Status { get; set; }
+
         public bool IsDeleted { get; set; }
     }
 }

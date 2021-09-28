@@ -59,9 +59,11 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
+        /// <param name="fcmService">The FCM service.</param>
+        /// <param name="cacheService">The cache service.</param>
         /// <param name="mapDistanceMatrixService">The map distance matrix service.</param>
-        public DealerInformationService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
-                                        IMapDistanceMatrixService mapDistanceMatrixService, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
+        public DealerInformationService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, ICacheService cacheService,
+                                        IMapDistanceMatrixService mapDistanceMatrixService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
         {
             _dealerInformationRepository = unitOfWork.DealerInformationRepository;
             _locationRepository = unitOfWork.LocationRepository;

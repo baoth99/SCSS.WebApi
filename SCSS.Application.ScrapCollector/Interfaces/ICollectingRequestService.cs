@@ -15,6 +15,12 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         Task<BaseApiResponseModel> GetCollectingRequestList(CollectingRequestFilterModel model);
 
         /// <summary>
+        /// Checks the maximum number collecting requests collector recevice.
+        /// </summary>
+        /// <returns></returns>
+        Task<string> CheckMaxNumberCollectingRequestsCollectorRecevice();
+
+        /// <summary>
         /// Receives the collecting request.
         /// </summary>
         /// <param name="id">The identifier.</param>

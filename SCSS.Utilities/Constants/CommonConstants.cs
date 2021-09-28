@@ -4,14 +4,15 @@ namespace SCSS.Utilities.Constants
     public class NumberConstant
     {
         public const int Zero = 0;
+        public const int One = 1;
+        public const int Two = 2;
         public const int NegativeOne = -1;
         public const int Ten = 10;
         public const int TwentyFour = 24;
         public const int Sixty = 60;
         public const int OneThousand = 1000;
+        public const int TenThousand = 10000;
     }
-
-    
 
     public class BooleanConstants
     {

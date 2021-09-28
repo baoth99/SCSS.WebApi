@@ -1,10 +1,9 @@
-﻿using SCSS.Utilities.Helper;
+﻿using Newtonsoft.Json;
+using SCSS.Utilities.Helper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SCSS.Utilities.Extensions
 {
@@ -39,14 +38,16 @@ namespace SCSS.Utilities.Extensions
                 dictionary.Add(property.Name, (T)value);
         }
 
-        
-
-
         public static object GetPropertyValue(this object obj, string propertyName)
         {
             return obj.GetType().GetProperties()
                .Single(pi => pi.Name == propertyName)
                .GetValue(obj, null);
+        }
+
+        public static string ToJson<T>(this T obj)
+        {
+            return JsonConvert.SerializeObject(obj);
         }
     }
 }

@@ -38,10 +38,12 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <summary>
         /// Initializes a new instance of the <see cref="ScrapCategoryService"/> class.
         /// </summary>
-        /// <param name="unitOfWork"></param>
-        /// <param name="userAuthSession"></param>
-        /// <param name="logger"></param>
-        public ScrapCategoryService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
+        /// <param name="unitOfWork">The unit of work.</param>
+        /// <param name="userAuthSession">The user authentication session.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="fcmService">The FCM service.</param>
+        /// <param name="cacheService"></param>
+        public ScrapCategoryService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
         {
             _scrapCategoryRepository = unitOfWork.ScrapCategoryRepository;
             _scrapCategoryDetailRepository = unitOfWork.ScrapCategoryDetailRepository;

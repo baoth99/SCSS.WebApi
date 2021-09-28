@@ -47,7 +47,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        public DealerPromotionService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
+        /// <param name="fcmService">The FCM service.</param>
+        /// <param name="cacheService"></param>
+        public DealerPromotionService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
         {
             _promotionRepository = unitOfWork.PromotionRepository;
             _dealerInformationRepository = unitOfWork.DealerInformationRepository;

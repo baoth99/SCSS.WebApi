@@ -1,56 +1,25 @@
-﻿using SCSS.Application.Admin.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
 using SCSS.Application.Admin.Models.TransactionServiceFeeModels;
-using SCSS.AWSService.Interfaces;
-using SCSS.Data.EF.Repositories;
-using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
-using SCSS.FirebaseService.Interfaces;
-using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.Admin.Implementations
 {
-    public class TransactionServiceFeeService : BaseService, ITransactionServiceFeeService
+    public partial class SystemConfigService
     {
-        #region Repositories
-
-        /// <summary>
-        /// The transaction service fee percent repository
-        /// </summary>
-        private readonly IRepository<TransactionServiceFeePercent> _transactionServiceFeePercentRepository;
-
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TransactionServiceFeeService"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <param name="userAuthSession">The user authentication session.</param>
-        /// <param name="logger">The logger.</param>
-        public TransactionServiceFeeService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
-        {
-            _transactionServiceFeePercentRepository = unitOfWork.TransactionServiceFeePercentRepository;
-        }
-
-        #endregion
-
         #region Create Transaction Service Fee
 
         /// <summary>
-        /// Creates the transaction service fee.
+        /// Modify the transaction service fee.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> CreateTransactionServiceFee(TransactionServiceFeeCreateModel model)
+        public async Task<BaseApiResponseModel> ModifyTransactionServiceFee(TransactionServiceFeeModifyModel model)
         {
             var oldTransactionServiceFees = _transactionServiceFeePercentRepository.GetManyAsNoTracking(x => x.TransactionType == model.TransactionType).ToList()
                                                                                    .Select(x =>
@@ -74,7 +43,40 @@ namespace SCSS.Application.Admin.Implementations
 
             await UnitOfWork.CommitAsync();
 
+            // Modify Redis Cache
+            var redisKey = model.TransactionType == TransactionType.SELL_COLLECT ? CacheRedisKey.SellCollectTransactionServiceFee : CacheRedisKey.CollectDealTransactionServiceFee;
+            await _cacheService.SetCacheData(redisKey, entity.Percent.ToString());
+
             return BaseApiResponse.OK();
+        }
+
+        #endregion
+
+        #region Get Transaction Service Fee
+
+        /// <summary>
+        /// Gets the transaction service fee.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> GetTransactionServiceFee()
+        {
+            var transactionFee = await _transactionServiceFeePercentRepository.GetManyAsNoTracking(x => x.IsActive).ToListAsync();
+
+            var sellCollectTransFee = transactionFee.Where(x => x.TransactionType == TransactionType.SELL_COLLECT).Select(x => new TransactionServiceFeeViewModel()
+            {
+                TransactionType = x.TransactionType,
+                Percent = x.Percent
+            }).FirstOrDefault();
+
+            var collectDealTransFee = transactionFee.Where(x => x.TransactionType == TransactionType.COLLECT_DEAL).Select(x => new TransactionServiceFeeViewModel()
+            {
+                TransactionType = x.TransactionType,
+                Percent = x.Percent
+            }).FirstOrDefault();
+
+            var dataResult = new Tuple<TransactionServiceFeeViewModel, TransactionServiceFeeViewModel>(sellCollectTransFee, collectDealTransFee);
+
+            return BaseApiResponse.OK(dataResult);
         }
 
         #endregion

@@ -10,7 +10,7 @@ namespace SCSS.Utilities.Helper
 {
     public class DateTimeUtils
     {
-        public static bool IsMoreThanDays(DateTime? dateTime, int days = RequestScrapCollecting.SevenDays)
+        public static bool IsMoreThanDays(DateTime? dateTime, int days)
         {
             var toTime = dateTime.Value.Date;
             var betweenDays = toTime.Subtract(DateTimeVN.DATE_NOW).Days;

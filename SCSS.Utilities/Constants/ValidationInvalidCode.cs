@@ -31,8 +31,9 @@
 
     public class InvalidCollectingRequestCode
     {
-        public const string MoreThan7Days = "MT7DS";
+        public const string MoreThanDays = "MTDS001";
         public const string FromTimeGreaterThanToTime = "FTGTTT";
+        public const string LimitCR = "LIMITCR001";
         public const string ToTimeGreaterThanToTime = "TTGTTT";
         public const string LessThan15Minutes = "LT15MS";
         public const string Coordinate = "IVCDN001";
@@ -41,6 +42,7 @@
         public const string InvalidCollector = "IVCOL0001";
         public const string InvalidSeller = "IVSELL0001";
         public const string InvalidTimeTo = "IVTIMETO0001";
+        public static string OverReceive = "OCR0001";
 
 
     }

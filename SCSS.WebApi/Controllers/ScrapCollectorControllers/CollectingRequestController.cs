@@ -4,6 +4,7 @@ using SCSS.Application.ScrapCollector.Interfaces;
 using SCSS.Application.ScrapCollector.Models.CollectingRequestModels;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
+using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SignalR.CollectorHubs.Hubs;
@@ -105,8 +106,12 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> ReceiveCollectingRequest([FromQuery] Guid id)
         {
+            var msgErrCode = await _collectingRequestService.CheckMaxNumberCollectingRequestsCollectorRecevice();
+            if (!ValidatorUtil.IsBlank(msgErrCode))
+            {
+                return BaseApiResponse.Error(msgErrCode);
+            }
             var resTuple = await _collectingRequestService.ReceiveCollectingRequest(id);
-
             if (resTuple == null)
             {
                 return BaseApiResponse.Error(SystemMessageCode.SystemException);

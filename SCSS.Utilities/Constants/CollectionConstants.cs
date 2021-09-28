@@ -92,6 +92,26 @@ namespace SCSS.Utilities.Constants
             CollectingRequestStatus.CANCEL_BY_COLLECTOR,
             CollectingRequestStatus.CANCEL_BY_SYSTEM,
         };
+
+
+        public static readonly List<int> RemainingCollectingRequest = new List<int>()
+        {
+            CollectingRequestStatus.PENDING,
+            CollectingRequestStatus.APPROVED,
+        };
+
+
+        public static readonly List<CacheRedisKey> TransactionServiceFees = new List<CacheRedisKey>()
+        {
+            CacheRedisKey.SellCollectTransactionServiceFee,
+            CacheRedisKey.CollectDealTransactionServiceFee,
+        };
+
+        public static readonly List<CacheRedisKey> TransactionAwardAmounts = new List<CacheRedisKey>()
+        {
+            CacheRedisKey.SellCollectTransactionAwardAmount,
+            CacheRedisKey.CollectDealTransactionAwardAmount,
+        };
     }
 
     public class DictionaryConstants
@@ -107,4 +127,5 @@ namespace SCSS.Utilities.Constants
         };
 
     }
+
 }

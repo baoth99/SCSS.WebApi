@@ -19,6 +19,18 @@ namespace SCSS.Application.ScrapSeller.Interfaces
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> CancelCollectingRequest(CollectingRequestCancelModel model);      
+        Task<BaseApiResponseModel> CancelCollectingRequest(CollectingRequestCancelModel model);
+
+        /// <summary>
+        /// Gets the number of remaining days.
+        /// </summary>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetRemainingDays();
+
+        /// <summary>
+        /// Checks the seller request ability.
+        /// </summary>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> CheckSellerRequestAbility();
     }
 }

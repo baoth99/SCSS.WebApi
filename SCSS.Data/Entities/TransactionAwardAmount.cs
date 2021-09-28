@@ -12,7 +12,7 @@ namespace SCSS.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        public int? AppliedObject { get; set; }
+        public int? TransactionType { get; set; }
 
         public long? AppliedAmount { get; set; }
 

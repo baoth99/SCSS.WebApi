@@ -1,5 +1,7 @@
-﻿using SCSS.Application.ScrapDealer.Models.NotificationModels;
+﻿using Microsoft.EntityFrameworkCore;
+using SCSS.Application.ScrapDealer.Models.NotificationModels;
 using SCSS.AWSService.Interfaces;
+using SCSS.AWSService.Models;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
 using SCSS.FirebaseService.Interfaces;
@@ -7,6 +9,7 @@ using SCSS.FirebaseService.Models;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,6 +50,14 @@ namespace SCSS.Application.ScrapDealer
         /// </value>
         protected IFCMService FCMService { get; private set; }
 
+        /// <summary>
+        /// Gets the cache service.
+        /// </summary>
+        /// <value>
+        /// The cache service.
+        /// </value>
+        protected ICacheService CacheService { get; private set; }
+
 
         #region Constructor
 
@@ -57,12 +68,14 @@ namespace SCSS.Application.ScrapDealer
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="fcmService">The FCM service.</param>
-        public BaseService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService)
+        /// <param name="cacheService">The cache service.</param>
+        public BaseService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, ICacheService cacheService)
         {
             UnitOfWork = unitOfWork;
             UserAuthSession = userAuthSession;
             Logger = logger;
             FCMService = fcmService;
+            CacheService = cacheService;
         }
 
         #endregion
@@ -141,6 +154,87 @@ namespace SCSS.Application.ScrapDealer
             };
 
             await FCMService.PushNotification(notificationMessage);
+        }
+
+        #endregion
+
+        #region Get Transaction Service Fee
+
+        /// <summary>
+        /// Transactions the service fee percent.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<float> TransactionServiceFeePercent(CacheRedisKey redisKey)
+        {
+            if (!CollectionConstants.TransactionServiceFees.Contains(redisKey))
+            {
+                throw new ArgumentException("CacheRedisKey is not correct", nameof(redisKey));
+            }
+
+            var percentRes = await CacheService.GetCacheData(redisKey);
+
+            if (percentRes == null)
+            {
+                var transType = redisKey == CacheRedisKey.SellCollectTransactionServiceFee ? TransactionType.SELL_COLLECT : TransactionType.COLLECT_DEAL;
+
+                var entity = await UnitOfWork.TransactionServiceFeePercentRepository.GetManyAsNoTracking(x => x.TransactionType == transType &&
+                                                                                                  x.IsActive).FirstOrDefaultAsync();
+                if (entity == null)
+                {
+                    return NumberConstant.Zero;
+                }
+                var percent = entity.Percent.Value;
+                await CacheService.SetCacheData(redisKey, percent.ToString());
+
+                return percent;
+            }
+            return percentRes.ToFloat();
+        }
+
+        #endregion
+
+        #region Get Transaction Award Point
+
+        /// <summary>
+        /// Transactions the award amount.
+        /// </summary>
+        /// <param name="redisKey">The redis key.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException">CacheRedisKey is not correct - redisKey</exception>
+        public async Task<TransactionAwardAmountCacheViewModel> TransactionAwardAmount(CacheRedisKey redisKey)
+        {
+            if (!CollectionConstants.TransactionAwardAmounts.Contains(redisKey))
+            {
+                throw new ArgumentException("CacheRedisKey is not correct", nameof(redisKey));
+            }
+
+            var transAwardAmount = await CacheService.GetCacheData(redisKey);
+
+            if (transAwardAmount == null)
+            {
+                var transType = redisKey == CacheRedisKey.SellCollectTransactionAwardAmount ? TransactionType.SELL_COLLECT : TransactionType.COLLECT_DEAL;
+
+                var entity = await UnitOfWork.TransactionAwardAmountRepository.GetManyAsNoTracking(x => x.TransactionType == transType &&
+                                                                                                  x.IsActive).FirstOrDefaultAsync();
+                if (entity == null)
+                {
+                    return new TransactionAwardAmountCacheViewModel()
+                    {
+                        Amount = NumberConstant.Zero,
+                        AppliedAmount = NumberConstant.Zero
+                    };
+                }
+                var cache = new TransactionAwardAmountCacheViewModel()
+                {
+                    Amount = entity.Amount.Value,
+                    AppliedAmount = entity.AppliedAmount.Value
+                };
+                await CacheService.SetCacheData(redisKey, cache.ToJson());
+
+                return cache;
+            }
+
+            return transAwardAmount.ToMapperObject<TransactionAwardAmountCacheViewModel>();
         }
 
         #endregion

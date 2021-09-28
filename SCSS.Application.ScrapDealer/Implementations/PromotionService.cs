@@ -42,7 +42,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        public PromotionService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
+        public PromotionService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
         {
             _promotionRepository = unitOfWork.PromotionRepository;
             _scrapCategoryRepository = unitOfWork.ScrapCategoryRepository;

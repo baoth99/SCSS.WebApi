@@ -35,6 +35,8 @@ namespace SCSS.Data.EF.UnitOfWork
 
         private IRepository<CollectingRequest> _collectingRequestRepository;
 
+        private IRepository<CollectingRequestConfig> _collectingRequestConfigRepository;
+
         private IRepository<CollectDealTransaction> _collectDealTransactionRepository;
 
         private IRepository<CollectDealTransactionDetail> _collectDealTransactionDetailRepository;
@@ -59,11 +61,7 @@ namespace SCSS.Data.EF.UnitOfWork
 
         private IRepository<SellCollectTransactionDetail> _sellCollectTransactionDetailRepository;
 
-        private IRepository<ServicePack> _servicePackRepository;
-
         private IRepository<ServiceTransaction> _serviceTransactionRepository;
-
-        private IRepository<Subscription> _subscriptionRepository;
 
         private IRepository<TransactionServiceFeePercent> _transactionServiceFeePercentRepository;
 
@@ -97,6 +95,8 @@ namespace SCSS.Data.EF.UnitOfWork
 
         public IRepository<CollectingRequest> CollectingRequestRepository => _collectingRequestRepository ??= (_collectingRequestRepository = new Repository<CollectingRequest>(AppDbContext));
 
+        public IRepository<CollectingRequestConfig> CollectingRequestConfigRepository => _collectingRequestConfigRepository ??= (_collectingRequestConfigRepository = new Repository<CollectingRequestConfig>(AppDbContext));
+
         public IRepository<CollectDealTransaction> CollectDealTransactionRepository => _collectDealTransactionRepository ??= (_collectDealTransactionRepository = new Repository<CollectDealTransaction>(AppDbContext));
 
         public IRepository<CollectDealTransactionDetail> CollectDealTransactionDetailRepository => _collectDealTransactionDetailRepository ??= (_collectDealTransactionDetailRepository = new Repository<CollectDealTransactionDetail>(AppDbContext));
@@ -121,11 +121,7 @@ namespace SCSS.Data.EF.UnitOfWork
 
         public IRepository<SellCollectTransactionDetail> SellCollectTransactionDetailRepository => _sellCollectTransactionDetailRepository ??= (_sellCollectTransactionDetailRepository = new Repository<SellCollectTransactionDetail>(AppDbContext));
 
-        public IRepository<ServicePack> ServicePackRepository => _servicePackRepository ??= (_servicePackRepository = new Repository<ServicePack>(AppDbContext));
-
         public IRepository<ServiceTransaction> ServiceTransactionRepository => _serviceTransactionRepository ??= (_serviceTransactionRepository = new Repository<ServiceTransaction>(AppDbContext));
-
-        public IRepository<Subscription> SubscriptionRepository => _subscriptionRepository ??= (_subscriptionRepository = new Repository<Subscription>(AppDbContext));
 
         public IRepository<TransactionServiceFeePercent> TransactionServiceFeePercentRepository => _transactionServiceFeePercentRepository ??= (_transactionServiceFeePercentRepository = new Repository<TransactionServiceFeePercent>(AppDbContext));
 
@@ -135,7 +131,7 @@ namespace SCSS.Data.EF.UnitOfWork
 
         #endregion
 
-        #region Commit
+        #region Commit Async
 
         /// <summary>
         /// Commits the asynchronous.

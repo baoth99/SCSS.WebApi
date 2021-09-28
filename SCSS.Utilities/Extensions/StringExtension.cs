@@ -73,5 +73,22 @@ namespace SCSS.Utilities.Extensions
             }
             return str;
         }
+
+        public static int ToInt(this string val)
+        {
+            var isSuccess = int.TryParse(val, out int result);
+            return isSuccess ? result : NumberConstant.One;
+        }
+
+        public static float ToFloat(this string val)
+        {
+            var isSuccess = float.TryParse(val, out float result);
+            return isSuccess ? result : NumberConstant.Zero;
+        }
+
+        public static T ToEnum<T>(this string val)
+        {
+            return (T)Enum.Parse(typeof(T), val);
+        }
     }
 }

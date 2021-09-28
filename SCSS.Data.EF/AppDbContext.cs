@@ -55,6 +55,8 @@ namespace SCSS.Data.EF
 
         public DbSet<CollectingRequest> CollectingRequest { get; set; }
 
+        public DbSet<CollectingRequestConfig> CollectingRequestConfig { get; set; }
+
         public DbSet<CollectDealTransaction> CollectDealTransaction { get; set; }
 
         public DbSet<CollectDealTransactionDetail> CollectDealTransactionDetail { get; set; }
@@ -78,10 +80,6 @@ namespace SCSS.Data.EF
         public DbSet<SellCollectTransaction> SellCollectTransaction { get; set; }
 
         public DbSet<SellCollectTransactionDetail> SellCollectTransactionDetail { get; set; }
-
-        public DbSet<ServicePack> ServicePack { get; set; }
-
-        public DbSet<Subscription> Subscription { get; set; }
 
         public DbSet<ServiceTransaction> ServiceTransaction { get; set; }
 

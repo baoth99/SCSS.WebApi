@@ -33,7 +33,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="fcmService">The FCM service.</param>
-        public StatisticService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
+        /// <param name="cacheService"></param>
+        public StatisticService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
         }

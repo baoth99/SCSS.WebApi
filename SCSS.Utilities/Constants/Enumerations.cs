@@ -35,7 +35,14 @@
 
     public enum CacheRedisKey
     {
-        ImageSlider
+        ImageSlider,
+        RequestQuantity,
+        ReceiveQuantity,
+        MaxNumberOfRequestDays,
+        SellCollectTransactionServiceFee,
+        CollectDealTransactionServiceFee,
+        SellCollectTransactionAwardAmount,
+        CollectDealTransactionAwardAmount
     }
 
     public enum Vehicle

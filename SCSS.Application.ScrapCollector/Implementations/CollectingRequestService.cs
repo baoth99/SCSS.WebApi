@@ -71,9 +71,10 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="mapDistanceMatrixService">The map distance matrix service.</param>
-        /// <param name="FCMService">The FCM service.</param>
+        /// <param name="fcmService">The FCM service.</param>
+        /// <param name="cacheService">The cache service.</param>
         public CollectingRequestService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
-                                        IMapDistanceMatrixService mapDistanceMatrixService, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
+                                        IMapDistanceMatrixService mapDistanceMatrixService, IFCMService fcmService, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _collectingRequestRejectionRepository = unitOfWork.CollectingRequestRejectionRepository;
@@ -247,6 +248,29 @@ namespace SCSS.Application.ScrapCollector.Implementations
             }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: resData);
+        }
+
+        #endregion
+
+
+        #region Check Max Number Of Collecting Requests that Collector Can Receive;
+
+        /// <summary>
+        /// Checks the maximum number collecting requests collector recevices.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> CheckMaxNumberCollectingRequestsCollectorRecevice()
+        {
+            var maxRequest = await MaxNumberCollectingRequestCollectorReceive();
+
+            var collectingRequests = _collectingRequestRepository.GetManyAsNoTracking(x => x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id) &&
+                                                                                          x.Status == CollectingRequestStatus.APPROVED).ToList();
+            if (collectingRequests.Count >= maxRequest)
+            {
+                return InvalidCollectingRequestCode.OverReceive;
+            }
+
+            return string.Empty;
         }
 
         #endregion

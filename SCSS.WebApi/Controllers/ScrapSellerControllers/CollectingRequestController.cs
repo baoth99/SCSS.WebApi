@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting.Internal;
 using SCSS.Application.Admin.Models;
 using SCSS.Application.ScrapSeller.Interfaces;
 using SCSS.Application.ScrapSeller.Models.CollectingRequestModels;
@@ -103,6 +104,46 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         public async Task<BaseApiResponseModel> CancelScrapCollectingRequest([FromBody] CollectingRequestCancelModel model)
         {
             return await _collectingRequestService.CancelCollectingRequest(model);
+        }
+
+        #endregion
+
+
+        #region Get Number Of Remaining Days that seller can request
+
+        /// <summary>
+        /// Gets the number of remaining days.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapSellerApiUrlDefinition.CollectingRequestApiUrl.GetRemainingDays)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetRemainingDays()
+        {
+            return await _collectingRequestService.GetRemainingDays();
+        }
+
+        #endregion
+
+
+        #region Check Seller Request Ability
+
+        /// <summary>
+        /// Checks the seller request ability.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapSellerApiUrlDefinition.CollectingRequestApiUrl.RequestAbility)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> CheckSellerRequestAbility()
+        {
+            return await _collectingRequestService.CheckSellerRequestAbility();
         }
 
         #endregion

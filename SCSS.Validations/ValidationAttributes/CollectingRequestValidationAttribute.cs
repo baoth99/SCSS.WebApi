@@ -25,12 +25,6 @@ namespace SCSS.Validations.ValidationAttributes
                 return new ValidationResult(InvalidTextCode.DateTimeNow);
             }
 
-            // Check Collecting Request day is more than 7 days
-            if (DateTimeUtils.IsMoreThanDays(collectingRequestDate))
-            {
-                return new ValidationResult(InvalidCollectingRequestCode.MoreThan7Days);
-            }
-
             return ValidationResult.Success;
         }
     }

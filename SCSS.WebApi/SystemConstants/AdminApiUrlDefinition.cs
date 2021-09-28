@@ -13,6 +13,7 @@ namespace SCSS.WebApi.SystemConstants
         private const string TransactionAwardAmount = "transaction-award";
         private const string TransactionServiceFee = "transaction-fee";
         private const string ColletingRequest = "collecting-request";
+        private const string SystemConfig = "sys-conf";
 
         public static class TransactionAwardAmountApiUrl
         {
@@ -28,6 +29,16 @@ namespace SCSS.WebApi.SystemConstants
         {
             public const string Search = ColletingRequest + "/search";
             public const string Detail = ColletingRequest + "/detail";
+        }
+
+        public static class SystemConfigApiUrl
+        {
+            public const string SystemConfigInfo = SystemConfig + "/info";
+            public const string ModifySystemConfig = SystemConfig + "/modify";
+            public const string ModifyTransactionAward = SystemConfig + "/trans-award/modify";
+            public const string GetTransactionAward = SystemConfig + "/trans-award/get";
+            public const string ModifyTransactionFee = SystemConfig + "/trans-fee/modify";
+            public const string GetTransactionFee = SystemConfig + "/trans-fee/get";
         }
 
         public static class ScrapCategoryApiUrl

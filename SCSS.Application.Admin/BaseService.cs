@@ -66,7 +66,6 @@ namespace SCSS.Application.Admin
 
         #endregion
 
-
         #region Store and Send Many Notification
 
         /// <summary>

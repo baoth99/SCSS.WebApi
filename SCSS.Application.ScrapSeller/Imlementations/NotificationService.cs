@@ -38,7 +38,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        public NotificationService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
+        /// <param name="cacheService"></param>
+        public NotificationService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _notificationRepository = unitOfWork.NotificationRepository;
         }

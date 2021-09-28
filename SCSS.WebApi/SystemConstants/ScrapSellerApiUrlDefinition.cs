@@ -41,6 +41,8 @@
             public const string RequestCollecting = CollectingRequest + "/request";
             public const string CancelCollectingRequest = CollectingRequest + "/cancel";
             public const string UploadCollectingRequestImg = CollectingRequest + "/upload-img";
+            public const string GetRemainingDays = CollectingRequest + "/remaining-days";
+            public const string RequestAbility = CollectingRequest + "/request-ability";
         }
 
         public static class ActivityApiUrl

@@ -2,9 +2,9 @@
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.ORM.Dapper.Implementations;
 using SCSS.ORM.Dapper.Interfaces;
+using SCSS.QueueEngine.QueueEngines;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.WebApi.BackgroundTasks;
-using Microsoft.AspNetCore.Hosting;
 using System;
 
 namespace SCSS.WebApi.SystemConfigurations
@@ -21,8 +21,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddSingleton<IDapperService, DapperService>();
             services.AddScoped<IAuthSession, AuthSession>();
-
-
+            services.AddTransient<IQueueEngineFactory, QueueEngineFactory>();
 
             #region Admin Application
 
@@ -32,9 +31,8 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.Admin.Interfaces.IImageSliderService, SCSS.Application.Admin.Implementations.ImageSliderService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.IRequestRegisterService, SCSS.Application.Admin.Implementations.RequestRegisterService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.IDealerInformationService, SCSS.Application.Admin.Implementations.DealerInformationService>();
-            services.AddScoped<SCSS.Application.Admin.Interfaces.ITransactionAwardAmountService, SCSS.Application.Admin.Implementations.TransactionAwardAmountService>();
-            services.AddScoped<SCSS.Application.Admin.Interfaces.ITransactionServiceFeeService, SCSS.Application.Admin.Implementations.TransactionServiceFeeService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.ICollectingRequestService, SCSS.Application.Admin.Implementations.CollectingRequestService>();
+            services.AddScoped<SCSS.Application.Admin.Interfaces.ISystemConfigService, SCSS.Application.Admin.Implementations.SystemConfigService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.ICollectingRequestBackgroundService, SCSS.Application.Admin.Implementations.CollectingRequestBackgroundService>();
 
             #endregion Admin Application
@@ -54,7 +52,6 @@ namespace SCSS.WebApi.SystemConfigurations
             #region Dealer Application
 
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IAccountService, SCSS.Application.ScrapDealer.Implementations.AccountService>();
-            services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.ISubscriptionService, SCSS.Application.ScrapDealer.Implementations.SubscriptionService>();
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IDealerInformationService, SCSS.Application.ScrapDealer.Implementations.DealerInformationService>();
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IPromotionService, SCSS.Application.ScrapDealer.Implementations.PromotionService>();
 

@@ -87,6 +87,12 @@ namespace SCSS.WebApi
 
             #endregion
 
+            #region Add Memory Cache
+
+            services.AddMemoryCacheSetUp();
+
+            #endregion
+
             #region Database Connection
 
             services.AddDatabaseConnectionSetUp();
@@ -151,6 +157,8 @@ namespace SCSS.WebApi
             app.UseAuthorization();
 
             app.UseEndpointsSetUp();
+
+            app.UseInitializeDatabaseSetUp();
         }
     }
 }

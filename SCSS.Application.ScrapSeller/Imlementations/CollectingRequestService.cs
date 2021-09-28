@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapSeller.Imlementations
 {
-    public class CollectingRequestService : BaseService, ICollectingRequestService
+    public partial class CollectingRequestService : BaseService, ICollectingRequestService
     {
         #region Repositories
 
@@ -44,7 +44,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        public CollectingRequestService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
+        /// <param name="cacheService"></param>
+        public CollectingRequestService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _locationRepository = unitOfWork.LocationRepository;
@@ -65,7 +66,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             var collectingRequestToTime = model.ToTime.ToTimeSpan().Value;
 
             // Validate Collecting Request Time
-            var errorList = ValidateCollectingRequestTime(model.CollectingRequestDate.ToDateTime(), collectingRequestFromTime, collectingRequestToTime);
+            var errorList = await ValidateCollectingRequestTime(model.CollectingRequestDate.ToDateTime(), collectingRequestFromTime, collectingRequestToTime);
 
             if (errorList.Any())
             {
@@ -221,9 +222,31 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <param name="fromTime">From time.</param>
         /// <param name="toTime">To time.</param>
         /// <returns></returns>
-        private List<ValidationError> ValidateCollectingRequestTime(DateTime? collectingRequestDate, TimeSpan? fromTime, TimeSpan? toTime)
+        private async Task<List<ValidationError>> ValidateCollectingRequestTime(DateTime? collectingRequestDate, TimeSpan? fromTime, TimeSpan? toTime)
         {
             var errorList = new List<ValidationError>();
+
+            var days = await MaxNumberDaysSellerRequestAdvance();
+
+            // Check Collecting Request day is more than days
+            if (DateTimeUtils.IsMoreThanDays(collectingRequestDate, days))
+            {
+                errorList.Add(new ValidationError(nameof(collectingRequestDate), InvalidCollectingRequestCode.MoreThanDays));
+            }
+
+
+            // Check Colleting Request in request Day
+            // Only One Collecting Request is pending in request day.
+            var collectingRequestInDay = _collectingRequestRepository.GetManyAsNoTracking(x => x.SellerAccountId.Equals(UserAuthSession.UserSession.Id) &&
+                                                                                         x.CollectingRequestDate.Value.Date.CompareTo(collectingRequestDate.Value.Date) == NumberConstant.Zero &&
+                                                                                         (x.Status == CollectingRequestStatus.PENDING || x.Status == CollectingRequestStatus.APPROVED));
+
+            var requests = await MaxNumberCollectingRequestSellerRequest();
+
+            if (collectingRequestInDay.Count() >= requests)
+            {
+                errorList.Add(new ValidationError(nameof(collectingRequestDate), InvalidCollectingRequestCode.LimitCR));
+            }
 
             //  Check CollectingRequestFromTime with CollectingRequestToTime
             //  If CollectingRequestFromTime is greater than CollectingRequestFromTime 
@@ -245,7 +268,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 }
             }
 
-            // Check minutes between fromTime and toTime. if it less than 15 minutes => error
+            // Check minutes between fromTime and toTime. if it is less than 15 minutes => error
             if (!DateTimeUtils.IsMoreThanMinutes(fromTime, toTime))
             {
                 errorList.Add(new ValidationError("between", InvalidCollectingRequestCode.LessThan15Minutes));
