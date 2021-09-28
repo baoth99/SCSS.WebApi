@@ -26,7 +26,7 @@ namespace SCSS.WebApi.SystemConfigurations
                 throw new ArgumentException(nameof(services));
             }
             // Set Environment Variable for Firebase
-            Environment.SetEnvironmentVariable(CommonConstants.GoogleCredentials, AppSettingValues.FirebaseCredentialFile);
+            Environment.SetEnvironmentVariable(AppSettingValues.GoogleCredentials, AppSettingValues.FirebaseCredentialFile);
 
             // Connect to Twilio Service
             string accountSid = AppSettingValues.TwilioAccountSID;

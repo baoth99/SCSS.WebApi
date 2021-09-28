@@ -1,19 +1,16 @@
 ﻿using Dapper;
-using SCSS.Application.Admin.Interfaces;
-using SCSS.AWSService.Interfaces;
+using SCSS.Aplication.BackgroundService.Interfaces;
 using SCSS.Data.EF.UnitOfWork;
-using SCSS.FirebaseService.Interfaces;
 using SCSS.ORM.Dapper.Interfaces;
-using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Helper;
 using System;
 using System.Threading.Tasks;
 
-namespace SCSS.Application.Admin.Implementations
+namespace SCSS.Aplication.BackgroundService.Implementations
 {
-    public class CollectingRequestBackgroundService : BaseService, ICollectingRequestBackgroundService
+    public class CollectingRequestService : BaseService, ICollectingRequestService
     {
         #region Services
 
@@ -27,15 +24,11 @@ namespace SCSS.Application.Admin.Implementations
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CollectingRequestBackgroundService"/> class.
+        /// Initializes a new instance of the <see cref="CollectingRequestService"/> class.
         /// </summary>
         /// <param name="unitOfWork">The unit of work.</param>
-        /// <param name="userAuthSession">The user authentication session.</param>
-        /// <param name="logger">The logger.</param>
-        /// <param name="fcmService">The FCM service.</param>
         /// <param name="dapperService">The dapper service.</param>
-        public CollectingRequestBackgroundService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, 
-                                                    IFCMService fcmService, IDapperService dapperService) : base(unitOfWork, userAuthSession, logger, fcmService)
+        public CollectingRequestService(IUnitOfWork unitOfWork, IDapperService dapperService) : base(unitOfWork)
         {
             _dapperService = dapperService;
         }
@@ -58,9 +51,10 @@ namespace SCSS.Application.Admin.Implementations
             parameters.Add("@PendingStatus", CollectingRequestStatus.PENDING);
             parameters.Add("@ApprovedStatus", CollectingRequestStatus.APPROVED);
 
-            //await _dapperService.SqlExecuteAsync(sql, parameters);
+            await _dapperService.SqlExecuteAsync(sql, parameters);
         }
 
         #endregion
+
     }
 }

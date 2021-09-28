@@ -106,7 +106,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             }
 
             var collectingRequestdataQuery = _collectingRequestRepository.GetMany(x => (ValidatorUtil.IsBlank(filterDate) || x.CollectingRequestDate.Value.Date.CompareTo(filterDate.Value.Date) == NumberConstant.Zero) &&
-                                                                                                    x.Status == CollectingRequestStatus.PENDING && x.CollectorAccountId == null)                                                       
+                                                                                  x.Status == CollectingRequestStatus.PENDING && x.CollectorAccountId == null)                                                       
                                                         .Join(_locationRepository.GetAll(), x => x.LocationId, y => y.Id,
                                                                 (x, y) => new
                                                                 {
@@ -122,6 +122,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                     y.Longitude,
                                                                     x.IsBulky,
                                                                 });
+
+            collectingRequestdataQuery = collectingRequestdataQuery.Where(x => !(x.CollectingRequestDate.Value.Date.CompareTo(DateTimeVN.DATE_NOW) == NumberConstant.Zero &&
+                                                                                x.TimeTo.Value.CompareTo(DateTimeVN.TIMESPAN_NOW) >= NumberConstant.Zero));
 
             if (!collectingRequestdataQuery.Any())
             {
@@ -295,6 +298,13 @@ namespace SCSS.Application.ScrapCollector.Implementations
             {
                 return null;
             }
+
+            if (collectingRequestEntity.CollectingRequestDate.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW) &&
+                collectingRequestEntity.TimeFrom.IsCompareTimeSpanGreaterOrEqual(DateTimeVN.TIMESPAN_NOW))
+            {
+                return null;
+            }
+
 
             collectingRequestEntity.CollectorAccountId = UserAuthSession.UserSession.Id;
             collectingRequestEntity.Status = CollectingRequestStatus.APPROVED;

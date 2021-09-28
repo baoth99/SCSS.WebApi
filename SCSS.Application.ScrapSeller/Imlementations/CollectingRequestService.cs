@@ -229,7 +229,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             var days = await MaxNumberDaysSellerRequestAdvance();
 
             // Check Collecting Request day is more than days
-            if (DateTimeUtils.IsMoreThanDays(collectingRequestDate, days))
+            if (DateTimeUtils.IsMoreThanFutureDays(collectingRequestDate, days))
             {
                 errorList.Add(new ValidationError(nameof(collectingRequestDate), InvalidCollectingRequestCode.MoreThanDays));
             }

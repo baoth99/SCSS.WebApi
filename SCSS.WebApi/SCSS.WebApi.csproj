@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SCSS.Aplication.BackgroundService\SCSS.Aplication.BackgroundService.csproj" />
     <ProjectReference Include="..\SCSS.Application.Admin\SCSS.Application.Admin.csproj" />
     <ProjectReference Include="..\SCSS.Application.ScrapCollector\SCSS.Application.ScrapCollector.csproj" />
     <ProjectReference Include="..\SCSS.Application.ScrapDealer\SCSS.Application.ScrapDealer.csproj" />

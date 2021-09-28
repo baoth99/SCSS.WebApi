@@ -7,7 +7,7 @@
         private const string CollectingRequest = "collecting-request";
         private const string Notification = "notification";
         private const string Activity = "activity";
-
+        private const string Feedback = "Feedback";
         public static class DataApiUrl
         {
             public const string GetImage = "image/get";
@@ -50,6 +50,12 @@
             public const string Get = Activity + "/get";
             public const string Detail = Activity + "/detail";
 
+        }
+
+        public static class FeedbackApiUrl
+        {
+            public const string CreateTransFeedback = Feedback + "/trans-feedback/create";
+            public const string CreateFeedbackToAdmin = Feedback + "/feedback-admin/create";
         }
     }
 

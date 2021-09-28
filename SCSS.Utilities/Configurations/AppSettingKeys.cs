@@ -52,6 +52,7 @@ namespace SCSS.Utilities.Configurations
         public static class Firebase
         {
             public const string CredentialFile = "FirebaseService:CredentialFile";
+            public const string GoogleCredentials = "FirebaseService:GoogleCredentials";
         }
 
         public static class Twilio

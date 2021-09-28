@@ -64,6 +64,19 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         }
 
         #endregion
-        
+
+
+
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapDealerApiUrlDefinition.DataApiUrl.GetImage + "/time")]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+
+        public async Task<string> GetString()
+        {
+            return DateTimeVN.DATETIME_NOW.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time);
+        }
     }
 }

@@ -48,7 +48,20 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// </summary>
         private readonly IRepository<Account> _accountRepository;
 
+        /// <summary>
+        /// The scrap category repository
+        /// </summary>
+        private readonly IRepository<ScrapCategory> _scrapCategoryRepository;
 
+        /// <summary>
+        /// The scrap category detail repository
+        /// </summary>
+        private readonly IRepository<ScrapCategoryDetail> _scrapCategoryDetailRepository;
+
+        /// <summary>
+        /// The feedback repository
+        /// </summary>
+        private readonly IRepository<Feedback> _feedbackRepository;
 
         #endregion
 
@@ -69,6 +82,9 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             _sellCollectTransactionRepository = unitOfWork.SellCollectTransactionRepository;
             _sellCollectTransactionDetailRepository = unitOfWork.SellCollectTransactionDetailRepository;
             _accountRepository = unitOfWork.AccountRepository;
+            _scrapCategoryRepository = unitOfWork.ScrapCategoryRepository;
+            _scrapCategoryDetailRepository = unitOfWork.ScrapCategoryDetailRepository;
+            _feedbackRepository = unitOfWork.FeedbackRepository;
         }
 
         #endregion
@@ -137,7 +153,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
         #endregion
 
-
         #region Get Activity Detail
 
         /// <summary>
@@ -175,19 +190,123 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             var collectorInfo = _accountRepository.GetById(crEntity.CollectorAccountId);
 
-            dataResult.CollectorInfo = new CollectorInformation()
+            if (collectorInfo != null)
             {
-                Name = collectorInfo?.Name,
-                Phone = collectorInfo?.Phone
-            };
+                dataResult.CollectorInfo = new CollectorInformation()
+                {
+                    Name = collectorInfo?.Name,
+                    Phone = collectorInfo?.Phone
+                };
+            }
 
-            // TODO: 
             if (crEntity.Status == CollectingRequestStatus.COMPLETED)
             {
+                var transactionInfo = _sellCollectTransactionRepository.GetAsNoTracking(x => x.CollectingRequestId.Equals(crEntity.Id));
 
+                var transactionDetailItems = await GetTransactionInformationDetails(transactionInfo.Id);
+
+                var feedbackInfo = GetFeedbackInfo(transactionInfo.Id, transactionInfo.CreatedTime);
+
+                dataResult.Transaction = new TransactionInformation()
+                {
+                    TransactionDate = transactionInfo?.CreatedTime.ToStringFormat(DateTimeFormat.DDD_dd_MMM),
+                    TransactionTime = transactionInfo?.CreatedTime.Value.TimeOfDay.ToStringFormat(TimeSpanFormat.HH_MM),
+                    Total = transactionInfo?.Total,
+                    Fee = transactionInfo?.TransactionServiceFee,
+                    AwardPoint = transactionInfo?.AwardPoint,
+                    Details = transactionDetailItems,
+                    FeedbackInfo = feedbackInfo
+                };
             }
 
             return BaseApiResponse.OK(dataResult);
+        }
+
+        #endregion
+
+        #region Get Transaction Information Details
+
+        /// <summary>
+        /// Gets the transaction information details.
+        /// </summary>
+        /// <param name="transId">The trans identifier.</param>
+        /// <returns></returns>
+        private async Task<List<TransactionInformationDetail>> GetTransactionInformationDetails(Guid transId)
+        {
+            var transactionDetailItems = await _sellCollectTransactionDetailRepository.GetManyAsNoTracking(x => x.SellCollectTransactionId.Equals(transId))
+                                                                                    .GroupJoin(_scrapCategoryDetailRepository.GetAllAsNoTracking(), x => x.CollectorCategoryDetailId, y => y.Id,
+                                                                                         (x, y) => new
+                                                                                         {
+                                                                                             x.Quantity,
+                                                                                             x.Total,
+                                                                                             ScrapCategoryDetail = y
+                                                                                         }).SelectMany(x => x.ScrapCategoryDetail.DefaultIfEmpty(), (x, y) => new
+                                                                                         {
+                                                                                             x.Quantity,
+                                                                                             x.Total,
+                                                                                             y.ScrapCategoryId,
+                                                                                             y.Unit,
+                                                                                         })
+                                                                                    .GroupJoin(_scrapCategoryRepository.GetAllAsNoTracking(), x => x.ScrapCategoryId, y => y.Id,
+                                                                                         (x, y) => new
+                                                                                         {
+                                                                                             x.Quantity,
+                                                                                             x.Total,
+                                                                                             x.Unit,
+                                                                                             ScrapCategory = y
+                                                                                         }).SelectMany(x => x.ScrapCategory.DefaultIfEmpty(), (x, y) => new
+                                                                                         {
+                                                                                             x.Quantity,
+                                                                                             x.Total,
+                                                                                             x.Unit,
+                                                                                             y.Name
+                                                                                         }).Select(x => new TransactionInformationDetail()
+                                                                                         {
+                                                                                             Quantity = x.Quantity,
+                                                                                             ScrapCategoryName = x.Name,
+                                                                                             Unit = x.Unit,
+                                                                                             Total = x.Total,
+                                                                                         }).ToListAsync();
+            return transactionDetailItems;
+        }
+
+        #endregion
+
+        #region Get FeedbackInfo
+
+        /// <summary>
+        /// Gets the feedback information.
+        /// </summary>
+        /// <param name="transId">The trans identifier.</param>
+        /// <param name="createdTransTime">The created trans time.</param>
+        /// <returns></returns>
+        private FeedbackInformationResponse GetFeedbackInfo(Guid transId, DateTime? createdTransTime)
+        {
+
+            var betweenDays = DateTimeUtils.IsMoreThanPastDays(createdTransTime, NumberConstant.Five);
+            if (betweenDays)
+            {
+                return new FeedbackInformationResponse()
+                {
+                    FeedbackStatus = FeedbackStatus.TimeUpToGiveFeedback
+                };
+            }
+
+            var feedback = _feedbackRepository.GetAsNoTracking(x => x.SellCollectTransactionId.Equals(transId));
+
+            if (feedback == null)
+            {
+                return new FeedbackInformationResponse()
+                {
+                    FeedbackStatus = FeedbackStatus.HaveNotGivenFeedbackYet
+                };
+            }
+
+            return new FeedbackInformationResponse()
+            {
+                FeedbackStatus = FeedbackStatus.HaveGivenFeedback,
+                RatingFeedback = feedback.Rate
+            };
         }
 
         #endregion

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SCSS.Application.Admin.Interfaces;
+using SCSS.Aplication.BackgroundService.Interfaces;
 using SCSS.AWSService.Interfaces;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SCSS.WebApi.BackgroundTasks
+namespace SCSS.WebApi.BackgroundJobs
 {
     public class TrailCollectingRequestHostedService : IHostedService, IDisposable
     {
@@ -73,7 +73,7 @@ namespace SCSS.WebApi.BackgroundTasks
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                var collectingRequestBackgroundService = scope.ServiceProvider.GetRequiredService<ICollectingRequestBackgroundService>();
+                var collectingRequestBackgroundService = scope.ServiceProvider.GetRequiredService<ICollectingRequestService>();
                 await collectingRequestBackgroundService.TrailCollectingRequestInDayBackground();
             }
 

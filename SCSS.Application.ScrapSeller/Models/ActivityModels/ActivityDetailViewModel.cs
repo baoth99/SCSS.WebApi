@@ -59,7 +59,16 @@ namespace SCSS.Application.ScrapSeller.Models.ActivityModels
 
         public int? AwardPoint { get; set; }
 
+        public FeedbackInformationResponse FeedbackInfo { get; set; }
+
         public List<TransactionInformationDetail> Details { get; set; }
+    }
+
+    public class FeedbackInformationResponse
+    {
+        public int FeedbackStatus { get; set; }
+
+        public float? RatingFeedback { get; set; }
     }
 
     public class TransactionInformationDetail

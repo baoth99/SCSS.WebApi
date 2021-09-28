@@ -4,8 +4,8 @@
     "profile" : "Tran Hoai Bao",
     "region"  : "ap-southeast-1",
     "application" : "SCSS.WebApi",
-    "environment" : "Scsswebapi-env",
-    "solution-stack" : "64bit Windows Server 2019 v2.6.8 running IIS 10.0",
+    "environment" : "Scsswebapi-pro-env",
+    "solution-stack" : "64bit Windows Server 2019 v2.7.0 running IIS 10.0",
     "iis-website"    : "Default Web Site",
     "app-path"       : "/",
     "enable-xray"    : false

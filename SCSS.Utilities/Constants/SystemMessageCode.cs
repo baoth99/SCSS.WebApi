@@ -113,6 +113,20 @@ namespace SCSS.Utilities.Constants
         /// </value>
         public static string DuplicateData => "300011";
 
+        /// <summary>
+        /// Gets the time up.
+        /// </summary>
+        /// <value>
+        /// The time up.
+        /// </value>
+        public static string TimeUp => "300012";
 
+        /// <summary>
+        /// Gets the fixed data.
+        /// </summary>
+        /// <value>
+        /// The fixed data.
+        /// </value>
+        public static string FixedData => "300013";
     }
 }

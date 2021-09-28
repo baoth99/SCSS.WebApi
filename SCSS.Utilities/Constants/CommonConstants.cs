@@ -7,6 +7,8 @@ namespace SCSS.Utilities.Constants
         public const int One = 1;
         public const int Two = 2;
         public const int NegativeOne = -1;
+        public const int Five = 5;
+        public const int Seven = 7;
         public const int Ten = 10;
         public const int TwentyFour = 24;
         public const int Sixty = 60;
@@ -59,7 +61,6 @@ namespace SCSS.Utilities.Constants
         public const int Zero = 0;
         public const string ContentType = "Content-Type";
         public const string Null = "N/A";
-        public const string GoogleCredentials = "GOOGLE_APPLICATION_CREDENTIALS";
     }
 
     public class DefaultConstant
@@ -167,6 +168,19 @@ namespace SCSS.Utilities.Constants
         public const string HYPHEN = "-";
         public const string PERCENT = "%";
         public const string SLASH = "|";
+    }
+
+    public class FeedbackType
+    {
+        public const int Transaction = 1;
+        public const int FeedbackToAdmin = 2;
+    }
+
+    public class FeedbackStatus
+    {
+        public const int HaveNotGivenFeedbackYet = 1;
+        public const int HaveGivenFeedback = 2;
+        public const int TimeUpToGiveFeedback = 3;
     }
 
     public class RequestScrapCollecting

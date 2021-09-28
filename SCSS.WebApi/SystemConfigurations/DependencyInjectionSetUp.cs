@@ -4,7 +4,7 @@ using SCSS.ORM.Dapper.Implementations;
 using SCSS.ORM.Dapper.Interfaces;
 using SCSS.QueueEngine.QueueEngines;
 using SCSS.Utilities.AuthSessionConfig;
-using SCSS.WebApi.BackgroundTasks;
+using SCSS.WebApi.BackgroundJobs;
 using System;
 
 namespace SCSS.WebApi.SystemConfigurations
@@ -21,7 +21,13 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddSingleton<IDapperService, DapperService>();
             services.AddScoped<IAuthSession, AuthSession>();
-            services.AddTransient<IQueueEngineFactory, QueueEngineFactory>();
+            services.AddSingleton<IQueueEngineFactory, QueueEngineFactory>();
+
+            #region Background Services
+
+            services.AddScoped<SCSS.Aplication.BackgroundService.Interfaces.ICollectingRequestService, SCSS.Aplication.BackgroundService.Implementations.CollectingRequestService>();
+
+            #endregion
 
             #region Admin Application
 
@@ -33,7 +39,6 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.Admin.Interfaces.IDealerInformationService, SCSS.Application.Admin.Implementations.DealerInformationService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.ICollectingRequestService, SCSS.Application.Admin.Implementations.CollectingRequestService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.ISystemConfigService, SCSS.Application.Admin.Implementations.SystemConfigService>();
-            services.AddScoped<SCSS.Application.Admin.Interfaces.ICollectingRequestBackgroundService, SCSS.Application.Admin.Implementations.CollectingRequestBackgroundService>();
 
             #endregion Admin Application
 
@@ -63,11 +68,11 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces. ICollectingRequestService, SCSS.Application.ScrapSeller.Imlementations.CollectingRequestService>();
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.INotificationService, SCSS.Application.ScrapSeller.Imlementations.NotificationService>();
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IActivityService, SCSS.Application.ScrapSeller.Imlementations.ActivityService>();
+            services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IFeedbackService, SCSS.Application.ScrapSeller.Imlementations.FeedbackService>();
 
             #endregion Seller Application           
 
-
-            services.AddHostedService<TrailCollectingRequestHostedService>();
+            //services.AddHostedService<TrailCollectingRequestHostedService>();
 
         }
     }

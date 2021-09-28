@@ -10,13 +10,19 @@ namespace SCSS.Utilities.Helper
 {
     public class DateTimeUtils
     {
-        public static bool IsMoreThanDays(DateTime? dateTime, int days)
+        public static bool IsMoreThanFutureDays(DateTime? dateTime, int days)
         {
             var toTime = dateTime.Value.Date;
             var betweenDays = toTime.Subtract(DateTimeVN.DATE_NOW).Days;
             return betweenDays > days;
         }
-        
+
+        public static bool IsMoreThanPastDays(DateTime? dateTime, int days)
+        {
+            var toTime = dateTime.Value.Date;
+            var betweenDays = DateTimeVN.DATE_NOW.Subtract(toTime).Days;
+            return betweenDays > days;
+        }
 
         public static bool IsMoreThanMinutes(TimeSpan? time1, TimeSpan? time2, double minutes = RequestScrapCollecting.FifteenMinutes)
         {

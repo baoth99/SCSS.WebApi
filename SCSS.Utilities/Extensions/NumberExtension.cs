@@ -35,7 +35,7 @@ namespace SCSS.Utilities.Extensions
 
         public static float ToFloatValue(this float? val)
         {
-            return val.HasValue ? val.Value : NumberConstant.Zero;
+            return val.HasValue ? val.Value : NumberConstant.NegativeOne;
         }
     }
 }
