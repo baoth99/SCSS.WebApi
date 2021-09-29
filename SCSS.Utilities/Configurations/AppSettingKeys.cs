@@ -41,12 +41,22 @@ namespace SCSS.Utilities.Configurations
             public const string S3AccessKey = "AWSService:S3AccessKey";
             public const string S3SecretKey = "AWSService:S3SecretKey";
 
-            public const string CloudWatchAccessKey = "AWSService:CloudWatchAccessKey";
-            public const string CloudWatchSecrectKey = "AWSService:CloudWatchSecrectKey";
+            public const string AWSAccessKey = "AWSService:CloudWatchAccessKey";
+            public const string AWSSecrectKey = "AWSService:CloudWatchSecrectKey";
             public const string CloudWatchLogGroup = "AWSService:CloudWatchLogGroup";
 
             public const string Region = "AWSService:Region";
 
+        }
+
+        public static class AWSSQSSetting
+        {
+            public const string Enabled = "AWSSQSSetting:Enabled";
+            public const string EnablePublisher = "AWSSQSSetting:EnablePublisher";
+            public const string EnableSubscriber = "AWSSQSSetting:EnableSubscriber";
+            public const string NotificationQueueUrl = "AWSSQSSetting:NotificationQueueUrl";
+            public const string MaxNumberOfMessages = "AWSSQSSetting:MaxNumberOfMessages";
+            public const string WaitTimeSeconds = "AWSSQSSetting:WaitTimeSeconds";
         }
 
         public static class Firebase

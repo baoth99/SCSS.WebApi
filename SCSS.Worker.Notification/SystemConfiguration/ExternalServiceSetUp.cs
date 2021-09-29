@@ -1,6 +1,8 @@
 ﻿using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.DependencyInjection;
+using SCSS.AWSService.Implementations;
+using SCSS.AWSService.Interfaces;
 using SCSS.FirebaseService.Implementations;
 using SCSS.FirebaseService.Interfaces;
 using SCSS.Utilities.Configurations;
@@ -26,6 +28,8 @@ namespace SCSS.Worker.Notification.SystemConfiguration
             });
 
             services.AddScoped<IFCMService, FCMService>();
+
+            services.AddSingleton<ISQSSubscriberService, SQSSubscriberService>();
         }
     }
 }

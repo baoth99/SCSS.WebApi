@@ -28,6 +28,7 @@ namespace SCSS.Worker.Notification
 
                     services.AddDatabaseConnectionSetUp();
                     services.AddExternalServiceSetUp();
+                    services.AddLoggingSetUp();
                     services.AddDependencyInjectionSetUp();
                     services.AddHostedService<Worker>();
                 });

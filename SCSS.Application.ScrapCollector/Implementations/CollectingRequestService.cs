@@ -19,6 +19,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using SCSS.Application.ScrapCollector.Models.NotificationModels;
+using SCSS.AWSService.Models.SQSModels;
 
 namespace SCSS.Application.ScrapCollector.Implementations
 {
@@ -60,6 +61,11 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         private readonly IMapDistanceMatrixService _mapDistanceMatrixService;
 
+        /// <summary>
+        /// The SQS publisher service
+        /// </summary>
+        private readonly ISQSPublisherService _SQSPublisherService;
+
         #endregion
 
         #region Constructor
@@ -71,10 +77,12 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="mapDistanceMatrixService">The map distance matrix service.</param>
+        /// <param name="SQSPublisherService">The SQS publisher service.</param>
         /// <param name="fcmService">The FCM service.</param>
         /// <param name="cacheService">The cache service.</param>
         public CollectingRequestService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
-                                        IMapDistanceMatrixService mapDistanceMatrixService, IFCMService fcmService, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
+                                        IMapDistanceMatrixService mapDistanceMatrixService, ISQSPublisherService SQSPublisherService, 
+                                        IFCMService fcmService, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _collectingRequestRejectionRepository = unitOfWork.CollectingRequestRejectionRepository;
@@ -82,6 +90,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             _accountRepository = unitOfWork.AccountRepository;
             _notificationRepository = unitOfWork.NotificationRepository;
             _mapDistanceMatrixService = mapDistanceMatrixService;
+            _SQSPublisherService = SQSPublisherService;
         }
 
         #endregion
@@ -255,7 +264,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion
 
-
         #region Check Max Number Of Collecting Requests that Collector Can Receive;
 
         /// <summary>
@@ -313,6 +321,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
             try
             {
                 await UnitOfWork.CommitAsync();
+
+                await RemovePendingCollectingRequestFromCache(id);
+
                 return new Tuple<Guid?, Guid, string>(collectingRequestEntity.SellerAccountId, id, collectingRequestEntity.CollectingRequestCode);
             }
             catch (DbUpdateConcurrencyException)
@@ -335,9 +346,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
         {
             var sellerInfo = _accountRepository.GetById(sellerId);
 
-            var notifications = new List<NotificationCreateModel>()
+            var notifications = new List<NotificationMessageQueueModel>()
             {
-                new NotificationCreateModel()
+                new NotificationMessageQueueModel()
                 {
                     AccountId = sellerInfo.Id,
                     Title = NotificationMessage.CollectingRequestReceviedTitle(collectingRequestCode),
@@ -345,7 +356,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     DataCustom = null, // TODO:
                     DeviceId = sellerInfo.DeviceId
                 },
-                new NotificationCreateModel()
+                new NotificationMessageQueueModel()
                 {
                     AccountId = UserAuthSession.UserSession.Id,
                     Title = "", // TODO:
@@ -354,7 +365,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     DeviceId = UserAuthSession.UserSession.DeviceId
                 }
             };
-            await StoreAndSendManyNotifications(notifications);
+
+            await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(notifications);
 
             return BaseApiResponse.OK();
         }

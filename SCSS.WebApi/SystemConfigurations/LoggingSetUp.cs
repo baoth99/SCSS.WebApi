@@ -31,7 +31,7 @@ namespace SCSS.WebApi.SystemConfigurations
                     LogGroup = AppSettingValues.AWSCloudWatchLogGroup,
                     LogStreamNamePrefix = "SCSS",
                     Region = AppSettingValues.AWSRegion,
-                    Credentials = new Amazon.Runtime.BasicAWSCredentials(AppSettingValues.AWSCloudWatchAccessKey, AppSettingValues.AWSCloudWatchSecrectKey)
+                    Credentials = new Amazon.Runtime.BasicAWSCredentials(AppSettingValues.AWSAccessKey, AppSettingValues.AWSSecrectKey)
                 };
                 config.AddTarget("aws", awsTarget);
                 config.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, awsTarget));

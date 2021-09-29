@@ -32,7 +32,7 @@ namespace SCSS.QueueEngine.QueueRepositories
         /// Consumes the queue.
         /// </summary>
         /// <returns></returns>
-        IList<T> ConsumePeekQueue();
+        IList<T> GetAllQueue();
 
         /// <summary>
         /// Consumes the dequeue queue.

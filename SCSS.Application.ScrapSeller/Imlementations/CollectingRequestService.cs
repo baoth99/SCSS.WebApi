@@ -2,6 +2,7 @@
 using SCSS.Application.ScrapSeller.Interfaces;
 using SCSS.Application.ScrapSeller.Models.CollectingRequestModels;
 using SCSS.AWSService.Interfaces;
+using SCSS.AWSService.Models;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
@@ -106,10 +107,21 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             };
 
             // Insert Collecting Request Entity 
-            _collectingRequestRepository.Insert(collectingRequestEntity);
+            var insertEntity =  _collectingRequestRepository.Insert(collectingRequestEntity);
 
             // Commit Data into Database
             await UnitOfWork.CommitAsync();
+
+            var cacheModel = new PendingCollectingRequestCacheModel()
+            {
+                Id = insertEntity.Id,
+                Date = insertEntity.CollectingRequestDate,
+                FromTime = insertEntity.TimeFrom,
+                ToTime = insertEntity.TimeTo
+            };
+
+            await AddPendingCollectingRequestToCache(cacheModel);
+
 
             return BaseApiResponse.OK();
         }

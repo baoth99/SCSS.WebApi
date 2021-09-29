@@ -50,7 +50,7 @@ namespace SCSS.QueueEngine.QueueRepositories
         /// Consumes the queue.
         /// </summary>
         /// <returns></returns>
-        public IList<T> ConsumePeekQueue()
+        public IList<T> GetAllQueue()
         {
             List<T> result = new List<T>();
 
@@ -59,13 +59,9 @@ namespace SCSS.QueueEngine.QueueRepositories
                 return result;
             }
 
-            for (int i = 1; i <= _queue.Count; i++)
+            foreach (var item in _queue.ToList())
             {
-                _queue.TryPeek(out T data);
-                if (data != null)
-                {
-                    result.Add(data);
-                }
+                result.Add(item);
             }
 
             return result;

@@ -264,5 +264,28 @@ namespace SCSS.Application.ScrapCollector
         }
 
         #endregion
+
+
+        #region Remove Pending Collecting Request to Redis Cache
+
+        /// <summary>
+        /// Adds the pending collecting request.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        public async Task RemovePendingCollectingRequestFromCache(Guid id)
+        {
+            var cache = await CacheService.GetCacheData(CacheRedisKey.PendingCollectingRequest);
+
+            if (cache != null)
+            {
+                var cacheList = cache.ToList<PendingCollectingRequestCacheModel>();
+                var item = cacheList.Find(x => x.Id.Equals(id));
+                cacheList.Remove(item);
+
+                await CacheService.SetCacheData(CacheRedisKey.PendingCollectingRequest, cacheList.ToJson());
+            }
+        }
+
+        #endregion
     }
 }

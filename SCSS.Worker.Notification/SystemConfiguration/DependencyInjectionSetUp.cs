@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SCSS.Aplication.BackgroundService.Implementations;
+using SCSS.Aplication.BackgroundService.Interfaces;
 using SCSS.Data.EF.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -19,9 +21,9 @@ namespace SCSS.Worker.Notification.SystemConfiguration
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-            #region Seller Application
+            #region Background
 
-
+            services.AddScoped<IMessageNotificationService, MessageNotificationService>();
 
             #endregion
         }

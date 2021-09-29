@@ -42,7 +42,8 @@
         SellCollectTransactionServiceFee,
         CollectDealTransactionServiceFee,
         SellCollectTransactionAwardAmount,
-        CollectDealTransactionAwardAmount
+        CollectDealTransactionAwardAmount,
+        PendingCollectingRequest
     }
 
     public enum Vehicle

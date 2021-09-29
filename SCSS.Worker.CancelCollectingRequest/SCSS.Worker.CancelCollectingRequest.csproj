@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>dotnet-SCSS.Worker.CancelCollectingRequest-5FE1D1CB-EC63-4A4F-AAB8-0C9B41A898C6</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SCSS.Aplication.BackgroundService\SCSS.Aplication.BackgroundService.csproj" />
+    <ProjectReference Include="..\SCSS.AWSService\SCSS.AWSService.csproj" />
+    <ProjectReference Include="..\SCSS.Data.EF\SCSS.Data.EF.csproj" />
+    <ProjectReference Include="..\SCSS.ORM.Dapper\SCSS.ORM.Dapper.csproj" />
+    <ProjectReference Include="..\SCSS.Utilities\SCSS.Utilities.csproj" />
+  </ItemGroup>
+</Project>

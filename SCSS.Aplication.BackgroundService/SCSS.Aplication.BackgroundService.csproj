@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SCSS.AWSService\SCSS.AWSService.csproj" />
     <ProjectReference Include="..\SCSS.Data.EF\SCSS.Data.EF.csproj" />
     <ProjectReference Include="..\SCSS.FirebaseService\SCSS.FirebaseService.csproj" />

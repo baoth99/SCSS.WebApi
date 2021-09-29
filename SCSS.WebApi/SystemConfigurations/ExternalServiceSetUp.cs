@@ -58,6 +58,8 @@ namespace SCSS.WebApi.SystemConfigurations
             // AWS
             services.AddScoped<IStorageBlobS3Service, StorageBlobS3Service>();
             services.AddScoped<ICacheService, CacheService>();
+            services.AddSingleton<ISQSPublisherService, SQSPublisherService>();
+
 
             // Goong Map
             services.AddScoped<IMapDistanceMatrixService, MapDistanceMatrixService>();

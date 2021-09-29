@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SCSS.AWSService.Interfaces;
+using SCSS.AWSService.Models;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapSeller
@@ -110,6 +112,34 @@ namespace SCSS.Application.ScrapSeller
                 return maxNumberOfRequestDays;
             }
             return quantity.ToInt();
+        }
+
+        #endregion
+
+        #region Add Pending Collecting Request to Redis Cache
+
+        /// <summary>
+        /// Adds the pending collecting request.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        public async Task AddPendingCollectingRequestToCache(PendingCollectingRequestCacheModel model)
+        {
+            var cache = await CacheService.GetCacheData(CacheRedisKey.PendingCollectingRequest);
+
+            if (cache == null)
+            {
+                var cacheList = new List<PendingCollectingRequestCacheModel>()
+                {
+                    model
+                };
+                await CacheService.SetCacheData(CacheRedisKey.PendingCollectingRequest, cacheList.ToJson());
+            }
+            else
+            {
+                var crList = cache.ToList<PendingCollectingRequestCacheModel>();
+                crList.Add(model);
+                await CacheService.SetCacheData(CacheRedisKey.PendingCollectingRequest, crList.ToJson());
+            }
         }
 
         #endregion

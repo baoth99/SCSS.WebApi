@@ -1,0 +1,11 @@
+﻿{
+  "profiles": {
+    "SCSS.Worker.CancelCollectingRequest": {
+      "commandName": "Project",
+      "dotnetRunMessages": "true",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development" //Production, Testing, Development
+      }
+    }
+  }
+}

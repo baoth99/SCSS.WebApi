@@ -44,9 +44,6 @@ namespace SCSS.AWSService.Implementations
         {
             try
             {
-                // Remove old Cache
-                await _distributedCache.RemoveAsync(key.ToString());
-
                 // Set new Cache
                 await _distributedCache.SetStringAsync(key.ToString(), data);
 

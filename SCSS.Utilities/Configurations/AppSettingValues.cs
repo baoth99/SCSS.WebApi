@@ -41,11 +41,23 @@ namespace SCSS.Utilities.Configurations
 
         public static string AWSRegion => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.Region);
 
-        public static string AWSCloudWatchAccessKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.CloudWatchAccessKey);
+        public static string AWSAccessKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.AWSAccessKey);
 
-        public static string AWSCloudWatchSecrectKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.CloudWatchSecrectKey);
+        public static string AWSSecrectKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.AWSSecrectKey);
 
         public static string AWSCloudWatchLogGroup => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.CloudWatchLogGroup);
+
+        public static bool IsEnabledSQS => ConfigurationHelper.GetValue<bool>(AppSettingKeys.AWSSQSSetting.Enabled);
+
+        public static bool IsEnabledSQSPublisher => ConfigurationHelper.GetValue<bool>(AppSettingKeys.AWSSQSSetting.EnablePublisher);
+
+        public static bool IsEnabledSubscriber => ConfigurationHelper.GetValue<bool>(AppSettingKeys.AWSSQSSetting.EnableSubscriber);
+
+        public static string NotificationQueueUrl => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSSQSSetting.NotificationQueueUrl);
+
+        public static int MaxNumberOfMessages => ConfigurationHelper.GetValue<int>(AppSettingKeys.AWSSQSSetting.MaxNumberOfMessages);
+
+        public static int WaitTimeSeconds => ConfigurationHelper.GetValue<int>(AppSettingKeys.AWSSQSSetting.WaitTimeSeconds);
 
         public static string TwilioAccountSID => ConfigurationHelper.GetValue<string>(AppSettingKeys.Twilio.AccountSID);
 

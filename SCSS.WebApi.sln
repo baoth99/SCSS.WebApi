@@ -45,9 +45,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCSS.QueueEngine", "SCSS.Qu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "06-WorkerService", "06-WorkerService", "{8DA3C26A-0274-443B-9E1B-0318F6C8D33E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCSS.Worker.Notification", "SCSS.Worker.Notification\SCSS.Worker.Notification.csproj", "{4564964E-2AC3-4467-97DF-0F54902766A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCSS.Worker.Notification", "SCSS.Worker.Notification\SCSS.Worker.Notification.csproj", "{4564964E-2AC3-4467-97DF-0F54902766A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCSS.Aplication.BackgroundService", "SCSS.Aplication.BackgroundService\SCSS.Aplication.BackgroundService.csproj", "{D7150F03-0644-4FD7-ACF3-00B5DD73CB01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCSS.Aplication.BackgroundService", "SCSS.Aplication.BackgroundService\SCSS.Aplication.BackgroundService.csproj", "{D7150F03-0644-4FD7-ACF3-00B5DD73CB01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCSS.Worker.CancelCollectingRequest", "SCSS.Worker.CancelCollectingRequest\SCSS.Worker.CancelCollectingRequest.csproj", "{52776954-6A76-433E-8A42-12ABAD1B3931}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +125,10 @@ Global
 		{D7150F03-0644-4FD7-ACF3-00B5DD73CB01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7150F03-0644-4FD7-ACF3-00B5DD73CB01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7150F03-0644-4FD7-ACF3-00B5DD73CB01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52776954-6A76-433E-8A42-12ABAD1B3931}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52776954-6A76-433E-8A42-12ABAD1B3931}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52776954-6A76-433E-8A42-12ABAD1B3931}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52776954-6A76-433E-8A42-12ABAD1B3931}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -145,6 +151,7 @@ Global
 		{9AD3ECAC-EF46-48EB-B029-106131607A4E} = {4EE44CAD-4EF4-467B-A015-E0571A94FB79}
 		{4564964E-2AC3-4467-97DF-0F54902766A1} = {8DA3C26A-0274-443B-9E1B-0318F6C8D33E}
 		{D7150F03-0644-4FD7-ACF3-00B5DD73CB01} = {C275D8AF-E358-4C67-84FB-142DF726CFA1}
+		{52776954-6A76-433E-8A42-12ABAD1B3931} = {8DA3C26A-0274-443B-9E1B-0318F6C8D33E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6634B941-55AC-4C95-ABBA-F49B97A79E9A}
