@@ -1,51 +1,51 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
-using SCSS.AWSService.Interfaces;
+﻿using SCSS.AWSService.Interfaces;
+using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SCSS.AWSService.Implementations
 {
-    public class CacheService : AWSBaseService, ICacheService
+    public class StringCacheService : AWSBaseService, IStringCacheService
     {
         #region Services
 
         /// <summary>
-        /// The distributed cache
+        /// The redis database
         /// </summary>
-        private readonly IDistributedCache _distributedCache;
-
+        private readonly IDatabase _redisDB;
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CacheService"/> class.
+        /// Initializes a new instance of the <see cref="StringCacheService"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="distributedCache">The distributed cache.</param>
-        public CacheService(ILoggerService logger, IDistributedCache distributedCache) : base(logger)
+        public StringCacheService(ILoggerService logger, IConnectionMultiplexer connection) : base(logger)
         {
-            _distributedCache = distributedCache;
+            _redisDB = connection.GetDatabase(AppSettingValues.RedisDB00);
         }
 
         #endregion
 
-        #region Set Cache Data
+        #region Set String Cache Async
 
         /// <summary>
-        /// Sets the images slider cache data.
+        /// Sets the string cache asynchronous.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="data">The data.</param>
-        public async Task SetCacheData(CacheRedisKey key, string data)
+        public async Task SetStringCacheAsync(CacheRedisKey key, string data)
         {
             try
             {
                 // Set new Cache
-                await _distributedCache.SetStringAsync(key.ToString(), data);
+                await _redisDB.StringSetAsync(key.ToString(), data);
 
                 Logger.LogInfo(CacheLoggerMessage.SetCacheSuccess(key));
             }
@@ -57,34 +57,20 @@ namespace SCSS.AWSService.Implementations
 
         #endregion
 
-        #region Set Cache Data (Dic)
-
-        public async Task SetCacheDatas(Dictionary<CacheRedisKey, string> data)
-        {
-            foreach (var item in data)
-            {
-                await SetCacheData(item.Key, item.Value);
-            }
-        }
-
-        #endregion
-
-        #region Set Cache Data Byte
+        #region Set String Cache
 
         /// <summary>
-        /// Sets the cache data.
+        /// Sets the string cache.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="data">The data.</param>
-        public async Task SetCacheData(CacheRedisKey key, byte[] data)
+        public void SetStringCache(CacheRedisKey key, string data)
         {
             try
             {
-                // Remove old Cache
-                await _distributedCache.RemoveAsync(key.ToString());
-
                 // Set new Cache
-                await _distributedCache.SetAsync(key.ToString(), data);
+                _redisDB.StringSet(key.ToString(), data);
+                Logger.LogInfo(CacheLoggerMessage.SetCacheSuccess(key));
             }
             catch (Exception ex)
             {
@@ -94,39 +80,38 @@ namespace SCSS.AWSService.Implementations
 
         #endregion
 
-        #region Set Cache Data Byte (Dic)
+        #region Set String Caches Async (Dic)
 
         /// <summary>
-        /// Sets the cache data.
+        /// Sets the string caches asynchronous.
         /// </summary>
         /// <param name="data">The data.</param>
-        public async Task SetCacheDatas(Dictionary<CacheRedisKey, byte[]> data)
+        public async Task SetStringCachesAsync(Dictionary<CacheRedisKey, string> data)
         {
             foreach (var item in data)
             {
-                await SetCacheData(item.Key, item.Value);
+                await SetStringCacheAsync(item.Key, item.Value);
             }
         }
 
-
         #endregion
 
-        #region Get Cache Data
+        #region Get String Cache Async
 
         /// <summary>
         /// Gets the cache data.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public async Task<string> GetCacheData(CacheRedisKey key)
+        public async Task<string> GetStringCacheAsync(CacheRedisKey key)
         {
             try
             {
-                var data = await _distributedCache.GetStringAsync(key.ToString());
+                var data = await _redisDB.StringGetAsync(key.ToString());
 
-                if (data == null)
+                if (!data.HasValue)
                 {
-                    return null;
+                    return string.Empty;
                 }
 
                 return data;
@@ -140,22 +125,22 @@ namespace SCSS.AWSService.Implementations
 
         #endregion
 
-        #region Get Cache Data Byte
+        #region Get String Cache
 
         /// <summary>
-        /// Gets the cache byte data.
+        /// Gets the string cache.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public async Task<byte[]> GetCacheByteData(CacheRedisKey key)
+        public string GetStringCache(CacheRedisKey key)
         {
             try
             {
-                var data = await _distributedCache.GetAsync(key.ToString());
+                var data = _redisDB.StringGet(key.ToString());
 
-                if (data == null)
+                if (!data.HasValue)
                 {
-                    return null;
+                    return string.Empty;
                 }
 
                 return data;
@@ -172,14 +157,14 @@ namespace SCSS.AWSService.Implementations
         #region Remove Cache Data
 
         /// <summary>
-        /// Removes the cache data.
+        /// Removes the string cache asynchronous.
         /// </summary>
         /// <param name="key">The key.</param>
-        public async Task RemoveCacheData(CacheRedisKey key)
+        public async Task RemoveStringCacheAsync(CacheRedisKey key)
         {
             try
             {
-                await _distributedCache.RemoveAsync(key.ToString());
+                await _redisDB.KeyDeleteAsync(key.ToString());
             }
             catch (Exception ex)
             {
@@ -189,28 +174,70 @@ namespace SCSS.AWSService.Implementations
 
         #endregion
 
-        #region Remove Cache Data (List)
+        #region Remove String Cache
 
         /// <summary>
-        /// Removes the cache datas.
+        /// Removes the string cache.
         /// </summary>
-        /// <param name="keys">The keys.</param>
-        public async Task RemoveCacheDatas(List<CacheRedisKey> keys)
+        /// <param name="key">The key.</param>
+        public void RemoveStringCache(CacheRedisKey key)
         {
             try
             {
-                foreach (var item in keys)
-                {
-                    await RemoveCacheData(item);
-                }
+                _redisDB.KeyDelete(key.ToString());
             }
             catch (Exception ex)
             {
-                //Logger.LogError(ex, CacheLoggerMessage.RemoveCacheFail());
+                Logger.LogError(ex, CacheLoggerMessage.RemoveCacheFail(key));
             }
         }
 
         #endregion
 
+        #region Remove Cache Data (List)
+
+        /// <summary>
+        /// Removes the string caches asynchronous.
+        /// </summary>
+        /// <param name="keys">The keys.</param>
+        public async Task RemoveStringCachesAsync(List<CacheRedisKey> keys)
+        {
+            try
+            {
+                foreach (var item in keys)
+                {
+                    await RemoveStringCacheAsync(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "");
+            }
+        }
+
+        #endregion
+
+        #region Remove String Caches
+
+        /// <summary>
+        /// Removes the string caches.
+        /// </summary>
+        /// <param name="keys">The keys.</param>
+        public void RemoveStringCaches(List<CacheRedisKey> keys)
+        {
+            try
+            {
+                foreach (var item in keys)
+                {
+                    RemoveStringCache(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "");
+            }
+        }
+
+        #endregion
     }
 }

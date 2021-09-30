@@ -1,5 +1,4 @@
 ﻿using FirebaseAdmin;
-using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.DependencyInjection;
 using SCSS.AWSService.Implementations;
@@ -11,7 +10,7 @@ using SCSS.MapService.Interfaces;
 using SCSS.TwilioService.Implementations;
 using SCSS.TwilioService.Interfaces;
 using SCSS.Utilities.Configurations;
-using SCSS.Utilities.Constants;
+using StackExchange.Redis;
 using System;
 using Twilio;
 
@@ -40,13 +39,7 @@ namespace SCSS.WebApi.SystemConfigurations
             });
 
             // Connect to redis
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = AppSettingValues.RedisConnectionString;
-                options.ConfigurationOptions.DefaultDatabase = AppSettingValues.RedisDB01;
-
-            });
-           
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(AppSettingValues.RedisConnectionString));
 
             #region DI for External Service
 
@@ -58,9 +51,9 @@ namespace SCSS.WebApi.SystemConfigurations
 
             // AWS
             services.AddScoped<IStorageBlobS3Service, StorageBlobS3Service>();
-            services.AddScoped<ICacheService, CacheService>();
+            services.AddScoped<IStringCacheService, StringCacheService>();
             services.AddSingleton<ISQSPublisherService, SQSPublisherService>();
-
+            services.AddSingleton<ICacheListService, CacheListService>();
 
             // Goong Map
             services.AddScoped<IMapDistanceMatrixService, MapDistanceMatrixService>();

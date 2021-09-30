@@ -56,7 +56,7 @@ namespace SCSS.Application.ScrapCollector
         /// <value>
         /// The cache service.
         /// </value>
-        protected ICacheService CacheService { get; private set; }
+        protected IStringCacheService CacheService { get; private set; }
 
         #region Constructor
 
@@ -68,7 +68,7 @@ namespace SCSS.Application.ScrapCollector
         /// <param name="logger">The logger.</param>
         /// <param name="fcmService">The FCM service.</param>
         /// <param name="cacheService">The cache service.</param>
-        public BaseService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, ICacheService cacheService)
+        public BaseService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, IStringCacheService cacheService)
         {
             UnitOfWork = unitOfWork;
             UserAuthSession = userAuthSession;
@@ -164,7 +164,7 @@ namespace SCSS.Application.ScrapCollector
         /// <returns></returns>
         public async Task<int> MaxNumberCollectingRequestCollectorReceive()
         {
-            var quantity = await CacheService.GetCacheData(CacheRedisKey.ReceiveQuantity);
+            var quantity = await CacheService.GetStringCacheAsync(CacheRedisKey.ReceiveQuantity);
             if (quantity == null)
             {
                 var entity = await UnitOfWork.CollectingRequestConfigRepository.GetManyAsNoTracking(x => x.IsActive).FirstOrDefaultAsync();
@@ -174,7 +174,7 @@ namespace SCSS.Application.ScrapCollector
                 }
                 var receiveQuantity = entity.ReceiveQuantity;
 
-                await CacheService.SetCacheData(CacheRedisKey.ReceiveQuantity, receiveQuantity.ToString());
+                await CacheService.SetStringCacheAsync(CacheRedisKey.ReceiveQuantity, receiveQuantity.ToString());
 
                 return receiveQuantity;
             }
@@ -197,7 +197,7 @@ namespace SCSS.Application.ScrapCollector
                 throw new ArgumentException("CacheRedisKey is not correct", nameof(redisKey));
             }
 
-            var percentRes = await CacheService.GetCacheData(redisKey);
+            var percentRes = await CacheService.GetStringCacheAsync(redisKey);
 
             if (percentRes == null)
             {
@@ -210,7 +210,7 @@ namespace SCSS.Application.ScrapCollector
                     return NumberConstant.Zero;
                 }
                 var percent = entity.Percent.Value;
-                await CacheService.SetCacheData(redisKey, percent.ToString());
+                await CacheService.SetStringCacheAsync(redisKey, percent.ToString());
 
                 return percent;
             }
@@ -234,7 +234,7 @@ namespace SCSS.Application.ScrapCollector
                 throw new ArgumentException("CacheRedisKey is not correct", nameof(redisKey));
             }
 
-            var transAwardAmount = await CacheService.GetCacheData(redisKey);
+            var transAwardAmount = await CacheService.GetStringCacheAsync(redisKey);
 
             if (transAwardAmount == null)
             {
@@ -255,35 +255,12 @@ namespace SCSS.Application.ScrapCollector
                     Amount = entity.Amount.Value,
                     AppliedAmount = entity.AppliedAmount.Value
                 };
-                await CacheService.SetCacheData(redisKey, cache.ToJson());
+                await CacheService.SetStringCacheAsync(redisKey, cache.ToJson());
 
                 return cache;
             }
 
             return transAwardAmount.ToMapperObject<TransactionAwardAmountCacheViewModel>();
-        }
-
-        #endregion
-
-
-        #region Remove Pending Collecting Request to Redis Cache
-
-        /// <summary>
-        /// Adds the pending collecting request.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        public async Task RemovePendingCollectingRequestFromCache(Guid id)
-        {
-            var cache = await CacheService.GetCacheData(CacheRedisKey.PendingCollectingRequest);
-
-            if (cache != null)
-            {
-                var cacheList = cache.ToList<PendingCollectingRequestCacheModel>();
-                var item = cacheList.Find(x => x.Id.Equals(id));
-                cacheList.Remove(item);
-
-                await CacheService.SetCacheData(CacheRedisKey.PendingCollectingRequest, cacheList.ToJson());
-            }
         }
 
         #endregion

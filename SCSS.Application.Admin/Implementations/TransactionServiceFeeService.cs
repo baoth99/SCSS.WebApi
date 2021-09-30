@@ -45,7 +45,7 @@ namespace SCSS.Application.Admin.Implementations
 
             // Modify Redis Cache
             var redisKey = model.TransactionType == TransactionType.SELL_COLLECT ? CacheRedisKey.SellCollectTransactionServiceFee : CacheRedisKey.CollectDealTransactionServiceFee;
-            await _cacheService.SetCacheData(redisKey, entity.Percent.ToString());
+            await _cacheService.SetStringCacheAsync(redisKey, entity.Percent.ToString());
 
             return BaseApiResponse.OK();
         }

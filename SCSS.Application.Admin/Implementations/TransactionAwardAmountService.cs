@@ -56,7 +56,7 @@ namespace SCSS.Application.Admin.Implementations
                 Amount = entity.AppliedAmount.Value,
             };
 
-            await _cacheService.SetCacheData(redisKey, cacheModel.ToJson());
+            await _cacheService.SetStringCacheAsync(redisKey, cacheModel.ToJson());
 
             return BaseApiResponse.OK();
         }
@@ -79,6 +79,7 @@ namespace SCSS.Application.Admin.Implementations
                 AppliedAmount = x.AppliedAmount,
                 Amount = x.Amount
             }).FirstOrDefault();
+
             var collectDealTrans = transactionAward.Where(x => x.TransactionType == TransactionType.COLLECT_DEAL).Select(x => new TransactionAwardAmountViewModel()
             {
                 TransactionType = x.TransactionType,

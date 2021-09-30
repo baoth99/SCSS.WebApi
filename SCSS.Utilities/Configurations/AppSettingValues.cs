@@ -15,9 +15,15 @@ namespace SCSS.Utilities.Configurations
 
         public static string RedisInstanceName => ConfigurationHelper.GetValue<string>(AppSettingKeys.SystemConfig.RedisInstanceName);
 
+        public static int RedisDB00 => ConfigurationHelper.GetValue<int>(AppSettingKeys.SystemConfig.RedisDB00);
+
         public static int RedisDB01 => ConfigurationHelper.GetValue<int>(AppSettingKeys.SystemConfig.RedisDB01);
 
         public static int RedisDB02 => ConfigurationHelper.GetValue<int>(AppSettingKeys.SystemConfig.RedisDB02);
+
+        public static int RedisDB03 => ConfigurationHelper.GetValue<int>(AppSettingKeys.SystemConfig.RedisDB03);
+
+        public static int RedisDB04 => ConfigurationHelper.GetValue<int>(AppSettingKeys.SystemConfig.RedisDB04);
 
         public static string Authority => ConfigurationHelper.GetValue<string>(AppSettingKeys.IdentityServer.Authority);
 

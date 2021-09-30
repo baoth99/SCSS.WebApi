@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SCSS.Utilities.Constants;
+using SCSS.Validations.ValidationAttributes.CommonValidations;
 
 namespace SCSS.Application.Admin.Models.SystemConfigModels
 {
@@ -13,5 +10,11 @@ namespace SCSS.Application.Admin.Models.SystemConfigModels
         public int ReceiveQuantity { get; set; }
 
         public int MaxNumberOfRequestDays { get; set; }
+
+        [TimeSpanValidation(isCompareToNow: BooleanConstants.FALSE)]
+        public string OperatingTimeFrom{ get; set; }
+
+        [TimeSpanValidation(isCompareToNow: BooleanConstants.FALSE)]
+        public string OperatingTimeTo{ get; set; }
     }
 }

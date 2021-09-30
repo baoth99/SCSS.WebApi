@@ -62,7 +62,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="storageBlobS3Service">The storage BLOB s3 service.</param>
-        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, ICacheService cacheService,
+        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, IStringCacheService cacheService,
                                 IStorageBlobS3Service storageBlobS3Service) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
         {
             _accountRepository = unitOfWork.AccountRepository;

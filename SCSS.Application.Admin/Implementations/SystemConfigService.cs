@@ -2,6 +2,7 @@
 using SCSS.Application.Admin.Interfaces;
 using SCSS.Application.Admin.Models.SystemConfigModels;
 using SCSS.AWSService.Interfaces;
+using SCSS.AWSService.Models;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
@@ -49,13 +50,13 @@ namespace SCSS.Application.Admin.Implementations
         /// <summary>
         /// The cache service
         /// </summary>
-        private readonly ICacheService _cacheService;
+        private readonly IStringCacheService _cacheService;
 
         #endregion
 
         #region Constructor
 
-        public SystemConfigService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService)
+        public SystemConfigService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService)
         {
             _transactionAwardAmountRepository = unitOfWork.TransactionAwardAmountRepository;
             _transactionServiceFeePercentRepository = unitOfWork.TransactionServiceFeePercentRepository;
@@ -92,6 +93,8 @@ namespace SCSS.Application.Admin.Implementations
                 ReceiveQuantity = model.ReceiveQuantity,
                 RequestQuantity = model.RequestQuantity,
                 MaxNumberOfRequestDays = model.MaxNumberOfRequestDays,
+                OperatingTimeFrom = model.OperatingTimeFrom.ToTimeSpan(),
+                OperatingTimeTo = model.OperatingTimeTo.ToTimeSpan(),
             };
 
             var insertedEntity = _collectingRequestConfigRepository.Insert(newConfig);
@@ -99,9 +102,25 @@ namespace SCSS.Application.Admin.Implementations
             await UnitOfWork.CommitAsync();
 
             // Modify Redis Cache
-            var dic = CommonUtils.ObjToDictionary(model).ToDictionary(x => x.Key.ToEnum<CacheRedisKey>(), y => y.Value);
 
-            await _cacheService.SetCacheDatas(dic);
+            var cacheModel = new
+            {
+                model.ReceiveQuantity,
+                model.RequestQuantity,
+                model.MaxNumberOfRequestDays
+            };
+
+            var dic = CommonUtils.ObjToDictionary(cacheModel).ToDictionary(x => x.Key.ToEnum<CacheRedisKey>(), y => y.Value);
+
+            await _cacheService.SetStringCachesAsync(dic);
+
+            var operatingRangeTime = new OperatingRangeTimeCache()
+            {
+                FromTime = model.OperatingTimeFrom.ToTimeSpan(),
+                ToTime = model.OperatingTimeTo.ToTimeSpan(),
+            };
+
+            await _cacheService.SetStringCacheAsync(CacheRedisKey.OperatingTimeRange, operatingRangeTime.ToJson());
 
             return BaseApiResponse.OK();
         }
@@ -127,6 +146,8 @@ namespace SCSS.Application.Admin.Implementations
                                                                             x.ReceiveQuantity,
                                                                             x.MaxNumberOfRequestDays,
                                                                             x.UpdatedTime,
+                                                                            x.OperatingTimeFrom,
+                                                                            x.OperatingTimeTo,
                                                                             y.Name
                                                                         })
                                                                   .Select(x => new SystemConfigHistoryViewModel()
@@ -134,6 +155,8 @@ namespace SCSS.Application.Admin.Implementations
                                                                       RequestQuantity = x.RequestQuantity,
                                                                       ReceiveQuantity = x.ReceiveQuantity,
                                                                       MaxNumberOfRequestDays = x.MaxNumberOfRequestDays,
+                                                                      OperatingTimeFrom = x.OperatingTimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
+                                                                      OperatingTimeTo = x.OperatingTimeTo.ToStringFormat(TimeSpanFormat.HH_MM),
                                                                       DeActiveTime = x.UpdatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
                                                                       DeActiveBy = x.Name
                                                                   }).ToList();
@@ -144,6 +167,8 @@ namespace SCSS.Application.Admin.Implementations
                 ReceiveQuantity = configIsUsing.ReceiveQuantity,
                 MaxNumberOfRequestDays = configIsUsing.MaxNumberOfRequestDays,
                 ActiveTime = configIsUsing.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time_tt),
+                OperatingTimeFrom = configIsUsing.OperatingTimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
+                OperatingTimeTo = configIsUsing.OperatingTimeTo.ToStringFormat(TimeSpanFormat.HH_MM),
                 Histories = configHistories
             };
 

@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using SCSS.Application.ScrapCollector.Models.NotificationModels;
 using SCSS.AWSService.Models.SQSModels;
+using SCSS.AWSService.Models;
 
 namespace SCSS.Application.ScrapCollector.Implementations
 {
@@ -66,6 +67,11 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         private readonly ISQSPublisherService _SQSPublisherService;
 
+        /// <summary>
+        /// The cache list service
+        /// </summary>
+        private readonly ICacheListService _cacheListService;
+
         #endregion
 
         #region Constructor
@@ -81,8 +87,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="fcmService">The FCM service.</param>
         /// <param name="cacheService">The cache service.</param>
         public CollectingRequestService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
-                                        IMapDistanceMatrixService mapDistanceMatrixService, ISQSPublisherService SQSPublisherService, 
-                                        IFCMService fcmService, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
+                                        IMapDistanceMatrixService mapDistanceMatrixService, ISQSPublisherService SQSPublisherService, ICacheListService cacheListService,
+                                        IFCMService fcmService, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _collectingRequestRejectionRepository = unitOfWork.CollectingRequestRejectionRepository;
@@ -91,6 +97,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             _notificationRepository = unitOfWork.NotificationRepository;
             _mapDistanceMatrixService = mapDistanceMatrixService;
             _SQSPublisherService = SQSPublisherService;
+            _cacheListService = cacheListService;
         }
 
         #endregion
@@ -322,7 +329,14 @@ namespace SCSS.Application.ScrapCollector.Implementations
             {
                 await UnitOfWork.CommitAsync();
 
-                await RemovePendingCollectingRequestFromCache(id);
+                var cacheModel = new PendingCollectingRequestCacheModel()
+                {
+                    Id = collectingRequestEntity.Id,
+                    Date = collectingRequestEntity.CollectingRequestDate,
+                    FromTime = collectingRequestEntity.TimeFrom,
+                    ToTime = collectingRequestEntity.TimeTo
+                };
+                await _cacheListService.PendingCollectingRequestCache.RemoveAsync(cacheModel);
 
                 return new Tuple<Guid?, Guid, string>(collectingRequestEntity.SellerAccountId, id, collectingRequestEntity.CollectingRequestCode);
             }

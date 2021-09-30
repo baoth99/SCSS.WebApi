@@ -43,8 +43,10 @@
         CollectDealTransactionServiceFee,
         SellCollectTransactionAwardAmount,
         CollectDealTransactionAwardAmount,
-        PendingCollectingRequest
+        PendingCollectingRequest,
+        OperatingTimeRange,
     }
+
 
     public enum Vehicle
     {

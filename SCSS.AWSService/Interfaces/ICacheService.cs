@@ -4,64 +4,70 @@ using System.Threading.Tasks;
 
 namespace SCSS.AWSService.Interfaces
 {
-    public interface ICacheService
+    public interface IStringCacheService
     {
         /// <summary>
-        /// Sets the cache data.
+        /// Sets the string cache asynchronous.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="data">The data.</param>
         /// <returns></returns>
-        Task SetCacheData(CacheRedisKey key, string data);
+        Task SetStringCacheAsync(CacheRedisKey key, string data);
 
         /// <summary>
-        /// Sets the cache data.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        /// <returns></returns>
-        Task SetCacheDatas(Dictionary<CacheRedisKey, string> data);
-
-        /// <summary>
-        /// Sets the cache data.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        /// <returns></returns>
-        Task SetCacheDatas(Dictionary<CacheRedisKey, byte[]> data);
-
-        /// <summary>
-        /// Sets the cache data.
+        /// Sets the string cache.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="data">The data.</param>
         /// <returns></returns>
-        Task SetCacheData(CacheRedisKey key, byte[] data);
+        void SetStringCache(CacheRedisKey key, string data);
 
         /// <summary>
-        /// Gets the cache data.
+        /// Sets the string caches asynchronous.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <returns></returns>
+        Task SetStringCachesAsync(Dictionary<CacheRedisKey, string> data);
+
+        /// <summary>
+        /// Gets the string cache asynchronous.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        Task<string> GetCacheData(CacheRedisKey key);
+        Task<string> GetStringCacheAsync(CacheRedisKey key);
 
         /// <summary>
-        /// Gets the cache byte data.
+        /// Gets the string cache.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        Task<byte[]> GetCacheByteData(CacheRedisKey key);
+        string GetStringCache(CacheRedisKey key);
 
         /// <summary>
-        /// Removes the cache data.
+        /// Removes the string cache asynchronous.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        Task RemoveCacheData(CacheRedisKey key);
+        Task RemoveStringCacheAsync(CacheRedisKey key);
 
         /// <summary>
-        /// Removes the cache datas.
+        /// Removes the string cache.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        void RemoveStringCache(CacheRedisKey key);
+
+        /// <summary>
+        /// Removes the string caches asynchronous.
         /// </summary>
         /// <param name="keys">The keys.</param>
         /// <returns></returns>
-        Task RemoveCacheDatas(List<CacheRedisKey> keys);
+        Task RemoveStringCachesAsync(List<CacheRedisKey> keys);
+
+        /// <summary>
+        /// Removes the string caches.
+        /// </summary>
+        /// <param name="keys">The keys.</param>
+        /// <returns></returns>
+        void RemoveStringCaches(List<CacheRedisKey> keys);
     }
 }

@@ -1,12 +1,17 @@
 ﻿using SCSS.Application.ScrapSeller.Models.CollectingRequestModels;
 using SCSS.Utilities.ResponseModel;
-using System;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapSeller.Interfaces
 {
     public interface ICollectingRequestService
     {
+        /// <summary>
+        /// Gets the operating time range.
+        /// </summary>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetOperatingTimeRange();
+
         /// <summary>
         /// Requests the scrap collecting.
         /// </summary>

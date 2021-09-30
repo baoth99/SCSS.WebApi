@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using SCSS.Aplication.BackgroundService.Interfaces;
 using SCSS.AWSService.Interfaces;
-using SCSS.AWSService.Models;
 using SCSS.AWSService.Models.SQSModels;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
@@ -42,9 +41,9 @@ namespace SCSS.Aplication.BackgroundService.Implementations
         private readonly IDapperService _dapperService;
 
         /// <summary>
-        /// The cache service
+        /// The cache list service
         /// </summary>
-        private readonly ICacheService _cacheService;
+        private readonly ICacheListService _cacheListService;
 
         /// <summary>
         /// The SQS publisher service
@@ -61,12 +60,12 @@ namespace SCSS.Aplication.BackgroundService.Implementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="dapperService">The dapper service.</param>
         /// <param name="cacheService">The cache service.</param>
-        public CollectingRequestService(IUnitOfWork unitOfWork, IDapperService dapperService, ICacheService cacheService, ISQSPublisherService SQSPublisherService) : base(unitOfWork)
+        public CollectingRequestService(IUnitOfWork unitOfWork, IDapperService dapperService, ICacheListService cacheListService, ISQSPublisherService SQSPublisherService) : base(unitOfWork)
         {
             _accountRepository = unitOfWork.AccountRepository;
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _dapperService = dapperService;
-            _cacheService = cacheService;
+            _cacheListService = cacheListService;
             _SQSPublisherService = SQSPublisherService;
         }
 
@@ -100,28 +99,29 @@ namespace SCSS.Aplication.BackgroundService.Implementations
         /// </summary>
         public async Task ScanToCancelCollectingRequest()
         {
-            var cache = await _cacheService.GetCacheData(CacheRedisKey.PendingCollectingRequest);
+            var pendingCRCache = _cacheListService.PendingCollectingRequestCache;
+            var cache = await pendingCRCache.GetAllAsync();
 
-            if (cache != null)
+            if (cache.Any())
             {
-                var cacheList = cache.ToList<PendingCollectingRequestCacheModel>();
+                var cacheList = cache.ToList();
+
                 foreach (var item in cacheList)
                 {
                     if (item.Date.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW) && item.ToTime.IsCompareTimeSpanGreaterOrEqual(DateTimeVN.TIMESPAN_NOW))
                     {
+                        // Remove From Cache
+                        await pendingCRCache.RemoveAsync(item);
+
                         // Update DB
                         await CancelCollectingRequest(item.Id);
 
                         // Publish Message To Amazon SQS
                         await PublishMessageToSQS(item.Id);
-
-                        // Update Cache
-                        cacheList.Remove(item);
-                        await _cacheService.SetCacheData(CacheRedisKey.PendingCollectingRequest, cacheList.ToJson());
                     }
                 }
-
             }
+
             Console.WriteLine("Processing....");
 
             //var publishModel = new NotificationMessageQueueModel()

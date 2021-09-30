@@ -2,6 +2,7 @@
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
+using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using System;
 using System.Collections.Generic;
@@ -23,23 +24,25 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         {
             var maxNumberOfDays = await MaxNumberDaysSellerRequestAdvance();
 
-            var days = new List<DateTime>();
+            var days = DateTimeUtils.GetNextDays(maxNumberOfDays);
 
-            for (int i = 0; i < maxNumberOfDays; i++)
-            {
-                days.Add(DateTimeVN.DATE_NOW.AddDays(i).Date);
-            }
-
-            var maxNumberOfRequest = await MaxNumberCollectingRequestSellerRequest();
+            var maxNumberOfRequest = await MaxNumberCollectingRequestSellerRequest(); //
 
             var dataQuery = _collectingRequestRepository.GetManyAsNoTracking(x => CollectionConstants.RemainingCollectingRequest.Contains(x.Status.Value) &&
                                                                                           x.SellerAccountId.Equals(UserAuthSession.UserSession.Id))
-                                                                                    .Select(x => x.CollectingRequestDate.Value.Date)
-                                                                                    .GroupBy(x => x).Select(x => new
+                                                                                    .Select(x => new
+                                                                                    {
+                                                                                        CollectingRequestDate = x.CollectingRequestDate.Value.Date,
+                                                                                        x.TimeFrom,
+                                                                                        x.TimeTo
+                                                                                    })
+                                                                                    .GroupBy(x => x.CollectingRequestDate).Select(x => new
                                                                                     {
                                                                                         Count = x.Count(),
-                                                                                        Date = x.Key
+                                                                                        Date = x.Key,
                                                                                     }).ToList();
+
+            
 
 
             var collectingRequest = days.GroupJoin(dataQuery, x => x, y => y.Date, (x, y) => new
@@ -76,7 +79,27 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                     continue;
                 }
             }
-            
+
+            // Check Operating Time Range
+            var operatingTimeRange = await OperatingTimeRange();
+
+            if (remainingdays.Any())
+            {
+                foreach (var item in remainingdays)
+                {
+                    if (item.Date.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW))
+                    {
+                        var isValid = (DateTimeVN.TIMESPAN_NOW.IsCompareTimeSpanGreaterOrEqual(operatingTimeRange.Item1) &&
+                                        DateTimeVN.TIMESPAN_NOW.IsCompareTimeSpanLessOrEqual(operatingTimeRange.Item2));
+                        if (!isValid)
+                        {
+                            remainingdays.Remove(item);
+                        }
+                        break;
+                    }
+                }
+            }
+
             var total = remainingdays.Count;
 
             return BaseApiResponse.OK(totalRecord: total, resData: remainingdays);
@@ -122,13 +145,38 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             {
                 x.Date,
                 Count = y == null ? maxNumberOfRequest : maxNumberOfRequest - y.Count
-            }).Select(x => x.Count).ToList();
+            }).Select(x => new
+            {
+                x.Count,
+                x.Date,
+            }).ToList();
 
-            var total = collectingRequest.Sum();
+            // Check Operating Time Range
+            var operatingTimeRange = await OperatingTimeRange();
+
+            if (collectingRequest.Any())
+            {
+                foreach (var item in collectingRequest)
+                {
+                    if (item.Date.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW))
+                    {
+                        var isValid = (DateTimeVN.TIMESPAN_NOW.IsCompareTimeSpanGreaterOrEqual(operatingTimeRange.Item1) &&
+                                        DateTimeVN.TIMESPAN_NOW.IsCompareTimeSpanLessOrEqual(operatingTimeRange.Item2));
+                        if (!isValid)
+                        {
+                            collectingRequest.Remove(item);
+                        }
+                        break;
+                    }
+                }
+            }
+
+
+            var total = collectingRequest.Select(x => x.Count).Sum();
 
             var dataResult = new CollectingRequestAbilityInfoViewModel
             {
-                IsFull = total <= 0,
+                IsFull = total <= NumberConstant.Zero,
                 NumberOfRemainingRequest = total,
             };
 

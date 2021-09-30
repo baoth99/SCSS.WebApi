@@ -13,6 +13,10 @@ namespace SCSS.Application.Admin.Models.SystemConfigModels
 
         public int MaxNumberOfRequestDays { get; set; }
 
+        public string OperatingTimeFrom { get; set; }
+
+        public string OperatingTimeTo { get; set; }
+
         public string ActiveTime { get; set; }
 
         public List<SystemConfigHistoryViewModel> Histories { get; set; }
@@ -26,6 +30,10 @@ namespace SCSS.Application.Admin.Models.SystemConfigModels
         public int ReceiveQuantity { get; set; }
 
         public int MaxNumberOfRequestDays { get; set; }
+
+        public string OperatingTimeFrom { get; set; }
+
+        public string OperatingTimeTo { get; set; }
 
         public string DeActiveTime { get; set; }
 

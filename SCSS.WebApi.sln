@@ -49,7 +49,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCSS.Worker.Notification", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCSS.Aplication.BackgroundService", "SCSS.Aplication.BackgroundService\SCSS.Aplication.BackgroundService.csproj", "{D7150F03-0644-4FD7-ACF3-00B5DD73CB01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCSS.Worker.CancelCollectingRequest", "SCSS.Worker.CancelCollectingRequest\SCSS.Worker.CancelCollectingRequest.csproj", "{52776954-6A76-433E-8A42-12ABAD1B3931}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCSS.Worker.CancelCollectingRequest", "SCSS.Worker.CancelCollectingRequest\SCSS.Worker.CancelCollectingRequest.csproj", "{52776954-6A76-433E-8A42-12ABAD1B3931}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

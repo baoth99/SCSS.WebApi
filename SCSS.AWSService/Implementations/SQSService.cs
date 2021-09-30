@@ -5,7 +5,6 @@ using SCSS.AWSService.Models.SQSModels;
 using SCSS.AWSService.SQSHandlers;
 using SCSS.Utilities.Configurations;
 
-
 namespace SCSS.AWSService.Implementations
 {
     public class SQSPublisherService : AWSBaseService, ISQSPublisherService

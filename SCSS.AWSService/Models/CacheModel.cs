@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 namespace SCSS.AWSService.Models
 {
@@ -17,6 +16,20 @@ namespace SCSS.AWSService.Models
 
         public DateTime? Date { get; set; }
 
+        public TimeSpan? FromTime { get; set; }
+
+        public TimeSpan? ToTime { get; set; }
+    }
+
+    public class ImageCacheModel
+    {
+        public string Extension { get; set; }
+
+        public string Base64 { get; set; }
+    }
+
+    public class OperatingRangeTimeCache
+    {
         public TimeSpan? FromTime { get; set; }
 
         public TimeSpan? ToTime { get; set; }

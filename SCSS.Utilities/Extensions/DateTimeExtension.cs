@@ -123,6 +123,21 @@ namespace SCSS.Utilities.Extensions
             return res > 0;
         }
 
+
+        /// <summary>
+        /// Determines whether [is compare date time greater than] [the specified date time2].
+        /// </summary>
+        /// <param name="dateTime1">The date time1.</param>
+        /// <param name="dateTime2">The date time2.</param>
+        /// <returns>
+        ///   <c>true</c> if [is compare date time greater than] [the specified date time2]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsCompareDateTimeGreaterThan(this DateTime dateTime1, DateTime? dateTime2)
+        {
+            var res = dateTime1.CompareTo(dateTime2.Value);
+            return res > 0;
+        }
+
         #endregion Compare DateTime Greater Than
 
         #region Compare DateTime Less Than
@@ -138,6 +153,20 @@ namespace SCSS.Utilities.Extensions
         public static bool IsCompareDateTimeLessThan(this DateTime? dateTime1, DateTime? dateTime2)
         {
             var res = dateTime1.Value.CompareTo(dateTime2.Value);
+            return res < 0;
+        }
+
+        /// <summary>
+        /// Determines whether [is compare date time less than] [the specified date time2].
+        /// </summary>
+        /// <param name="dateTime1">The date time1.</param>
+        /// <param name="dateTime2">The date time2.</param>
+        /// <returns>
+        ///   <c>true</c> if [is compare date time less than] [the specified date time2]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsCompareDateTimeLessThan(this DateTime dateTime1, DateTime? dateTime2)
+        {
+            var res = dateTime1.CompareTo(dateTime2.Value);
             return res < 0;
         }
 
@@ -159,6 +188,20 @@ namespace SCSS.Utilities.Extensions
             return res == 0;
         }
 
+        /// <summary>
+        /// Determines whether [is compare date time equal] [the specified date time2].
+        /// </summary>
+        /// <param name="dateTime1">The date time1.</param>
+        /// <param name="dateTime2">The date time2.</param>
+        /// <returns>
+        ///   <c>true</c> if [is compare date time equal] [the specified date time2]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsCompareDateTimeEqual(this DateTime dateTime1, DateTime? dateTime2)
+        {
+            var res = dateTime1.CompareTo(dateTime2.Value);
+            return res == 0;
+        }
+
         #endregion Compare DateTime Equal
 
         #region Compare TimeSpan Greater Or Equal
@@ -174,6 +217,20 @@ namespace SCSS.Utilities.Extensions
         public static bool IsCompareTimeSpanGreaterOrEqual(this TimeSpan? dateTime1, TimeSpan? dateTime2)
         {
             var res = dateTime1.Value.CompareTo(dateTime2.Value);
+            return res >= 0;
+        }
+
+        /// <summary>
+        /// Determines whether [is compare time span greater or equal] [the specified date time2].
+        /// </summary>
+        /// <param name="dateTime1">The date time1.</param>
+        /// <param name="dateTime2">The date time2.</param>
+        /// <returns>
+        ///   <c>true</c> if [is compare time span greater or equal] [the specified date time2]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsCompareTimeSpanGreaterOrEqual(this TimeSpan dateTime1, TimeSpan? dateTime2)
+        {
+            var res = dateTime1.CompareTo(dateTime2.Value);
             return res >= 0;
         }
 
@@ -195,6 +252,21 @@ namespace SCSS.Utilities.Extensions
             return res <= 0;
         }
 
+
+        /// <summary>
+        /// Determines whether [is compare time span less or equal] [the specified date time2].
+        /// </summary>
+        /// <param name="dateTime1">The date time1.</param>
+        /// <param name="dateTime2">The date time2.</param>
+        /// <returns>
+        ///   <c>true</c> if [is compare time span less or equal] [the specified date time2]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsCompareTimeSpanLessOrEqual(this TimeSpan dateTime1, TimeSpan? dateTime2)
+        {
+            var res = dateTime1.CompareTo(dateTime2.Value);
+            return res <= 0;
+        }
+
         #endregion Compare TimeSpan Less Or Equal
 
         #region Compare TimeSpan Greater Than
@@ -210,6 +282,20 @@ namespace SCSS.Utilities.Extensions
         public static bool IsCompareTimeSpanGreaterThan(this TimeSpan? timeSpan1, TimeSpan? timeSpan2)
         {
             var res = timeSpan1.Value.CompareTo(timeSpan2.Value);
+            return res > 0;
+        }
+
+        /// <summary>
+        /// Determines whether [is compare time span greater than] [the specified time span2].
+        /// </summary>
+        /// <param name="timeSpan1">The time span1.</param>
+        /// <param name="timeSpan2">The time span2.</param>
+        /// <returns>
+        ///   <c>true</c> if [is compare time span greater than] [the specified time span2]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsCompareTimeSpanGreaterThan(this TimeSpan timeSpan1, TimeSpan? timeSpan2)
+        {
+            var res = timeSpan1.CompareTo(timeSpan2.Value);
             return res > 0;
         }
 
@@ -231,6 +317,20 @@ namespace SCSS.Utilities.Extensions
             return res < 0;
         }
 
+        /// <summary>
+        /// Determines whether [is compare time span less than] [the specified time span2].
+        /// </summary>
+        /// <param name="timeSpan1">The time span1.</param>
+        /// <param name="timeSpan2">The time span2.</param>
+        /// <returns>
+        ///   <c>true</c> if [is compare time span less than] [the specified time span2]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsCompareTimeSpanLessThan(this TimeSpan timeSpan1, TimeSpan? timeSpan2)
+        {
+            var res = timeSpan1.CompareTo(timeSpan2.Value);
+            return res < 0;
+        }
+
         #endregion
 
         #region Compare TimeSpan Equal
@@ -248,6 +348,22 @@ namespace SCSS.Utilities.Extensions
             var res = timeSpan1.Value.CompareTo(timeSpan2.Value);
             return res == 0;
         }
+
+
+        /// <summary>
+        /// Determines whether [is compare time span equal] [the specified time span2].
+        /// </summary>
+        /// <param name="timeSpan1">The time span1.</param>
+        /// <param name="timeSpan2">The time span2.</param>
+        /// <returns>
+        ///   <c>true</c> if [is compare time span equal] [the specified time span2]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsCompareTimeSpanEqual(this TimeSpan timeSpan1, TimeSpan? timeSpan2)
+        {
+            var res = timeSpan1.CompareTo(timeSpan2.Value);
+            return res == 0;
+        }
+
 
         #endregion
 

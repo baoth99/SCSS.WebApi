@@ -56,7 +56,7 @@ namespace SCSS.Application.ScrapDealer
         /// <value>
         /// The cache service.
         /// </value>
-        protected ICacheService CacheService { get; private set; }
+        protected IStringCacheService CacheService { get; private set; }
 
 
         #region Constructor
@@ -69,7 +69,7 @@ namespace SCSS.Application.ScrapDealer
         /// <param name="logger">The logger.</param>
         /// <param name="fcmService">The FCM service.</param>
         /// <param name="cacheService">The cache service.</param>
-        public BaseService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, ICacheService cacheService)
+        public BaseService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, IStringCacheService cacheService)
         {
             UnitOfWork = unitOfWork;
             UserAuthSession = userAuthSession;
@@ -171,7 +171,7 @@ namespace SCSS.Application.ScrapDealer
                 throw new ArgumentException("CacheRedisKey is not correct", nameof(redisKey));
             }
 
-            var percentRes = await CacheService.GetCacheData(redisKey);
+            var percentRes = await CacheService.GetStringCacheAsync(redisKey);
 
             if (percentRes == null)
             {
@@ -184,7 +184,7 @@ namespace SCSS.Application.ScrapDealer
                     return NumberConstant.Zero;
                 }
                 var percent = entity.Percent.Value;
-                await CacheService.SetCacheData(redisKey, percent.ToString());
+                await CacheService.SetStringCacheAsync(redisKey, percent.ToString());
 
                 return percent;
             }
@@ -208,7 +208,7 @@ namespace SCSS.Application.ScrapDealer
                 throw new ArgumentException("CacheRedisKey is not correct", nameof(redisKey));
             }
 
-            var transAwardAmount = await CacheService.GetCacheData(redisKey);
+            var transAwardAmount = await CacheService.GetStringCacheAsync(redisKey);
 
             if (transAwardAmount == null)
             {
@@ -229,7 +229,7 @@ namespace SCSS.Application.ScrapDealer
                     Amount = entity.Amount.Value,
                     AppliedAmount = entity.AppliedAmount.Value
                 };
-                await CacheService.SetCacheData(redisKey, cache.ToJson());
+                await CacheService.SetStringCacheAsync(redisKey, cache.ToJson());
 
                 return cache;
             }

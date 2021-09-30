@@ -2,6 +2,7 @@
 using SCSS.AWSService.Implementations;
 using SCSS.AWSService.Interfaces;
 using SCSS.Utilities.Configurations;
+using StackExchange.Redis;
 using System;
 
 
@@ -17,13 +18,9 @@ namespace SCSS.Worker.CancelCollectingRequest.SystemConfiguration
             }
 
             // Connect to redis
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = AppSettingValues.RedisConnectionString;
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(AppSettingValues.RedisConnectionString));
 
-            });
-
-            services.AddSingleton<ICacheService, CacheService>();
+            services.AddSingleton<ICacheListService, CacheListService>();
             services.AddSingleton<ISQSPublisherService, SQSPublisherService>();
         }
     }

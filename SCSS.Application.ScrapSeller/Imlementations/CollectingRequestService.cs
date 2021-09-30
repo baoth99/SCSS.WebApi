@@ -37,6 +37,15 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
         #endregion
 
+        #region Services
+
+        /// <summary>
+        /// The cache list service
+        /// </summary>
+        private readonly ICacheListService _cacheListService;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -45,11 +54,40 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        /// <param name="cacheService"></param>
-        public CollectingRequestService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
+        /// <param name="cacheService">The cache service.</param>
+        /// <param name="cacheListService">The cache list service.</param>
+        public CollectingRequestService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService,
+                                        ICacheListService cacheListService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _locationRepository = unitOfWork.LocationRepository;
+            _cacheListService = cacheListService;
+        }
+
+        #endregion
+
+        #region Get Operating Time Range
+
+        /// <summary>
+        /// Gets the operating time range.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> GetOperatingTimeRange()
+        {
+            var operatingTimeRange = await OperatingTimeRange();
+
+            if (operatingTimeRange == null)
+            {
+                return BaseApiResponse.OK();
+            }
+
+            var result = new OperatingTimeRangeViewModel()
+            {
+                OperatingFromTime = operatingTimeRange.Item1.ToStringFormat(TimeSpanFormat.HH_MM),
+                OperatingToTime = operatingTimeRange.Item2.ToStringFormat(TimeSpanFormat.HH_MM)
+            };
+
+            return BaseApiResponse.OK(result);
         }
 
         #endregion
@@ -120,8 +158,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 ToTime = insertEntity.TimeTo
             };
 
-            await AddPendingCollectingRequestToCache(cacheModel);
-
+            await _cacheListService.PendingCollectingRequestCache.PushAsync(cacheModel);
 
             return BaseApiResponse.OK();
         }
@@ -257,14 +294,27 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             if (collectingRequestInDay.Count() >= requests)
             {
-                errorList.Add(new ValidationError(nameof(collectingRequestDate), InvalidCollectingRequestCode.LimitCR));
+                errorList.Add(new ValidationError("MaxNumberCR", InvalidCollectingRequestCode.LimitCR));
             }
 
             //  Check CollectingRequestFromTime with CollectingRequestToTime
             //  If CollectingRequestFromTime is greater than CollectingRequestFromTime 
-            if (fromTime.IsCompareTimeSpanGreaterThan(toTime))
+            if (fromTime.IsCompareTimeSpanGreaterOrEqual(toTime))
             {
-                errorList.Add(new ValidationError(nameof(collectingRequestDate), InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
+                errorList.Add(new ValidationError("FromTimeToTime", InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
+            }
+
+            // Check Operating Time Range
+            var operatingTimeRange = await OperatingTimeRange();
+
+            if (operatingTimeRange != null)
+            {
+                var IsValidFromTime = (fromTime.IsCompareTimeSpanGreaterOrEqual(operatingTimeRange.Item1) && fromTime.IsCompareTimeSpanLessOrEqual(operatingTimeRange.Item2));
+                var IsValidToTime = (toTime.IsCompareTimeSpanGreaterOrEqual(operatingTimeRange.Item1) && toTime.IsCompareTimeSpanLessOrEqual(operatingTimeRange.Item2));
+                if (!(IsValidFromTime && IsValidToTime))
+                {
+                    errorList.Add(new ValidationError("TimeRange", InvalidCollectingRequestCode.TimeRangeNotValid));
+                }
             }
 
             // Check CollectingRequestFromTime and CollectingRequestToTime in day
@@ -281,9 +331,9 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             }
 
             // Check minutes between fromTime and toTime. if it is less than 15 minutes => error
-            if (!DateTimeUtils.IsMoreThanMinutes(fromTime, toTime))
+            if (!DateTimeUtils.IsMoreThanOrEqualMinutes(fromTime, toTime))
             {
-                errorList.Add(new ValidationError("between", InvalidCollectingRequestCode.LessThan15Minutes));
+                errorList.Add(new ValidationError("Between", InvalidCollectingRequestCode.LessThan15Minutes));
             }
 
             return errorList;

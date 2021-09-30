@@ -1,7 +1,6 @@
 ﻿using SCSS.Utilities.Constants;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -19,7 +18,7 @@ namespace SCSS.Utilities.Helper
             return isValid? val : Guid.Empty;
         }
 
-        public static Dictionary<string, string> ObjToDictionary<T>(T obj) where T : class
+        public static Dictionary<string, string> ObjToDictionary<T>(T obj)
         {
             var data = obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
                                     .ToDictionary(prop => prop.Name, prop => prop.GetValue(obj, null).ToString());
@@ -58,7 +57,6 @@ namespace SCSS.Utilities.Helper
         {
             return $"{prefix}-{DateTimeVN.DATETIME_NOW.ToString(DateTimeFormat.Format01)}-{fileNameEx.ToLower()}";
         }
-
 
         public static List<int> GetActivityStatus(int status)
         {

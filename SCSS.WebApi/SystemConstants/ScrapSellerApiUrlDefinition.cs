@@ -39,6 +39,7 @@
         public static class CollectingRequestApiUrl
         {
             public const string RequestCollecting = CollectingRequest + "/request";
+            public const string GetOperatingTimeRange = CollectingRequest + "/operating-time";
             public const string CancelCollectingRequest = CollectingRequest + "/cancel";
             public const string UploadCollectingRequestImg = CollectingRequest + "/upload-img";
             public const string GetRemainingDays = CollectingRequest + "/remaining-days";

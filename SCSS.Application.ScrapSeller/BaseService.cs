@@ -5,7 +5,8 @@ using SCSS.Data.EF.UnitOfWork;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
-using System.Collections.Generic;
+using SCSS.Utilities.Helper;
+using System;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapSeller
@@ -42,7 +43,7 @@ namespace SCSS.Application.ScrapSeller
         /// <value>
         /// The cache service.
         /// </value>
-        protected ICacheService CacheService { get; private set; }
+        protected IStringCacheService CacheService { get; private set; }
 
         #region Constructor
 
@@ -52,7 +53,7 @@ namespace SCSS.Application.ScrapSeller
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        public BaseService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, ICacheService cacheService)
+        public BaseService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService)
         {
             UnitOfWork = unitOfWork;
             UserAuthSession = userAuthSession;
@@ -70,7 +71,7 @@ namespace SCSS.Application.ScrapSeller
         /// <returns></returns>
         public async Task<int> MaxNumberCollectingRequestSellerRequest()
         {
-            var quantity = await CacheService.GetCacheData(CacheRedisKey.RequestQuantity);
+            var quantity = await CacheService.GetStringCacheAsync(CacheRedisKey.RequestQuantity);
             if (quantity == null)
             {
                 var entity = await UnitOfWork.CollectingRequestConfigRepository.GetManyAsNoTracking(x => x.IsActive).FirstOrDefaultAsync();
@@ -80,7 +81,7 @@ namespace SCSS.Application.ScrapSeller
                 }
                 var requestQuantity = entity.RequestQuantity;
 
-                await CacheService.SetCacheData(CacheRedisKey.RequestQuantity, requestQuantity.ToString());
+                await CacheService.SetStringCacheAsync(CacheRedisKey.RequestQuantity, requestQuantity.ToString());
 
                 return requestQuantity;
             }
@@ -97,7 +98,7 @@ namespace SCSS.Application.ScrapSeller
         /// <returns></returns>
         public async Task<int> MaxNumberDaysSellerRequestAdvance()
         {
-            var quantity = await CacheService.GetCacheData(CacheRedisKey.MaxNumberOfRequestDays);
+            var quantity = await CacheService.GetStringCacheAsync(CacheRedisKey.MaxNumberOfRequestDays);
             if (quantity == null)
             {
                 var entity = await UnitOfWork.CollectingRequestConfigRepository.GetManyAsNoTracking(x => x.IsActive).FirstOrDefaultAsync();
@@ -107,7 +108,7 @@ namespace SCSS.Application.ScrapSeller
                 }
                 var maxNumberOfRequestDays = entity.MaxNumberOfRequestDays;
 
-                await CacheService.SetCacheData(CacheRedisKey.MaxNumberOfRequestDays, maxNumberOfRequestDays.ToString());
+                await CacheService.SetStringCacheAsync(CacheRedisKey.MaxNumberOfRequestDays, maxNumberOfRequestDays.ToString());
 
                 return maxNumberOfRequestDays;
             }
@@ -116,30 +117,40 @@ namespace SCSS.Application.ScrapSeller
 
         #endregion
 
-        #region Add Pending Collecting Request to Redis Cache
+        #region Get Operating Range Time 
 
         /// <summary>
-        /// Adds the pending collecting request.
+        /// Operatings the range time.
         /// </summary>
-        /// <param name="model">The model.</param>
-        public async Task AddPendingCollectingRequestToCache(PendingCollectingRequestCacheModel model)
+        /// <returns></returns>
+        public async Task<Tuple<TimeSpan?, TimeSpan?>> OperatingTimeRange()
         {
-            var cache = await CacheService.GetCacheData(CacheRedisKey.PendingCollectingRequest);
+            var operatingRangeTimeVal = await CacheService.GetStringCacheAsync(CacheRedisKey.OperatingTimeRange);
+            
+            if (ValidatorUtil.IsBlank(operatingRangeTimeVal))
+            {
+                var systemConfig = await UnitOfWork.CollectingRequestConfigRepository.GetManyAsNoTracking(x => x.IsActive).FirstOrDefaultAsync();
 
-            if (cache == null)
-            {
-                var cacheList = new List<PendingCollectingRequestCacheModel>()
+                if (systemConfig == null)
                 {
-                    model
+                    return null;
+                }
+
+                var operatingRangeTimeCache = new OperatingRangeTimeCache()
+                {
+                    FromTime = systemConfig.OperatingTimeFrom,
+                    ToTime = systemConfig.OperatingTimeTo
                 };
-                await CacheService.SetCacheData(CacheRedisKey.PendingCollectingRequest, cacheList.ToJson());
+
+                await CacheService.SetStringCacheAsync(CacheRedisKey.OperatingTimeRange, operatingRangeTimeCache.ToJson());
+
+                return new Tuple<TimeSpan?, TimeSpan?>(operatingRangeTimeCache.FromTime, operatingRangeTimeCache.ToTime);
             }
-            else
-            {
-                var crList = cache.ToList<PendingCollectingRequestCacheModel>();
-                crList.Add(model);
-                await CacheService.SetCacheData(CacheRedisKey.PendingCollectingRequest, crList.ToJson());
-            }
+
+            var operatingRangeTime = operatingRangeTimeVal.ToMapperObject<OperatingRangeTimeCache>();
+
+            var rangeTime = new Tuple<TimeSpan?, TimeSpan?>(operatingRangeTime.FromTime, operatingRangeTime.ToTime);
+            return rangeTime;
         }
 
         #endregion

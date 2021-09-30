@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCSS.Data.EF;
 
 namespace SCSS.Data.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210930114248_Add ActiveTimeFrom and ActiveTimeTo into CRConfig Table")]
+    partial class AddActiveTimeFromandActiveTimeTointoCRConfigTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,6 +256,12 @@ namespace SCSS.Data.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<TimeSpan?>("ActiveTimeFrom")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan?>("ActiveTimeTo")
+                        .HasColumnType("time");
+
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -268,12 +276,6 @@ namespace SCSS.Data.EF.Migrations
 
                     b.Property<int>("MaxNumberOfRequestDays")
                         .HasColumnType("int");
-
-                    b.Property<TimeSpan?>("OperatingTimeFrom")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan?>("OperatingTimeTo")
-                        .HasColumnType("time");
 
                     b.Property<int>("ReceiveQuantity")
                         .HasColumnType("int");

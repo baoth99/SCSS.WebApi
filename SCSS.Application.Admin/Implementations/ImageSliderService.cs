@@ -45,7 +45,7 @@ namespace SCSS.Application.Admin.Implementations
         /// <summary>
         /// The cache service
         /// </summary>
-        private readonly ICacheService _cacheService;
+        private readonly ICacheListService _cacheListService;
 
         #endregion
 
@@ -53,11 +53,11 @@ namespace SCSS.Application.Admin.Implementations
 
         public ImageSliderService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
                                   IStorageBlobS3Service storageBlobS3Service, IFCMService fcmService,
-                                  ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService)
+                                  ICacheListService cacheListService) : base(unitOfWork, userAuthSession, logger, fcmService)
         {
             _imageSliderRepository = unitOfWork.ImageSliderRepository;
             _storageBlobS3Service = storageBlobS3Service;
-            _cacheService = cacheService;
+            _cacheListService = cacheListService;
         }
 
         #endregion
@@ -186,17 +186,23 @@ namespace SCSS.Application.Admin.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> GetImages(bool isWeb = false)
         {
-            var cacheData = await _cacheService.GetCacheData(CacheRedisKey.ImageSlider);
+            var imageSliderCache = _cacheListService.ImageSliderCache;
+
+            var cacheData = await imageSliderCache.GetAllAsync();
 
             if (cacheData == null)
             {
                 await SaveCache();
-                cacheData = await _cacheService.GetCacheData(CacheRedisKey.ImageSlider);
+                cacheData = await imageSliderCache.GetAllAsync();
             }
 
-            var listData = cacheData.ToList<FileResponseModel>();
+            var listData = cacheData.Select(x => new FileResponseModel()
+            {
+                Base64 = x.Base64,
+                Extension = x.Extension
+            }).ToList();
 
-            if (listData.Count > 0)
+            if(listData.Count > 0)
             {
                 if (isWeb)
                 {
@@ -224,12 +230,13 @@ namespace SCSS.Application.Admin.Implementations
 
             if (selectedList.Count > 0)
             {
-                var imgCache = new List<FileResponseModel>();
+
+                var imgCache = new List<ImageCacheModel>();
 
                 foreach (var item in selectedList)
                 {
                     var file = await _storageBlobS3Service.GetFile(item);
-                    var image = new FileResponseModel()
+                    var image = new ImageCacheModel()
                     {
                         Extension = file.Extension,
                         Base64 = file.Stream.ToBase64()
@@ -239,13 +246,16 @@ namespace SCSS.Application.Admin.Implementations
 
                 if (imgCache.Count > 0)
                 {
-                    var cacheData = imgCache.ToJson();
-                    await _cacheService.SetCacheData(CacheRedisKey.ImageSlider, cacheData);
+                    await _cacheListService.ImageSliderCache.RemoveRedisKeyAsync();
+                    foreach (var item in imgCache)
+                    {
+                        await _cacheListService.ImageSliderCache.PushAsync(item);
+                    }
                 }
             }
             else
             {
-                await _cacheService.RemoveCacheData(CacheRedisKey.ImageSlider);
+                await _cacheListService.ImageSliderCache.RemoveRedisKeyAsync();
             }
         }
 

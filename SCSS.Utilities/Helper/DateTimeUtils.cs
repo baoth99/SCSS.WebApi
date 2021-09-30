@@ -30,6 +30,11 @@ namespace SCSS.Utilities.Helper
             return betweenMinutes > minutes;
         }
 
+        public static bool IsMoreThanOrEqualMinutes(TimeSpan? time1, TimeSpan? time2, double minutes = RequestScrapCollecting.FifteenMinutes)
+        {
+            var betweenMinutes = time2.Value.Subtract(time1.Value).TotalMinutes;
+            return betweenMinutes >= minutes;
+        }
 
         #region GetDateTime Trasaction History
 
@@ -78,5 +83,33 @@ namespace SCSS.Utilities.Helper
         }
 
         #endregion
+
+        #region GetNextDays
+
+        /// <summary>
+        /// Gets the next days.
+        /// </summary>
+        /// <param name="days">The days.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">Number of days can not be less than 0 - days</exception>
+        public static List<DateTime> GetNextDays(int days)
+        {
+            if (days < 0)
+            {
+                throw new ArgumentException("Number of days can not be less than 0", nameof(days));
+            }
+
+            var res = new List<DateTime>();
+
+            for (int i = 0; i < days; i++)
+            {
+                res.Add(DateTimeVN.DATE_NOW.AddDays(i).Date);
+            }
+
+            return res;
+        }
+
+        #endregion
+
     }
 }

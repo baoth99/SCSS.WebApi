@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting.Internal;
 using SCSS.Application.Admin.Models;
 using SCSS.Application.ScrapSeller.Interfaces;
 using SCSS.Application.ScrapSeller.Models.CollectingRequestModels;
@@ -68,6 +67,25 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
 
         #endregion
 
+        #region Get Operating Time Range
+
+        /// <summary>
+        /// Gets the operating time range.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapSellerApiUrlDefinition.CollectingRequestApiUrl.GetOperatingTimeRange)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetOperatingTimeRange()
+        {
+            return await _collectingRequestService.GetOperatingTimeRange();
+        }
+
+        #endregion
+
         #region Request Scrap Collecting
 
         /// <summary>
@@ -108,7 +126,6 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
 
         #endregion
 
-
         #region Get Number Of Remaining Days that seller can request
 
         /// <summary>
@@ -127,7 +144,6 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         }
 
         #endregion
-
 
         #region Check Seller Request Ability
 

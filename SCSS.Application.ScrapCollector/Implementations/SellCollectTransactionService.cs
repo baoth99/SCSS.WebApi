@@ -86,7 +86,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="fcmService">The FCM service.</param>
         /// <param name="cacheService"></param>
         public SellCollectTransactionService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
-                                             IFCMService fcmService, ICacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
+                                             IFCMService fcmService, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
         {
             _sellCollectTransactionRepository = unitOfWork.SellCollectTransactionRepository;
             _sellCollectTransactionDetailRepository = unitOfWork.SellCollectTransactionDetailRepository;
