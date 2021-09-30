@@ -43,6 +43,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = AppSettingValues.RedisConnectionString;
+                options.ConfigurationOptions.DefaultDatabase = AppSettingValues.RedisDB01;
 
             });
            

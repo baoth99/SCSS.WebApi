@@ -20,6 +20,8 @@ namespace SCSS.Utilities.Configurations
             public const string ReadScaleOut = "SystemConfig:ReadScaleOut";
             public const string UseSwaggerUI = "SystemConfig:UseSwaggerUI";
             public const string RedisInstanceName = "SystemConfig:RedisInstanceName";
+            public const string RedisDB01 = "SystemConfig:RedisDB01";
+            public const string RedisDB02 = "SystemConfig:RedisDB02";
         }
 
         public static class IdentityServer
