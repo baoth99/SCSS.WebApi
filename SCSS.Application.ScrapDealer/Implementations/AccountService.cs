@@ -161,7 +161,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
             {
                 var fileNameEx = imageFile.FileName;
                 var fileName = CommonUtils.GetFileName(PrefixFileName.DealerInformation, fileNameEx);
-                var imageUrl = await _storageBlobS3Service.UploadFile(imageFile, fileName, FileS3Path.DealerInformationImages);
+                var imageUrl = await _storageBlobS3Service.UploadImageFile(imageFile, fileName, FileS3Path.DealerInformationImages);
                 dealerEntity.DealerImageUrl = imageUrl;
             }
 

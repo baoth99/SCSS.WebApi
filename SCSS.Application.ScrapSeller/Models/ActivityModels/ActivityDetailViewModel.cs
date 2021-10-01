@@ -29,6 +29,10 @@ namespace SCSS.Application.ScrapSeller.Models.ActivityModels
 
         public string ToTime { get; set; }
 
+        public string ApprovedDate { get; set; }
+
+        public string ApprovedTime { get; set; }
+
         public bool IsBulky { get; set; }
 
         public string ScrapCategoryImageUrl { get; set; }
@@ -37,6 +41,10 @@ namespace SCSS.Application.ScrapSeller.Models.ActivityModels
 
         // Transaction Information
         public TransactionInformation Transaction { get; set; }
+
+        public string DoneActivityDate { get; set; }
+
+        public string DoneActivityTime { get; set; }
 
     }
 

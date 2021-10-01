@@ -102,8 +102,8 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                 IsRead = BooleanConstants.FALSE,
             }).ToList();
 
-            //_notificationRepository.InsertRange(notificationEntities);
-            //await UnitOfWork.CommitAsync();
+            _notificationRepository.InsertRange(notificationEntities);
+            await UnitOfWork.CommitAsync();
 
             var notificationMessages = models.Select(x => new NotificationRequestModel()
             {

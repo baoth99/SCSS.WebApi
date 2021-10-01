@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Hosting;
 using SCSS.Aplication.BackgroundService.Interfaces;
 using SCSS.AWSService.Interfaces;
+using SCSS.Utilities.Configurations;
+using SCSS.Utilities.Constants;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,11 +55,9 @@ namespace SCSS.WebApi.BackgroundJobs
         /// <param name="cancellationToken">Indicates that the start process has been aborted.</param>
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            // TODO:
-            //TimeSpan delayTime = DateTime.Today.AddHours(21) - DateTime.Now;
-            TimeSpan intervalTime = TimeSpan.FromHours(24);
-
-            _timer = new Timer(callback: async o => await DoWork(), state: null, dueTime: TimeSpan.Parse("00:00:05"), period: intervalTime);
+            TimeSpan intervalTime = TimeSpan.Parse(AppSettingValues.CollectingRequestTrailSchedule);
+            var totalMinutes = intervalTime.Subtract(DateTimeVN.TIMESPAN_NOW).TotalMinutes;
+            _timer = new Timer(callback: async o => await DoWork(), state: null, dueTime: TimeSpan.FromMinutes(totalMinutes), period: intervalTime);
 
             return Task.CompletedTask;
         }

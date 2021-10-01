@@ -46,6 +46,7 @@ namespace SCSS.Utilities.Constants
         public const string DD_MMM_yyyy = @"dd MMM, yyyy";
         public const string DDMMyyyyhhmmss = @"ddMMyyyyhhmmss";
         public const string DDD_DD_MM_yyy_HH_mm = @"ddd, dd MM yyyy lúc HH:mm";
+        public const string DDD_DD_MMM_yyy_HH_mm = @"ddd, dd MMM yyyy";
         public const string DDD_dd_MMM = "ddd ,dd MMM";
     }
 
@@ -73,13 +74,6 @@ namespace SCSS.Utilities.Constants
     {
         public const string PhoneRegex = @"(84|0[3|5|7|8|9])+([0-9]{8})\b";
         public const string EmailRegex = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
-    }
-
-    public class ImageFileConstants
-    {
-        public const string PNG = ".png";
-        public const string JPEG = ".jpeg";
-        public const string JPG = ".jpg";
     }
 
     public class ScrapCategoryStatus
@@ -154,6 +148,8 @@ namespace SCSS.Utilities.Constants
     public class DefaultSort
     {
         public const string CreatedTimeDESC = "CreatedTime DESC";
+        public const string CollectingRequestDateDESC = "CollectingRequestDate DESC";
+        public const string ApprovedTimeDESC = "ApprovedTime DESC";
     }
 
     public class MarkConstant
@@ -200,4 +196,17 @@ namespace SCSS.Utilities.Constants
         public const string SINGAPORE = "Singapore Standard Time";
     }
 
+    public class ImageFileConstants
+    {
+        public const string PNG = ".png";
+        public const string JPEG = ".jpeg";
+        public const string JPG = ".jpg";
+    }
+
+    public class ContentTypeString
+    {
+        public const string JpgImageContentType = "image/jpeg";
+        public const string PngImageContentType = "image/png";
+        public const string JpegImageContentType = "image/jpeg";
+    }
 }

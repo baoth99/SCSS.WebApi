@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SCSS.Aplication.BackgroundService.Interfaces;
+using SCSS.Utilities.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +52,7 @@ namespace SCSS.Worker.CancelCollectingRequest
             while (!stoppingToken.IsCancellationRequested)
             {
                 await DoWork();
-                await Task.Delay(1000, stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(AppSettingValues.DelayMinutesSchedule), stoppingToken);
             }
         }
 

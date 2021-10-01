@@ -117,7 +117,6 @@ namespace SCSS.Utilities.Constants
 
     public class DictionaryConstants
     {      
-
         public static readonly Dictionary<string, int> AccountStatusCollection = new Dictionary<string, int>()
         {
             {AccountRoleConstants.ADMIN, AccountRole.ADMIN },
@@ -126,7 +125,6 @@ namespace SCSS.Utilities.Constants
             {AccountRoleConstants.COLLECTOR, AccountRole.COLLECTOR },
             {AccountRoleConstants.DEALER_MEMBER, AccountRole.DEALER_MEMBER }
         };
-
     }
 
 }

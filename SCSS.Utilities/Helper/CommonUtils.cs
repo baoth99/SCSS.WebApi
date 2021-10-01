@@ -3,8 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SCSS.Utilities.Helper
 {
@@ -66,6 +65,17 @@ namespace SCSS.Utilities.Helper
                 CollectingRequestStatus.APPROVED => new List<int>() { CollectingRequestStatus.APPROVED },
                 CollectingRequestStatus.COMPLETED => CollectionConstants.CompletedCRActivity,
                 _ => CollectionConstants.Empty<int>(),
+            };
+        }
+
+        public static string GetContentImageTypeString(string extension)
+        {
+            return extension switch
+            {
+                "png" => ContentTypeString.PngImageContentType,
+                "jpg" => ContentTypeString.JpgImageContentType,
+                "jpeg" => ContentTypeString.JpegImageContentType,
+                _ => throw new ArgumentException("Image Extension is not valid !", nameof(extension)),
             };
         }
 

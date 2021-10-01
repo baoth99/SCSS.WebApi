@@ -82,7 +82,7 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         public async Task<BaseApiResponseModel> UploadSellerAccountImage([FromForm] ImageUploadModel model)
         {
             var fileName = CommonUtils.GetFileName(PrefixFileName.SellerAccount, model.Image.FileName);
-            var imageUrl = await _storageBlobS3Service.UploadFile(model.Image, fileName, FileS3Path.SellerAccountImages);
+            var imageUrl = await _storageBlobS3Service.UploadImageFile(model.Image, fileName, FileS3Path.SellerAccountImages);
             return BaseApiResponse.OK(imageUrl);
         }
 

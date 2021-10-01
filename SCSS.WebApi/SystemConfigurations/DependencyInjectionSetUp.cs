@@ -72,7 +72,7 @@ namespace SCSS.WebApi.SystemConfigurations
 
             #endregion Seller Application           
 
-            //services.AddHostedService<TrailCollectingRequestHostedService>();
+            services.AddHostedService<TrailCollectingRequestHostedService>();
 
         }
     }

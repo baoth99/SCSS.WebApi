@@ -55,6 +55,8 @@ namespace SCSS.Utilities.Configurations
 
         public static string AWSSecrectKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.AWSSecrectKey);
 
+        public static int DurationTimeOutPreSignedUrl => ConfigurationHelper.GetValue<int>(AppSettingKeys.AWSService.DurationTimeOutPreSignedUrl);
+
         public static string AWSCloudWatchLogGroup => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.CloudWatchLogGroup);
 
         public static bool IsEnabledSQS => ConfigurationHelper.GetValue<bool>(AppSettingKeys.AWSSQSSetting.Enabled);
@@ -90,6 +92,20 @@ namespace SCSS.Utilities.Configurations
         public static string LoggingConfig => ConfigurationHelper.GetValue<string>(AppSettingKeys.Logging.Config);
 
         public static string CollectingRequestSQLCommand => ConfigurationHelper.GetValue<string>(AppSettingKeys.SQLCommand.CollectorRequestCommand);
+
+        public static int ResizeImageWidth => ConfigurationHelper.GetValue<int>(AppSettingKeys.ResizeImage.Width);
+
+        public static int ResizeImageHeight => ConfigurationHelper.GetValue<int>(AppSettingKeys.ResizeImage.Height);
+
+        public static int ResizeLimitedHeight => ConfigurationHelper.GetValue<int>(AppSettingKeys.ResizeImage.LimitedHeight);
+
+        public static int ResizeLimitedWidth => ConfigurationHelper.GetValue<int>(AppSettingKeys.ResizeImage.LimitedWidth);
+
+        public static int RatioResize => ConfigurationHelper.GetValue<int>(AppSettingKeys.ResizeImage.Ratio);
+
+        public static string CollectingRequestTrailSchedule => ConfigurationHelper.GetValue<string>(AppSettingKeys.TaskSchedule.CollectingRequestTrail);
+
+        public static int DelayMinutesSchedule => ConfigurationHelper.GetValue<int>(AppSettingKeys.TaskSchedule.DelayMinutes);
 
     }
 }

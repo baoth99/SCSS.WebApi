@@ -82,7 +82,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         public async Task<BaseApiResponseModel> UploadDealerAccountImage([FromForm] ImageUploadModel model)
         {
             var fileName = CommonUtils.GetFileName(PrefixFileName.CollectorAccount, model.Image.FileName);
-            var imageUrl = await _storageBlobS3Service.UploadFile(model.Image, fileName, FileS3Path.CollectorAccountImages);
+            var imageUrl = await _storageBlobS3Service.UploadImageFile(model.Image, fileName, FileS3Path.CollectorAccountImages);
             return BaseApiResponse.OK(imageUrl);
         }
 
@@ -127,7 +127,6 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         }
 
         #endregion
-
 
         #region Get Collector Information Detail
 

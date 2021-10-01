@@ -2,11 +2,6 @@
 using Microsoft.Extensions.Hosting;
 using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Helper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SCSS.Worker.CancelCollectingRequest.SystemConfiguration
 {

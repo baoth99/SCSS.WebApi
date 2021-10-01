@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Text.Json.Serialization;
 
 namespace SCSS.Application.ScrapSeller.Models.ActivityModels
 {
@@ -11,9 +11,9 @@ namespace SCSS.Application.ScrapSeller.Models.ActivityModels
 
         public string CollectingRequestDate { get; set; }
 
-        public string CreatedDate { get; set; }
+        public string FromTime { get; set; }
 
-        public string CreatedTime { get; set; }
+        public string ToTime { get; set; }   
 
         public int? Status { get; set; }
 
@@ -23,5 +23,7 @@ namespace SCSS.Application.ScrapSeller.Models.ActivityModels
 
         public long? Total { get; set; }
 
+        [JsonIgnore]
+        public DateTime? CompletedTime { get; set; }
     }
 }

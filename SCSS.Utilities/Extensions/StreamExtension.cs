@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SCSS.Utilities.Extensions
 {
@@ -33,11 +29,13 @@ namespace SCSS.Utilities.Extensions
             }
             
         }
+
+
         public static Bitmap ToBitmap(this Stream stream)
         {
             try
             {
-                return new Bitmap(stream);
+                return new Bitmap(Bitmap.FromStream(stream));
             }
             catch (Exception)
             {
@@ -46,6 +44,26 @@ namespace SCSS.Utilities.Extensions
             finally
             {
                 stream.Dispose();
+            }
+        }
+
+        public static byte[] ToByteArray(this Stream stream)
+        {
+            byte[] bytes;
+            var memoryStream = new MemoryStream();
+            try
+            {
+                stream.CopyTo(memoryStream);
+                bytes = memoryStream.ToArray();
+                return bytes;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                memoryStream.Dispose();
             }
         }
     }

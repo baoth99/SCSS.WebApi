@@ -4,11 +4,10 @@ using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using SCSS.AWSService.Interfaces;
 using SCSS.AWSService.Models;
-using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
-using SCSS.Utilities.ResponseModel;
+using SCSS.Utilities.Helper;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -35,6 +34,48 @@ namespace SCSS.AWSService.Implementations
         public StorageBlobS3Service(ILoggerService logger) : base(logger)
         {
             AmazonS3 = new AmazonS3Client(AppSettingValues.AWSS3AccessKey, AppSettingValues.AWSS3SecretKey, RegionEndpoint.APSoutheast1);
+        }
+
+        #endregion
+
+        #region Upload Image File
+
+        /// <summary>
+        /// Uploads the image file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="path">The path.</param>
+        /// <param name="isResize">if set to <c>true</c> [is resize].</param>
+        /// <returns></returns>
+        public async Task<string> UploadImageFile(IFormFile file, string fileName, FileS3Path path, bool isResize = false)
+        {
+            var fileStream = file.OpenReadStream();
+            if (isResize)
+            {
+                fileStream = await ImageHelper.ResizeImage(file);
+            }
+            try
+            {
+                var putRequest = new PutObjectRequest()
+                {
+                    BucketName = AppSettingValues.AWSS3BucketName,
+                    Key = $"{path}/{fileName}",
+                    InputStream = fileStream,
+                    ContentType = file.ContentType,
+                };
+                await AmazonS3.PutObjectAsync(putRequest);
+
+                fileStream.Dispose();
+                Logger.LogInfo(AWSLoggerMessage.UploadFileSuccess(fileName, path));
+
+                return $"{path}/{fileName}";
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, AWSLoggerMessage.UploadFileFail(fileName, path));
+                return string.Empty;
+            }
         }
 
         #endregion
@@ -219,5 +260,51 @@ namespace SCSS.AWSService.Implementations
 
         #endregion
 
+        #region Get File PreSigned URL
+
+        /// <summary>
+        /// Gets the file URL.
+        /// </summary>
+        /// <param name="filepath">The filepath.</param>
+        /// <returns></returns>
+        public async Task<string> GetFilePreSignedURL(string filepath)
+        {
+            try
+            {
+                var path = filepath.Split("/")[0];
+
+                if (!CollectionConstants.FileS3PathCollection.Contains(path))
+                {
+                    return null;
+                }
+                var file = filepath.Split("/")[1];
+
+                if (!CollectionConstants.ImageExtensions.Contains(Path.GetExtension(file.ToLower())))
+                {
+                    return null;
+                }
+
+                GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
+                {
+                    BucketName = AppSettingValues.AWSS3BucketName,
+                    Key = filepath,
+                    Expires = DateTimeVN.DATETIME_NOW.AddMinutes(AppSettingValues.DurationTimeOutPreSignedUrl)
+                };
+
+                var preSignedUrl = await Task.Run(() =>
+                {
+                    return AmazonS3.GetPreSignedURL(request);
+                });
+
+                return preSignedUrl;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, AWSLoggerMessage.GetFileFail(filepath));
+                return null;
+            }
+        }
+
+        #endregion
     }
 }

@@ -14,7 +14,7 @@ using SCSS.Utilities.ResponseModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapSeller.Imlementations
@@ -65,7 +65,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
         #endregion
 
-
         #region Constructor
 
         /// <summary>
@@ -105,6 +104,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
             }
 
+
             var dataQuery = _collectingRequestRepository.GetManyAsNoTracking(x => x.SellerAccountId.Equals(UserAuthSession.UserSession.Id) &&
                                                                                   crStatus.Contains(x.Status.Value))
                                                         .Join(_locationRepository.GetAllAsNoTracking(), x => x.LocationId, y => y.Id,
@@ -113,11 +113,20 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                                                                   x.Id,
                                                                   x.CollectingRequestCode,
                                                                   x.CollectingRequestDate,
-                                                                  x.CreatedTime,
+                                                                  x.TimeFrom,
+                                                                  x.TimeTo,
+                                                                  x.ApprovedTime,
+                                                                  x.UpdatedTime,
                                                                   x.IsBulky,
                                                                   y.AddressName,
                                                                   x.Status
                                                               });
+
+            if (CollectionConstants.RemainingCollectingRequest.Contains(model.Status))
+            {
+                var sortBy = model.Status == CollectingRequestStatus.PENDING ? DefaultSort.CollectingRequestDateDESC : DefaultSort.ApprovedTimeDESC;
+                dataQuery = dataQuery.OrderBy(sortBy);
+            }
 
             var totalRecord = await dataQuery.CountAsync();
 
@@ -125,11 +134,12 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             {
                 CollectingRequestId = x.Id,
                 CollectingRequestCode = x.CollectingRequestCode,
-                CollectingRequestDate = x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
+                CollectingRequestDate = x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DDD_DD_MMM_yyy_HH_mm),
                 AddressName = x.AddressName,
-                CreatedDate = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MMM_yyyy),
-                CreatedTime = x.CreatedTime.Value.TimeOfDay.ToStringFormat(TimeSpanFormat.HH_MM),
+                FromTime = x.TimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
+                ToTime = x.TimeTo.ToStringFormat(TimeSpanFormat.HH_MM),
                 Status = x.Status,
+                CompletedTime = x.UpdatedTime,
                 IsBulky = x.IsBulky
             }).ToList();
 
@@ -144,8 +154,9 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                                         .SelectMany(x => x.Transaction.DefaultIfEmpty(), (x, y) =>
                                         {
                                             x.Activity.Total = y?.Total;
+                                            x.Activity.CompletedTime = y != null ? y.CreatedTime : x.Activity.CompletedTime;
                                             return x.Activity;
-                                        }).ToList();
+                                        }).OrderByDescending(x => x.CompletedTime).ToList();
             }
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: activities);
@@ -197,6 +208,18 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                     Name = collectorInfo?.Name,
                     Phone = collectorInfo?.Phone
                 };
+
+                if (crEntity.ApprovedTime != null)
+                {
+                    dataResult.ApprovedDate = crEntity.ApprovedTime.ToStringFormat(DateTimeFormat.DD_MMM_yyyy);
+                    dataResult.ApprovedTime = crEntity.ApprovedTime.Value.TimeOfDay.ToStringFormat(TimeSpanFormat.HH_MM);
+                }
+            }
+
+            if (crEntity.UpdatedTime != null)
+            {
+                dataResult.DoneActivityDate = crEntity.UpdatedTime.ToStringFormat(DateTimeFormat.DD_MMM_yyyy);
+                dataResult.DoneActivityTime = crEntity.UpdatedTime.Value.TimeOfDay.ToStringFormat(TimeSpanFormat.HH_MM);
             }
 
             if (crEntity.Status == CollectingRequestStatus.COMPLETED)

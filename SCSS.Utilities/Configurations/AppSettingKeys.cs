@@ -45,6 +45,7 @@ namespace SCSS.Utilities.Configurations
             public const string S3BucketName = "AWSService:S3BucketName";
             public const string S3AccessKey = "AWSService:S3AccessKey";
             public const string S3SecretKey = "AWSService:S3SecretKey";
+            public const string DurationTimeOutPreSignedUrl = "AWSService:DurationTimeOutPreSignedUrl";
 
             public const string AWSAccessKey = "AWSService:CloudWatchAccessKey";
             public const string AWSSecrectKey = "AWSService:CloudWatchSecrectKey";
@@ -93,6 +94,21 @@ namespace SCSS.Utilities.Configurations
         public static class SQLCommand
         {
             public const string CollectorRequestCommand = "SqlCommands:CollectorRequestCommands";
+        }
+
+        public static class ResizeImage
+        {
+            public const string LimitedWidth = "ResizeImage:LimitedWidth";
+            public const string LimitedHeight = "ResizeImage:LimitedHeight";
+            public const string Ratio = "ResizeImage:Ratio";
+            public const string Width = "ResizeImage:Width";
+            public const string Height = "ResizeImage:Height";
+        }
+
+        public static class TaskSchedule
+        {
+            public const string CollectingRequestTrail = "TaskSchedule:CollectingRequestTrail";
+            public const string DelayMinutes = "TaskSchedule:DelayMinutes";
         }
     }
 }

@@ -42,7 +42,6 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
 
         #endregion
 
-
         #region Search The Nearest Dealer  
 
         /// <summary>

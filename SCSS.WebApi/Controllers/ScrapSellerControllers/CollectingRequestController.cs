@@ -61,7 +61,7 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         public async Task<BaseApiResponseModel> UploadScrapCollectingImage([FromForm] ImageUploadModel model)
         {
             var fileName = CommonUtils.GetFileName(PrefixFileName.ScrapCollectingRequest, model.Image.FileName);
-            var imageUrl = await _storageBlobService.UploadFile(model.Image, fileName, FileS3Path.ScrapCollectingRequestImages);
+            var imageUrl = await _storageBlobService.UploadImageFile(model.Image, fileName, FileS3Path.ScrapCollectingRequestImages);
             return BaseApiResponse.OK(imageUrl);
         }
 

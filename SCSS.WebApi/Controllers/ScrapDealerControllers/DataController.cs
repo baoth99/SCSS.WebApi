@@ -4,6 +4,7 @@ using SCSS.AWSService.Interfaces;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
+using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConstants;
@@ -52,15 +53,17 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapDealerApiUrlDefinition.DataApiUrl.GetImage)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetImage([FromQuery] string imageUrl)
+        public async Task<IActionResult> GetImage([FromQuery] string imageUrl)
         {
             var file = await _storageBlobS3Service.GetFile(imageUrl);
+
             if (file == null)
             {
-                return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
+                return new NotFoundResult();
             }
-            var image = file.Stream.ToBitmap();
-            return BaseApiResponse.OK(image);
+
+            var image = file.Stream.ToByteArray();
+            return File(image, CommonUtils.GetContentImageTypeString(file.Extension));
         }
 
         #endregion

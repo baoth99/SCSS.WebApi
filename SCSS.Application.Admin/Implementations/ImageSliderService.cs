@@ -208,7 +208,7 @@ namespace SCSS.Application.Admin.Implementations
                 {
                     return BaseApiResponse.OK(listData);
                 }
-                var result = listData.Select(x => x.Base64.ToBitmap());
+                var result = listData.Select(x => x.Base64);
 
                 return BaseApiResponse.OK(result);
             }

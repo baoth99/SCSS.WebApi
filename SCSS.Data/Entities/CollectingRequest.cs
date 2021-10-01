@@ -31,6 +31,8 @@ namespace SCSS.Data.Entities
         [ConcurrencyCheck]
         public Guid? CollectorAccountId { get; set; }
 
+        public DateTime? ApprovedTime { get; set; }
+
         public bool IsBulky { get; set; }
 
         public string ScrapImageUrl { get; set; }

@@ -323,6 +323,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             collectingRequestEntity.CollectorAccountId = UserAuthSession.UserSession.Id;
             collectingRequestEntity.Status = CollectingRequestStatus.APPROVED;
+            collectingRequestEntity.ApprovedTime = DateTimeVN.DATETIME_NOW;
             _collectingRequestRepository.Update(collectingRequestEntity);
 
             try
