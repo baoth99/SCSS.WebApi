@@ -9,6 +9,9 @@ namespace SCSS.WebApi.SystemConstants
         private const string CollectingRequest = "collecting-request";
         private const string Hub = "/hubs/collector";
         private const string SellCollectTransaction = "transaction/sell-colect";
+        private const string Statistic = "statistic";
+        private const string Notification = "notification";
+
 
         public static class AccountApiUrl
         {
@@ -17,6 +20,18 @@ namespace SCSS.WebApi.SystemConstants
             public const string InfoDetail = Account + "/dealer-info";
             public const string UpdateDeviceId = Account + "/device-id";
             public const string UploadImage = Account + "/upload-image";
+        }
+
+        public static class StatisticApiUrl
+        {
+            public const string GetStatistic = Statistic + "/get";
+        }
+
+        public static class NotificationApiUrl
+        {
+            public const string Get = Notification + "/get";
+            public const string GetDetail = Notification + "/get-detail";
+            public const string Read = Notification + "/read";
         }
 
         public static class HubApiUrl

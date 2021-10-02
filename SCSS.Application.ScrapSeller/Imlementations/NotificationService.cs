@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SCSS.Application.ScrapSeller.Interfaces;
+using SCSS.Application.ScrapSeller.Models;
 using SCSS.Application.ScrapSeller.Models.NotificationModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
@@ -52,13 +53,16 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// Gets the notifications.
         /// </summary>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> GetNotifications()
+        public async Task<BaseApiResponseModel> GetNotifications(BaseFilterModel model)
         {
             var dataQuery = _notificationRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id)).OrderByDescending(x => x.CreatedTime);
 
             var totalRecord = await dataQuery.CountAsync();
 
-            var dataResult = dataQuery.Select(x => new NotificationViewModel()
+            var page = model.Page <= NumberConstant.Zero ? NumberConstant.One : model.Page;
+            var pageSize = model.PageSize <= NumberConstant.Zero ? NumberConstant.Ten : model.PageSize;
+
+            var dataResult = dataQuery.Skip((page - 1) * pageSize).Take(pageSize).Select(x => new NotificationViewModel()
             {
                 Id = x.Id,
                 Title = x.Title,
@@ -73,7 +77,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         }
 
         #endregion
-
 
         #region Read The Notification
 

@@ -18,8 +18,6 @@
             public const string Get = Notification + "/get";
             public const string GetDetail = Notification + "/get-detail";
             public const string Read = Notification + "/read";
-
-
         }
 
         public static class AccountApiUrl

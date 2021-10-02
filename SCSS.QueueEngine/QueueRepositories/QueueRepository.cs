@@ -44,7 +44,7 @@ namespace SCSS.QueueEngine.QueueRepositories
 
         #endregion
 
-        #region Consume Peek Queue
+        #region Get All Queue
 
         /// <summary>
         /// Consumes the queue.
@@ -52,19 +52,7 @@ namespace SCSS.QueueEngine.QueueRepositories
         /// <returns></returns>
         public IList<T> GetAllQueue()
         {
-            List<T> result = new List<T>();
-
-            if (!_queue.Any())
-            {
-                return result;
-            }
-
-            foreach (var item in _queue.ToList())
-            {
-                result.Add(item);
-            }
-
-            return result;
+            return _queue.ToList();
         }
 
         #endregion
@@ -103,7 +91,7 @@ namespace SCSS.QueueEngine.QueueRepositories
         /// Consumes the dequeue queue.
         /// </summary>
         /// <returns></returns>
-        public IList<T> ConsumeDequeueQueue()
+        public IList<T> ConsumeDequeueQueue(int length)
         {
             List<T> result = new List<T>();
 
@@ -112,7 +100,7 @@ namespace SCSS.QueueEngine.QueueRepositories
                 return result;
             }
 
-            for (int i = 1; i <= _queue.Count; i++)
+            for (int i = 1; i <= length; i++)
             {
                 _queue.TryDequeue(out T data);
                 if (data != null)

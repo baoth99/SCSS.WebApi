@@ -36,6 +36,12 @@
     <None Update="AppData\SqlCommands\CollectorRequestCommands\TrailCollectingRequestInDay.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="AppData\SqlCommands\StatisticCommands\DealerDashboardStastistic.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AppData\SqlCommands\StatisticCommands\CollectorDashboardStastistic.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

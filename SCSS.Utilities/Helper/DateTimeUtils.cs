@@ -71,12 +71,12 @@ namespace SCSS.Utilities.Helper
 
             if (rangeTime.TotalMinutes <= NumberConstant.Sixty)
             {
-                return $"{rangeTime.TotalMinutes} phút trước";
+                return $"{rangeTime.Minutes} phút trước";
             }
 
             if (rangeTime.TotalHours <= NumberConstant.TwentyFour)
             {
-                return $"{rangeTime.TotalHours} giờ trước";
+                return $"{(int)rangeTime.TotalHours} giờ trước";
             }
 
             return dateTime.ToStringFormat(DateTimeFormat.DDD_DD_MM_yyy_HH_mm);

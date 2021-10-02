@@ -1,4 +1,5 @@
-﻿using SCSS.Utilities.ResponseModel;
+﻿using SCSS.Application.ScrapSeller.Models;
+using SCSS.Utilities.ResponseModel;
 using System;
 using System.Threading.Tasks;
 
@@ -10,8 +11,13 @@ namespace SCSS.Application.ScrapSeller.Interfaces
         /// Gets the notifications.
         /// </summary>
         /// <returns></returns>
-        Task<BaseApiResponseModel> GetNotifications();
+        Task<BaseApiResponseModel> GetNotifications(BaseFilterModel model);
 
+        /// <summary>
+        /// Gets the notification detail.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         Task<BaseApiResponseModel> GetNotificationDetail(Guid id);
 
         /// <summary>

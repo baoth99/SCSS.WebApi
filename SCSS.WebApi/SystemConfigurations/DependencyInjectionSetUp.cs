@@ -59,6 +59,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IAccountService, SCSS.Application.ScrapDealer.Implementations.AccountService>();
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IDealerInformationService, SCSS.Application.ScrapDealer.Implementations.DealerInformationService>();
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IPromotionService, SCSS.Application.ScrapDealer.Implementations.PromotionService>();
+            services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IStatisticService, SCSS.Application.ScrapDealer.Implementations.StatisticService>();
 
             #endregion Dealer Application
 

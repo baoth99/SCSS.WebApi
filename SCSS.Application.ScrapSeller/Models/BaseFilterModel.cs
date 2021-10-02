@@ -1,5 +1,5 @@
 ﻿
-namespace SCSS.Application.Admin.Models
+namespace SCSS.Application.ScrapSeller.Models
 {
     public class BaseFilterModel
     {

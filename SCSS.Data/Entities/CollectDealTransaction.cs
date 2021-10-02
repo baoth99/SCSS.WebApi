@@ -23,6 +23,8 @@ namespace SCSS.Data.Entities
 
         public long? Total { get; set; }
 
+        public long? TransactionServiceFee { get; set; }
+
         public long? BonusAmount { get; set; }
 
         public float? AwardPoint { get; set; }

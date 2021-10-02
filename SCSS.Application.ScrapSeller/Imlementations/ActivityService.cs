@@ -104,7 +104,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
             }
 
-
             var dataQuery = _collectingRequestRepository.GetManyAsNoTracking(x => x.SellerAccountId.Equals(UserAuthSession.UserSession.Id) &&
                                                                                   crStatus.Contains(x.Status.Value))
                                                         .Join(_locationRepository.GetAllAsNoTracking(), x => x.LocationId, y => y.Id,
@@ -159,7 +158,12 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                                         }).OrderByDescending(x => x.CompletedTime).ToList();
             }
 
-            return BaseApiResponse.OK(totalRecord: totalRecord, resData: activities);
+            var page = model.Page <= NumberConstant.Zero ? NumberConstant.One : model.Page;
+            var pageSize = model.PageSize <= NumberConstant.Zero ? NumberConstant.Ten : model.PageSize;
+
+            var dataResult = activities.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
         }
 
         #endregion

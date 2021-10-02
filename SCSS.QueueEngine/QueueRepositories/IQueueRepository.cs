@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+
 
 namespace SCSS.QueueEngine.QueueRepositories
 {
@@ -38,7 +35,7 @@ namespace SCSS.QueueEngine.QueueRepositories
         /// Consumes the dequeue queue.
         /// </summary>
         /// <returns></returns>
-        IList<T> ConsumeDequeueQueue();
+        IList<T> ConsumeDequeueQueue(int length);
 
         /// <summary>
         /// Queues the length.

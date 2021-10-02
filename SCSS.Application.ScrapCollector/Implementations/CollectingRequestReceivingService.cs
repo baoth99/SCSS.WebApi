@@ -25,20 +25,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> GetCollectingRequestReceivedList(CollectingRequestReceivingFilterModel model)
         {
-            var filterDate = model.FilterDate.ToDateTime();
-
-            if (filterDate != null)
-            {
-                if (filterDate.IsCompareDateTimeLessThan(DateTimeVN.DATE_NOW))
-                {
-                    filterDate = DateTimeVN.DATE_NOW;
-                }
-            }
-
             var collectorId = UserAuthSession.UserSession.Id;
             var receivingDataQuery = _collectingRequestRepository.GetMany(x => x.CollectorAccountId.Equals(collectorId) &&
-                                                                               x.Status == CollectingRequestStatus.APPROVED &&
-                                                                               (ValidatorUtil.IsBlank(filterDate) || x.CollectingRequestDate.Value.Date.CompareTo(filterDate.Value.Date) == NumberConstant.Zero))
+                                                                               x.Status == CollectingRequestStatus.APPROVED)
                                                                   .Join(_locationRepository.GetAllAsNoTracking(), x => x.LocationId, y => y.Id,
                                                                                (x, y) => new
                                                                                {
@@ -53,7 +42,22 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                    y.AddressName,
                                                                                    y.Latitude,
                                                                                    y.Longitude,
-                                                                               });
+                                                                               })
+                                                                  .Join(_accountRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.SellerPhone) || x.Phone.Contains(model.SellerPhone))), x => x.SellerAccountId, y => y.Id,
+                                                                              (x, y) => new
+                                                                              {
+                                                                                  x.CollectingRequestId,
+                                                                                  x.CollectingRequestCode,
+                                                                                  x.CollectingRequestDate,
+                                                                                  x.TimeFrom,
+                                                                                  x.TimeTo,
+                                                                                  x.IsBulky,
+                                                                                  x.Address,
+                                                                                  x.AddressName,
+                                                                                  x.Latitude,
+                                                                                  x.Longitude,
+                                                                                  SellerName = y.Name,
+                                                                              });
             if (!receivingDataQuery.Any())
             {
                 return BaseApiResponse.OK(totalRecord: NumberConstant.Zero, resData: CollectionConstants.Empty<CollectingRequestReceivingViewModel>());
@@ -81,9 +85,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             // Get Seller Role 
             var sellerRoleId = UnitOfWork.RoleRepository.Get(x => x.Key.Equals(AccountRole.SELLER)).Id;
 
-            model.ScreenSize = model.ScreenSize <= NumberConstant.Zero ? NumberConstant.Ten : model.ScreenSize;
-
-            var receivingData = destinationDistancesRes.Take(model.ScreenSize).Join(receivingDataQuery, x => x.DestinationId, y => y.CollectingRequestId,
+            var receivingData = destinationDistancesRes.Join(receivingDataQuery, x => x.DestinationId, y => y.CollectingRequestId,
                                                              (x, y) => new
                                                              {
                                                                  y.CollectingRequestId,
@@ -94,25 +96,10 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                  y.Address,
                                                                  y.AddressName,
                                                                  y.IsBulky,
+                                                                 y.SellerName,
                                                                  x.DistanceVal,
                                                                  x.DistanceText,
-                                                                 y.SellerAccountId
-                                                             })
-                                                         .Join(_accountRepository.GetManyAsNoTracking(x => x.RoleId.Equals(sellerRoleId)), x => x.SellerAccountId, y => y.Id,
-                                                            (x, y) => new
-                                                            {
-                                                                x.CollectingRequestId,
-                                                                x.CollectingRequestCode,
-                                                                x.CollectingRequestDate,
-                                                                x.TimeFrom,
-                                                                x.TimeTo,
-                                                                x.Address,
-                                                                x.AddressName,
-                                                                x.IsBulky,
-                                                                x.DistanceVal,
-                                                                x.DistanceText,
-                                                                SellerName = y.Name,
-                                                            }).OrderBy(x => x.DistanceVal);
+                                                             }).OrderBy(x => x.DistanceVal);
 
             var totalRecord = receivingData.Count();
 
@@ -134,7 +121,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 DistanceText = x.DistanceText,
             }).ToList();
 
-            return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult); ;
+            return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
         }
 
         #endregion Get List Of Collecting Request which have received

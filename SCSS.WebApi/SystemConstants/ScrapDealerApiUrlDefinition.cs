@@ -6,10 +6,17 @@
         private const string ScrapCategory = "scrap-category";
         private const string DealerInformation = "dealer-information";
         private const string Promotion = "promotion";
+        private const string Statistic = "statistic";
+        private const string Notification = "notification";
 
         public static class DataApiUrl
         {
             public const string GetImage = "image/get";
+        }
+
+        public static class StatisticApiUrl
+        {
+            public const string GetStatistic = Statistic + "/get";
         }
 
         public static class AccountApiUrl
@@ -35,6 +42,7 @@
             public const string GetDealerBranchInformation = DealerInformation + "/get-branchs";
             public const string GetDealerBranchInformationDetail = DealerInformation + "/get-branch-detail";
             public const string ChangeDealerStatus = DealerInformation + "/change-status";
+
         }
 
         public static class ScrapCategoryUrl
@@ -49,5 +57,11 @@
             public const string Remove = ScrapCategory + "/remove";
         }
 
+        public static class NotificationApiUrl
+        {
+            public const string Get = Notification + "/get";
+            public const string GetDetail = Notification + "/get-detail";
+            public const string Read = Notification + "/read";
+        }
     }
 }

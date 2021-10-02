@@ -37,5 +37,10 @@ namespace SCSS.Utilities.Extensions
         {
             return val.HasValue ? val.Value : NumberConstant.NegativeOne;
         }
+
+        public static long ToLongValue(this long? val)
+        {
+            return val.HasValue ? val.Value : NumberConstant.Zero;
+        }
     }
 }

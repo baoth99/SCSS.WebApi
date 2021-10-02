@@ -6,12 +6,14 @@ using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConstants;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace SCSS.WebApi.Controllers.ScrapSellerControllers
+namespace SCSS.WebApi.Controllers.ScrapDealerControllers
 {
-    [ApiVersion(ApiVersions.ApiVersionV2)]
-    public class NotificationController : BaseScrapSellerControllers
+    [ApiVersion(ApiVersions.ApiVersionV3)]
+    public class NotificationController : BaseScrapDealerController
     {
         #region Services
 
@@ -21,6 +23,7 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         private readonly INotificationService _notificationService;
 
         #endregion
+
 
         #region Constructor
 
@@ -38,23 +41,24 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         #region Get Notifications
 
         /// <summary>
-        /// Gets the notifications.
+        /// Gets the notification.
         /// </summary>
+        /// <param name="count">The count.</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapSellerApiUrlDefinition.NotificationApiUrl.Get)]
+        [Route(ScrapDealerApiUrlDefinition.NotificationApiUrl.Get)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetNotifications([FromQuery] BaseFilterModel model)
+        public async Task<BaseApiResponseModel> GetNotification([FromQuery] BaseFilterModel model)
         {
             return await _notificationService.GetNotifications(model);
         }
 
         #endregion
 
-        #region Reads The Notification
+        #region Read Notification
 
         /// <summary>
         /// Reads the notification.
@@ -63,9 +67,9 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapSellerApiUrlDefinition.NotificationApiUrl.Read)]
+        [Route(ScrapDealerApiUrlDefinition.NotificationApiUrl.Read)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> ReadNotification([FromQuery] Guid id)
         {
@@ -85,7 +89,7 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapSellerApiUrlDefinition.NotificationApiUrl.GetDetail)]
+        [Route(ScrapDealerApiUrlDefinition.NotificationApiUrl.GetDetail)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> GetNotificationDetail([FromQuery] Guid id)
         {
@@ -93,6 +97,5 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         }
 
         #endregion
-
     }
 }

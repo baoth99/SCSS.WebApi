@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SCSS.Application.ScrapCollector.Interfaces;
-using SCSS.Application.ScrapCollector.Models.StatisticModels;
+using SCSS.Application.ScrapDealer.Interfaces;
+using SCSS.Application.ScrapDealer.Models.StatisticModels;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConstants;
 using System.Threading.Tasks;
 
-namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
+namespace SCSS.WebApi.Controllers.ScrapDealerControllers
 {
-    [ApiVersion(ApiVersions.ApiVersionV4)]
-    public class StatisticController :  BaseScrapCollectorController
+    [ApiVersion(ApiVersions.ApiVersionV3)]
+    public class StatisticController : BaseScrapDealerController
     {
         #region Services
 
@@ -23,6 +23,10 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StatisticController"/> class.
+        /// </summary>
+        /// <param name="statisticService">The statistic service.</param>
         public StatisticController(IStatisticService statisticService)
         {
             _statisticService = statisticService;
@@ -30,7 +34,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
 
         #endregion
 
-        #region MyRegion
+        #region Get Statistic
 
         /// <summary>
         /// Gets the statistic.
@@ -41,11 +45,11 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapCollectorApiUrlDefinition.StatisticApiUrl.GetStatistic)]
+        [Route(ScrapDealerApiUrlDefinition.StatisticApiUrl.GetStatistic)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> GetStatistic([FromQuery] StatisticDateFilterModel model)
         {
-            return await _statisticService.GetStatisticInTimeRange(model);
+            return await _statisticService.GetStatisticInRangeTime(model);
         }
 
         #endregion
