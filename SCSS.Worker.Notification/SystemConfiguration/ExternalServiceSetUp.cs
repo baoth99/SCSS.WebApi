@@ -20,7 +20,14 @@ namespace SCSS.Worker.Notification.SystemConfiguration
             }
 
             // Set Environment Variable for Firebase
-            Environment.SetEnvironmentVariable(AppSettingValues.GoogleCredentials, AppSettingValues.FirebaseCredentialFile);
+            var firebaseCredentialFile = AppSettingValues.FirebaseCredentialFile;
+
+            if (ConfigurationHelper.IsProduction)
+            {
+                firebaseCredentialFile = Environment.GetEnvironmentVariable("SCSS.Worker.Notification") + "\\" + AppSettingValues.FirebaseCredentialFile;
+            }
+
+            Environment.SetEnvironmentVariable(AppSettingValues.GoogleCredentials, firebaseCredentialFile);
 
             FirebaseApp.Create(new AppOptions()
             {

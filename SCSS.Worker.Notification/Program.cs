@@ -19,7 +19,12 @@ namespace SCSS.Worker.Notification
                 .ConfigureAppConfiguration((hostContext, config) =>
                 {
                     var env = hostContext.HostingEnvironment;
-                    config.SetBasePath(Environment.CurrentDirectory).AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                    var environment = Environment.CurrentDirectory;
+                    if (env.IsProduction())
+                    {
+                        environment = Environment.GetEnvironmentVariable("SCSS.Worker.Notification");
+                    }
+                    config.SetBasePath(environment).AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
                     config.AddEnvironmentVariables();
                 })
                 .ConfigureServices((hostContext, services) =>

@@ -25,7 +25,12 @@ namespace SCSS.Worker.CancelCollectingRequest.SystemConfiguration
             }
 
             // Load nlog.config file
-            var config = new LoggingConfiguration(LogManager.LoadConfiguration(AppFileHelper.GetFileConfig(AppSettingValues.LoggingConfig)));
+            var logConfigFile = AppFileHelper.GetFileConfig(AppSettingValues.LoggingConfig);
+            if (ConfigurationHelper.IsProduction || ConfigurationHelper.IsTesting)
+            {
+                logConfigFile = Environment.GetEnvironmentVariable("SCSS.Worker.CancelCollectingRequest") + "\\" + AppSettingValues.LoggingConfig;
+            }
+            var config = new LoggingConfiguration(LogManager.LoadConfiguration(logConfigFile));
             // Set up to write log to AWS WatchCloud
             if (ConfigurationHelper.IsProduction || ConfigurationHelper.IsTesting)
             {

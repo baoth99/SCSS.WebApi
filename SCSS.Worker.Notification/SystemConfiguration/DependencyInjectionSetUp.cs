@@ -2,11 +2,8 @@
 using SCSS.Aplication.BackgroundService.Implementations;
 using SCSS.Aplication.BackgroundService.Interfaces;
 using SCSS.Data.EF.UnitOfWork;
+using SCSS.Utilities.AuthSessionConfig;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SCSS.Worker.Notification.SystemConfiguration
 {
@@ -20,6 +17,7 @@ namespace SCSS.Worker.Notification.SystemConfiguration
             }
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAuthSession, AuthSession>();
 
             #region Background
 

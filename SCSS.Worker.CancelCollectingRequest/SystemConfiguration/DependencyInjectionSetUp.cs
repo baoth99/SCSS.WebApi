@@ -4,6 +4,7 @@ using SCSS.Aplication.BackgroundService.Interfaces;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.ORM.Dapper.Implementations;
 using SCSS.ORM.Dapper.Interfaces;
+using SCSS.Utilities.AuthSessionConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,7 @@ namespace SCSS.Worker.CancelCollectingRequest.SystemConfiguration
             }
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAuthSession, AuthSession>();
             services.AddSingleton<IDapperService, DapperService>();
 
             #region Background
