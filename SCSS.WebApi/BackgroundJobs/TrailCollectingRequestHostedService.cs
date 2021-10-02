@@ -55,14 +55,23 @@ namespace SCSS.WebApi.BackgroundJobs
         /// <param name="cancellationToken">Indicates that the start process has been aborted.</param>
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            TimeSpan intervalTime = TimeSpan.Parse(AppSettingValues.CollectingRequestTrailSchedule);
-            var totalMinutes = intervalTime.Subtract(DateTimeVN.TIMESPAN_NOW).TotalMinutes;
+            TimeSpan intervalTime = TimeSpan.Parse(AppSettingValues.CollectingRequestTrailPeriodSchedule);
+            var totalMinutes = TimeSpan.Parse(AppSettingValues.CollectingRequestTrailStartSchedule).Subtract(DateTimeVN.TIMESPAN_NOW).TotalMinutes;
             _timer = new Timer(callback: async o => await DoWork(), state: null, dueTime: TimeSpan.FromMinutes(totalMinutes), period: intervalTime);
 
             return Task.CompletedTask;
         }
 
         #endregion
+
+
+        public TimeSpan GetStartTime()
+        {
+
+            return DateTimeVN.TIMESPAN_NOW;
+        }
+
+
 
         #region Do Work
 

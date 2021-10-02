@@ -78,16 +78,70 @@ namespace SCSS.Aplication.BackgroundService.Implementations
         /// </summary>
         public async Task TrailCollectingRequestInDayBackground()
         {
+            await PublishMessageToSQS();
+
             var sql = AppFileHelper.ReadContent(AppSettingValues.CollectingRequestSQLCommand, "TrailCollectingRequestInDay.sql");
 
             var parameters = new DynamicParameters();
             parameters.Add("@CancelBySystemStatus", CollectingRequestStatus.CANCEL_BY_SYSTEM);
             parameters.Add("@UpdatedBy", Guid.Empty);
             parameters.Add("@DateNow", DateTimeVN.DATETIME_NOW);
-            parameters.Add("@PendingStatus", CollectingRequestStatus.PENDING);
             parameters.Add("@ApprovedStatus", CollectingRequestStatus.APPROVED);
 
             await _dapperService.SqlExecuteAsync(sql, parameters);
+        }
+
+        #endregion
+
+        #region PublishMessageToSQS ()
+
+        /// <summary>
+        /// Publishes the message to SQS.
+        /// </summary>
+        private async Task PublishMessageToSQS()
+        {
+            var dataQuery = _collectingRequestRepository.GetManyAsNoTracking(x => x.CollectingRequestDate.Value.Date.CompareTo(DateTimeVN.DATE_NOW) == NumberConstant.Zero &&
+                                                                                  x.Status == CollectingRequestStatus.APPROVED);
+
+            var sellerAccountNotifications = dataQuery.Join(_accountRepository.GetAllAsNoTracking(), x => x.SellerAccountId, y => y.Id,
+                                                            (x, y) => new
+                                                            {
+                                                                SellerDeviceId = y.DeviceId,
+                                                                x.SellerAccountId,
+                                                                x.CollectingRequestCode,
+                                                                x.CollectingRequestDate,
+                                                                x.ApprovedTime,
+                                                                x.TimeFrom,
+                                                                x.TimeTo,
+                                                            }).Select(x => new NotificationMessageQueueModel()
+                                                            {
+                                                                AccountId = x.SellerAccountId,
+                                                                DeviceId = x.SellerDeviceId,
+                                                                Title = $"Lịch hẹn {x.CollectingRequestCode} đã bị hệ thống hủy" ,
+                                                                Body = $"Lịch hẹn {x.CollectingRequestCode} vào lúc {x.CollectingRequestDate} đã bị hệ thống hủy"
+                                                            }).ToList();
+            await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(sellerAccountNotifications);
+
+            var collectorAccountNotifications = dataQuery.Join(_accountRepository.GetAllAsNoTracking(), x => x.CollectorAccountId, y => y.Id,
+                                                            (x, y) => new
+                                                            {
+                                                                CollectorDeviceId = y.DeviceId,
+                                                                x.CollectorAccountId,
+                                                                x.CollectingRequestCode,
+                                                                x.CollectingRequestDate,
+                                                                x.ApprovedTime,
+                                                                x.TimeFrom,
+                                                                x.TimeTo,
+                                                            })
+                                                        .Select(x => new NotificationMessageQueueModel
+                                                        {
+                                                            AccountId = x.CollectorAccountId,
+                                                            DeviceId = x.CollectorDeviceId,
+                                                            Title = $"Lịch hẹn {x.CollectingRequestCode} đã bị hệ thống hủy",
+                                                            Body = $"Lịch hẹn {x.CollectingRequestCode} vào lúc {x.CollectingRequestDate} đã bị hệ thống hủy. Bởi vì bạn đã không tạo giao dịch hoàn tất lịch hẹn này"
+                                                        }).ToList();
+
+            await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(collectorAccountNotifications);
         }
 
         #endregion

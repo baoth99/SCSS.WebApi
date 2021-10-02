@@ -107,7 +107,8 @@ namespace SCSS.Utilities.Configurations
 
         public static class TaskSchedule
         {
-            public const string CollectingRequestTrail = "TaskSchedule:CollectingRequestTrail";
+            public const string CollectingRequestTrailPeriod = "TaskSchedule:CollectingRequestTrailPeriod";
+            public const string CollectingRequestTrailStart = "TaskSchedule:CollectingRequestTrailStart";
             public const string DelayMinutes = "TaskSchedule:DelayMinutes";
         }
     }

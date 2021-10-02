@@ -53,6 +53,11 @@ namespace SCSS.Aplication.BackgroundService.Implementations
         /// <param name="model">The model.</param>
         public async Task PushNotification(MessageNotificationPushModel model)
         {
+            if (model == null)
+            {
+                return;
+            }
+
             // Store Notifications into Database
             var notificationEntity = new Notification()
             {

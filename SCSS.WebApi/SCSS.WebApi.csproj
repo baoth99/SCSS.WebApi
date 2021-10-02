@@ -30,6 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="AppData\SqlCommands\CollectorRequestCommands\GetCollectingRequestIsApproved.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="AppData\SqlCommands\CollectorRequestCommands\TrailCollectingRequestInDay.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

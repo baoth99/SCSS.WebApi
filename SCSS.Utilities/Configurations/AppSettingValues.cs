@@ -103,7 +103,9 @@ namespace SCSS.Utilities.Configurations
 
         public static int RatioResize => ConfigurationHelper.GetValue<int>(AppSettingKeys.ResizeImage.Ratio);
 
-        public static string CollectingRequestTrailSchedule => ConfigurationHelper.GetValue<string>(AppSettingKeys.TaskSchedule.CollectingRequestTrail);
+        public static string CollectingRequestTrailPeriodSchedule => ConfigurationHelper.GetValue<string>(AppSettingKeys.TaskSchedule.CollectingRequestTrailPeriod);
+
+        public static string CollectingRequestTrailStartSchedule => ConfigurationHelper.GetValue<string>(AppSettingKeys.TaskSchedule.CollectingRequestTrailStart);
 
         public static int DelayMinutesSchedule => ConfigurationHelper.GetValue<int>(AppSettingKeys.TaskSchedule.DelayMinutes);
 
