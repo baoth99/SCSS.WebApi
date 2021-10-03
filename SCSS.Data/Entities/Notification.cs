@@ -22,6 +22,8 @@ namespace SCSS.Data.Entities
 
         public string DataCustom { get; set; }
 
+        public int? NotiType { get; set; }
+
         public bool IsRead { get; set; }
 
         public bool IsDeleted { get; set; }

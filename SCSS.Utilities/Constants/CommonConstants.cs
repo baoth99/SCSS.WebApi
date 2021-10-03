@@ -209,4 +209,19 @@ namespace SCSS.Utilities.Constants
         public const string PngImageContentType = "image/png";
         public const string JpegImageContentType = "image/jpeg";
     }
+
+    public class SellerAppScreen
+    {
+        public const string ActivityScreen = "1";
+    }
+
+    public class CollectorAppScreen
+    {
+
+    }
+
+    public class DealerAppScreen
+    {
+
+    }
 }

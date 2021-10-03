@@ -41,9 +41,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        /// <param name="fcmService">The FCM service.</param>
-        /// <param name="cacheService"></param>
-        public ScrapCategoryService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
+        /// <param name="cacheService">The cache service.</param>
+        public ScrapCategoryService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _scrapCategoryRepository = unitOfWork.ScrapCategoryRepository;
             _scrapCategoryDetailRepository = unitOfWork.ScrapCategoryDetailRepository;

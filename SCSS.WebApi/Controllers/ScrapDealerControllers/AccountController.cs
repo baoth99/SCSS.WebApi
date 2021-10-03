@@ -145,7 +145,6 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
             return await _accountService.GetDealerAccountInfo();
         }
 
-
         #endregion
     }
 }

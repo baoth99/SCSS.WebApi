@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SCSS.Application.Admin.Interfaces;
+using SCSS.Application.ScrapDealer.Interfaces;
 using SCSS.AWSService.Interfaces;
-using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConstants;
+using System;
 using System.Threading.Tasks;
 
 namespace SCSS.WebApi.Controllers.ScrapDealerControllers
@@ -25,18 +25,17 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// <summary>
         /// The scrap category service
         /// </summary>
-        private readonly IScrapCategoryService _scrapCategoryService;
+        private readonly ICollectDealTransactionService _collectDealTransactionService;
 
         #endregion
 
         #region Constructor
 
-        public DataController(IStorageBlobS3Service storageBlobS3Service, IScrapCategoryService scrapCategoryService)
+        public DataController(IStorageBlobS3Service storageBlobS3Service, ICollectDealTransactionService collectDealTransactionService)
         {
             _storageBlobS3Service = storageBlobS3Service;
-            _scrapCategoryService = scrapCategoryService;
+            _collectDealTransactionService = collectDealTransactionService;
         }
-
 
         #endregion
 
@@ -64,6 +63,64 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
 
             var image = file.Stream.ToByteArray();
             return File(image, CommonUtils.GetContentImageTypeString(file.Extension));
+        }
+
+        #endregion
+
+        #region Get Transaction Scrap Categories
+
+        /// <summary>
+        /// Gets the transaction scrap categories.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapDealerApiUrlDefinition.DataApiUrl.TransScrapCategories)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetTransactionScrapCategories()
+        {
+            return await _collectDealTransactionService.GetTransactionScrapCategories();
+        }
+
+        #endregion
+
+        #region Get Transaction Scrap Category Detail
+
+        /// <summary>
+        /// Gets the transaction scrap category detail.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapDealerApiUrlDefinition.DataApiUrl.TransSCDetail)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetTransactionScrapCategoryDetail([FromQuery] Guid id)
+        {
+            return await _collectDealTransactionService.GetTransactionScrapCategoryDetail(id);
+        }
+
+        #endregion
+
+        #region Auto Complete Collector Phone
+
+        /// <summary>
+        /// Automatics the complete collector phone.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapDealerApiUrlDefinition.DataApiUrl.AutoCompleteCollectorPhone)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> AutoCompleteCollectorPhone() 
+        {
+            return await _collectDealTransactionService.AutoCompleteCollectorPhone();
         }
 
         #endregion

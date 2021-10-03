@@ -1,11 +1,11 @@
-﻿using SCSS.Application.ScrapCollector.Interfaces;
-using SCSS.Application.ScrapCollector.Models.NotificationModels;
+﻿using Microsoft.EntityFrameworkCore;
+using SCSS.Application.ScrapCollector.Interfaces;
 using SCSS.Application.ScrapCollector.Models.SellCollectTransactionModels;
 using SCSS.AWSService.Interfaces;
+using SCSS.AWSService.Models.SQSModels;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
-using SCSS.FirebaseService.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
@@ -49,21 +49,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
         private IRepository<Account> _accountRepository;
 
         /// <summary>
-        /// The notification repository
-        /// </summary>
-        private IRepository<Notification> _notificationRepository;
-
-        /// <summary>
-        /// The feedback repository
-        /// </summary>
-        private IRepository<Feedback> _feedbackRepository;
-
-        /// <summary>
-        /// The transaction service fee percent repository
-        /// </summary>
-        private IRepository<TransactionServiceFeePercent> _transactionServiceFeePercentRepository;
-
-        /// <summary>
         /// The collecting request repository
         /// </summary>
         private IRepository<CollectingRequest> _collectingRequestRepository;
@@ -75,6 +60,15 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion
 
+        #region Services
+
+        /// <summary>
+        /// The SQS publisher service
+        /// </summary>
+        private readonly ISQSPublisherService _SQSPublisherService;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -83,21 +77,18 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        /// <param name="fcmService">The FCM service.</param>
-        /// <param name="cacheService"></param>
+        /// <param name="cacheService">The cache service.</param>
+        /// <param name="SQSPublisherService">The SQS publisher service.</param>
         public SellCollectTransactionService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
-                                             IFCMService fcmService, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
+                                             IStringCacheService cacheService, ISQSPublisherService SQSPublisherService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _sellCollectTransactionRepository = unitOfWork.SellCollectTransactionRepository;
             _sellCollectTransactionDetailRepository = unitOfWork.SellCollectTransactionDetailRepository;
             _scrapCategoryDetailRepository = unitOfWork.ScrapCategoryDetailRepository;
             _scrapCategoryRepository = unitOfWork.ScrapCategoryRepository;
             _accountRepository = unitOfWork.AccountRepository;
-            _notificationRepository = unitOfWork.NotificationRepository;
-            _feedbackRepository = unitOfWork.FeedbackRepository;
-            _transactionServiceFeePercentRepository = unitOfWork.TransactionServiceFeePercentRepository;
-            _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _transactionAwardAmountRepository = unitOfWork.TransactionAwardAmountRepository;
+            _SQSPublisherService = SQSPublisherService;
         }
 
         #endregion
@@ -210,32 +201,87 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             // Send Notification to Seller
 
-            var notifications = new List<NotificationCreateModel>()
+            var notifications = new List<NotificationMessageQueueModel>()
             {
-                new NotificationCreateModel()
+                new NotificationMessageQueueModel()
                 {
                     AccountId = UserAuthSession.UserSession.Id,
                     DeviceId = UserAuthSession.UserSession.DeviceId,
-                    Title = "", // TODO:
-                    Body = "", // TODO:
-                    DataCustom = null
+                    Title = NotificationMessage.CompletedSellerCRTitle, 
+                    Body = NotificationMessage.CompletedCollectorCRBody(collectingRequest.CollectingRequestCode), 
+                    DataCustom = null, // TODO:
+                    NotiType = CollectingRequestStatus.COMPLETED
                 },
-                new NotificationCreateModel()
+                new NotificationMessageQueueModel()
                 {
                     AccountId = sellerAccount.Id,
                     DeviceId = sellerAccount.DeviceId,
-                    Title = "", // TODO:
-                    Body = "", // TODO:
-                    DataCustom = null
+                    Title = NotificationMessage.CompletedSellerCRTitle, 
+                    Body = NotificationMessage.CompletedSellerCRBody(collectingRequest.CollectingRequestCode), 
+                    DataCustom = null, // TODO:
+                    NotiType = CollectingRequestStatus.COMPLETED
                 }
             };
 
-            await StoreAndSendManyNotifications(notifications);
+            await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(notifications);
 
             return BaseApiResponse.OK();
         }
 
         #endregion
 
+        #region Get Scrap Category To Create transaction
+
+        /// <summary>
+        /// Gets the scrap category transaction.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> GetTransactionScrapCategories()
+        {
+            var dataQuery = _scrapCategoryRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id) &&
+                                                                              x.Status == ScrapCategoryStatus.ACTIVE);
+            var totalRecord = await dataQuery.CountAsync();
+
+            var dataResult = dataQuery.Select(x => new TransactionScrapCategoryViewModel()
+            {
+                Id = x.Id,
+                Name = x.Name
+            }).ToList();
+
+            return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
+        }
+
+        #endregion
+
+        #region Get Transaction Scrap Category Unit
+
+        /// <summary>
+        /// Gets the transaction scrap category detail.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> GetTransactionScrapCategoryDetail(Guid id)
+        {
+            if (!_scrapCategoryRepository.IsExisted(x => x.Id.Equals(id) && x.AccountId.Equals(UserAuthSession.UserSession.Id)))
+            {
+                return BaseApiResponse.NotFound();
+            }
+
+            var dataQuery = _scrapCategoryDetailRepository.GetManyAsNoTracking(x => x.ScrapCategoryId.Equals(id) &&
+                                                                                    x.Status == ScrapCategoryStatus.ACTIVE);
+
+            var totalRecord = await dataQuery.CountAsync();
+
+            var dataResult = dataQuery.Select(x => new TransactionScrapCategoryDetailViewModel()
+            {
+                Id = x.Id,
+                Price = x.Price.ToLongValue(),
+                Unit = x.Unit
+            }).ToList();
+
+            return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
+        }
+
+        #endregion
     }
 }

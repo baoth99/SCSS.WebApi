@@ -17,6 +17,8 @@ namespace SCSS.Data.Entities
 
         public int MaxNumberOfRequestDays { get; set; }
 
+        public int CancelTimeRange { get; set; }
+
         public TimeSpan? OperatingTimeFrom { get; set; }
 
         public TimeSpan? OperatingTimeTo { get; set; }

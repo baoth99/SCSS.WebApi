@@ -8,15 +8,24 @@
         private const string Promotion = "promotion";
         private const string Statistic = "statistic";
         private const string Notification = "notification";
+        private const string CollectDealTransaction = "transaction/collect-deal";
 
         public static class DataApiUrl
         {
             public const string GetImage = "image/get";
+            public const string TransScrapCategories = "trans/scrap-categories";
+            public const string TransSCDetail = "trans/scrap-category-detail";
+            public const string AutoCompleteCollectorPhone = "auto-complete/collector-phone";
         }
 
         public static class StatisticApiUrl
         {
             public const string GetStatistic = Statistic + "/get";
+        }
+
+        public static class CollectDealTransactionApiUrl
+        {
+            public const string GetTransactionInfoReview = CollectDealTransaction + "/info-review";
         }
 
         public static class AccountApiUrl

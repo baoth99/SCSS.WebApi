@@ -3,6 +3,7 @@ using SCSS.Application.ScrapSeller.Interfaces;
 using SCSS.Application.ScrapSeller.Models.CollectingRequestModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.AWSService.Models;
+using SCSS.AWSService.Models.SQSModels;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
@@ -44,6 +45,11 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// </summary>
         private readonly ICacheListService _cacheListService;
 
+        /// <summary>
+        /// The SQS publisher service
+        /// </summary>
+        private readonly ISQSPublisherService _SQSPublisherService;
+
         #endregion
 
         #region Constructor
@@ -57,11 +63,12 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <param name="cacheService">The cache service.</param>
         /// <param name="cacheListService">The cache list service.</param>
         public CollectingRequestService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService,
-                                        ICacheListService cacheListService) : base(unitOfWork, userAuthSession, logger, cacheService)
+                                        ICacheListService cacheListService, ISQSPublisherService SQSPublisherService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _locationRepository = unitOfWork.LocationRepository;
             _cacheListService = cacheListService;
+            _SQSPublisherService = SQSPublisherService;
         }
 
         #endregion
@@ -160,6 +167,19 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             await _cacheListService.PendingCollectingRequestCache.PushAsync(cacheModel);
 
+
+            var message = new NotificationMessageQueueModel()
+            {
+                AccountId = UserAuthSession.UserSession.Id,
+                DeviceId = UserAuthSession.UserSession.DeviceId,
+                DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, insertEntity.Id.ToString()), // TODO:
+                Title = NotificationMessage.SellerRequestCRTitle,
+                Body = NotificationMessage.SellerRequestCRBody(insertEntity.CollectingRequestCode),
+                NotiType = CollectingRequestStatus.CANCEL_BY_SELLER
+            };
+
+            await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(message);
+
             return BaseApiResponse.OK();
         }
 
@@ -206,7 +226,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 return BaseApiResponse.NotFound();
             }
 
-            var errorList = ValidateCollectingRequest(entity.SellerAccountId, entity.Status, entity.CollectorAccountId);
+            var errorList = await ValidateCollectingRequest(entity.SellerAccountId, entity.Status, entity.CollectorAccountId, entity.CollectingRequestDate, entity.TimeFrom);
 
             if (errorList.Any())
             {
@@ -222,6 +242,19 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 _collectingRequestRepository.Update(entity);
                 // Commit Data to Database
                 await UnitOfWork.CommitAsync();
+
+
+                var message = new NotificationMessageQueueModel()
+                {
+                    AccountId = UserAuthSession.UserSession.Id,
+                    DeviceId = UserAuthSession.UserSession.DeviceId,
+                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, entity.Id.ToString()),
+                    Title = NotificationMessage.CancelCRBySellerTitle,
+                    Body = NotificationMessage.CancelCRBySellerBody(entity.CollectingRequestCode),
+                    NotiType = CollectingRequestStatus.CANCEL_BY_SELLER
+                };
+
+                await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(message);
             }
             catch (Exception)
             {
@@ -240,7 +273,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <param name="status">The status.</param>
         /// <param name="collectorAccountId">The collector account identifier.</param>
         /// <returns></returns>
-        private List<string> ValidateCollectingRequest(Guid? sellerAccountId, int? status, Guid? collectorAccountId)
+        private async Task<List<string>> ValidateCollectingRequest(Guid? sellerAccountId, int? status, 
+                                                                   Guid? collectorAccountId, DateTime? collectingRequestDate, TimeSpan? timeFrom)
         {
             var errorList = new List<string>();
             if (!sellerAccountId.Equals(UserAuthSession.UserSession.Id))
@@ -248,9 +282,18 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 errorList.Add(InvalidCollectingRequestCode.InvalidSeller);
             }
 
-            if (status != CollectingRequestStatus.PENDING)
+            if (status != CollectingRequestStatus.PENDING || status != CollectingRequestStatus.APPROVED)
             {
                 errorList.Add(InvalidCollectingRequestCode.InvalidStatus);
+            }
+
+
+
+            if (status == CollectingRequestStatus.APPROVED)
+            {
+                var timeRange = await CancelTimeRange();
+
+                //var res = DateTimeVN.TIMESPAN_NOW
             }
 
             if (collectorAccountId != null)

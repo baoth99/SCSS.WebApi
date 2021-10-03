@@ -125,6 +125,12 @@ namespace SCSS.Utilities.Constants
             {AccountRoleConstants.COLLECTOR, AccountRole.COLLECTOR },
             {AccountRoleConstants.DEALER_MEMBER, AccountRole.DEALER_MEMBER }
         };
+
+        public static Dictionary<string, string> FirebaseCustomData(string appScreen, string id) => new Dictionary<string, string>()
+        {
+            {"screen", appScreen },
+            {"id", id }
+        };
     }
 
 }

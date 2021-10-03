@@ -72,7 +72,8 @@ namespace SCSS.Application.ScrapSeller
         public async Task<int> MaxNumberCollectingRequestSellerRequest()
         {
             var quantity = await CacheService.GetStringCacheAsync(CacheRedisKey.RequestQuantity);
-            if (quantity == null)
+
+            if (ValidatorUtil.IsBlank(quantity))
             {
                 var entity = await UnitOfWork.CollectingRequestConfigRepository.GetManyAsNoTracking(x => x.IsActive).FirstOrDefaultAsync();
                 if (entity == null)
@@ -99,7 +100,7 @@ namespace SCSS.Application.ScrapSeller
         public async Task<int> MaxNumberDaysSellerRequestAdvance()
         {
             var quantity = await CacheService.GetStringCacheAsync(CacheRedisKey.MaxNumberOfRequestDays);
-            if (quantity == null)
+            if (ValidatorUtil.IsBlank(quantity))
             {
                 var entity = await UnitOfWork.CollectingRequestConfigRepository.GetManyAsNoTracking(x => x.IsActive).FirstOrDefaultAsync();
                 if (entity == null)
@@ -151,6 +152,33 @@ namespace SCSS.Application.ScrapSeller
 
             var rangeTime = new Tuple<TimeSpan?, TimeSpan?>(operatingRangeTime.FromTime, operatingRangeTime.ToTime);
             return rangeTime;
+        }
+
+        #endregion
+
+        #region Get Cancel Time Range
+
+        /// <summary>
+        /// Cancels the time range.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<int> CancelTimeRange()
+        {
+            var count = await CacheService.GetStringCacheAsync(CacheRedisKey.CancelRangeTime);
+            if (ValidatorUtil.IsBlank(count))
+            {
+                var entity = await UnitOfWork.CollectingRequestConfigRepository.GetManyAsNoTracking(x => x.IsActive).FirstOrDefaultAsync();
+                if (entity == null)
+                {
+                    return NumberConstant.Ten;
+                }
+                var cancelTimeRange = entity.CancelTimeRange;
+
+                await CacheService.SetStringCacheAsync(CacheRedisKey.CancelRangeTime, cancelTimeRange.ToString());
+
+                return cancelTimeRange;
+            }
+            return count.ToInt();
         }
 
         #endregion

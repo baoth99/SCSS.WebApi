@@ -3,7 +3,6 @@ using SCSS.Application.ScrapDealer.Interfaces;
 using SCSS.Application.ScrapDealer.Models.StatisticModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.UnitOfWork;
-using SCSS.FirebaseService.Interfaces;
 using SCSS.ORM.Dapper.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
@@ -40,7 +39,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
         /// <param name="cacheService">The cache service.</param>
         /// <param name="dapperService">The dapper service.</param>
         public StatisticService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, 
-                                IFCMService fcmService, IStringCacheService cacheService, IDapperService dapperService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
+                                IStringCacheService cacheService, IDapperService dapperService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _dapperService = dapperService;
         }

@@ -4,7 +4,6 @@ using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
-using SCSS.FirebaseService.Interfaces;
 using SCSS.MapService.Interfaces;
 using SCSS.MapService.Models;
 using SCSS.Utilities.AuthSessionConfig;
@@ -18,7 +17,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using SCSS.Application.ScrapCollector.Models.NotificationModels;
 using SCSS.AWSService.Models.SQSModels;
 using SCSS.AWSService.Models;
 
@@ -88,7 +86,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="cacheService">The cache service.</param>
         public CollectingRequestService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
                                         IMapDistanceMatrixService mapDistanceMatrixService, ISQSPublisherService SQSPublisherService, ICacheListService cacheListService,
-                                        IFCMService fcmService, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService, cacheService)
+                                        IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _collectingRequestRejectionRepository = unitOfWork.CollectingRequestRejectionRepository;
@@ -366,18 +364,20 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 new NotificationMessageQueueModel()
                 {
                     AccountId = sellerInfo.Id,
-                    Title = NotificationMessage.CollectingRequestReceviedTitle(collectingRequestCode),
-                    Body = "", // TODO:
+                    Title = NotificationMessage.SellerCollectingRequestReceviedTitle,
+                    Body = NotificationMessage.SellerCollectingRequestReceviedBody(collectingRequestCode),
                     DataCustom = null, // TODO:
-                    DeviceId = sellerInfo.DeviceId
+                    DeviceId = sellerInfo.DeviceId,
+                    NotiType = CollectingRequestStatus.APPROVED
                 },
                 new NotificationMessageQueueModel()
                 {
                     AccountId = UserAuthSession.UserSession.Id,
-                    Title = "", // TODO:
-                    Body = "", // TODO:
+                    Title = NotificationMessage.CollectorCollectingRequestReceviedTitle,
+                    Body = NotificationMessage.CollectorCollectingRequestReceviedBody(collectingRequestCode), 
                     DataCustom = null, // TODO:
-                    DeviceId = UserAuthSession.UserSession.DeviceId
+                    DeviceId = UserAuthSession.UserSession.DeviceId,
+                    NotiType = CollectingRequestStatus.APPROVED
                 }
             };
 

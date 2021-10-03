@@ -60,6 +60,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IDealerInformationService, SCSS.Application.ScrapDealer.Implementations.DealerInformationService>();
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IPromotionService, SCSS.Application.ScrapDealer.Implementations.PromotionService>();
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IStatisticService, SCSS.Application.ScrapDealer.Implementations.StatisticService>();
+            services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.ICollectDealTransactionService, SCSS.Application.ScrapDealer.Implementations.CollectDealTransactionService>();
 
             #endregion Dealer Application
 
@@ -74,7 +75,6 @@ namespace SCSS.WebApi.SystemConfigurations
             #endregion Seller Application           
 
             services.AddHostedService<TrailCollectingRequestHostedService>();
-
         }
     }
 }

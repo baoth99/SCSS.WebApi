@@ -9,6 +9,8 @@ namespace SCSS.Application.Admin.Models.SystemConfigModels
 
         public int ReceiveQuantity { get; set; }
 
+        public int CancelRangeTime { get; set; }
+
         public int MaxNumberOfRequestDays { get; set; }
 
         [TimeSpanValidation(isCompareToNow: BooleanConstants.FALSE)]
@@ -16,5 +18,6 @@ namespace SCSS.Application.Admin.Models.SystemConfigModels
 
         [TimeSpanValidation(isCompareToNow: BooleanConstants.FALSE)]
         public string OperatingTimeTo{ get; set; }
+
     }
 }

@@ -85,7 +85,8 @@ namespace SCSS.Worker.Notification
                     Body = x.Body,
                     DataCustom = x.DataCustom,
                     DeviceId = x.DeviceId,
-                    Title = x.Title
+                    Title = x.Title,
+                    NotiType = x.NotiType
                 }).ToList();
 
                 using (var scope = _scopeFactory.CreateScope())

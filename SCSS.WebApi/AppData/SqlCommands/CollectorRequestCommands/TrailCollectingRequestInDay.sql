@@ -3,4 +3,4 @@ SET [Status] = @CancelBySystemStatus,
 	[UpdatedBy] = @UpdatedBy, 
 	[UpdatedTime] = @DateNow
 WHERE [CollectingRequestDate] = @DateNow AND
-	  [Status] = @ApprovedStatus
+	  ([Status] = @ApprovedStatus OR [Status] = @PendingStatus)

@@ -16,6 +16,8 @@ namespace SCSS.Application.ScrapSeller.Models.NotificationModels
 
         public bool IsRead { get; set; }
 
+        public int? NotiType { get; set; }
+
         public string PreviousTime  { get; set; }
     }
 }

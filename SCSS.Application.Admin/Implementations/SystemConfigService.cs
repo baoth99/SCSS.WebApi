@@ -95,6 +95,7 @@ namespace SCSS.Application.Admin.Implementations
                 MaxNumberOfRequestDays = model.MaxNumberOfRequestDays,
                 OperatingTimeFrom = model.OperatingTimeFrom.ToTimeSpan(),
                 OperatingTimeTo = model.OperatingTimeTo.ToTimeSpan(),
+                CancelTimeRange = model.CancelRangeTime
             };
 
             var insertedEntity = _collectingRequestConfigRepository.Insert(newConfig);
@@ -107,7 +108,8 @@ namespace SCSS.Application.Admin.Implementations
             {
                 model.ReceiveQuantity,
                 model.RequestQuantity,
-                model.MaxNumberOfRequestDays
+                model.MaxNumberOfRequestDays,
+                model.CancelRangeTime
             };
 
             var dic = CommonUtils.ObjToDictionary(cacheModel).ToDictionary(x => x.Key.ToEnum<CacheRedisKey>(), y => y.Value);
@@ -148,7 +150,8 @@ namespace SCSS.Application.Admin.Implementations
                                                                             x.UpdatedTime,
                                                                             x.OperatingTimeFrom,
                                                                             x.OperatingTimeTo,
-                                                                            y.Name
+                                                                            y.Name,
+                                                                            x.CancelTimeRange
                                                                         })
                                                                   .Select(x => new SystemConfigHistoryViewModel()
                                                                   {
@@ -158,7 +161,8 @@ namespace SCSS.Application.Admin.Implementations
                                                                       OperatingTimeFrom = x.OperatingTimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
                                                                       OperatingTimeTo = x.OperatingTimeTo.ToStringFormat(TimeSpanFormat.HH_MM),
                                                                       DeActiveTime = x.UpdatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
-                                                                      DeActiveBy = x.Name
+                                                                      DeActiveBy = x.Name,
+                                                                      CancelTimeRange = x.CancelTimeRange
                                                                   }).ToList();
             var dataResult = new SystemConfigViewModel()
             {
@@ -169,6 +173,7 @@ namespace SCSS.Application.Admin.Implementations
                 ActiveTime = configIsUsing.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time_tt),
                 OperatingTimeFrom = configIsUsing.OperatingTimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
                 OperatingTimeTo = configIsUsing.OperatingTimeTo.ToStringFormat(TimeSpanFormat.HH_MM),
+                CancelTimeRange = configIsUsing.CancelTimeRange,
                 Histories = configHistories
             };
 

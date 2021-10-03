@@ -87,6 +87,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
             parameters.Add("@UpdatedBy", Guid.Empty);
             parameters.Add("@DateNow", DateTimeVN.DATETIME_NOW);
             parameters.Add("@ApprovedStatus", CollectingRequestStatus.APPROVED);
+            parameters.Add("@PendingStatus", CollectingRequestStatus.PENDING);
 
             await _dapperService.SqlExecuteAsync(sql, parameters);
         }
@@ -117,10 +118,15 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                                             {
                                                                 AccountId = x.SellerAccountId,
                                                                 DeviceId = x.SellerDeviceId,
-                                                                Title = $"Lịch hẹn {x.CollectingRequestCode} đã bị hệ thống hủy" ,
-                                                                Body = $"Lịch hẹn {x.CollectingRequestCode} vào lúc {x.CollectingRequestDate} đã bị hệ thống hủy"
+                                                                Title = NotificationMessage.SystemCancelCRTitle,
+                                                                Body = NotificationMessage.SystemCancelCRSellerBody(x.CollectingRequestCode, x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy)),
+                                                                DataCustom = null, // TODO:
+                                                                NotiType = CollectingRequestStatus.CANCEL_BY_SYSTEM
                                                             }).ToList();
-            await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(sellerAccountNotifications);
+            if (sellerAccountNotifications.Any())
+            {
+                await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(sellerAccountNotifications);
+            }
 
             var collectorAccountNotifications = dataQuery.Join(_accountRepository.GetAllAsNoTracking(), x => x.CollectorAccountId, y => y.Id,
                                                             (x, y) => new
@@ -137,11 +143,16 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                                         {
                                                             AccountId = x.CollectorAccountId,
                                                             DeviceId = x.CollectorDeviceId,
-                                                            Title = $"Lịch hẹn {x.CollectingRequestCode} đã bị hệ thống hủy",
-                                                            Body = $"Lịch hẹn {x.CollectingRequestCode} vào lúc {x.CollectingRequestDate} đã bị hệ thống hủy. Bởi vì bạn đã không tạo giao dịch hoàn tất lịch hẹn này"
+                                                            Title = NotificationMessage.SystemCancelCRTitle,
+                                                            Body = NotificationMessage.SystemCancelCRCollectorBody(x.CollectingRequestCode, x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy)),
+                                                            DataCustom = null, // TODO:
+                                                            NotiType = CollectingRequestStatus.CANCEL_BY_SYSTEM
                                                         }).ToList();
 
-            await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(collectorAccountNotifications);
+            if (collectorAccountNotifications.Any())
+            {
+                await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(collectorAccountNotifications);
+            }
         }
 
         #endregion
@@ -241,7 +252,9 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                     AccountId = messageInfo.AccountId,
                     Title = NotificationMessage.CancelCollectingRequestTitleSystem(messageInfo.CollectingRequestCode),
                     Body = NotificationMessage.CancelCollectingRequestBodySystem(messageInfo.CollectingRequestCode),
-                    DeviceId = messageInfo.DeviceId
+                    DeviceId = messageInfo.DeviceId,
+                    DataCustom = null, // TODO:
+                    NotiType = CollectingRequestStatus.CANCEL_BY_SYSTEM
                 };
 
                 await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(publishModel);

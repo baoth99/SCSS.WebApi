@@ -1,17 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SCSS.Application.ScrapCollector.Models.NotificationModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.AWSService.Models;
 using SCSS.Data.EF.UnitOfWork;
-using SCSS.Data.Entities;
-using SCSS.FirebaseService.Interfaces;
-using SCSS.FirebaseService.Models;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapCollector
@@ -43,14 +37,6 @@ namespace SCSS.Application.ScrapCollector
         protected ILoggerService Logger { get; private set; }
 
         /// <summary>
-        /// Gets the FCM service.
-        /// </summary>
-        /// <value>
-        /// The FCM service.
-        /// </value>
-        protected IFCMService FCMService { get; private set; }
-
-        /// <summary>
         /// Gets the cache service.
         /// </summary>
         /// <value>
@@ -68,90 +54,12 @@ namespace SCSS.Application.ScrapCollector
         /// <param name="logger">The logger.</param>
         /// <param name="fcmService">The FCM service.</param>
         /// <param name="cacheService">The cache service.</param>
-        public BaseService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, IStringCacheService cacheService)
+        public BaseService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService)
         {
             UnitOfWork = unitOfWork;
             UserAuthSession = userAuthSession;
             Logger = logger;
-            FCMService = fcmService;
             CacheService = cacheService;
-        }
-
-        #endregion
-
-        #region Store and Send Many Notification
-
-        /// <summary>
-        /// Stores and sends many notifications.
-        /// </summary>
-        /// <param name="notifications">The notifications.</param>
-        protected async Task StoreAndSendManyNotifications(List<NotificationCreateModel> notifications)
-        {
-            if (!notifications.Any())
-            {
-                return;
-            }
-
-            // Store Notifications into Database
-            var notificationEntities = notifications.Select(x => new Notification()
-            {
-                AccountId = x.AccountId,
-                Title = x.Title,
-                Body = x.Body,
-                DataCustom = x.DataCustom != null ? x.DataCustom.ToJson<string, string>() : string.Empty,
-                IsRead = BooleanConstants.FALSE,
-            }).ToList();
-
-            UnitOfWork.NotificationRepository.InsertRange(notificationEntities);
-
-            await UnitOfWork.CommitAsync();
-
-            // Send Notification
-            var notificationMessages = notifications.Select(x => new NotificationRequestModel()
-            {
-                Title = x.Title,
-                Body = x.Body,
-                Data = x.DataCustom,
-                DeviceId = x.DeviceId,
-            }).ToList();
-
-            await FCMService.PushManyNotifications(notificationMessages);
-        }
-
-        #endregion
-
-        #region Store and Send Notification
-
-        /// <summary>
-        /// Stores and send notification.
-        /// </summary>
-        /// <param name="notification">The notification.</param>
-        protected async Task StoreAndSendNotification(NotificationCreateModel notification)
-        {
-            // Store Notifications into Database
-            var notificationEntity = new Notification()
-            {
-                AccountId = notification.AccountId,
-                Title = notification.Title,
-                Body = notification.Body,
-                DataCustom = notification.DataCustom != null ? notification.DataCustom.ToJson<string, string>() : string.Empty,
-                IsRead = BooleanConstants.FALSE,
-            };
-
-            UnitOfWork.NotificationRepository.Insert(notificationEntity);
-            await UnitOfWork.CommitAsync();
-
-            // Send Notification
-
-            var notificationMessage = new NotificationRequestModel()
-            {
-                Title = notification.Title,
-                Body = notification.Body,
-                Data = notification.DataCustom,
-                DeviceId = notification.DeviceId,
-            };
-
-            await FCMService.PushNotification(notificationMessage);
         }
 
         #endregion

@@ -1,5 +1,5 @@
 ﻿using SCSS.Application.ScrapCollector.Models.CollectingRequestModels;
-using SCSS.Application.ScrapCollector.Models.NotificationModels;
+using SCSS.AWSService.Models.SQSModels;
 using SCSS.MapService.Models;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
@@ -212,27 +212,29 @@ namespace SCSS.Application.ScrapCollector.Implementations
             // Push Notification to notice seller that their collecting request was canceled by collector
             var sellerInfo = _accountRepository.GetById(entity.SellerAccountId);
 
-            var notifications = new List<NotificationCreateModel>()
+            var notifications = new List<NotificationMessageQueueModel>()
             {
-                new NotificationCreateModel()
+                new NotificationMessageQueueModel()
                 {
                     AccountId = sellerInfo.Id,
-                    Body = NotificationMessage.CollectingRequestCancelBody(model.CancelReason),
-                    Title = NotificationMessage.CollectingRequestCancelTitle(entity.CollectingRequestCode),
+                    Body = NotificationMessage.CollectingRequestCancelBody(entity.CollectingRequestCode),
+                    Title = NotificationMessage.CollectingRequestCancelTitle(),
                     DataCustom = null, // TODO:
-                    DeviceId = sellerInfo.DeviceId
+                    DeviceId = sellerInfo.DeviceId,
+                    NotiType = CollectingRequestStatus.CANCEL_BY_COLLECTOR
                 },
-                new NotificationCreateModel()
+                new NotificationMessageQueueModel()
                 {
                     AccountId = UserAuthSession.UserSession.Id,
                     Body = "", // TODO:
                     Title = "", // TODO:
                     DataCustom = null, // TODO:
-                    DeviceId = UserAuthSession.UserSession.DeviceId
+                    DeviceId = UserAuthSession.UserSession.DeviceId,
+                    NotiType = CollectingRequestStatus.CANCEL_BY_COLLECTOR
                 }
             };
 
-            await StoreAndSendManyNotifications(notifications);
+            await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(notifications);
 
             return BaseApiResponse.OK();
         }
@@ -253,9 +255,14 @@ namespace SCSS.Application.ScrapCollector.Implementations
         {
             var errorList = new List<ValidationError>();
 
-            if (!collectorAccountId.Equals(UserAuthSession.UserSession.Id) || status != CollectingRequestStatus.APPROVED)
+            if (!collectorAccountId.Equals(UserAuthSession.UserSession.Id))
             {
-                errorList.Add(new ValidationError(nameof(collectorAccountId), InvalidCollectingRequestCode.InvalidDate));
+                errorList.Add(new ValidationError(nameof(collectorAccountId), InvalidCollectingRequestCode.InvalidCollector));
+            }
+
+            if (status != CollectingRequestStatus.APPROVED)
+            {
+                errorList.Add(new ValidationError(nameof(status), InvalidCollectingRequestCode.InvalidStatus));
             }
 
             if (!collectingRequestDate.IsCompareDateTimeEqual(DateTimeVN.DATETIME_NOW))

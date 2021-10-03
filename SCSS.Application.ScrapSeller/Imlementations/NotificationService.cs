@@ -70,7 +70,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 IsRead = x.IsRead,
                 PreviousTime = DateTimeUtils.GetPreviousTime(x.CreatedTime),
                 DataCustom = x.DataCustom,
-                Date = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy)
+                Date = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
+                NotiType = x.NotiType.ToIntValue()
             }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);

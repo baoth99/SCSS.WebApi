@@ -134,7 +134,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 };
 
                 return BaseApiResponse.OK(dataResult);
-
             }
 
             var dataRes = new SellCollectTransactionHistoryDetailViewModel()

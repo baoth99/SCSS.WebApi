@@ -45,6 +45,7 @@
         CollectDealTransactionAwardAmount,
         PendingCollectingRequest,
         OperatingTimeRange,
+        CancelRangeTime
     }
 
 

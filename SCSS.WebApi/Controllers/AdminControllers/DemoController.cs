@@ -12,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace SCSS.WebApi.Controllers.AdminControllers
 {
-   // [ApiVersion(ApiVersions.ApiVersionV1)]
-    public class DemoController// : BaseAdminController
+    [ApiVersion(ApiVersions.ApiVersionV1)]
+    public class DemoController : BaseAdminController
     {
         //private ISQSPublisherService _SQSPublisherService;
 
@@ -39,9 +39,11 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         //    var model = new NotificationMessageQueueModel()
         //    {
         //        AccountId = Guid.Parse("b3c16d0f-2f4f-4440-8f72-24c141ab52ad"),
-        //        DeviceId = "PXvkALmQGCzMH2dBrpCkJ:APA91bELCZQfO9eaHDPSIj20R0flE0OGnhoqpnwEt5VNv2q-9nXv2c0_9qVil2RBDJxL0fCpth851QhddiNwIJDkJqFm5lwnrqbcKSnOzzH8TkPhwa3h6mCFAJEPu39g43iPOv5dCM2f",
-        //        Title = "Tiến Ơi Tiến Ơi FCM",
-        //        Body = "Tiến Ơi Tiến Ơi Tiến Ơi Tiến Ơi Firebase Cloud Message"
+        //        DeviceId = "dpgwwDPBRrakiNQWNcq94L:APA91bHT6-SowYIiHpSp3XpaK2drGxGYQvxb75sfnwlUU9ia-HSlZAMC2KX90V7-tS2itAagPDuBen3TLBnMmk-Mr9gXZG_W5NQnKKU6XCpitl0V_9MULXPZ6FRG-GCJ9nF-d62Lv8tb",
+        //        Title = "Test lại Tiến Ơi",
+        //        Body = "Test lại Tiến Ơi Test lại Tiến Ơi Test lại Tiến Ơi Test lại Tiến Ơi",
+        //        NotiType = 100,
+        //        DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, "b3c16d0f-2f4f-4440-8f72-24c141ab52ad")
         //    };
         //    await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(model);
 
