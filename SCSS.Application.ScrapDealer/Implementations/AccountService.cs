@@ -237,7 +237,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
         /// </summary>
         /// <param name="deviceId"></param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> UpdateDeviceId(string deviceId)
+        public async Task<BaseApiResponseModel> UpdateDeviceId(DeviceIdUpdateModel model)
         {
             var entity = _accountRepository.GetById(UserAuthSession.UserSession.Id);
 
@@ -246,7 +246,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 return BaseApiResponse.NotFound(SystemMessageCode.DataNotFound);
             }
 
-            entity.DeviceId = deviceId;
+            entity.DeviceId = model.DeviceId;
 
             _accountRepository.Update(entity);
 

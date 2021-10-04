@@ -217,7 +217,7 @@ namespace SCSS.Utilities.Constants
 
     public class CollectorAppScreen
     {
-
+        public const string HistoryScreen = "1";
     }
 
     public class DealerAppScreen

@@ -108,6 +108,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                                             (x, y) => new
                                                             {
                                                                 SellerDeviceId = y.DeviceId,
+                                                                CollectingRequestId = x.Id,
                                                                 x.SellerAccountId,
                                                                 x.CollectingRequestCode,
                                                                 x.CollectingRequestDate,
@@ -120,7 +121,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                                                 DeviceId = x.SellerDeviceId,
                                                                 Title = NotificationMessage.SystemCancelCRTitle,
                                                                 Body = NotificationMessage.SystemCancelCRSellerBody(x.CollectingRequestCode, x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy)),
-                                                                DataCustom = null, // TODO:
+                                                                DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, x.CollectingRequestId.ToString()),
                                                                 NotiType = CollectingRequestStatus.CANCEL_BY_SYSTEM
                                                             }).ToList();
             if (sellerAccountNotifications.Any())
@@ -132,6 +133,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                                             (x, y) => new
                                                             {
                                                                 CollectorDeviceId = y.DeviceId,
+                                                                CollectingRequestId = x.Id,
                                                                 x.CollectorAccountId,
                                                                 x.CollectingRequestCode,
                                                                 x.CollectingRequestDate,
@@ -145,7 +147,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                                             DeviceId = x.CollectorDeviceId,
                                                             Title = NotificationMessage.SystemCancelCRTitle,
                                                             Body = NotificationMessage.SystemCancelCRCollectorBody(x.CollectingRequestCode, x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy)),
-                                                            DataCustom = null, // TODO:
+                                                            DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.HistoryScreen, x.CollectingRequestId.ToString()),
                                                             NotiType = CollectingRequestStatus.CANCEL_BY_SYSTEM
                                                         }).ToList();
 
@@ -241,6 +243,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                   (x, y) => new
                                   {
                                       AccountId = y.Id,
+                                      CollectingRequestId = x.Id,
                                       x.CollectingRequestCode,
                                       y.DeviceId
                                   }).FirstOrDefault();
@@ -253,7 +256,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                     Title = NotificationMessage.CancelCollectingRequestTitleSystem(messageInfo.CollectingRequestCode),
                     Body = NotificationMessage.CancelCollectingRequestBodySystem(messageInfo.CollectingRequestCode),
                     DeviceId = messageInfo.DeviceId,
-                    DataCustom = null, // TODO:
+                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, messageInfo.CollectingRequestId.ToString()),
                     NotiType = CollectingRequestStatus.CANCEL_BY_SYSTEM
                 };
 

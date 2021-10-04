@@ -22,7 +22,7 @@ namespace SCSS.Application.ScrapSeller.Interfaces
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> UpdateDeviceId(string deviceId);
+        Task<BaseApiResponseModel> UpdateDeviceId(DeviceIdUpdateModel model);
 
         /// <summary>
         /// Updates the account.

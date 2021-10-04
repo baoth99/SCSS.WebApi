@@ -121,9 +121,9 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapSellerApiUrlDefinition.AccountApiUrl.UpdateDeviceId)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> UpdateDeviceId([FromBody] string deviceId)
+        public async Task<BaseApiResponseModel> UpdateDeviceId([FromBody] DeviceIdUpdateModel model)
         {
-            return await _accountService.UpdateDeviceId(deviceId);
+            return await _accountService.UpdateDeviceId(model);
         }
 
         #endregion

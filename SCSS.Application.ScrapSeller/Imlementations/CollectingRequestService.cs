@@ -226,11 +226,40 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 return BaseApiResponse.NotFound();
             }
 
-            var errorList = await ValidateCollectingRequest(entity.SellerAccountId, entity.Status, entity.CollectorAccountId, entity.CollectingRequestDate, entity.TimeFrom);
+            var errorList = await ValidateCollectingRequest(entity.SellerAccountId, entity.Status, 
+                                                            entity.CollectingRequestDate, 
+                                                            entity.TimeFrom);
 
             if (errorList.Any())
             {
                 return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
+            }
+
+            var notifcations = new List<NotificationMessageQueueModel>()
+            {
+                new NotificationMessageQueueModel()
+                {
+                    AccountId = UserAuthSession.UserSession.Id,
+                    DeviceId = UserAuthSession.UserSession.DeviceId,
+                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, entity.Id.ToString()),
+                    Title = NotificationMessage.CancelCRBySellerTitle,
+                    Body = NotificationMessage.CancelCRBySellerBody(entity.CollectingRequestCode),
+                    NotiType = CollectingRequestStatus.CANCEL_BY_SELLER
+                }
+            };
+
+            if (entity.Status == CollectingRequestStatus.APPROVED)
+            {
+                var collectorDeviceId = UnitOfWork.AccountRepository.GetById(entity.CollectorAccountId)?.DeviceId;
+                notifcations.Add(new NotificationMessageQueueModel()
+                {
+                    AccountId = entity.CollectorAccountId,
+                    DeviceId = collectorDeviceId,
+                    NotiType = CollectingRequestStatus.CANCEL_BY_SELLER,
+                    Title = NotificationMessage.CancelCRBySellerTitle,
+                    Body = NotificationMessage.CancelCRBySellerToCollectorBody(entity.CollectingRequestCode),
+                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.HistoryScreen, entity.CollectorAccountId.ToString())
+                });
             }
 
             // Update Status and Cancel Reason
@@ -243,18 +272,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 // Commit Data to Database
                 await UnitOfWork.CommitAsync();
 
-
-                var message = new NotificationMessageQueueModel()
-                {
-                    AccountId = UserAuthSession.UserSession.Id,
-                    DeviceId = UserAuthSession.UserSession.DeviceId,
-                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, entity.Id.ToString()),
-                    Title = NotificationMessage.CancelCRBySellerTitle,
-                    Body = NotificationMessage.CancelCRBySellerBody(entity.CollectingRequestCode),
-                    NotiType = CollectingRequestStatus.CANCEL_BY_SELLER
-                };
-
-                await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(message);
+                await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(notifcations);
             }
             catch (Exception)
             {
@@ -273,8 +291,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <param name="status">The status.</param>
         /// <param name="collectorAccountId">The collector account identifier.</param>
         /// <returns></returns>
-        private async Task<List<string>> ValidateCollectingRequest(Guid? sellerAccountId, int? status, 
-                                                                   Guid? collectorAccountId, DateTime? collectingRequestDate, TimeSpan? timeFrom)
+        private async Task<List<string>> ValidateCollectingRequest(Guid? sellerAccountId, int? status, DateTime? collectingRequestDate, TimeSpan? timeFrom)
         {
             var errorList = new List<string>();
             if (!sellerAccountId.Equals(UserAuthSession.UserSession.Id))
@@ -282,23 +299,22 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 errorList.Add(InvalidCollectingRequestCode.InvalidSeller);
             }
 
-            if (status != CollectingRequestStatus.PENDING || status != CollectingRequestStatus.APPROVED)
+            if (status == CollectingRequestStatus.COMPLETED || status == CollectingRequestStatus.CANCEL_BY_COLLECTOR)
             {
                 errorList.Add(InvalidCollectingRequestCode.InvalidStatus);
             }
 
 
-
             if (status == CollectingRequestStatus.APPROVED)
             {
-                var timeRange = await CancelTimeRange();
+                var cancelTimeRange = await CancelTimeRange();
 
-                //var res = DateTimeVN.TIMESPAN_NOW
-            }
-
-            if (collectorAccountId != null)
-            {
-                errorList.Add(InvalidCollectingRequestCode.InvalidCollector);
+                var dateTimeFrom = collectingRequestDate.Value.Add(timeFrom.Value);
+                var timeRange = (int)dateTimeFrom.Subtract(DateTimeVN.DATETIME_NOW.StripSecondAndMilliseconds()).TotalMinutes;
+                if (timeRange <= cancelTimeRange)
+                {
+                    errorList.Add(InvalidCollectingRequestCode.TimeRangeNotValid);
+                }
             }
 
             return errorList;

@@ -388,10 +388,12 @@ namespace SCSS.Utilities.Extensions
         /// </summary>
         /// <param name="time">The time.</param>
         /// <returns></returns>
-        public static DateTime? StripSecondAndMilliseconds(this DateTime dateTime)
+        public static DateTime StripSecondAndMilliseconds(this DateTime dateTime)
         {
             return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 00, 00);
         }
+
+        
 
         #endregion
 

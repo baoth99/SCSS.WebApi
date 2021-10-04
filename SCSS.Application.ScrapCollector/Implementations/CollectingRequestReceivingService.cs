@@ -189,6 +189,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 return BaseApiResponse.NotFound();
             }
 
+            // TODO:
             var errorList = ValidateCancelCollectingRequest(entity.CollectorAccountId, entity.Status, entity.CollectingRequestDate, entity.TimeTo);
 
             if (errorList.Any())
@@ -219,16 +220,16 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     AccountId = sellerInfo.Id,
                     Body = NotificationMessage.CollectingRequestCancelBody(entity.CollectingRequestCode),
                     Title = NotificationMessage.CollectingRequestCancelTitle(),
-                    DataCustom = null, // TODO:
+                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, entity.Id.ToString()), 
                     DeviceId = sellerInfo.DeviceId,
                     NotiType = CollectingRequestStatus.CANCEL_BY_COLLECTOR
                 },
                 new NotificationMessageQueueModel()
                 {
                     AccountId = UserAuthSession.UserSession.Id,
-                    Body = "", // TODO:
-                    Title = "", // TODO:
-                    DataCustom = null, // TODO:
+                    Body = NotificationMessage.CancelCRBySellerTitle, 
+                    Title = NotificationMessage.CancelCRByCollector(entity.CollectingRequestCode), 
+                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.HistoryScreen, entity.Id.ToString()),
                     DeviceId = UserAuthSession.UserSession.DeviceId,
                     NotiType = CollectingRequestStatus.CANCEL_BY_COLLECTOR
                 }

@@ -18,9 +18,13 @@
 
         public static string CancelCollectingRequestBodySystem(string code) => $"Yêu cầu thu gom {code} đã bị hủy bởi hệ thống. Chưa có người thu gom cho yêu cầu của bạn !";
 
-        public static string CancelCRBySellerTitle => $"Yêu cầu thu gom bị hủy";
+        public static string CancelCRBySellerTitle => $"Yêu cầu thu gom đã bị hủy";
 
         public static string CancelCRBySellerBody(string code) => $"Bạn đã hủy yêu cầu thu gom {code}";
+
+        public static string CancelCRBySellerToCollectorBody(string code) => $"Yêu cầu thu gom {code} đã bị hủy bởi người bán";
+
+        public static string CancelCRByCollector(string code) => $"Yêu cầu thu gom {code} đã bị hủy bởi người thu gom";
 
         public static string CompletedSellerCRTitle => $"Giao dịch thu gom hoàn tất";
 
