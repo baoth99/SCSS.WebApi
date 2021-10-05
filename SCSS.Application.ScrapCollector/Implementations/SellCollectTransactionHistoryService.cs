@@ -52,6 +52,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             {
                 CollectingRequestId = x.CollectingRequestId,
                 CollectingRequestCode = x.CollectingRequestCode,
+                DoneDateTime = DateTimeUtils.GetTransactionHistoryDate(x.Status.Value, x.TransactionDate, x.CollectingUpdateTime),
                 Status = x.Status,
                 Date = DateTimeUtils.GetTransactionHistoryDate(x.Status.Value, x.TransactionDate, x.CollectingUpdateTime).ToStringFormat(DateTimeFormat.DD_MM_yyyy),
                 DayOfWeek = DateTimeUtils.GetTransactionHistoryDate(x.Status.Value,x.TransactionDate, x.CollectingUpdateTime).GetDayOfWeek(),

@@ -26,7 +26,8 @@ namespace SCSS.WebApi.SystemConfigurations
             #region Background Services
 
             services.AddScoped<SCSS.Aplication.BackgroundService.Interfaces.ICollectingRequestService, SCSS.Aplication.BackgroundService.Implementations.CollectingRequestService>();
-
+            services.AddScoped<SCSS.Aplication.BackgroundService.Interfaces.IPromotionService, SCSS.Aplication.BackgroundService.Implementations.PromotionService>();
+            
             #endregion
 
             #region Admin Application
@@ -75,6 +76,7 @@ namespace SCSS.WebApi.SystemConfigurations
             #endregion Seller Application           
 
             services.AddHostedService<TrailCollectingRequestHostedService>();
+            services.AddHostedService<ScanExpiredPromotionHostedService>();
         }
     }
 }

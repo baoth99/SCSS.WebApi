@@ -203,6 +203,11 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 AddressName = location.AddressName,
             };
 
+            if (dataResult.Status == CollectingRequestStatus.PENDING)
+            {
+                dataResult.IsCancelable = BooleanConstants.TRUE;
+            }
+
             var collectorInfo = _accountRepository.GetById(crEntity.CollectorAccountId);
 
             if (collectorInfo != null)
@@ -219,6 +224,17 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                     dataResult.ApprovedTime = crEntity.ApprovedTime.Value.TimeOfDay.ToStringFormat(TimeSpanFormat.HH_MM);
                 }
             }
+
+            if (dataResult.Status == CollectingRequestStatus.APPROVED)
+            {
+                var cancelTimeRange = await CancelTimeRange();
+
+                var dateTimeFrom = crEntity.CollectingRequestDate.Value.Add(crEntity.TimeFrom.Value);
+                var timeRange = (int)dateTimeFrom.Subtract(DateTimeVN.DATETIME_NOW.StripSecondAndMilliseconds()).TotalMinutes;
+                dataResult.IsCancelable = !(timeRange <= cancelTimeRange);
+            }
+
+
 
             if (crEntity.UpdatedTime != null)
             {
@@ -244,6 +260,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                     Details = transactionDetailItems,
                     FeedbackInfo = feedbackInfo
                 };
+                dataResult.IsCancelable = BooleanConstants.FALSE;
             }
 
             return BaseApiResponse.OK(dataResult);

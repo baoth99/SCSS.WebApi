@@ -151,8 +151,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 return BaseApiResponse.Error();
             }
 
-            var awardPoints = _transactionAwardAmountRepository.GetManyAsNoTracking(x => x.IsActive);
-            var awardPointForSeller = awardPoints.Where(x => x.TransactionType == AccountRole.SELLER).FirstOrDefault();
 
 
             var sellCollectTransactionEntity = new SellCollectTransaction()
@@ -163,11 +161,13 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 AwardPoint = NumberConstant.Zero
             };
 
+            var awardPointForSeller = await TransactionAwardAmount(CacheRedisKey.SellCollectTransactionAwardAmount);
+
             // Get AwardPoint
             //var awardPoint = model.Total
-            if (awardPoints != null)
+            if (awardPointForSeller != null)
             {
-                var awardPoint = (model.Total / awardPointForSeller.AppliedAmount.Value) * awardPointForSeller.Amount.Value;
+                var awardPoint = (model.Total / awardPointForSeller.AppliedAmount) * awardPointForSeller.Amount;
                 sellCollectTransactionEntity.AwardPoint = (int)awardPoint;
             }
             var insertEntity =  _sellCollectTransactionRepository.Insert(sellCollectTransactionEntity);

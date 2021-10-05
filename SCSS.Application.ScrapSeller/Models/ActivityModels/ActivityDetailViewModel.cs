@@ -46,6 +46,8 @@ namespace SCSS.Application.ScrapSeller.Models.ActivityModels
 
         public string DoneActivityTime { get; set; }
 
+        public bool IsCancelable { get; set; }
+
     }
 
     public class CollectorInformation

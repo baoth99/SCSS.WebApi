@@ -2,6 +2,7 @@
 using SCSS.Application.ScrapDealer.Interfaces;
 using SCSS.Application.ScrapDealer.Models.CollectDealTransactionModels;
 using SCSS.AWSService.Interfaces;
+using SCSS.AWSService.Models.SQSModels;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
@@ -9,8 +10,10 @@ using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
+using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,6 +27,11 @@ namespace SCSS.Application.ScrapDealer.Implementations
         /// The collect deal transaction repository
         /// </summary>
         private readonly IRepository<CollectDealTransaction> _collectDealTransactionRepository;
+
+        /// <summary>
+        /// The collect deal transaction detail repository
+        /// </summary>
+        private readonly IRepository<CollectDealTransactionDetail> _collectDealTransactionDetailRepository;
 
         /// <summary>
         /// The scrap category repository
@@ -40,16 +48,47 @@ namespace SCSS.Application.ScrapDealer.Implementations
         /// </summary>
         private readonly IRepository<Account> _accountRepository;
 
+        /// <summary>
+        /// The promotion repository
+        /// </summary>
+        private readonly IRepository<Promotion> _promotionRepository;
+
+        /// <summary>
+        /// The role repository
+        /// </summary>
+        private readonly IRepository<Role> _roleRepository;
+
+        #endregion
+
+        #region Services
+
+        /// <summary>
+        /// The SQS publisher service
+        /// </summary>
+        private readonly ISQSPublisherService _SQSPublisherService;
+
         #endregion
 
         #region Constructor
 
-        public CollectDealTransactionService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CollectDealTransactionService"/> class.
+        /// </summary>
+        /// <param name="unitOfWork">The unit of work.</param>
+        /// <param name="userAuthSession">The user authentication session.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="cacheService">The cache service.</param>
+        /// <param name="SQSPublisherService">The SQS publisher service.</param>
+        public CollectDealTransactionService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService, ISQSPublisherService SQSPublisherService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _collectDealTransactionRepository = unitOfWork.CollectDealTransactionRepository;
+            _collectDealTransactionDetailRepository = unitOfWork.CollectDealTransactionDetailRepository;
             _scrapCategoryRepository = unitOfWork.ScrapCategoryRepository;
             _scrapCategoryDetailRepository = unitOfWork.ScrapCategoryDetailRepository;
             _accountRepository = unitOfWork.AccountRepository;
+            _roleRepository = unitOfWork.RoleRepository;
+            _promotionRepository = unitOfWork.PromotionRepository;
+            _SQSPublisherService = SQSPublisherService;
         }
 
         #endregion
@@ -122,13 +161,34 @@ namespace SCSS.Application.ScrapDealer.Implementations
         public async Task<BaseApiResponseModel> GetTransactionScrapCategories()
         {
             var dataQuery = _scrapCategoryRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id) &&
-                                                                              x.Status == ScrapCategoryStatus.ACTIVE);
+                                                                              x.Status == ScrapCategoryStatus.ACTIVE)
+                                                    .GroupJoin(_promotionRepository.GetManyAsNoTracking(x => x.Status == PromotionStatus.ACTIVE), x => x.Id, y => y.DealerCategoryId,
+                                                                        (x, y) => new
+                                                                        {
+                                                                            ScrapCategoryId = x.Id,
+                                                                            ScrapCategoryName = x.Name,
+                                                                            Promotion = y
+                                                                        })
+                                                            .SelectMany(x => x.Promotion.DefaultIfEmpty(),
+                                                                        (x, y) => new
+                                                                        {
+                                                                            x.ScrapCategoryId,
+                                                                            x.ScrapCategoryName,
+                                                                            PromotionId = y.Id,
+                                                                            PromotionCode = y.Code,
+                                                                            y.AppliedAmount,
+                                                                            y.BonusAmount
+                                                                        });
             var totalRecord = await dataQuery.CountAsync();
 
             var dataResult = dataQuery.Select(x => new TransactionScrapCategoryViewModel()
             {
-                Id = x.Id,
-                Name = x.Name
+                Id = x.ScrapCategoryId,
+                Name = x.ScrapCategoryName,
+                PromotionId = x.PromotionId,
+                PromotionCode = x.PromotionCode,
+                BonusAmount = x.BonusAmount,
+                AppliedAmount = x.AppliedAmount
             }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
@@ -163,6 +223,103 @@ namespace SCSS.Application.ScrapDealer.Implementations
             }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
+        }
+
+        #endregion
+
+        #region Create Transaction
+
+        /// <summary>
+        /// Creates the collect deal transaction.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> CreateCollectDealTransaction(TransactionCreateModel model)
+        {
+            var transactionCode = await GenerateTransactionCode();
+
+            var transactionEntity = new CollectDealTransaction()
+            {
+                DealerAccountId = UserAuthSession.UserSession.Id,
+                CollectorAccountId = model.CollectorId,
+                TransactionCode = transactionCode,
+                Total = model.Total,
+                TransactionServiceFee = model.TransactionFee,
+                AwardPoint = NumberConstant.Zero,
+                BonusAmount = model.TotalBonus,
+            };
+
+            var awardPointForCollector = await TransactionAwardAmount(CacheRedisKey.CollectDealTransactionAwardAmount);
+
+            if (awardPointForCollector != null)
+            {
+                var awardPoint = (model.Total / awardPointForCollector.AppliedAmount) * awardPointForCollector.Amount;
+                transactionEntity.AwardPoint = (int)awardPoint;
+            }
+
+            var insertEntity = _collectDealTransactionRepository.Insert(transactionEntity);
+
+            // Insert CollectDeal Transaction Detail
+            var transactionDetail = model.Items.Select(x => new CollectDealTransactionDetail()
+            {
+                DealerCategoryDetailId = x.DealerCategoryDetailId,
+                CollectDealTransactionId = insertEntity.Id,
+                Quantity = x.Quantity,
+                Price = x.Price,
+                Total = x.Total,
+                BonusAmount = x.BonusAmount,
+                PromotionId = x.PromotionId
+            }).ToList();
+
+            _collectDealTransactionDetailRepository.InsertRange(transactionDetail);
+
+            // Update Collector's Award point
+            var collectorAccount = _accountRepository.GetById(model.CollectorId);
+            collectorAccount.TotalPoint += transactionEntity.AwardPoint;
+
+            _accountRepository.Update(collectorAccount);
+
+            await UnitOfWork.CommitAsync();
+
+            // Send Notification to Collector
+
+            var notifications = new List<NotificationMessageQueueModel>()
+            {
+                new NotificationMessageQueueModel()
+                {
+                    AccountId = UserAuthSession.UserSession.Id,
+                    DeviceId = UserAuthSession.UserSession.DeviceId,
+                    NotiType = CollectingRequestStatus.COMPLETED,
+                    Title = "",
+                    Body = "",
+                    DataCustom = null
+                },
+                new NotificationMessageQueueModel()
+                {
+                    AccountId = collectorAccount.Id,
+                    DeviceId = collectorAccount.DeviceId,
+                    NotiType = CollectingRequestStatus.COMPLETED,
+                    Title = "",
+                    Body = "",
+                    DataCustom = null
+                }
+            };
+
+            // TODO:
+            return BaseApiResponse.OK();
+        }
+
+
+        /// <summary>
+        /// Generates the transaction code.
+        /// </summary>
+        /// <returns></returns>
+        private async Task<string> GenerateTransactionCode()
+        {
+            var collectingRequestCount = await _collectDealTransactionRepository.GetAllAsNoTracking().CountAsync();
+            var dateTimeCode = DateTimeUtils.GetDateTimeNowCode();
+            return string.Format(GenerationCodeFormat.COLLECT_DEAL_TRANSACTION_CODE, dateTimeCode, collectingRequestCount);
+
         }
 
         #endregion

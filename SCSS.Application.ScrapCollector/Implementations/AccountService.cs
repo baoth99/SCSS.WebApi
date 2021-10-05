@@ -144,10 +144,10 @@ namespace SCSS.Application.ScrapCollector.Implementations
             {
                 {"id", id.ToString() },
                 {"email", model.Email },
-                {"name", model.Name },
+                {"name", model.Name },  
                 {"gender", model.Gender.ToString() },
                 {"address", entity.Address },
-                {"bithdate", model.BirthDate },
+                {"birthdate", model.BirthDate },
                 {"image", model.ImageUrl},
                 {"idcard", entity.IdCard },
             };

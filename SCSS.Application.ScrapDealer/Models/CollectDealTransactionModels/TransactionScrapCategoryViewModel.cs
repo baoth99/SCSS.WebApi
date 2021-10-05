@@ -7,6 +7,14 @@ namespace SCSS.Application.ScrapDealer.Models.CollectDealTransactionModels
         public Guid Id { get; set; }
 
         public string Name { get; set; }
+
+        public Guid? PromotionId { get; set; }
+
+        public string PromotionCode { get; set; }
+
+        public long? AppliedAmount { get; set; }
+
+        public long? BonusAmount { get; set; }
     }
 
     public class TransactionScrapCategoryDetailViewModel

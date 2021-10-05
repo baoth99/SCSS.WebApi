@@ -8,6 +8,8 @@ namespace SCSS.Application.ScrapCollector.Models.SellCollectTransactionModels
 
         public string CollectingRequestCode { get; set; }
 
+        public DateTime? DoneDateTime { get; set; }
+
         public int? DayOfWeek { get; set; }
 
         public string Date { get; set; }

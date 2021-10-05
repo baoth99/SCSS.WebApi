@@ -11,6 +11,8 @@ namespace SCSS.Application.Admin.Models.SystemConfigModels
 
         public int CancelRangeTime { get; set; }
 
+        public int TimeRangeRequestNow { get; set; }
+
         public int MaxNumberOfRequestDays { get; set; }
 
         [TimeSpanValidation(isCompareToNow: BooleanConstants.FALSE)]

@@ -43,6 +43,7 @@
         public const string InvalidCollector = "IVCOL0001";
         public const string InvalidSeller = "IVSELL0001";
         public const string InvalidTimeTo = "IVTIMETO0001";
+        public const string InvalidTimeFrom = "IVTIMEFRO0001";
         public static string OverReceive = "OCR0001";
 
 

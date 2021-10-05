@@ -13,7 +13,6 @@ namespace SCSS.Application.ScrapDealer.Models.AccountModels
 
         public int Gender { get; set; }
 
-        [ValidateRegex(RegularExpression.EmailRegex)]
         public string Email { get; set; }
 
     }

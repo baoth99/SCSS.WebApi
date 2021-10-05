@@ -175,31 +175,21 @@ namespace SCSS.Aplication.BackgroundService.Implementations
 
                 foreach (var item in cacheList)
                 {
-                    if (item.Date.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW) && item.ToTime.IsCompareTimeSpanGreaterOrEqual(DateTimeVN.TIMESPAN_NOW))
+                    if (item.Date.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW) && item.ToTime.IsCompareTimeSpanLessOrEqual(DateTimeVN.TIMESPAN_NOW))
                     {
                         // Remove From Cache
                         await pendingCRCache.RemoveAsync(item);
 
                         // Update DB
-                        await CancelCollectingRequest(item.Id);
-
-                        // Publish Message To Amazon SQS
-                        await PublishMessageToSQS(item.Id);
+                        var res = await CancelCollectingRequest(item.Id);
+                        if (res > NumberConstant.Zero)
+                        {
+                            // Publish Message To Amazon SQS
+                            await PublishMessageToSQS(item.Id);
+                        }
                     }
                 }
             }
-
-            Console.WriteLine("Processing....");
-
-            //var publishModel = new NotificationMessageQueueModel()
-            //{
-            //    AccountId = Guid.Parse("78e1f230-effd-4b62-9ea6-b98491dd4ed9"),
-            //    Title = NotificationMessage.CancelCollectingRequestTitleSystem("SQR-21312312312312"),
-            //    Body = NotificationMessage.CancelCollectingRequestBodySystem("SQR-21312312312312"),
-            //    DeviceId = "d3goJZwvQaWZaxLJG5OBuZ:APA91bHurVY2ATlZ2Cgg66RpN9ZX0K3FJBpg_P4Yv8uZIJgmNC-RoWV9zaNPCV9VZ_qjhlJW52vKQGK8fyR494sJpibsy3UKjYTbENqNcSrXdbcy0wOTP9ZBFvoFck6LQ-P5KiMBFfbE"
-            //};
-
-            //await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(publishModel);
         }
 
         #endregion
@@ -210,7 +200,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
         /// Cancels the collecting request.
         /// </summary>
         /// <param name="crId">The cr identifier.</param>
-        private async Task CancelCollectingRequest(Guid crId)
+        private async Task<int> CancelCollectingRequest(Guid crId)
         {
             var sql = "UPDATE [CollectingRequest] " +
                       "SET [Status] = @CancelBySystemStatus, " +
@@ -225,7 +215,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
             parameters.Add("@DateNow", DateTimeVN.DATETIME_NOW);
             parameters.Add("@PendingStatus", CollectingRequestStatus.PENDING);
 
-            await _dapperService.SqlExecuteAsync(sql, parameters);
+            return await _dapperService.SqlExecuteAsync(sql, parameters);
         }
 
         #endregion

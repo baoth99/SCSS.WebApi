@@ -175,7 +175,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, insertEntity.Id.ToString()), // TODO:
                 Title = NotificationMessage.SellerRequestCRTitle,
                 Body = NotificationMessage.SellerRequestCRBody(insertEntity.CollectingRequestCode),
-                NotiType = CollectingRequestStatus.CANCEL_BY_SELLER
+                NotiType = CollectingRequestStatus.PENDING
             };
 
             await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(message);
@@ -271,13 +271,22 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 _collectingRequestRepository.Update(entity);
                 // Commit Data to Database
                 await UnitOfWork.CommitAsync();
-
-                await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(notifcations);
             }
             catch (Exception)
             {
                 return BaseApiResponse.Error();
             }
+
+            var cacheModel = new PendingCollectingRequestCacheModel()
+            {
+                Id = entity.Id,
+                Date = entity.CollectingRequestDate,
+                FromTime = entity.TimeFrom,
+                ToTime = entity.TimeTo
+            };
+            await _cacheListService.PendingCollectingRequestCache.RemoveAsync(cacheModel);
+
+            await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(notifcations);
 
             return BaseApiResponse.OK();
         }
@@ -372,7 +381,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 var IsValidToTime = (toTime.IsCompareTimeSpanGreaterOrEqual(operatingTimeRange.Item1) && toTime.IsCompareTimeSpanLessOrEqual(operatingTimeRange.Item2));
                 if (!(IsValidFromTime && IsValidToTime))
                 {
-                    errorList.Add(new ValidationError("TimeRange", InvalidCollectingRequestCode.TimeRangeNotValid));
+                    errorList.Add(new ValidationError("OperatingTime", InvalidCollectingRequestCode.TimeRangeNotValid));
                 }
             }
 
@@ -386,6 +395,15 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 if (toTime.IsCompareTimeSpanLessThan(DateTimeVN.TIMESPAN_NOW.StripMilliseconds()))
                 {
                     errorList.Add(new ValidationError(nameof(toTime), InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
+                }
+
+                // Check FromTime in Day
+                var timeRange = await TimeRangeRequestNow();
+
+                var isValid = DateTimeUtils.IsMoreThanOrEqualMinutes(DateTimeVN.TIMESPAN_NOW, fromTime, timeRange);
+                if (!isValid)
+                {
+                    errorList.Add(new ValidationError(nameof(fromTime), InvalidCollectingRequestCode.InvalidTimeFrom));
                 }
             }
 

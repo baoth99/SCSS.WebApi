@@ -17,6 +17,7 @@ namespace SCSS.Utilities.Helper
             return betweenDays > days;
         }
 
+
         public static bool IsMoreThanPastDays(DateTime? dateTime, int days)
         {
             var toTime = dateTime.Value.Date;
@@ -111,5 +112,26 @@ namespace SCSS.Utilities.Helper
 
         #endregion
 
+        #region Get DateTime Now Code
+
+        /// <summary>
+        /// Gets the date time now code.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetDateTimeNowCode()
+        {
+            var dateTimeNow = DateTimeVN.DATETIME_NOW;
+
+            var dateTimeCode = string.Format(DateCodeFormat.DATETIME_NOW_CODE, dateTimeNow.Year,
+                                                                               dateTimeNow.Month,
+                                                                               dateTimeNow.Day,
+                                                                               dateTimeNow.Hour,
+                                                                               dateTimeNow.Minute,
+                                                                               dateTimeNow.Second,
+                                                                               dateTimeNow.Millisecond);
+            return dateTimeCode;
+        }
+
+        #endregion
     }
 }

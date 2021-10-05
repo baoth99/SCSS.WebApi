@@ -182,5 +182,32 @@ namespace SCSS.Application.ScrapSeller
         }
 
         #endregion
+
+        #region Get Time Range Request Now
+
+        /// <summary>
+        /// Times the name of the range request.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<int> TimeRangeRequestNow()
+        {
+            var timeRange = await CacheService.GetStringCacheAsync(CacheRedisKey.TimeRangeRequestNow);
+            if (ValidatorUtil.IsBlank(timeRange))
+            {
+                var entity = await UnitOfWork.CollectingRequestConfigRepository.GetManyAsNoTracking(x => x.IsActive).FirstOrDefaultAsync();
+                if (entity == null)
+                {
+                    return NumberConstant.Ten;
+                }
+                var timeRangeRequest = entity.TimeRangeRequestNow;
+
+                await CacheService.SetStringCacheAsync(CacheRedisKey.TimeRangeRequestNow, timeRangeRequest.ToString());
+
+                return timeRangeRequest;
+            }
+            return timeRange.ToInt();
+        }
+
+        #endregion
     }
 }

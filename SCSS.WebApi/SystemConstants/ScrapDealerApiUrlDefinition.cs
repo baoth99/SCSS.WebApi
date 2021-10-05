@@ -26,6 +26,7 @@
         public static class CollectDealTransactionApiUrl
         {
             public const string GetTransactionInfoReview = CollectDealTransaction + "/info-review";
+            public const string Create = CollectDealTransaction + "/create";
         }
 
         public static class AccountApiUrl

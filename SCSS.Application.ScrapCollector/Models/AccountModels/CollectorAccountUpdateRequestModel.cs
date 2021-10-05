@@ -1,6 +1,4 @@
-﻿using SCSS.Utilities.Constants;
-using SCSS.Validations.ValidationAttributes.CommonValidations;
-
+﻿
 namespace SCSS.Application.ScrapCollector.Models.AccountModels
 {
     public class CollectorAccountUpdateRequestModel
@@ -13,7 +11,6 @@ namespace SCSS.Application.ScrapCollector.Models.AccountModels
 
         public int Gender { get; set; }
 
-        [ValidateRegex(RegularExpression.EmailRegex)]
         public string Email { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using SCSS.Utilities.Configurations;
+using SCSS.Utilities.Constants;
 using SCSS.Utilities.Helper;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConfigurations;
@@ -64,7 +65,7 @@ namespace SCSS.WebApi
 
             #region Controller & Validation Behavior
 
-            services.AddControllers().AddConfigureApiValidationBehaviorOptions(); 
+            services.AddControllers().AddConfigureApiValidationBehaviorOptions(); //x => x.AllowEmptyInputInBodyModelBinding = BooleanConstants.TRUE
 
             #endregion
 

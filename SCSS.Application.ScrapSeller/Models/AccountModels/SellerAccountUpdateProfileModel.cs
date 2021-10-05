@@ -7,13 +7,11 @@ namespace SCSS.Application.ScrapSeller.Models.AccountModels
     {
         public string Name { get; set; }
 
-        [ValidateRegex(RegularExpression.EmailRegex)]
         public string Email { get; set; }
 
         [Gender]
         public int Gender { get; set; }
 
-        [DateTimeValidation(isCompareToNow: BooleanConstants.FALSE)]
         public string BirthDate { get; set; }
 
         public string Address { get; set; }
@@ -22,6 +20,5 @@ namespace SCSS.Application.ScrapSeller.Models.AccountModels
 
         public string IDCard { get; set; }
 
-        public string DeviceID { get; set; }
     }
 }

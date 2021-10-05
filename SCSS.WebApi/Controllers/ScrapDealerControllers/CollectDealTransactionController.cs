@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SCSS.Application.ScrapDealer.Interfaces;
+using SCSS.Application.ScrapDealer.Models.CollectDealTransactionModels;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConstants;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SCSS.WebApi.Controllers.ScrapDealerControllers
@@ -25,13 +24,16 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CollectDealTransactionController"/> class.
+        /// </summary>
+        /// <param name="collectDealTransactionService">The collect deal transaction service.</param>
         public CollectDealTransactionController(ICollectDealTransactionService collectDealTransactionService)
         {
             _collectDealTransactionService = collectDealTransactionService;
         }
 
         #endregion
-
 
         #region Get Transaction Info Review
 
@@ -53,5 +55,38 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
 
         #endregion
 
+        #region Create Collect-Deal Transaction
+
+        /// <summary>
+        /// Creates the collect deal transaction.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapDealerApiUrlDefinition.CollectDealTransactionApiUrl.Create)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> CreateCollectDealTransaction([FromBody] TransactionCreateModel model)
+        {
+            return await _collectDealTransactionService.CreateCollectDealTransaction(model);
+        }
+
+        #endregion
+
+
+        #region Get Collect-Deal Transaction Histories
+
+
+
+        #endregion
+
+
+        #region Get Collect-Deal Transaction History Detail
+
+
+
+        #endregion
     }
 }

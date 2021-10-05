@@ -190,7 +190,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             }
 
             // TODO:
-            var errorList = ValidateCancelCollectingRequest(entity.CollectorAccountId, entity.Status, entity.CollectingRequestDate, entity.TimeTo);
+            var errorList = ValidateCancelCollectingRequest(entity.CollectorAccountId, entity.Status, model.CancelReason);
 
             if (errorList.Any())
             {
@@ -252,7 +252,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="collectingRequestDate">The collecting request date.</param>
         /// <param name="timeTo">The time to.</param>
         /// <returns></returns>
-        private List<ValidationError> ValidateCancelCollectingRequest(Guid? collectorAccountId, int? status, DateTime? collectingRequestDate, TimeSpan? timeTo)
+        private List<ValidationError> ValidateCancelCollectingRequest(Guid? collectorAccountId, int? status, string cancelReason)
         {
             var errorList = new List<ValidationError>();
 
@@ -266,15 +266,21 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 errorList.Add(new ValidationError(nameof(status), InvalidCollectingRequestCode.InvalidStatus));
             }
 
-            if (!collectingRequestDate.IsCompareDateTimeEqual(DateTimeVN.DATETIME_NOW))
+            if (ValidatorUtil.IsBlank(cancelReason))
             {
-                errorList.Add(new ValidationError(nameof(collectingRequestDate), InvalidCollectingRequestCode.InvalidDate));
+                errorList.Add(new ValidationError(nameof(cancelReason), InvalidCollectingRequestCode.InvalidDate));
             }
 
-            if (timeTo.IsCompareTimeSpanGreaterOrEqual(DateTimeVN.TIMESPAN_NOW))
-            {
-                errorList.Add(new ValidationError(nameof(timeTo), InvalidCollectingRequestCode.InvalidTimeTo));
-            }
+
+            //if (!collectingRequestDate.IsCompareDateTimeEqual(DateTimeVN.DATETIME_NOW))
+            //{
+            //    errorList.Add(new ValidationError(nameof(collectingRequestDate), InvalidCollectingRequestCode.InvalidDate));
+            //}
+
+            //if (timeTo.IsCompareTimeSpanGreaterOrEqual(DateTimeVN.TIMESPAN_NOW))
+            //{
+            //    errorList.Add(new ValidationError(nameof(timeTo), InvalidCollectingRequestCode.InvalidTimeTo));
+            //}
 
             return errorList;
 

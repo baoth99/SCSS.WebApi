@@ -157,7 +157,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 {"email", model.Email },
                 {"gender", model.Gender.ToString() },
                 {"address", model.Address },
-                {"bithdate", model.BirthDate },
+                {"birthdate", model.BirthDate },
                 {"image", model.ImageUrl},
                 {"idcard", model.IDCard }
             };
@@ -176,7 +176,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             entity.Address = model.Address;
             entity.ImageUrl = model.ImageUrl;
             entity.IdCard = model.IDCard;
-            entity.DeviceId = model.DeviceID;
 
             _accountRepository.Update(entity);
 

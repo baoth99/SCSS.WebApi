@@ -19,6 +19,8 @@ namespace SCSS.Data.Entities
 
         public int CancelTimeRange { get; set; }
 
+        public int TimeRangeRequestNow { get; set; }
+
         public TimeSpan? OperatingTimeFrom { get; set; }
 
         public TimeSpan? OperatingTimeTo { get; set; }

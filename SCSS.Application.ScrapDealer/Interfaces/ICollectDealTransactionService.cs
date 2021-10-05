@@ -1,4 +1,5 @@
-﻿using SCSS.Utilities.ResponseModel;
+﻿using SCSS.Application.ScrapDealer.Models.CollectDealTransactionModels;
+using SCSS.Utilities.ResponseModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,5 +34,26 @@ namespace SCSS.Application.ScrapDealer.Interfaces
         /// </summary>
         /// <returns></returns>
         Task<BaseApiResponseModel> GetTransactionScrapCategoryDetail(Guid id);
+
+        /// <summary>
+        /// Creates the collect deal transaction.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> CreateCollectDealTransaction(TransactionCreateModel model);
+
+        /// <summary>
+        /// Gets the transaction histories.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetTransactionHistories(TransactionHistoryFilterModel model);
+
+        /// <summary>
+        /// Gets the transaction history detail.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetTransactionHistoryDetail(Guid id);
     }
 }

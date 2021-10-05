@@ -10,6 +10,7 @@ namespace SCSS.Utilities.Constants
     {
         public const string DDMMYYYY = "{0}{1}{2}";
         public const string DDMM = "{0}{1}";
+        public const string DATETIME_NOW_CODE = "{0}{1}{2}{3}{4}{5}{6}";
     }
 
     public class TimeSpanCodeFormat
@@ -23,7 +24,9 @@ namespace SCSS.Utilities.Constants
         public const string COLLECTING_REQUEST_CODE = "SCR-{0}{1}{2}{3}";
         public const string PROMOTION_CODE = "KM-{0}-{1}{2}{3}";
         public const string SELL_COLLECT_TRASACTION_CODE = "SCT-{0}{1}";
+        public const string COLLECT_DEAL_TRANSACTION_CODE = "CDT-{0}{1}";
     }
+
 
     public class GoongMapRestApiFormat
     {
