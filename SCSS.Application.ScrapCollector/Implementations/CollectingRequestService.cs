@@ -19,6 +19,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using SCSS.AWSService.Models.SQSModels;
 using SCSS.AWSService.Models;
+using SCSS.QueueEngine.QueueEngines;
+using SCSS.QueueEngine.QueueModels;
 
 namespace SCSS.Application.ScrapCollector.Implementations
 {
@@ -70,6 +72,11 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         private readonly ICacheListService _cacheListService;
 
+        /// <summary>
+        /// The queue engine factory
+        /// </summary>
+        private readonly IQueueEngineFactory _queueEngineFactory;
+
         #endregion
 
         #region Constructor
@@ -82,11 +89,12 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="logger">The logger.</param>
         /// <param name="mapDistanceMatrixService">The map distance matrix service.</param>
         /// <param name="SQSPublisherService">The SQS publisher service.</param>
-        /// <param name="fcmService">The FCM service.</param>
+        /// <param name="cacheListService">The cache list service.</param>
         /// <param name="cacheService">The cache service.</param>
+        /// <param name="queueEngineFactory">The queue engine factory.</param>
         public CollectingRequestService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
                                         IMapDistanceMatrixService mapDistanceMatrixService, ISQSPublisherService SQSPublisherService, ICacheListService cacheListService,
-                                        IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
+                                        IStringCacheService cacheService, IQueueEngineFactory queueEngineFactory) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _collectingRequestRejectionRepository = unitOfWork.CollectingRequestRejectionRepository;
@@ -96,6 +104,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             _mapDistanceMatrixService = mapDistanceMatrixService;
             _SQSPublisherService = SQSPublisherService;
             _cacheListService = cacheListService;
+            _queueEngineFactory = queueEngineFactory;
         }
 
         #endregion
@@ -137,8 +146,16 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                     x.IsBulky,
                                                                 });
 
-            collectingRequestdataQuery = collectingRequestdataQuery.Where(x => !(x.CollectingRequestDate.Value.Date.CompareTo(DateTimeVN.DATE_NOW) == NumberConstant.Zero &&
-                                                                                x.TimeTo.Value.CompareTo(DateTimeVN.TIMESPAN_NOW) >= NumberConstant.Zero));
+
+
+            var expiredRequests = collectingRequestdataQuery.Where(x => x.CollectingRequestDate.Value.Date.CompareTo(DateTimeVN.DATE_NOW) == NumberConstant.Zero &&
+                                                                                x.TimeTo.Value.CompareTo(DateTimeVN.TIMESPAN_NOW) < NumberConstant.Zero);
+
+            if (expiredRequests.Any())
+            {
+                collectingRequestdataQuery.Except(expiredRequests);
+            }
+
 
             if (!collectingRequestdataQuery.Any())
             {
@@ -313,7 +330,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             }
 
             if (collectingRequestEntity.CollectingRequestDate.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW) &&
-                collectingRequestEntity.TimeFrom.IsCompareTimeSpanGreaterOrEqual(DateTimeVN.TIMESPAN_NOW))
+                collectingRequestEntity.TimeTo.IsCompareTimeSpanLessThan(DateTimeVN.TIMESPAN_NOW))
             {
                 return null;
             }
@@ -337,6 +354,28 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 };
                 await _cacheListService.PendingCollectingRequestCache.RemoveAsync(cacheModel);
 
+                var requestDateTime = collectingRequestEntity.CollectingRequestDate.Value.Add(collectingRequestEntity.TimeFrom.Value);
+
+                if (DateTimeVN.DATETIME_NOW.IsCompareDateTimeLessThan(requestDateTime))
+                {
+                    var timeRange = DateTimeVN.DATETIME_NOW.Subtract(requestDateTime).TotalMinutes;
+                    if (timeRange >= NumberConstant.Ten)
+                    {
+                        var queueModel = new CollectingRequestReminderQueueModel()
+                        {
+                            Id = collectingRequestEntity.Id,
+                            CollectingRequestCode = collectingRequestEntity.CollectingRequestCode,
+                            CollectorId = collectingRequestEntity.CollectorAccountId,
+                            FromTime = collectingRequestEntity.TimeFrom,
+                            RequestDate = collectingRequestEntity.CollectingRequestDate,
+                            ToTime = collectingRequestEntity.TimeTo,
+                        };
+
+                        _queueEngineFactory.CollectingRequestReminderQueueRepos.PushQueue(queueModel);
+                    }
+                }
+
+
                 return new Tuple<Guid?, Guid, string>(collectingRequestEntity.SellerAccountId, id, collectingRequestEntity.CollectingRequestCode);
             }
             catch (DbUpdateConcurrencyException)
@@ -347,6 +386,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion Receive the Collecting Request
 
+
         #region Send Notification To User
 
         /// <summary>
@@ -355,7 +395,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="sellerId">The seller identifier.</param>
         /// <param name="collectingRequestCode"></param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> SendNotification(Guid? sellerId, string collectingRequestCode)
+        public async Task<BaseApiResponseModel> SendNotification(Guid? sellerId, Guid? requestId, string collectingRequestCode)
         {
             var sellerInfo = _accountRepository.GetById(sellerId);
 
@@ -366,7 +406,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     AccountId = sellerInfo.Id,
                     Title = NotificationMessage.SellerCollectingRequestReceviedTitle,
                     Body = NotificationMessage.SellerCollectingRequestReceviedBody(collectingRequestCode),
-                    DataCustom = null, // TODO:
+                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, requestId.ToString()),
                     DeviceId = sellerInfo.DeviceId,
                     NotiType = CollectingRequestStatus.APPROVED
                 },
@@ -375,7 +415,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     AccountId = UserAuthSession.UserSession.Id,
                     Title = NotificationMessage.CollectorCollectingRequestReceviedTitle,
                     Body = NotificationMessage.CollectorCollectingRequestReceviedBody(collectingRequestCode), 
-                    DataCustom = null, // TODO:
+                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.HistoryScreen, requestId.ToString()), 
                     DeviceId = UserAuthSession.UserSession.DeviceId,
                     NotiType = CollectingRequestStatus.APPROVED
                 }

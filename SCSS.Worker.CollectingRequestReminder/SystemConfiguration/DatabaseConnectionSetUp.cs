@@ -2,7 +2,8 @@
 using SCSS.Data.EF;
 using System;
 
-namespace SCSS.Worker.CancelCollectingRequest.SystemConfiguration
+
+namespace SCSS.Worker.CollectingRequestReminder.SystemConfiguration
 {
     internal static class DatabaseConnectionSetUp
     {

@@ -9,6 +9,19 @@ namespace SCSS.AWSService.Models
         public float Amount { get; set; }
     }
 
+    public class CollectingRequestReminderCacheModel
+    {
+        public Guid Id { get; set; }
+
+        public Guid? CollectorId { get; set; }
+
+        public string CollectingRequestCode { get; set; }
+
+        public DateTime? RequestDate { get; set; }
+
+        public TimeSpan? RemindTime { get; set; }
+
+    }
 
     public class PendingCollectingRequestCacheModel
     {

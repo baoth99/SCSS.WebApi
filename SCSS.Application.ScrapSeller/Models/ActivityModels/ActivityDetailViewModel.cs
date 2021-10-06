@@ -55,10 +55,14 @@ namespace SCSS.Application.ScrapSeller.Models.ActivityModels
         public string Name { get; set; }
 
         public string  Phone { get; set; }
+
+        public float? Rating { get; set; }
     }
 
     public class TransactionInformation
     {
+        public Guid? TransactionId { get; set; }
+
         public string TransactionDate { get; set; }
 
         public string TransactionTime { get; set; }

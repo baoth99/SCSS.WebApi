@@ -27,6 +27,8 @@
         {
             public const string GetTransactionInfoReview = CollectDealTransaction + "/info-review";
             public const string Create = CollectDealTransaction + "/create";
+            public const string TransHitories = CollectDealTransaction + "/histories";
+            public const string TransHitoryDetail = CollectDealTransaction + "/history-detail";
         }
 
         public static class AccountApiUrl

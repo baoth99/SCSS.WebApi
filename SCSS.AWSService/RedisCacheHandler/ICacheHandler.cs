@@ -39,11 +39,25 @@ namespace SCSS.AWSService.RedisCacheHandler
         /// <returns></returns>
         Task PushAsync(T model);
 
+
+        /// <summary>
+        /// Pushes the many asynchronous.
+        /// </summary>
+        /// <param name="models">The models.</param>
+        /// <returns></returns>
+        Task PushManyAsync(List<T> models);
+
         /// <summary>
         /// Pushes the specified model.
         /// </summary>
         /// <param name="model">The model.</param>
         void Push(T model);
+
+        /// <summary>
+        /// Pushes the many.
+        /// </summary>
+        /// <param name="models">The models.</param>
+        void PushMany(List<T> models);
 
         /// <summary>
         /// Removes the asynchronous.

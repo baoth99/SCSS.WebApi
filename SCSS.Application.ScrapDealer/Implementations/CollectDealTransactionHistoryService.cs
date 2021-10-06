@@ -28,8 +28,10 @@ namespace SCSS.Application.ScrapDealer.Implementations
             var dealerRoleId = _roleRepository.GetAsNoTracking(x => x.Key == AccountRole.DEALER).Id;
             var collectorRoleId = _roleRepository.GetAsNoTracking(x => x.Key == AccountRole.COLLECTOR).Id;
 
-            var dataQuery = _collectDealTransactionRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.FromDate) || x.CreatedTime.Value.Date.CompareTo(model.FromDate.ToDateTime()) >= NumberConstant.Zero) &&
-                                                                                       (ValidatorUtil.IsBlank(model.ToDate) || x.CreatedTime.Value.Date.CompareTo(model.ToDate.ToDateTime()) <= NumberConstant.Zero) &&
+            var dataDB = await _collectDealTransactionRepository.GetAllAsNoTracking().ToListAsync();
+
+            var dataQuery = dataDB.Where(x => (ValidatorUtil.IsBlank(model.FromDate) || x.CreatedTime.IsCompareDateTimeGreaterOrEqual(model.FromDate.ToDateTime())) &&
+                                                                                       (ValidatorUtil.IsBlank(model.ToDate) || x.CreatedTime.IsCompareDateTimeLessOrEqual(model.ToDate.ToDateTime())) &&
                                                                                        (model.FromTotal == NumberConstant.Zero || (x.Total - x.TransactionServiceFee) >= model.FromTotal) &&
                                                                                        (model.ToTotal == NumberConstant.Zero || (x.Total - x.TransactionServiceFee) <= model.ToTotal))
                                                              .Join(_accountRepository.GetManyAsNoTracking(x => x.RoleId.Equals(collectorRoleId)), x => x.CollectorAccountId, y => y.Id,
@@ -42,7 +44,8 @@ namespace SCSS.Application.ScrapDealer.Implementations
                                                                                            x.Total,
                                                                                            x.TransactionServiceFee
                                                                                        }).OrderByDescending(x => x.TransactionDateTime);
-            var totalRecord = await dataQuery.CountAsync();
+
+            var totalRecord = dataQuery.Count();
 
             var dataResult = dataQuery.Select(x => new CollectDealTransactionHistoryViewModel
             {

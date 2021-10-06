@@ -27,7 +27,8 @@ namespace SCSS.WebApi.SystemConfigurations
 
             services.AddScoped<SCSS.Aplication.BackgroundService.Interfaces.ICollectingRequestService, SCSS.Aplication.BackgroundService.Implementations.CollectingRequestService>();
             services.AddScoped<SCSS.Aplication.BackgroundService.Interfaces.IPromotionService, SCSS.Aplication.BackgroundService.Implementations.PromotionService>();
-            
+            services.AddSingleton<SCSS.Aplication.BackgroundService.Interfaces.IQueueHandlingService, SCSS.Aplication.BackgroundService.Implementations.QueueHandlingService>();
+
             #endregion
 
             #region Admin Application
@@ -77,6 +78,7 @@ namespace SCSS.WebApi.SystemConfigurations
 
             services.AddHostedService<TrailCollectingRequestHostedService>();
             services.AddHostedService<ScanExpiredPromotionHostedService>();
+            services.AddHostedService<CRReminderHostService>();
         }
     }
 }

@@ -111,6 +111,7 @@ namespace SCSS.Utilities.Configurations
             public const string CollectingRequestTrailPeriod = "TaskSchedule:CollectingRequestTrailPeriod";
             public const string CollectingRequestTrailStart = "TaskSchedule:CollectingRequestTrailStart";
             public const string DelayMinutes = "TaskSchedule:DelayMinutes";
+            public const string NoticeToCollector = "TaskSchedule:NoticeToCollector";
         }
     }
 }

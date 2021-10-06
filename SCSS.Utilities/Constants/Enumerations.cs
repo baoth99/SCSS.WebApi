@@ -44,6 +44,7 @@
         SellCollectTransactionAwardAmount,
         CollectDealTransactionAwardAmount,
         PendingCollectingRequest,
+        CollectingRequestReminders,
         OperatingTimeRange,
         CancelRangeTime,
         TimeRangeRequestNow

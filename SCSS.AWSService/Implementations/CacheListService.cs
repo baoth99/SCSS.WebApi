@@ -1,5 +1,6 @@
 ﻿using SCSS.AWSService.Interfaces;
 using SCSS.AWSService.Models;
+using SCSS.AWSService.Models.SQSModels;
 using SCSS.AWSService.RedisCacheHandler;
 using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
@@ -34,6 +35,8 @@ namespace SCSS.AWSService.Implementations
 
         private ICacheListHandler<ImageCacheModel> _imageSliderCache;
 
+        private ICacheListHandler<CollectingRequestReminderCacheModel> _collectingRequestReminderCache;
+
         #endregion
 
         #region Constructor
@@ -54,6 +57,8 @@ namespace SCSS.AWSService.Implementations
         public ICacheListHandler<PendingCollectingRequestCacheModel> PendingCollectingRequestCache => _pendingCollectingRequestCache ??= (_pendingCollectingRequestCache = new CacheListHandler<PendingCollectingRequestCacheModel>(connection, AppSettingValues.RedisDB03, CacheRedisKey.PendingCollectingRequest));
 
         public ICacheListHandler<ImageCacheModel> ImageSliderCache => _imageSliderCache ??= (_imageSliderCache = new CacheListHandler<ImageCacheModel>(connection, AppSettingValues.RedisDB01, CacheRedisKey.ImageSlider));
+
+        public ICacheListHandler<CollectingRequestReminderCacheModel> CollectingRequestReminderCache => _collectingRequestReminderCache ??= (_collectingRequestReminderCache = new CacheListHandler<CollectingRequestReminderCacheModel>(connection, AppSettingValues.RedisDB04, CacheRedisKey.CollectingRequestReminders));
 
         #endregion
 

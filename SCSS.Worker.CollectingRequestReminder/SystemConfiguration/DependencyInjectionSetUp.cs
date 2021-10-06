@@ -2,12 +2,11 @@
 using SCSS.Aplication.BackgroundService.Implementations;
 using SCSS.Aplication.BackgroundService.Interfaces;
 using SCSS.Data.EF.UnitOfWork;
-using SCSS.ORM.Dapper.Implementations;
-using SCSS.ORM.Dapper.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using System;
 
-namespace SCSS.Worker.CancelCollectingRequest.SystemConfiguration
+
+namespace SCSS.Worker.CollectingRequestReminder.SystemConfiguration
 {
     internal static class DependencyInjectionSetUp
     {
@@ -20,11 +19,10 @@ namespace SCSS.Worker.CancelCollectingRequest.SystemConfiguration
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthSession, AuthSession>();
-            services.AddSingleton<IDapperService, DapperService>();
 
             #region Background
 
-            services.AddScoped<ICollectingRequestService, CollectingRequestService>();
+            services.AddScoped<IRequestReminderService, RequestReminderService>();
 
             #endregion
         }

@@ -129,6 +129,22 @@ namespace SCSS.AWSService.RedisCacheHandler
 
         #endregion
 
+        #region Push Many Async
+
+        /// <summary>
+        /// Pushes the many asynchronous.
+        /// </summary>
+        /// <param name="models">The models.</param>
+        public async Task PushManyAsync(List<T> models)
+        {
+            foreach (var item in models)
+            {
+                await PushAsync(item);
+            }
+        }
+
+        #endregion
+
         #region Push
 
         /// <summary>
@@ -139,6 +155,22 @@ namespace SCSS.AWSService.RedisCacheHandler
         public void Push(T model)
         {
             redisDB.ListLeftPush(cacheRedisKey.ToString(), model.ToJson());
+        }
+
+        #endregion
+
+        #region Push Many
+
+        /// <summary>
+        /// Pushes the many.
+        /// </summary>
+        /// <param name="models">The models.</param>
+        public void PushMany(List<T> models)
+        {
+            foreach (var item in models)
+            {
+                Push(item);
+            }
         }
 
         #endregion

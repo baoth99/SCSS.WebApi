@@ -42,6 +42,8 @@ namespace SCSS.Data.Entities
 
         public float? TotalPoint { get; set; }
 
+        public float? Rating { get; set; }
+
         public int? Status { get; set; }
 
         [Column(TypeName = "VARCHAR(MAX)")]

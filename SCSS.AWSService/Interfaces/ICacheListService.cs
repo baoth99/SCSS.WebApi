@@ -1,4 +1,5 @@
 ﻿using SCSS.AWSService.Models;
+using SCSS.AWSService.Models.SQSModels;
 using SCSS.AWSService.RedisCacheHandler;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace SCSS.AWSService.Interfaces
         ICacheListHandler<PendingCollectingRequestCacheModel> PendingCollectingRequestCache { get; }
 
         ICacheListHandler<ImageCacheModel> ImageSliderCache { get; }
+
+        ICacheListHandler<CollectingRequestReminderCacheModel> CollectingRequestReminderCache { get; }
 
         #endregion
     }

@@ -140,7 +140,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             var collectingRequestEntity = new CollectingRequest()
             {
                 CollectingRequestCode = collectingRequestEntityCode,
-                CollectingRequestDate = model.CollectingRequestDate.ToDateTime(),
+                CollectingRequestDate = model.CollectingRequestDate.ToDateTime().Value.Date,
                 TimeFrom = collectingRequestFromTime,
                 TimeTo = collectingRequestToTime,
                 SellerAccountId = sellerAccountId,
@@ -160,7 +160,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             var cacheModel = new PendingCollectingRequestCacheModel()
             {
                 Id = insertEntity.Id,
-                Date = insertEntity.CollectingRequestDate,
+                Date = insertEntity.CollectingRequestDate.Value.Date,
                 FromTime = insertEntity.TimeFrom,
                 ToTime = insertEntity.TimeTo
             };
@@ -172,7 +172,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             {
                 AccountId = UserAuthSession.UserSession.Id,
                 DeviceId = UserAuthSession.UserSession.DeviceId,
-                DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, insertEntity.Id.ToString()), // TODO:
+                DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, insertEntity.Id.ToString()), 
                 Title = NotificationMessage.SellerRequestCRTitle,
                 Body = NotificationMessage.SellerRequestCRBody(insertEntity.CollectingRequestCode),
                 NotiType = CollectingRequestStatus.PENDING

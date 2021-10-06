@@ -89,6 +89,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             _accountRepository = unitOfWork.AccountRepository;
             _transactionAwardAmountRepository = unitOfWork.TransactionAwardAmountRepository;
             _SQSPublisherService = SQSPublisherService;
+            _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
         }
 
         #endregion

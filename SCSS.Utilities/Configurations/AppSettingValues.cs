@@ -111,5 +111,6 @@ namespace SCSS.Utilities.Configurations
 
         public static int DelayMinutesSchedule => ConfigurationHelper.GetValue<int>(AppSettingKeys.TaskSchedule.DelayMinutes);
 
+        public static string NoticeToCollector => ConfigurationHelper.GetValue<string>(AppSettingKeys.TaskSchedule.NoticeToCollector);
     }
 }

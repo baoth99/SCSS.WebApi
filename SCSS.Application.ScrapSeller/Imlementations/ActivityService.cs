@@ -215,7 +215,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 dataResult.CollectorInfo = new CollectorInformation()
                 {
                     Name = collectorInfo?.Name,
-                    Phone = collectorInfo?.Phone
+                    Phone = collectorInfo?.Phone,
+                    Rating = collectorInfo.Rating
                 };
 
                 if (crEntity.ApprovedTime != null)
@@ -235,7 +236,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             }
 
 
-
             if (crEntity.UpdatedTime != null)
             {
                 dataResult.DoneActivityDate = crEntity.UpdatedTime.ToStringFormat(DateTimeFormat.DD_MMM_yyyy);
@@ -252,6 +252,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
                 dataResult.Transaction = new TransactionInformation()
                 {
+                    TransactionId = transactionInfo?.Id,
                     TransactionDate = transactionInfo?.CreatedTime.ToStringFormat(DateTimeFormat.DDD_dd_MMM),
                     TransactionTime = transactionInfo?.CreatedTime.Value.TimeOfDay.ToStringFormat(TimeSpanFormat.HH_MM),
                     Total = transactionInfo?.Total,

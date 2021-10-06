@@ -175,7 +175,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
 
                 foreach (var item in cacheList)
                 {
-                    if (item.Date.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW) && item.ToTime.IsCompareTimeSpanLessOrEqual(DateTimeVN.TIMESPAN_NOW))
+                    if (item.Date.Value.Date.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW) && item.ToTime.IsCompareTimeSpanLessOrEqual(DateTimeVN.TIMESPAN_NOW))
                     {
                         // Remove From Cache
                         await pendingCRCache.RemoveAsync(item);

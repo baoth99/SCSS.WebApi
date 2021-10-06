@@ -1,4 +1,5 @@
 ﻿using SCSS.QueueEngine.QueueEngines;
+using SCSS.QueueEngine.QueueModels;
 using SCSS.QueueEngine.QueueRepositories;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace SCSS.QueueEngine.QueueEngines
 
         // TODO:
         private IQueueRepository<string> _stringEngineRepo;
+
+        private IQueueRepository<CollectingRequestReminderQueueModel> _collectingRequestReminderQueueRepos;
 
         #endregion
 
@@ -34,6 +37,8 @@ namespace SCSS.QueueEngine.QueueEngines
         public IQueueRepository<string> StringEngineRepo
                 => _stringEngineRepo ??= (_stringEngineRepo = new QueueRepository<string>(new ConcurrentQueue<string>()));
 
+        public IQueueRepository<CollectingRequestReminderQueueModel> CollectingRequestReminderQueueRepos
+               => _collectingRequestReminderQueueRepos ??= (_collectingRequestReminderQueueRepos = new QueueRepository<CollectingRequestReminderQueueModel>(new ConcurrentQueue<CollectingRequestReminderQueueModel>()));
 
         #endregion Publish Access Engine
     }

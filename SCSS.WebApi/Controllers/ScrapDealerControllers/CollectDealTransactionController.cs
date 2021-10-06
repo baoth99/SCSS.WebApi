@@ -75,17 +75,33 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
 
         #endregion
 
-
         #region Get Collect-Deal Transaction Histories
 
-
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapDealerApiUrlDefinition.CollectDealTransactionApiUrl.TransHitories)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetTransactionHistory([FromQuery] TransactionHistoryFilterModel model)
+        {
+            return await _collectDealTransactionService.GetTransactionHistories(model);
+        }
 
         #endregion
 
-
         #region Get Collect-Deal Transaction History Detail
 
-
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapDealerApiUrlDefinition.CollectDealTransactionApiUrl.TransHitoryDetail)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetTransactionHistoryDetail([FromQuery] Guid id)
+        {
+            return await _collectDealTransactionService.GetTransactionHistoryDetail(id);
+        }
 
         #endregion
     }

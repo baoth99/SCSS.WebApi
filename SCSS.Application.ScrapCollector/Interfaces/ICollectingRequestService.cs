@@ -32,7 +32,7 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         /// </summary>
         /// <param name="sellerId">The seller identifier.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> SendNotification(Guid? sellerId, string collectingRequestCode);
+        Task<BaseApiResponseModel> SendNotification(Guid? sellerId, Guid? requestId, string collectingRequestCode);
 
         /// <summary>
         /// Rejects the collecting request.

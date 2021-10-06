@@ -1,9 +1,6 @@
-﻿using SCSS.QueueEngine.QueueRepositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SCSS.QueueEngine.QueueModels;
+using SCSS.QueueEngine.QueueRepositories;
+
 
 namespace SCSS.QueueEngine.QueueEngines
 {
@@ -12,6 +9,8 @@ namespace SCSS.QueueEngine.QueueEngines
         #region Queue Repositories
 
         IQueueRepository<string> StringEngineRepo { get; }
+
+        IQueueRepository<CollectingRequestReminderQueueModel> CollectingRequestReminderQueueRepos { get; }
 
         #endregion
     }

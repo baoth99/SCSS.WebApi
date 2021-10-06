@@ -120,7 +120,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
             await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(resTuple.Item2);
 
             // Push notification to Seller App
-            return await _collectingRequestService.SendNotification(resTuple.Item1, resTuple.Item3);
+            return await _collectingRequestService.SendNotification(resTuple.Item1, resTuple.Item2, resTuple.Item3);
         }
 
         #endregion Receive the Collecting Request 
