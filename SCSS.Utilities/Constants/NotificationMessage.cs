@@ -41,5 +41,9 @@
         public static string SellerRequestCRTitle => "Tạo yêu cầu thu gom thành công";
 
         public static string SellerRequestCRBody(string code) => $"Yêu cầu thu gom {code} đã được tạo thành công. Hãy chờ người thu gom xác nhận đơn hàng";
+
+        public static string CollectorReminderTitle(string code) => $"Yêu cầu thu gom {code} của bạn sắp đến";
+
+        public static string CollectorReminderBody(string code, string addressName) => $"Yêu cầu thu gom {code} sắp đến, lịch hẹn thu gom ở {addressName}.";
     }
 }

@@ -21,6 +21,8 @@ namespace SCSS.AWSService.Models
 
         public TimeSpan? RemindTime { get; set; }
 
+        public string AddressName { get; set; }
+
     }
 
     public class PendingCollectingRequestCacheModel

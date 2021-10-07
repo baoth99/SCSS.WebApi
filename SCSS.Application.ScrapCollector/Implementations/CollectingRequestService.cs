@@ -358,14 +358,16 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
                 if (DateTimeVN.DATETIME_NOW.IsCompareDateTimeLessThan(requestDateTime))
                 {
-                    var timeRange = DateTimeVN.DATETIME_NOW.Subtract(requestDateTime).TotalMinutes;
-                    if (timeRange >= NumberConstant.Ten)
+                    var timeRange = requestDateTime.Subtract(DateTimeVN.DATETIME_NOW).TotalMinutes;
+                    if (timeRange >= NumberConstant.Twenty)
                     {
+                        var location = _locationRepository.GetById(collectingRequestEntity.LocationId);
                         var queueModel = new CollectingRequestReminderQueueModel()
                         {
                             Id = collectingRequestEntity.Id,
                             CollectingRequestCode = collectingRequestEntity.CollectingRequestCode,
                             CollectorId = collectingRequestEntity.CollectorAccountId,
+                            AddressName = location.AddressName,
                             FromTime = collectingRequestEntity.TimeFrom,
                             RequestDate = collectingRequestEntity.CollectingRequestDate,
                             ToTime = collectingRequestEntity.TimeTo,

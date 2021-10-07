@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SCSS.Application.ScrapCollector.Interfaces;
+using SCSS.Application.ScrapCollector.Models;
 using SCSS.Application.ScrapCollector.Models.SellCollectTransactionModels;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
@@ -89,9 +90,9 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapCollectorApiUrlDefinition.SellCollectTransactionApiUrl.GetTransactionHistories)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetCollectingTransactionHistory()
+        public async Task<BaseApiResponseModel> GetCollectingTransactionHistory([FromQuery] BaseFilterModel model)
         {
-            return await _sellCollectTransactionService.GetCollectingTransactionHistories();
+            return await _sellCollectTransactionService.GetCollectingTransactionHistories(model);
         }
 
         #endregion

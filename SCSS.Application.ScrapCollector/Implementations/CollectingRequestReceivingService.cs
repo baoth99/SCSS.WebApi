@@ -189,7 +189,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 return BaseApiResponse.NotFound();
             }
 
-            // TODO:
             var errorList = ValidateCancelCollectingRequest(entity.CollectorAccountId, entity.Status, model.CancelReason);
 
             if (errorList.Any())
@@ -236,6 +235,10 @@ namespace SCSS.Application.ScrapCollector.Implementations
             };
 
             await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(notifications);
+
+            // Remove reminder in RemiderCacche
+            var reminderCaches = _cacheListService.CollectingRequestReminderCache.GetMany(x => x.Id.Equals(entity.Id));
+            await _cacheListService.CollectingRequestReminderCache.RemoveRangeAsync(reminderCaches);
 
             return BaseApiResponse.OK();
         }

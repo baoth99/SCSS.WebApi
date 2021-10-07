@@ -277,6 +277,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 return BaseApiResponse.Error();
             }
 
+            // Remove CRCache in PendingCollectingRequestCache
             var cacheModel = new PendingCollectingRequestCacheModel()
             {
                 Id = entity.Id,
@@ -286,6 +287,11 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             };
             await _cacheListService.PendingCollectingRequestCache.RemoveAsync(cacheModel);
 
+            // Remove reminder in RemiderCacche
+            var remiderCaches = _cacheListService.CollectingRequestReminderCache.GetMany(x => x.Id.Equals(entity.Id));
+            await _cacheListService.CollectingRequestReminderCache.RemoveRangeAsync(remiderCaches);
+
+            // Push to AWS SQS
             await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(notifcations);
 
             return BaseApiResponse.OK();

@@ -71,6 +71,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                             CollectorId = item.CollectorId,
                             RequestDate = item.RequestDate,
                             RemindTime = remindTimeFrom,
+                            AddressName = item.AddressName
                         },
                         new CollectingRequestReminderCacheModel()
                         {
@@ -79,6 +80,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                             CollectorId = item.CollectorId,
                             RequestDate = item.RequestDate,
                             RemindTime = remindTimeTo,
+                            AddressName = item.AddressName
                         }
                     };
 

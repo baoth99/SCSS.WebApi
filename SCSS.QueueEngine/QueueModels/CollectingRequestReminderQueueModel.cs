@@ -10,6 +10,8 @@ namespace SCSS.QueueEngine.QueueModels
 
         public string CollectingRequestCode { get; set; }
 
+        public string AddressName { get; set; }
+
         public DateTime? RequestDate { get; set; }
 
         public TimeSpan? FromTime { get; set; }

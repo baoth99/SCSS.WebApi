@@ -31,6 +31,7 @@ namespace SCSS.WebApi.SystemConstants
         {
             public const string Get = Notification + "/get";
             public const string GetDetail = Notification + "/get-detail";
+            public const string GetNumberOfUnReadNotifications = Notification + "/unread-count";
             public const string Read = Notification + "/read";
         }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SCSS.Application.ScrapCollector.Interfaces;
+using SCSS.Application.ScrapCollector.Models;
 using SCSS.Application.ScrapCollector.Models.ScrapCategoryModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
@@ -242,18 +243,23 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// Gets the scrap categories.
         /// </summary>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> GetScrapCategories()
+        public async Task<BaseApiResponseModel> GetScrapCategories(BaseFilterModel model)
         {
-            var dataQuery = _scrapCategoryRepository.GetManyAsNoTracking(x => x.AccountId == UserAuthSession.UserSession.Id && x.Status == ScrapCategoryStatus.ACTIVE)
-                                                    .Select(x => new ScrapCategoryViewModel()
-                                                    {
-                                                        Id = x.Id,
-                                                        Name = x.Name,
-                                                        ImageUrl = x.ImageUrl
-                                                    }).OrderBy(x => x.Name);
+            var dataQuery = _scrapCategoryRepository.GetManyAsNoTracking(x => x.AccountId == UserAuthSession.UserSession.Id && x.Status == ScrapCategoryStatus.ACTIVE).OrderBy(x => x.Name);
             var totalRecord = await dataQuery.CountAsync();
 
-            return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataQuery.ToList());
+            var page = model.Page <= NumberConstant.Zero ? NumberConstant.One : model.Page;
+
+            var pageSize = model.PageSize <= NumberConstant.Zero ? NumberConstant.Ten : model.PageSize;
+
+            var dataResult = dataQuery.Skip((page - 1) * pageSize).Take(pageSize).Select(x => new ScrapCategoryViewModel()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                ImageUrl = x.ImageUrl
+            }).ToList();
+
+            return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
         }
 
         #endregion

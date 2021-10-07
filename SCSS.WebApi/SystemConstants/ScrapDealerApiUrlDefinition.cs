@@ -54,6 +54,7 @@
             public const string GetDealerBranchInformation = DealerInformation + "/get-branchs";
             public const string GetDealerBranchInformationDetail = DealerInformation + "/get-branch-detail";
             public const string ChangeDealerStatus = DealerInformation + "/change-status";
+            public const string GetDealerBranchs = DealerInformation + "/branchs";
 
         }
 
@@ -73,6 +74,7 @@
         {
             public const string Get = Notification + "/get";
             public const string GetDetail = Notification + "/get-detail";
+            public const string GetNumberOfUnReadNotifications = Notification + "/unread-count";
             public const string Read = Notification + "/read";
         }
     }

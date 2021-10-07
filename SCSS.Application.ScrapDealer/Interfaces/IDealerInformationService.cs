@@ -32,5 +32,11 @@ namespace SCSS.Application.ScrapDealer.Interfaces
         /// <param name="status">if set to <c>true</c> [status].</param>
         /// <returns></returns>
         Task<BaseApiResponseModel> ChangeDealerStatus(bool status);
+
+        /// <summary>
+        /// Gets the dealer branch infos.
+        /// </summary>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetDealerBranchs();
     }
 }

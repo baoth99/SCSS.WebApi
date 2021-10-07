@@ -237,5 +237,52 @@ namespace SCSS.Application.ScrapDealer.Implementations
         }
 
         #endregion
+
+        #region Get Dealer Branchs
+
+        /// <summary>
+        /// Gets the dealer branch infos.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> GetDealerBranchs()
+        {
+            // Check Account is Leader Dealer
+            if (UserAuthSession.UserSession.Role == AccountRole.DEALER_MEMBER)
+            {
+                return BaseApiResponse.Forbidden();
+            }
+
+            var dealerAccountId = UserAuthSession.UserSession.Id;
+
+            var dataQuery = _accountRepository.GetManyAsNoTracking(x => x.ManagedBy.Equals(dealerAccountId))
+                                                 .Join(_dealerInformationRepository.GetAllAsNoTracking(), x => x.Id, y => y.DealerAccountId,
+                                                        (x, y) => new
+                                                        {
+                                                            x.Id,
+                                                            y.DealerName
+                                                        }).OrderByDescending(x => x.DealerName);
+
+
+            var dealer = _dealerInformationRepository.GetAsNoTracking(x => x.DealerAccountId.Equals(dealerAccountId));
+
+            var dataResult = await dataQuery.Select(x => new DealerBranchViewModel()
+            {
+                DealerAccountId = x.Id,
+                DealerName = x.DealerName
+            }).ToListAsync();
+
+            dataResult.Insert(NumberConstant.Zero, new DealerBranchViewModel()
+            {
+                DealerAccountId = dealerAccountId,
+                DealerName = dealer.DealerName
+            });
+
+            var totalRecord = dataResult.Count();
+
+            return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
+        }
+
+        #endregion
+
     }
 }

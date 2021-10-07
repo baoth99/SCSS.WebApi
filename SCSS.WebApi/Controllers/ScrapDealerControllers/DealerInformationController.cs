@@ -145,5 +145,24 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         }
 
         #endregion
+
+        #region Get Dealer Branchs
+
+        /// <summary>
+        /// Gets the dealer branchs.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapDealerApiUrlDefinition.DealerInformationApiUrl.GetDealerBranchs)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetDealerBranchs()
+        {
+            return await _dealerInformationService.GetDealerBranchs();
+        }
+
+        #endregion
     }
 }

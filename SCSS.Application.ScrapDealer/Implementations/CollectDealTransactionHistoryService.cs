@@ -25,10 +25,32 @@ namespace SCSS.Application.ScrapDealer.Implementations
         {
             var dealerId = UserAuthSession.UserSession.Id;
 
+            if (UserAuthSession.UserSession.Role == AccountRole.DEALER_MEMBER)
+            {
+                if (!dealerId.Equals(model.DealerAccountId))
+                {
+                    return BaseApiResponse.Forbidden();
+                }
+            }
+            else
+            {
+                if (!dealerId.Equals(model.DealerAccountId))
+                {
+                    // Dealer Leader
+                    var dealer = _accountRepository.GetAsNoTracking(x => x.Id.Equals(model.DealerAccountId) &&
+                                                                             x.ManagedBy.Equals(UserAuthSession.UserSession.Id));
+                    if (dealer == null)
+                    {
+                        return BaseApiResponse.Forbidden();
+                    }
+                    dealerId = model.DealerAccountId.Value;
+                }
+            }
+
             var dealerRoleId = _roleRepository.GetAsNoTracking(x => x.Key == AccountRole.DEALER).Id;
             var collectorRoleId = _roleRepository.GetAsNoTracking(x => x.Key == AccountRole.COLLECTOR).Id;
 
-            var dataDB = await _collectDealTransactionRepository.GetAllAsNoTracking().ToListAsync();
+            var dataDB = await _collectDealTransactionRepository.GetManyAsNoTracking(x => x.DealerAccountId.Equals(dealerId)).ToListAsync();
 
             var dataQuery = dataDB.Where(x => (ValidatorUtil.IsBlank(model.FromDate) || x.CreatedTime.IsCompareDateTimeGreaterOrEqual(model.FromDate.ToDateTime())) &&
                                                                                        (ValidatorUtil.IsBlank(model.ToDate) || x.CreatedTime.IsCompareDateTimeLessOrEqual(model.ToDate.ToDateTime())) &&
@@ -47,7 +69,10 @@ namespace SCSS.Application.ScrapDealer.Implementations
 
             var totalRecord = dataQuery.Count();
 
-            var dataResult = dataQuery.Select(x => new CollectDealTransactionHistoryViewModel
+            var page = model.Page <= NumberConstant.Zero ? NumberConstant.One : model.Page;
+            var pageSize = model.PageSize <= NumberConstant.Zero ? NumberConstant.Ten : model.PageSize;
+
+            var dataResult = dataQuery.Skip((page - 1) * pageSize).Take(pageSize).Select(x => new CollectDealTransactionHistoryViewModel
             {
                 Id = x.TransactionId,
                 CollectorName = x.CollectorName,
@@ -61,7 +86,6 @@ namespace SCSS.Application.ScrapDealer.Implementations
         }
 
         #endregion
-
 
         #region Get Transaction History Detail
 

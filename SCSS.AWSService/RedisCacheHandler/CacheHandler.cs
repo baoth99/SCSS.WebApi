@@ -137,9 +137,12 @@ namespace SCSS.AWSService.RedisCacheHandler
         /// <param name="models">The models.</param>
         public async Task PushManyAsync(List<T> models)
         {
-            foreach (var item in models)
+            if (models.Any())
             {
-                await PushAsync(item);
+                foreach (var item in models)
+                {
+                    await PushAsync(item);
+                }
             }
         }
 
@@ -167,9 +170,12 @@ namespace SCSS.AWSService.RedisCacheHandler
         /// <param name="models">The models.</param>
         public void PushMany(List<T> models)
         {
-            foreach (var item in models)
+            if (models.Any())
             {
-                Push(item);
+                foreach (var item in models)
+                {
+                    Push(item);
+                }
             }
         }
 
@@ -188,6 +194,25 @@ namespace SCSS.AWSService.RedisCacheHandler
 
         #endregion
 
+        #region Remove Range Async
+
+        /// <summary>
+        /// Removes the range asynchronous.
+        /// </summary>
+        /// <param name="models">The models.</param>
+        public async Task RemoveRangeAsync(List<T> models)
+        {
+            if (models.Any())
+            {
+                foreach (var item in models)
+                {
+                    await RemoveAsync(item);
+                }
+            }
+        }
+
+        #endregion
+
         #region Remove
 
         /// <summary>
@@ -198,6 +223,24 @@ namespace SCSS.AWSService.RedisCacheHandler
         public void Remove(T model)
         {
             redisDB.ListRemove(cacheRedisKey.ToString(), model.ToJson());
+        }
+
+        #endregion
+
+        #region Remove Range 
+
+        /// <summary>
+        /// Removes the range.
+        /// </summary>
+        /// <param name="models">The models.</param>
+        public void RemoveRange(List<T> models) {
+            if (models.Any())
+            {
+                foreach (var item in models)
+                {
+                    Remove(item);
+                }
+            }
         }
 
         #endregion

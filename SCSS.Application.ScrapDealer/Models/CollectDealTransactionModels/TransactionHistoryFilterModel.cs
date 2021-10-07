@@ -1,10 +1,11 @@
-﻿using SCSS.Utilities.Constants;
-using SCSS.Validations.ValidationAttributes.CommonValidations;
+﻿using System;
 
 namespace SCSS.Application.ScrapDealer.Models.CollectDealTransactionModels
 {
-    public class TransactionHistoryFilterModel
+    public class TransactionHistoryFilterModel : BaseFilterModel
     {
+        public Guid? DealerAccountId { get; set; }
+
         public string FromDate { get; set; }
 
         public string ToDate { get; set; }

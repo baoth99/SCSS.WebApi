@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace SCSS.Aplication.BackgroundService.Interfaces
 {
     public interface IQueueHandlingService
     {
+        /// <summary>
+        /// Handles the collecting request reminder queue.
+        /// </summary>
+        /// <returns></returns>
         Task HandleCollectingRequestReminderQueue();
     }
 }

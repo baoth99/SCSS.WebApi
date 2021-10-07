@@ -11,6 +11,7 @@ using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConstants;
 using System;
 using System.Threading.Tasks;
+using CollectorBaseFilterModel = SCSS.Application.ScrapCollector.Models.BaseFilterModel;
 
 namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
 {
@@ -140,9 +141,9 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapCollectorApiUrlDefinition.ScrapCategoryUrl.Get)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetScrapCategories()
+        public async Task<BaseApiResponseModel> GetScrapCategories([FromQuery] CollectorBaseFilterModel model)
         {
-            return await _scrapCategoryService.GetScrapCategories();
+            return await _scrapCategoryService.GetScrapCategories(model);
         }
 
         #endregion

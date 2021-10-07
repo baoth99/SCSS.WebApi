@@ -61,8 +61,6 @@ namespace SCSS.Aplication.BackgroundService.Implementations
         {
             var cacheList = await _cacheListService.CollectingRequestReminderCache.GetAllAsync();
 
-            var user = _accountRepository.GetAllAsNoTracking().ToList();
-
             if (cacheList.Any())
             {
                 foreach (var item in cacheList)
@@ -79,14 +77,15 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                             var notification = new NotificationMessageQueueModel()
                             {
                                 AccountId = collectorInfo.Id,
-                                Title = "", // TODO:
-                                Body = "",
-                                DataCustom = null,
-                                NotiType = 0,
+                                Title = NotificationMessage.CollectorReminderTitle(item.CollectingRequestCode), 
+                                Body = NotificationMessage.CollectorReminderBody(item.CollectingRequestCode, item.AddressName),
+                                DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, item.Id.ToString()),
+                                NotiType = NumberConstant.Zero,
                                 DeviceId = collectorInfo.DeviceId
                             };
 
                             await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(notification);
+                            System.Console.WriteLine("DOne !!");
                         }
                     }
                 }
@@ -94,7 +93,5 @@ namespace SCSS.Aplication.BackgroundService.Implementations
         }
 
         #endregion
-
-
     }
 }

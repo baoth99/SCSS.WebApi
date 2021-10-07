@@ -151,7 +151,10 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                           }).OrderBy(x => x.DistanceVal);
             var totalRecord = dealerData.Count();
 
-            var dataResult = dealerData.Select(x => new DealerInformationViewModel()
+            var page = model.Page <= NumberConstant.Zero ? NumberConstant.One : model.Page;
+            var pageSize = model.PageSize <= NumberConstant.Zero ? NumberConstant.Ten : model.PageSize;
+
+            var dataResult = dealerData.Skip((page - 1) * pageSize).Take(pageSize).Select(x => new DealerInformationViewModel()
             {
                 DealerId =  x.DealerId,
                 DealerName = x.DealerName,

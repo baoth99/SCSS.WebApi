@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SCSS.Application.ScrapCollector.Models;
 using SCSS.Application.ScrapCollector.Models.SellCollectTransactionModels;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
@@ -18,8 +19,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <summary>
         /// Gets the collecting transaction histories.
         /// </summary>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> GetCollectingTransactionHistories()
+        public async Task<BaseApiResponseModel> GetCollectingTransactionHistories(BaseFilterModel model)
         {
             var collectorId = UserAuthSession.UserSession.Id;
 
@@ -48,7 +50,10 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             var totalRecord = await dataQuery.CountAsync();
 
-            var dataResult = dataQuery.Select(x => new SellCollectTransactionHistoryViewModel()
+            var page = model.Page <= NumberConstant.Zero ? NumberConstant.One : model.Page;
+            var pageSize = model.PageSize <= NumberConstant.Zero ? NumberConstant.Ten : model.PageSize;
+
+            var dataResult = dataQuery.Skip((page - 1) * pageSize).Take(pageSize).Select(x => new SellCollectTransactionHistoryViewModel()
             {
                 CollectingRequestId = x.CollectingRequestId,
                 CollectingRequestCode = x.CollectingRequestCode,

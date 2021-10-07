@@ -67,10 +67,23 @@ namespace SCSS.AWSService.RedisCacheHandler
         Task RemoveAsync(T model);
 
         /// <summary>
+        /// Removes the range asynchronous.
+        /// </summary>
+        /// <param name="models">The models.</param>
+        /// <returns></returns>
+        Task RemoveRangeAsync(List<T> models);
+
+        /// <summary>
         /// Removes the specified model.
         /// </summary>
         /// <param name="model">The model.</param>
         void Remove(T model);
+
+        /// <summary>
+        /// Removes the range.
+        /// </summary>
+        /// <param name="models">The models.</param>
+        void RemoveRange(List<T> models);
 
         /// <summary>
         /// Removes the redis key asynchronous.

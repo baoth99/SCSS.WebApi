@@ -97,5 +97,24 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         }
 
         #endregion
+
+        #region Get Number Of UnRead Notifications
+
+        /// <summary>
+        /// Gets the number of un read notifications.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapDealerApiUrlDefinition.NotificationApiUrl.GetNumberOfUnReadNotifications)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetNumberOfUnReadNotifications()
+        {
+            return await _notificationService.GetNumberOfUnReadNotifications();
+        }
+
+        #endregion
     }
 }

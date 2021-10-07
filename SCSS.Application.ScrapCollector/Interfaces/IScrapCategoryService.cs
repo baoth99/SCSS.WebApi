@@ -1,4 +1,5 @@
-﻿using SCSS.Application.ScrapCollector.Models.ScrapCategoryModels;
+﻿using SCSS.Application.ScrapCollector.Models;
+using SCSS.Application.ScrapCollector.Models.ScrapCategoryModels;
 using SCSS.Utilities.ResponseModel;
 using System;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         /// Gets the scrap categories.
         /// </summary>
         /// <returns></returns>
-        Task<BaseApiResponseModel> GetScrapCategories();
+        Task<BaseApiResponseModel> GetScrapCategories(BaseFilterModel model);
 
         /// <summary>
         /// Gets the scrap category detail.

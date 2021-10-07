@@ -1,4 +1,5 @@
-﻿using SCSS.Application.ScrapCollector.Models.SellCollectTransactionModels;
+﻿using SCSS.Application.ScrapCollector.Models;
+using SCSS.Application.ScrapCollector.Models.SellCollectTransactionModels;
 using SCSS.Utilities.ResponseModel;
 using System;
 using System.Threading.Tasks;
@@ -24,8 +25,9 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         /// <summary>
         /// Gets the collecting transaction histories.
         /// </summary>
+        /// <param name="model">The model.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> GetCollectingTransactionHistories();
+        Task<BaseApiResponseModel> GetCollectingTransactionHistories(BaseFilterModel model);
 
         /// <summary>
         /// Gets the collecting transaction detail history.

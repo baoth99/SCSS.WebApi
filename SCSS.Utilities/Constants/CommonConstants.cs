@@ -10,6 +10,8 @@ namespace SCSS.Utilities.Constants
         public const int Five = 5;
         public const int Seven = 7;
         public const int Ten = 10;
+        public const int Fifteen = 15;
+        public const int Twenty = 20;
         public const int TwentyFour = 24;
         public const int Sixty = 60;
         public const int OneThousand = 1000;
@@ -210,6 +212,12 @@ namespace SCSS.Utilities.Constants
         public const string JpegImageContentType = "image/jpeg";
     }
 
+    public class ReminderType
+    {
+        public const int PreviousFromTime = 0;
+        public const int LaterToTime = 1;
+    }
+
     public class SellerAppScreen
     {
         public const string ActivityScreen = "1";
@@ -217,7 +225,8 @@ namespace SCSS.Utilities.Constants
 
     public class CollectorAppScreen
     {
-        public const string HistoryScreen = "1";
+        public const string CollectingRequestScreen = "1";
+        public const string HistoryScreen = "2";
     }
 
     public class DealerAppScreen

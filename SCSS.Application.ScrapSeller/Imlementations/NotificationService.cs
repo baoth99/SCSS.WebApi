@@ -13,9 +13,7 @@ using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapSeller.Imlementations
@@ -110,6 +108,21 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         public async Task<BaseApiResponseModel> GetNotificationDetail(Guid id)
         {
             return BaseApiResponse.OK();
+        }
+
+        #endregion
+
+        #region Get Number Of UnRead Notifications
+
+        /// <summary>
+        /// Gets the number of un read notifications.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> GetNumberOfUnReadNotifications()
+        {
+            var dataQuery = _notificationRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id) && !x.IsRead);
+            var total = await dataQuery.CountAsync();
+            return BaseApiResponse.OK(totalRecord: total, resData: total);
         }
 
         #endregion

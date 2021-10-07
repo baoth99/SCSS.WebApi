@@ -3,7 +3,7 @@ using SCSS.Validations.ValidationAttributes;
 
 namespace SCSS.Application.ScrapCollector.Models.DealerInformationModels
 {
-    public class DealerInformationFilterModel
+    public class DealerInformationFilterModel : BaseFilterModel
     {
         public string SearchWord { get; set; }
 

@@ -67,6 +67,11 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         private readonly ISQSPublisherService _SQSPublisherService;
 
+        /// <summary>
+        /// The cache list service
+        /// </summary>
+        private readonly ICacheListService _cacheListService;
+
         #endregion
 
         #region Constructor
@@ -79,8 +84,10 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="logger">The logger.</param>
         /// <param name="cacheService">The cache service.</param>
         /// <param name="SQSPublisherService">The SQS publisher service.</param>
+        /// <param name="cacheListService">The cache list service.</param>
         public SellCollectTransactionService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
-                                             IStringCacheService cacheService, ISQSPublisherService SQSPublisherService) : base(unitOfWork, userAuthSession, logger, cacheService)
+                                             IStringCacheService cacheService, ISQSPublisherService SQSPublisherService,
+                                             ICacheListService cacheListService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _sellCollectTransactionRepository = unitOfWork.SellCollectTransactionRepository;
             _sellCollectTransactionDetailRepository = unitOfWork.SellCollectTransactionDetailRepository;
@@ -90,6 +97,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             _transactionAwardAmountRepository = unitOfWork.TransactionAwardAmountRepository;
             _SQSPublisherService = SQSPublisherService;
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
+            _cacheListService = cacheListService;
         }
 
         #endregion
@@ -151,9 +159,12 @@ namespace SCSS.Application.ScrapCollector.Implementations
             {
                 return BaseApiResponse.Error();
             }
+            // Remove Remider in ReminderCache
+            var remiderCaches = _cacheListService.CollectingRequestReminderCache.GetMany(x => x.Id.Equals(collectingRequest.Id));
+            await _cacheListService.CollectingRequestReminderCache.RemoveRangeAsync(remiderCaches);
 
 
-
+            // Create Entity
             var sellCollectTransactionEntity = new SellCollectTransaction()
             {
                 CollectingRequestId = model.CollectingRequestId,
@@ -210,7 +221,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     DeviceId = UserAuthSession.UserSession.DeviceId,
                     Title = NotificationMessage.CompletedSellerCRTitle, 
                     Body = NotificationMessage.CompletedCollectorCRBody(collectingRequest.CollectingRequestCode), 
-                    DataCustom = null, // TODO:
+                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, collectingRequest.Id.ToString()),
                     NotiType = CollectingRequestStatus.COMPLETED
                 },
                 new NotificationMessageQueueModel()
@@ -219,7 +230,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     DeviceId = sellerAccount.DeviceId,
                     Title = NotificationMessage.CompletedSellerCRTitle, 
                     Body = NotificationMessage.CompletedSellerCRBody(collectingRequest.CollectingRequestCode), 
-                    DataCustom = null, // TODO:
+                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, collectingRequest.Id.ToString()),
                     NotiType = CollectingRequestStatus.COMPLETED
                 }
             };

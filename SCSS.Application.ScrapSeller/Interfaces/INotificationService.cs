@@ -26,5 +26,11 @@ namespace SCSS.Application.ScrapSeller.Interfaces
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
         Task<BaseApiResponseModel> ReadNotification(Guid id);
+
+        /// <summary>
+        /// Gets the number of un read notifications.
+        /// </summary>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetNumberOfUnReadNotifications();
     }
 }
