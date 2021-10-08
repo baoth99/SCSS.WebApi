@@ -1,9 +1,6 @@
 ﻿using SCSS.Application.ScrapCollector.Models.AccountModels;
 using SCSS.Utilities.ResponseModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapCollector.Interfaces
@@ -36,5 +33,11 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         /// </summary>
         /// <returns></returns>
         Task<BaseApiResponseModel> GetCollectorAccountInfo();
+
+        /// <summary>
+        /// Gets the qr code.
+        /// </summary>
+        /// <returns></returns>
+        Task<MemoryStream> GetQRCode();
     }
 }

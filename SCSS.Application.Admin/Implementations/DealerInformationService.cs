@@ -49,7 +49,7 @@ namespace SCSS.Application.Admin.Implementations
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="fcmService"></param>
-        public DealerInformationService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
+        public DealerInformationService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
         {
             _accountRepository = unitOfWork.AccountRepository;
             _dealerInformationRepository = unitOfWork.DealerInformationRepository;

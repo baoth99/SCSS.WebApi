@@ -56,7 +56,7 @@ namespace SCSS.Application.Admin.Implementations
 
         #region Constructor
 
-        public SystemConfigService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, fcmService)
+        public SystemConfigService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger)
         {
             _transactionAwardAmountRepository = unitOfWork.TransactionAwardAmountRepository;
             _transactionServiceFeePercentRepository = unitOfWork.TransactionServiceFeePercentRepository;

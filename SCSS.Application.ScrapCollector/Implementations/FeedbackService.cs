@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SCSS.Application.ScrapSeller.Interfaces;
-using SCSS.Application.ScrapSeller.Models.FeedbackModels;
+using SCSS.Application.ScrapCollector.Interfaces;
+using SCSS.Application.ScrapCollector.Models.FeedbackModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
@@ -12,10 +12,12 @@ using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace SCSS.Application.ScrapSeller.Imlementations
+namespace SCSS.Application.ScrapCollector.Implementations
 {
     public class FeedbackService : BaseService, IFeedbackService
     {
@@ -24,12 +26,12 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <summary>
         /// The feedback repository
         /// </summary>
-        private IRepository<Feedback> _feedbackRepository;
+        private readonly IRepository<Feedback> _feedbackRepository;
 
         /// <summary>
-        /// The sell collect transaction repository
+        /// The collect deal transaction repository
         /// </summary>
-        private IRepository<SellCollectTransaction> _sellCollectTransactionRepository;
+        private readonly IRepository<CollectDealTransaction> _collectDealTransactionRepository;
 
         /// <summary>
         /// The account repository
@@ -37,9 +39,9 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         private IRepository<Account> _accountRepository;
 
         /// <summary>
-        /// The collecting request repository
+        /// The dealer information repository
         /// </summary>
-        private IRepository<CollectingRequest> _collectingRequestRepository;
+        private IRepository<DealerInformation> _dealerInformationRepository;
 
         #endregion
 
@@ -51,36 +53,34 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        /// <param name="cacheService"></param>
+        /// <param name="cacheService">The cache service.</param>
         public FeedbackService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _feedbackRepository = unitOfWork.FeedbackRepository;
-            _sellCollectTransactionRepository = unitOfWork.SellCollectTransactionRepository;
+            _collectDealTransactionRepository = unitOfWork.CollectDealTransactionRepository;
             _accountRepository = unitOfWork.AccountRepository;
-            _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
+            _dealerInformationRepository = unitOfWork.DealerInformationRepository;
         }
 
         #endregion
 
-        #region Create Sell-Collect Transaction Feedback
+        #region Create Dealer Feedback
 
         /// <summary>
-        /// Creates the transaction feedback.
+        /// Creates the dealer feedback.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> CreateSellCollectTransactionFeedback(SellCollecTransFeedbackCreateModel model)
+        public async Task<BaseApiResponseModel> CreateDealerFeedback(FeedbackTransactionCreateModel model)
         {
-            var transaction = _sellCollectTransactionRepository.GetAsNoTracking(x => x.Id.Equals(model.SellCollectTransactionId));
+            var transaction = _collectDealTransactionRepository.GetAsNoTracking(x => x.Id.Equals(model.CollectDealTransId));
 
             if (transaction == null)
             {
                 return BaseApiResponse.NotFound();
             }
 
-            var collectingRequest = _collectingRequestRepository.GetAsNoTracking(x => x.Id.Equals(transaction.CollectingRequestId));
-
-            var feedbackEntity = await _feedbackRepository.GetAsyncAsNoTracking(x => x.SellCollectTransactionId.Equals(model.SellCollectTransactionId));
+            var feedbackEntity = await _feedbackRepository.GetAsyncAsNoTracking(x => x.CollectDealTransactionId.Equals(model.CollectDealTransId));
 
             if (feedbackEntity == null)
             {
@@ -94,12 +94,12 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
                 var entity = new Feedback()
                 {
-                    SellCollectTransactionId = model.SellCollectTransactionId,
+                    CollectDealTransactionId = model.CollectDealTransId,
                     Type = FeedbackType.Transaction,
-                    SellingAccountId = UserAuthSession.UserSession.Id,
-                    BuyingAccountId = collectingRequest.CollectorAccountId,
+                    SellingAccountId = transaction.CollectorAccountId,
+                    BuyingAccountId = transaction.DealerAccountId,
                     Rate = model.Rate.ToFloatValue(),
-                    SellingReview = StringUtils.GetString(model.SellingReview),
+                    SellingReview = model.Review
                 };
 
                 _feedbackRepository.Insert(entity);
@@ -111,7 +111,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                     return BaseApiResponse.Error(SystemMessageCode.FixedData);
                 }
 
-                feedbackEntity.SellingReview = model.SellingReview;
+                feedbackEntity.SellingReview = model.Review;
                 feedbackEntity.Rate = model.Rate;
 
                 _feedbackRepository.Update(feedbackEntity);
@@ -119,30 +119,29 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             await UnitOfWork.CommitAsync();
 
-            await UpdateCollectorRating(collectingRequest.CollectorAccountId);
+            await UpdateDealerRating(transaction.DealerAccountId);
 
             return BaseApiResponse.OK();
         }
 
-
         /// <summary>
-        /// Updates the collector rating.
+        /// Updates the dealer rating.
         /// </summary>
-        /// <param name="collectorId">The collector identifier.</param>
-        private async Task UpdateCollectorRating(Guid? collectorId)
+        /// <param name="dealerId">The dealer identifier.</param>
+        private async Task UpdateDealerRating(Guid? dealerId)
         {
-            var feedbacks = _feedbackRepository.GetManyAsNoTracking(x => x.BuyingAccountId.Equals(collectorId)).Select(x => x.Rate);
+            var feedbacks = _feedbackRepository.GetManyAsNoTracking(x => x.BuyingAccountId.Equals(dealerId)).Select(x => x.Rate);
             var rating = await feedbacks.AverageAsync();
 
-            var collectorAccount = _accountRepository.GetById(collectorId);
-            collectorAccount.Rating = rating;
+            var dealer = _dealerInformationRepository.GetAsNoTracking(x => x.DealerAccountId.Equals(dealerId));
+            dealer.Rating = rating.Value;
 
-            _accountRepository.Update(collectorAccount);
+            _dealerInformationRepository.Update(dealer);
 
             await UnitOfWork.CommitAsync();
         }
 
-        #endregion
+        #endregion Create Dealer Feedback
 
         #region Create Feedback To Admin
 
@@ -153,18 +152,18 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> CreateFeedbackToAdmin(FeedbackAdminCreateModel model)
         {
-            var transaction = _sellCollectTransactionRepository.GetAsNoTracking(x => x.Id.Equals(model.SellCollectTransactionId));
+            var transaction = _collectDealTransactionRepository.GetAsNoTracking(x => x.Id.Equals(model.CollectDealTransactionId));
 
             if (transaction == null)
             {
                 return BaseApiResponse.NotFound();
             }
 
-            var feedbackEntity = await _feedbackRepository.GetAsyncAsNoTracking(x => x.SellCollectTransactionId.Equals(model.SellCollectTransactionId));
+            var feedbackEntity = await _feedbackRepository.GetAsyncAsNoTracking(x => x.CollectDealTransactionId.Equals(model.CollectDealTransactionId));
 
             if (feedbackEntity == null)
             {
-                // Check Time that Seller Can Give feedback
+                // Check Time that Collector Can Give feedback
                 var betweenDays = DateTimeUtils.IsMoreThanPastDays(transaction.CreatedTime, NumberConstant.Five);
 
                 if (betweenDays)
@@ -174,10 +173,9 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
                 var entity = new Feedback()
                 {
-                    SellCollectTransactionId = model.SellCollectTransactionId,
+                    CollectDealTransactionId = model.CollectDealTransactionId,
                     Type = FeedbackType.FeedbackToAdmin,
                     SellingAccountId = UserAuthSession.UserSession.Id,
-
                     SellingFeedback = StringUtils.GetString(model.SellingFeedback)
                 };
 
@@ -197,7 +195,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             }
 
             await UnitOfWork.CommitAsync();
-
 
             return BaseApiResponse.OK();
         }

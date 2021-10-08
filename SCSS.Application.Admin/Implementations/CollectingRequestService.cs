@@ -6,11 +6,8 @@ using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
-using SCSS.FirebaseService.Interfaces;
-using SCSS.ORM.Dapper.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
-using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
@@ -18,7 +15,6 @@ using SCSS.Utilities.ResponseModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.Admin.Implementations
@@ -63,8 +59,7 @@ namespace SCSS.Application.Admin.Implementations
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="fcmService">The FCM service.</param>
-        public CollectingRequestService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, 
-                                        IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
+        public CollectingRequestService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _accountRepository = unitOfWork.AccountRepository;

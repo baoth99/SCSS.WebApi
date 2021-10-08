@@ -6,7 +6,6 @@ using SCSS.AWSService.Models;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
-using SCSS.FirebaseService.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
@@ -52,8 +51,7 @@ namespace SCSS.Application.Admin.Implementations
         #region Constructor
 
         public ImageSliderService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger,
-                                  IStorageBlobS3Service storageBlobS3Service, IFCMService fcmService,
-                                  ICacheListService cacheListService) : base(unitOfWork, userAuthSession, logger, fcmService)
+                                  IStorageBlobS3Service storageBlobS3Service, ICacheListService cacheListService) : base(unitOfWork, userAuthSession, logger)
         {
             _imageSliderRepository = unitOfWork.ImageSliderRepository;
             _storageBlobS3Service = storageBlobS3Service;

@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SCSS.Utilities.Extensions;
-using SCSS.FirebaseService.Interfaces;
 
 namespace SCSS.Application.Admin.Implementations
 {
@@ -59,7 +58,7 @@ namespace SCSS.Application.Admin.Implementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        public ScrapCategoryService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IFCMService fcmService) : base(unitOfWork, userAuthSession, logger, fcmService)
+        public ScrapCategoryService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
         {
             _scrapCategoryRepository = unitOfWork.ScrapCategoryRepository;
             _scrapCategoryDetailRepository = unitOfWork.ScrapCategoryDetailRepository;

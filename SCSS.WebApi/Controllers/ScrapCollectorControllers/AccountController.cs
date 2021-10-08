@@ -6,6 +6,7 @@ using SCSS.Application.ScrapCollector.Models.AccountModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
+using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
@@ -143,6 +144,34 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         public async Task<BaseApiResponseModel> GetCollectorAccountInfo()
         {
             return await _accountService.GetCollectorAccountInfo();
+        }
+
+        #endregion
+
+        #region Get QR Code
+
+        /// <summary>
+        /// Gets the qr code.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapCollectorApiUrlDefinition.AccountApiUrl.GetQRCode)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<IActionResult> GetQRCode()
+        {
+            var result = await _accountService.GetQRCode();
+            try
+            {
+                var qrCode = result.ToByteArray();
+                return File(qrCode, ContentTypeString.PngImageContentType);
+            }
+            finally
+            {
+                result.Dispose();
+            }
         }
 
         #endregion

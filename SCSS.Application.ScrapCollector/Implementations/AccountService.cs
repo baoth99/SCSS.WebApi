@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SCSS.Application.ScrapCollector.Interfaces;
 using SCSS.Application.ScrapCollector.Models.AccountModels;
 using SCSS.AWSService.Interfaces;
@@ -12,6 +13,7 @@ using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -238,6 +240,26 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                                  TotalPoint = x.TotalPoint,
                                                                                              }).FirstOrDefaultAsync();
             return BaseApiResponse.OK(accountInfo);
+        }
+
+        #endregion
+
+        #region Get QR Code
+
+        /// <summary>
+        /// Gets the qr code.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<MemoryStream> GetQRCode()
+        {
+            var collectorId = UserAuthSession.UserSession.Id;
+
+            var qrCode = await Task.Run(() =>
+            {
+                return QRCodeHelper.GenerateQRCode(collectorId.ToString());
+            });
+
+            return qrCode;
         }
 
         #endregion

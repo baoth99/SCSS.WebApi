@@ -9,9 +9,10 @@ namespace SCSS.WebApi.SystemConstants
         private const string CollectingRequest = "collecting-request";
         private const string Hub = "/hubs/collector";
         private const string SellCollectTransaction = "transaction/sell-colect";
+        private const string CollectDealTransaction = "transaction/collect-deal";
         private const string Statistic = "statistic";
         private const string Notification = "notification";
-
+        private const string Feedback = "feedback";
 
         public static class AccountApiUrl
         {
@@ -20,6 +21,7 @@ namespace SCSS.WebApi.SystemConstants
             public const string InfoDetail = Account + "/collector-info";
             public const string UpdateDeviceId = Account + "/device-id";
             public const string UploadImage = Account + "/upload-image";
+            public const string GetQRCode = Account + "/qr-code";
         }
 
         public static class StatisticApiUrl
@@ -56,6 +58,12 @@ namespace SCSS.WebApi.SystemConstants
             public const string GetTransactionHistoryDetail = SellCollectTransaction + "/history-detail";
         }
 
+        public static class CollectDealTransactionApiUrl
+        {
+            public const string GetTransactions = CollectDealTransaction + "/histories";
+            public const string GetTransactionHistoryDetail = CollectDealTransaction + "/history-detail";
+        }
+
         public static class CollectingRequestApiUrl
         {
             public const string Get = CollectingRequest + "/get";
@@ -84,6 +92,12 @@ namespace SCSS.WebApi.SystemConstants
             public const string Update = ScrapCategory + "/update";
             public const string UploadImage = ScrapCategory + "/upload-image";
             public const string Remove = ScrapCategory + "/remove";
+        }
+
+        public static class FeedbackApiUrl
+        {
+            public const string CreateTransFeedback = Feedback + "/trans-feedback/create";
+            public const string CreateFeedbackToAdmin = Feedback + "/feedback-admin/create";
         }
     }
 }

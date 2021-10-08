@@ -53,6 +53,8 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IDealerPromotionService, SCSS.Application.ScrapCollector.Implementations.DealerPromotionService>();
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.ISellCollectTransactionService, SCSS.Application.ScrapCollector.Implementations.SellCollectTransactionService>();
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IStatisticService, SCSS.Application.ScrapCollector.Implementations.StatisticService>();
+            services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.ICollectDealTransactionService, SCSS.Application.ScrapCollector.Implementations.CollectDealTransactionService>();
+            services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IFeedbackService, SCSS.Application.ScrapCollector.Implementations.FeedbackService>();
 
             #endregion Collector Application
 
@@ -76,9 +78,15 @@ namespace SCSS.WebApi.SystemConfigurations
 
             #endregion Seller Application           
 
+            #region Hosted Service
+
             services.AddHostedService<TrailCollectingRequestHostedService>();
             services.AddHostedService<ScanExpiredPromotionHostedService>();
             services.AddHostedService<CRReminderHostService>();
+
+            #endregion
+
+
         }
     }
 }
