@@ -43,6 +43,8 @@ namespace SCSS.Data.EF.UnitOfWork
 
         private IRepository<Feedback> _feedbackRepository;
 
+        private IRepository<FeedbackToSystem> _feedbackToSystemRepository;
+
         private IRepository<ImageSlider> _imageSliderRepository;
 
         private IRepository<Location> _locationRepository;
@@ -68,6 +70,8 @@ namespace SCSS.Data.EF.UnitOfWork
         private IRepository<TransactionAwardAmount> _transactionAwardAmountRepository;
 
         private IRepository<CollectingRequestRejection> _collectingRequestRejectionRepository;
+
+        private IRepository<CollectorCancelReason> _collectorCancelReasonRepository;
 
         #endregion
 
@@ -103,6 +107,8 @@ namespace SCSS.Data.EF.UnitOfWork
 
         public IRepository<Feedback> FeedbackRepository => _feedbackRepository ??= (_feedbackRepository = new Repository<Feedback>(AppDbContext));
 
+        public IRepository<FeedbackToSystem> FeedbackToSystemRepository => _feedbackToSystemRepository ??= (_feedbackToSystemRepository = new Repository<FeedbackToSystem>(AppDbContext));
+
         public IRepository<ImageSlider> ImageSliderRepository => _imageSliderRepository ??= (_imageSliderRepository = new Repository<ImageSlider>(AppDbContext));
 
         public IRepository<Location> LocationRepository => _locationRepository ??= (_locationRepository = new Repository<Location>(AppDbContext));
@@ -129,6 +135,7 @@ namespace SCSS.Data.EF.UnitOfWork
 
         public IRepository<CollectingRequestRejection> CollectingRequestRejectionRepository => _collectingRequestRejectionRepository ??= (_collectingRequestRejectionRepository = new Repository<CollectingRequestRejection>(AppDbContext));
 
+        public IRepository<CollectorCancelReason> CollectorCancelReasonRepository => _collectorCancelReasonRepository ??= (_collectorCancelReasonRepository = new Repository<CollectorCancelReason>(AppDbContext));
         #endregion
 
         #region Commit Async

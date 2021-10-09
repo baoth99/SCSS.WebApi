@@ -39,8 +39,11 @@ namespace SCSS.Application.ScrapSeller.Models.ActivityModels
 
         public string Note { get; set; }
 
+        public string CancelReasoin { get; set; }
         // Transaction Information
         public TransactionInformation Transaction { get; set; }
+
+        public FeedbackToSystemInfoResponse FeedbackToSystemInfo { get; set; }
 
         public string DoneActivityDate { get; set; }
 
@@ -52,7 +55,11 @@ namespace SCSS.Application.ScrapSeller.Models.ActivityModels
 
     public class CollectorInformation
     {
+        public Guid? CollectorId { get; set; }
+
         public string Name { get; set; }
+
+        public string ImageURL { get; set; }
 
         public string  Phone { get; set; }
 
@@ -83,6 +90,15 @@ namespace SCSS.Application.ScrapSeller.Models.ActivityModels
         public int FeedbackStatus { get; set; }
 
         public float? RatingFeedback { get; set; }
+    }
+
+    public class FeedbackToSystemInfoResponse
+    {
+        public int FeedbackStatus { get; set; }
+
+        public string SellingFeedback { get; set; }
+
+        public string AdminReply { get; set; }
     }
 
     public class TransactionInformationDetail

@@ -79,5 +79,31 @@ namespace SCSS.Utilities.Helper
             };
         }
 
+        public static int GetFeedbackToSystemStatus(int? collectingRequestStatus,
+                                                    DateTime? approvedTime,
+                                                    Guid? feedbackToSysId,
+                                                    string adminReply)
+        {
+            if (collectingRequestStatus == CollectingRequestStatus.PENDING ||
+                (collectingRequestStatus == CollectingRequestStatus.CANCEL_BY_SELLER) && ValidatorUtil.IsBlank(approvedTime))
+            {
+                return FeedbackToSystemStatus.CanNotGiveFeedback;
+            }
+
+            if (ValidatorUtil.IsNull(feedbackToSysId))
+            {
+                return FeedbackToSystemStatus.CanGiveFeedback;
+            }
+
+            if (!ValidatorUtil.IsNull(feedbackToSysId))
+            {
+                if (!ValidatorUtil.IsBlank(adminReply))
+                {
+                    return FeedbackToSystemStatus.AdminReplied;
+                }
+            }
+            return FeedbackToSystemStatus.HaveGivenFeedback;
+        }
+
     }
 }

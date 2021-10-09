@@ -96,7 +96,8 @@ namespace SCSS.Application.Admin.Implementations
                 OperatingTimeFrom = model.OperatingTimeFrom.ToTimeSpan(),
                 OperatingTimeTo = model.OperatingTimeTo.ToTimeSpan(),
                 CancelTimeRange = model.CancelRangeTime,
-                TimeRangeRequestNow = model.TimeRangeRequestNow
+                TimeRangeRequestNow = model.TimeRangeRequestNow,
+                FeedbackDealine = model.FeedbackDeadline,
             };
 
             var insertedEntity = _collectingRequestConfigRepository.Insert(newConfig);
@@ -111,7 +112,8 @@ namespace SCSS.Application.Admin.Implementations
                 model.RequestQuantity,
                 model.MaxNumberOfRequestDays,
                 model.CancelRangeTime,
-                model.TimeRangeRequestNow
+                model.TimeRangeRequestNow,
+                model.FeedbackDeadline
             };
 
             var dic = CommonUtils.ObjToDictionary(cacheModel).ToDictionary(x => x.Key.ToEnum<CacheRedisKey>(), y => y.Value);
@@ -150,12 +152,15 @@ namespace SCSS.Application.Admin.Implementations
                                                                             x.ReceiveQuantity,
                                                                             x.MaxNumberOfRequestDays,
                                                                             x.UpdatedTime,
+                                                                            x.CreatedTime,
                                                                             x.OperatingTimeFrom,
                                                                             x.OperatingTimeTo,
                                                                             y.Name,
                                                                             x.CancelTimeRange,
                                                                             x.TimeRangeRequestNow,
+                                                                            x.FeedbackDealine
                                                                         })
+                                                                  .OrderByDescending(x => x.CreatedTime)
                                                                   .Select(x => new SystemConfigHistoryViewModel()
                                                                   {
                                                                       RequestQuantity = x.RequestQuantity,
@@ -166,6 +171,7 @@ namespace SCSS.Application.Admin.Implementations
                                                                       DeActiveTime = x.UpdatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
                                                                       DeActiveBy = x.Name,
                                                                       CancelTimeRange = x.CancelTimeRange,
+                                                                      FeedbackDeadline = x.FeedbackDealine,
                                                                       TimeRangeRequestNow = x.TimeRangeRequestNow
                                                                   }).ToList();
             var dataResult = new SystemConfigViewModel()
@@ -176,6 +182,7 @@ namespace SCSS.Application.Admin.Implementations
                 MaxNumberOfRequestDays = configIsUsing.MaxNumberOfRequestDays,
                 CancelTimeRange = configIsUsing.CancelTimeRange,
                 TimeRangeRequestNow = configIsUsing.TimeRangeRequestNow,
+                FeedbackDeadline = configIsUsing.FeedbackDealine,
                 ActiveTime = configIsUsing.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time_tt),
                 OperatingTimeFrom = configIsUsing.OperatingTimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
                 OperatingTimeTo = configIsUsing.OperatingTimeTo.ToStringFormat(TimeSpanFormat.HH_MM),

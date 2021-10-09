@@ -21,6 +21,8 @@ namespace SCSS.Application.Admin.Models.SystemConfigModels
 
         public int TimeRangeRequestNow { get; set; }
 
+        public int FeedbackDeadline { get; set; }
+
         public string ActiveTime { get; set; }
 
         public List<SystemConfigHistoryViewModel> Histories { get; set; }
@@ -42,6 +44,8 @@ namespace SCSS.Application.Admin.Models.SystemConfigModels
         public int CancelTimeRange { get; set; }
 
         public int TimeRangeRequestNow { get; set; }
+
+        public int FeedbackDeadline { get; set; }
 
         public string DeActiveTime { get; set; }
 

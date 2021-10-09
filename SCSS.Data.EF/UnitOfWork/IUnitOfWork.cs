@@ -65,6 +65,14 @@ namespace SCSS.Data.EF.UnitOfWork
         IRepository<Feedback> FeedbackRepository { get; }
 
         /// <summary>
+        /// Gets the feedback to system repository.
+        /// </summary>
+        /// <value>
+        /// The feedback to system repository.
+        /// </value>
+        IRepository<FeedbackToSystem> FeedbackToSystemRepository { get; }
+
+        /// <summary>
         /// Gets the image slider repository.
         /// </summary>
         /// <value>
@@ -167,6 +175,14 @@ namespace SCSS.Data.EF.UnitOfWork
         /// The collecting request rejection repository.
         /// </value>
         IRepository<CollectingRequestRejection> CollectingRequestRejectionRepository { get; }
+
+        /// <summary>
+        /// Gets the collector cancel reason repository.
+        /// </summary>
+        /// <value>
+        /// The collector cancel reason repository.
+        /// </value>
+        IRepository<CollectorCancelReason> CollectorCancelReasonRepository { get; }
 
         #endregion
 

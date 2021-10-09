@@ -14,6 +14,16 @@ namespace SCSS.WebApi.SystemConstants
         private const string TransactionServiceFee = "transaction-fee";
         private const string ColletingRequest = "collecting-request";
         private const string SystemConfig = "sys-conf";
+        private const string CollectorCancelReason = "cancel-reason";
+
+        public static class CollectorCancelReasonApiUrl
+        {
+            public const string Create = CollectorCancelReason + "/create";
+            public const string Update = CollectorCancelReason + "/update";
+            public const string Delete = CollectorCancelReason + "/delete";
+            public const string Get = CollectorCancelReason + "/get";
+        }
+
 
         public static class TransactionAwardAmountApiUrl
         {

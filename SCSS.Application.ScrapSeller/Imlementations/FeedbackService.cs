@@ -27,6 +27,11 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         private IRepository<Feedback> _feedbackRepository;
 
         /// <summary>
+        /// The feedback to system repository
+        /// </summary>
+        private IRepository<FeedbackToSystem> _feedbackToSystemRepository;
+
+        /// <summary>
         /// The sell collect transaction repository
         /// </summary>
         private IRepository<SellCollectTransaction> _sellCollectTransactionRepository;
@@ -55,6 +60,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         public FeedbackService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _feedbackRepository = unitOfWork.FeedbackRepository;
+            _feedbackToSystemRepository = unitOfWork.FeedbackToSystemRepository;
             _sellCollectTransactionRepository = unitOfWork.SellCollectTransactionRepository;
             _accountRepository = unitOfWork.AccountRepository;
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
@@ -80,42 +86,33 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             var collectingRequest = _collectingRequestRepository.GetAsNoTracking(x => x.Id.Equals(transaction.CollectingRequestId));
 
-            var feedbackEntity = await _feedbackRepository.GetAsyncAsNoTracking(x => x.SellCollectTransactionId.Equals(model.SellCollectTransactionId));
+            var isExisted = await _feedbackRepository.IsExistedAsync(x => x.SellCollectTransactionId.Equals(model.SellCollectTransactionId) &&
+                                                                          x.CollectDealTransactionId == null);
 
-            if (feedbackEntity == null)
+            if (isExisted)
             {
-                // Check Time that Seller Can Give feedback
-                var isMoreThan = DateTimeUtils.IsMoreThanPastDays(transaction.CreatedTime, NumberConstant.Five);
-
-                if (isMoreThan)
-                {
-                    return BaseApiResponse.Error(SystemMessageCode.TimeUp);
-                }
-
-                var entity = new Feedback()
-                {
-                    SellCollectTransactionId = model.SellCollectTransactionId,
-                    Type = FeedbackType.Transaction,
-                    SellingAccountId = UserAuthSession.UserSession.Id,
-                    BuyingAccountId = collectingRequest.CollectorAccountId,
-                    Rate = model.Rate.ToFloatValue(),
-                    SellingReview = StringUtils.GetString(model.SellingReview),
-                };
-
-                _feedbackRepository.Insert(entity);
+                return BaseApiResponse.Error(SystemMessageCode.DuplicateData);
             }
-            else
+
+            // Check Time that Seller Can Give feedback
+            var deadline = await FeedbackDeadline();
+            var isMoreThan = DateTimeUtils.IsMoreThanPastDays(transaction.CreatedTime, deadline);
+
+            if (isMoreThan)
             {
-                if (!ValidatorUtil.IsBlank(feedbackEntity.SellingReview) || feedbackEntity.Rate != null)
-                {
-                    return BaseApiResponse.Error(SystemMessageCode.FixedData);
-                }
-
-                feedbackEntity.SellingReview = model.SellingReview;
-                feedbackEntity.Rate = model.Rate;
-
-                _feedbackRepository.Update(feedbackEntity);
+                return BaseApiResponse.Error(SystemMessageCode.TimeUp);
             }
+
+            var entity = new Feedback()
+            {
+                SellCollectTransactionId = model.SellCollectTransactionId,
+                SellingAccountId = UserAuthSession.UserSession.Id,
+                BuyingAccountId = collectingRequest.CollectorAccountId,
+                Rate = model.Rate.ToFloatValue(),
+                SellingReview = StringUtils.GetString(model.SellingReview),
+            };
+
+            _feedbackRepository.Insert(entity);
 
             await UnitOfWork.CommitAsync();
 
@@ -153,51 +150,30 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> CreateFeedbackToAdmin(FeedbackAdminCreateModel model)
         {
-            var transaction = _sellCollectTransactionRepository.GetAsNoTracking(x => x.Id.Equals(model.SellCollectTransactionId));
+            var collectingRequest = _collectingRequestRepository.GetAsNoTracking(x => x.Id.Equals(model.CollectingRequestId));
 
-            if (transaction == null)
+            if (collectingRequest == null)
             {
                 return BaseApiResponse.NotFound();
             }
 
-            var feedbackEntity = await _feedbackRepository.GetAsyncAsNoTracking(x => x.SellCollectTransactionId.Equals(model.SellCollectTransactionId));
+            var isExisted = _feedbackToSystemRepository.IsExisted(x => x.CollectingRequestId.Equals(model.CollectingRequestId));
 
-            if (feedbackEntity == null)
+            if (isExisted)
             {
-                // Check Time that Seller Can Give feedback
-                var betweenDays = DateTimeUtils.IsMoreThanPastDays(transaction.CreatedTime, NumberConstant.Five);
-
-                if (betweenDays)
-                {
-                    return BaseApiResponse.Error(SystemMessageCode.TimeUp);
-                }
-
-                var entity = new Feedback()
-                {
-                    SellCollectTransactionId = model.SellCollectTransactionId,
-                    Type = FeedbackType.FeedbackToAdmin,
-                    SellingAccountId = UserAuthSession.UserSession.Id,
-
-                    SellingFeedback = StringUtils.GetString(model.SellingFeedback)
-                };
-
-                _feedbackRepository.Insert(entity);
+                return BaseApiResponse.Error(SystemMessageCode.DuplicateData);
             }
-            else
+            var entity = new FeedbackToSystem()
             {
-                if (!ValidatorUtil.IsBlank(feedbackEntity.SellingFeedback))
-                {
-                    return BaseApiResponse.Error(SystemMessageCode.FixedData);
-                }
+                CollectingRequestId = model.CollectingRequestId,
+                SellingAccountId = UserAuthSession.UserSession.Id,
+                BuyingAccountId = collectingRequest.CollectorAccountId,
+                SellingFeedback = model.SellingFeedback,
+            };
 
-                feedbackEntity.Type = FeedbackType.FeedbackToAdmin;
-                feedbackEntity.SellingFeedback = model.SellingFeedback;
-
-                _feedbackRepository.Update(feedbackEntity);
-            }
+            _feedbackToSystemRepository.Insert(entity);
 
             await UnitOfWork.CommitAsync();
-
 
             return BaseApiResponse.OK();
         }

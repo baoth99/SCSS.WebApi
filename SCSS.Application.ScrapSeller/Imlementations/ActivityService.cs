@@ -63,6 +63,11 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// </summary>
         private readonly IRepository<Feedback> _feedbackRepository;
 
+        /// <summary>
+        /// The feedback to system repository
+        /// </summary>
+        private readonly IRepository<FeedbackToSystem> _feedbackToSystemRepository;
+
         #endregion
 
         #region Constructor
@@ -84,6 +89,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             _scrapCategoryRepository = unitOfWork.ScrapCategoryRepository;
             _scrapCategoryDetailRepository = unitOfWork.ScrapCategoryDetailRepository;
             _feedbackRepository = unitOfWork.FeedbackRepository;
+            _feedbackToSystemRepository = unitOfWork.FeedbackToSystemRepository;
         }
 
         #endregion
@@ -199,6 +205,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 Note = crEntity.Note,
                 ScrapCategoryImageUrl = crEntity.ScrapImageUrl,
                 Status = crEntity.Status,
+                CancelReasoin = crEntity.CancelReason,
                 Address = location.Address,
                 AddressName = location.AddressName,
             };
@@ -214,9 +221,11 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             {
                 dataResult.CollectorInfo = new CollectorInformation()
                 {
+                    CollectorId = collectorInfo?.Id,
                     Name = collectorInfo?.Name,
+                    ImageURL = collectorInfo?.ImageUrl,
                     Phone = collectorInfo?.Phone,
-                    Rating = collectorInfo.Rating
+                    Rating = collectorInfo?.Rating
                 };
 
                 if (crEntity.ApprovedTime != null)
@@ -225,6 +234,18 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                     dataResult.ApprovedTime = crEntity.ApprovedTime.Value.TimeOfDay.ToStringFormat(TimeSpanFormat.HH_MM);
                 }
             }
+
+            var feedbackToSys = _feedbackToSystemRepository.GetAsNoTracking(x => x.CollectingRequestId.Equals(crEntity.Id) &&
+                                                                                 x.CollectDealTransactionId == null);
+
+
+            dataResult.FeedbackToSystemInfo = new FeedbackToSystemInfoResponse()
+            {
+                SellingFeedback = feedbackToSys?.SellingFeedback,
+                AdminReply = feedbackToSys?.AdminReply,
+                FeedbackStatus = CommonUtils.GetFeedbackToSystemStatus(crEntity.Status, crEntity.ApprovedTime, feedbackToSys?.Id, feedbackToSys?.AdminReply)
+            };
+
 
             if (dataResult.Status == CollectingRequestStatus.APPROVED)
             {
@@ -248,7 +269,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
                 var transactionDetailItems = await GetTransactionInformationDetails(transactionInfo.Id);
 
-                var feedbackInfo = GetFeedbackInfo(transactionInfo.Id, transactionInfo.CreatedTime);
+                var feedbackInfo = await GetFeedbackInfo(transactionInfo.Id, transactionInfo.CreatedTime);
 
                 dataResult.Transaction = new TransactionInformation()
                 {
@@ -325,10 +346,12 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <param name="transId">The trans identifier.</param>
         /// <param name="createdTransTime">The created trans time.</param>
         /// <returns></returns>
-        private FeedbackInformationResponse GetFeedbackInfo(Guid transId, DateTime? createdTransTime)
+        private async Task<FeedbackInformationResponse> GetFeedbackInfo(Guid transId, DateTime? createdTransTime)
         {
+            var deadline = await FeedbackDeadline();
 
-            var betweenDays = DateTimeUtils.IsMoreThanPastDays(createdTransTime, NumberConstant.Five);
+            var betweenDays = DateTimeUtils.IsMoreThanPastDays(createdTransTime, deadline);
+
             if (betweenDays)
             {
                 return new FeedbackInformationResponse()

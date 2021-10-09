@@ -121,7 +121,7 @@ namespace SCSS.WebApi.AuthenticationFilter
                     context.ActionFilterResult(SystemMessageCode.NotApproveAccountException, "Account is not approved", HttpStatusCodes.Unauthorized);
                     return;
                 }
-                accountInfo.DeviceId = accountInfo.DeviceId;
+                authSessionModel.DeviceId = accountInfo.DeviceId;
 
                 _authSession.SetUserInfoSession(authSessionModel);
             }

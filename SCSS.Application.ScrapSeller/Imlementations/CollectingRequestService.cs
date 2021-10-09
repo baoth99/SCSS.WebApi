@@ -108,6 +108,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> RequestScrapCollecting(CollectingRequestCreateModel model)
         {
+
             var collectingRequestFromTime = model.FromTime.ToTimeSpan().Value;
             var collectingRequestToTime = model.ToTime.ToTimeSpan().Value;
 
@@ -180,7 +181,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(message);
 
-            return BaseApiResponse.OK();
+            return BaseApiResponse.OK(insertEntity.Id);
         }
 
 

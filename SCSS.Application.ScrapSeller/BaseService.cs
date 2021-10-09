@@ -209,5 +209,32 @@ namespace SCSS.Application.ScrapSeller
         }
 
         #endregion
+
+        #region Get Feedback Deadline
+
+        /// <summary>
+        /// Feedbacks the deadline.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<int> FeedbackDeadline()
+        {
+            var feedbackDeadline = await CacheService.GetStringCacheAsync(CacheRedisKey.FeedbackDeadline);
+            if (ValidatorUtil.IsBlank(feedbackDeadline))
+            {
+                var entity = await UnitOfWork.CollectingRequestConfigRepository.GetManyAsNoTracking(x => x.IsActive).FirstOrDefaultAsync();
+                if (entity == null)
+                {
+                    return NumberConstant.Five;
+                }
+                var deadline = entity.FeedbackDealine;
+
+                await CacheService.SetStringCacheAsync(CacheRedisKey.FeedbackDeadline, deadline.ToString());
+
+                return deadline;
+            }
+            return feedbackDeadline.ToInt();
+        }
+
+        #endregion
     }
 }

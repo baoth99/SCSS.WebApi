@@ -47,7 +47,8 @@
         CollectingRequestReminders,
         OperatingTimeRange,
         CancelRangeTime,
-        TimeRangeRequestNow
+        TimeRangeRequestNow,
+        FeedbackDeadline
     }
 
 

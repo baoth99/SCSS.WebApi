@@ -14,6 +14,7 @@ namespace SCSS.Utilities.Constants
         public const int Twenty = 20;
         public const int TwentyFour = 24;
         public const int Sixty = 60;
+        public const int FiveHundred = 500;
         public const int OneThousand = 1000;
         public const int TenThousand = 10000;
     }
@@ -179,6 +180,14 @@ namespace SCSS.Utilities.Constants
         public const int HaveNotGivenFeedbackYet = 1;
         public const int HaveGivenFeedback = 2;
         public const int TimeUpToGiveFeedback = 3;
+    }
+
+    public class FeedbackToSystemStatus
+    {
+        public const int CanNotGiveFeedback = 1;
+        public const int CanGiveFeedback = 2;
+        public const int HaveGivenFeedback = 3;
+        public const int AdminReplied = 4;
     }
 
     public class RequestScrapCollecting

@@ -5,6 +5,7 @@ using SCSS.Data.EF.UnitOfWork;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
+using SCSS.Utilities.Helper;
 using System;
 using System.Threading.Tasks;
 
@@ -73,7 +74,7 @@ namespace SCSS.Application.ScrapCollector
         public async Task<int> MaxNumberCollectingRequestCollectorReceive()
         {
             var quantity = await CacheService.GetStringCacheAsync(CacheRedisKey.ReceiveQuantity);
-            if (quantity == null)
+            if (ValidatorUtil.IsBlank(quantity))
             {
                 var entity = await UnitOfWork.CollectingRequestConfigRepository.GetManyAsNoTracking(x => x.IsActive).FirstOrDefaultAsync();
                 if (entity == null)
@@ -107,7 +108,7 @@ namespace SCSS.Application.ScrapCollector
 
             var percentRes = await CacheService.GetStringCacheAsync(redisKey);
 
-            if (percentRes == null)
+            if (ValidatorUtil.IsBlank(percentRes))
             {
                 var transType = redisKey == CacheRedisKey.SellCollectTransactionServiceFee ? TransactionType.SELL_COLLECT : TransactionType.COLLECT_DEAL;
 
@@ -144,7 +145,7 @@ namespace SCSS.Application.ScrapCollector
 
             var transAwardAmount = await CacheService.GetStringCacheAsync(redisKey);
 
-            if (transAwardAmount == null)
+            if (ValidatorUtil.IsBlank(transAwardAmount))
             {
                 var transType = redisKey == CacheRedisKey.SellCollectTransactionAwardAmount ? TransactionType.SELL_COLLECT : TransactionType.COLLECT_DEAL;
 
@@ -169,6 +170,33 @@ namespace SCSS.Application.ScrapCollector
             }
 
             return transAwardAmount.ToMapperObject<TransactionAwardAmountCacheViewModel>();
+        }
+
+        #endregion
+
+        #region Get Feedback Deadline
+
+        /// <summary>
+        /// Feedbacks the deadline.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<int> FeedbackDeadline()
+        {
+            var feedbackDeadline = await CacheService.GetStringCacheAsync(CacheRedisKey.FeedbackDeadline);
+            if (ValidatorUtil.IsBlank(feedbackDeadline))
+            {
+                var entity = await UnitOfWork.CollectingRequestConfigRepository.GetManyAsNoTracking(x => x.IsActive).FirstOrDefaultAsync();
+                if (entity == null)
+                {
+                    return NumberConstant.Five;
+                }
+                var deadline = entity.FeedbackDealine;
+
+                await CacheService.SetStringCacheAsync(CacheRedisKey.FeedbackDeadline, deadline.ToString());
+
+                return deadline;
+            }
+            return feedbackDeadline.ToInt();
         }
 
         #endregion

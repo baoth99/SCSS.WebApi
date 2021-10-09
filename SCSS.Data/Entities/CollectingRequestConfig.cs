@@ -21,6 +21,8 @@ namespace SCSS.Data.Entities
 
         public int TimeRangeRequestNow { get; set; }
 
+        public int FeedbackDealine { get; set; }
+
         public TimeSpan? OperatingTimeFrom { get; set; }
 
         public TimeSpan? OperatingTimeTo { get; set; }

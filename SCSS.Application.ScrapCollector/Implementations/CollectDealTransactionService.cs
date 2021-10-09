@@ -149,7 +149,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             var dealerInfo = _dealerInformationRepository.GetAsNoTracking(x => x.DealerAccountId.Equals(transEntity.DealerAccountId));
 
-            var feedbackInfo = GetFeedbackInfo(transEntity.Id, transEntity.CreatedTime);
+            var feedbackInfo = await GetFeedbackInfo(transEntity.Id, transEntity.CreatedTime);
 
             var itemDetails = await GetTransactionInfoDetails(transId);
 
@@ -232,7 +232,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion
 
-
         #region Get Feedback Info
 
         /// <summary>
@@ -241,10 +240,12 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="transId">The trans identifier.</param>
         /// <param name="createdTransTime">The created trans time.</param>
         /// <returns></returns>
-        private CollectDealTransFeedbackViewModel GetFeedbackInfo(Guid transId, DateTime? createdTransTime)
+        private async Task<CollectDealTransFeedbackViewModel> GetFeedbackInfo(Guid transId, DateTime? createdTransTime)
         {
-            var betweenDays = DateTimeUtils.IsMoreThanPastDays(createdTransTime, NumberConstant.Five);
-            if (betweenDays)
+            var deadline = await FeedbackDeadline();
+
+            var isMoreThan = DateTimeUtils.IsMoreThanPastDays(createdTransTime, deadline);
+            if (isMoreThan)
             {
                 return new CollectDealTransFeedbackViewModel()
                 {

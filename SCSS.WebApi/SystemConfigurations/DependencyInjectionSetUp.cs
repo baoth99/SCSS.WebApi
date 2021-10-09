@@ -41,6 +41,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.Admin.Interfaces.IDealerInformationService, SCSS.Application.Admin.Implementations.DealerInformationService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.ICollectingRequestService, SCSS.Application.Admin.Implementations.CollectingRequestService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.ISystemConfigService, SCSS.Application.Admin.Implementations.SystemConfigService>();
+            services.AddScoped<SCSS.Application.Admin.Interfaces.ICollectorCancelReasonService, SCSS.Application.Admin.Implementations.CollectorCancelReasonService>();
 
             #endregion Admin Application
 

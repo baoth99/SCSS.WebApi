@@ -89,6 +89,10 @@ namespace SCSS.Data.EF
 
         public DbSet<CollectingRequestRejection> CollectingRequestRejection { get; set; }
 
+        public DbSet<CollectorCancelReason> CollectorCancelReason { get; set; }
+
+        public DbSet<FeedbackToSystem> FeedbackToSystem { get; set; }
+
         #endregion
 
         #region OnConfiguring
