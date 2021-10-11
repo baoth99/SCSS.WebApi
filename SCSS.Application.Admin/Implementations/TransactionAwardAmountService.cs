@@ -53,7 +53,7 @@ namespace SCSS.Application.Admin.Implementations
             var cacheModel = new TransactionAwardAmountCacheViewModel()
             {
                 AppliedAmount = entity.AppliedAmount.Value,
-                Amount = entity.AppliedAmount.Value,
+                Amount = entity.Amount.Value,
             };
 
             await _cacheService.SetStringCacheAsync(redisKey, cacheModel.ToJson());
@@ -69,27 +69,27 @@ namespace SCSS.Application.Admin.Implementations
         /// Gets the transaction award amount.
         /// </summary>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> GetTransactionAwardAmount()
+        public async Task<BaseApiResponseModel> GetTransactionAwardAmount(int transactionType)
         {
-            var transactionAward = await _transactionAwardAmountRepository.GetManyAsNoTracking(x => x.IsActive).ToListAsync();
+            var transactionAward = await _transactionAwardAmountRepository.GetManyAsNoTracking(x => x.TransactionType == transactionType).ToListAsync();
 
-            var sellCollectTrans = transactionAward.Where(x => x.TransactionType == TransactionType.SELL_COLLECT).Select(x => new TransactionAwardAmountViewModel()
+            var histories = transactionAward.Where(x => !x.IsActive).Select(x => new TransactionAwardAmountHistoryViewModel()
             {
-                TransactionType = x.TransactionType,
+                AppliedAmount = x.AppliedAmount,
+                Amount = x.Amount,
+                DeActiveTime = x.UpdatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time_tt)
+            }).ToList();
+
+
+            var transactionAwardPoint = transactionAward.Where(x => x.IsActive).Select(x => new TransactionAwardAmountViewModel()
+            {
                 AppliedAmount = x.AppliedAmount,
                 Amount = x.Amount
             }).FirstOrDefault();
 
-            var collectDealTrans = transactionAward.Where(x => x.TransactionType == TransactionType.COLLECT_DEAL).Select(x => new TransactionAwardAmountViewModel()
-            {
-                TransactionType = x.TransactionType,
-                AppliedAmount = x.AppliedAmount,
-                Amount = x.Amount
-            }).FirstOrDefault();
+            transactionAwardPoint.Histories = histories;
 
-            var dataResult = new Tuple<TransactionAwardAmountViewModel, TransactionAwardAmountViewModel>(sellCollectTrans, collectDealTrans);
-
-            return BaseApiResponse.OK(dataResult);
+            return BaseApiResponse.OK(transactionAwardPoint);
         }
 
         #endregion

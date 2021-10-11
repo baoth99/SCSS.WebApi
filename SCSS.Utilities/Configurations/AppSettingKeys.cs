@@ -84,6 +84,9 @@ namespace SCSS.Utilities.Configurations
             public const string GoongApiURL = "GoongMapService:ApiURL";
             public const string GoongDistanceMatrix = "GoongMapService:DistanceMatrix";
             public const string GoongDirection = "GoongMapService:Direction";
+            public const string GoongAutoComplete = "GoongMapService:AutoComplete";
+            public const string GoongPlaceDetail = "GoongMapService:Detail";
+            public const string GoongGeocode = "GoongMapService:Geocode";
         }
 
         public static class Logging

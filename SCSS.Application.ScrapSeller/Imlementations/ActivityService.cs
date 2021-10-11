@@ -124,6 +124,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                                                                   x.UpdatedTime,
                                                                   x.IsBulky,
                                                                   y.AddressName,
+                                                                  y.Address,
                                                                   x.Status
                                                               });
 
@@ -141,6 +142,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 CollectingRequestCode = x.CollectingRequestCode,
                 CollectingRequestDate = x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DDD_DD_MMM_yyy_HH_mm),
                 AddressName = x.AddressName,
+                Address = x.Address,
                 FromTime = x.TimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
                 ToTime = x.TimeTo.ToStringFormat(TimeSpanFormat.HH_MM),
                 Status = x.Status,
@@ -243,7 +245,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             {
                 SellingFeedback = feedbackToSys?.SellingFeedback,
                 AdminReply = feedbackToSys?.AdminReply,
-                FeedbackStatus = CommonUtils.GetFeedbackToSystemStatus(crEntity.Status, crEntity.ApprovedTime, feedbackToSys?.Id, feedbackToSys?.AdminReply)
+                FeedbackStatus = CommonUtils.GetFeedbackToSystemStatus(crEntity.Status, crEntity.CollectorAccountId, feedbackToSys?.Id, feedbackToSys?.AdminReply)
             };
 
 

@@ -95,7 +95,7 @@ namespace SCSS.Application.Admin.Implementations
                 MaxNumberOfRequestDays = model.MaxNumberOfRequestDays,
                 OperatingTimeFrom = model.OperatingTimeFrom.ToTimeSpan(),
                 OperatingTimeTo = model.OperatingTimeTo.ToTimeSpan(),
-                CancelTimeRange = model.CancelRangeTime,
+                CancelTimeRange = model.CancelTimeRange,
                 TimeRangeRequestNow = model.TimeRangeRequestNow,
                 FeedbackDealine = model.FeedbackDeadline,
             };
@@ -111,7 +111,7 @@ namespace SCSS.Application.Admin.Implementations
                 model.ReceiveQuantity,
                 model.RequestQuantity,
                 model.MaxNumberOfRequestDays,
-                model.CancelRangeTime,
+                model.CancelTimeRange,
                 model.TimeRangeRequestNow,
                 model.FeedbackDeadline
             };

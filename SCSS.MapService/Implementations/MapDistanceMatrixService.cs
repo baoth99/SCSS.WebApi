@@ -4,10 +4,8 @@ using SCSS.MapService.Models;
 using SCSS.MapService.Models.GoongMapResponseModels;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.MapService.Implementations

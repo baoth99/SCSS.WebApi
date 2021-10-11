@@ -21,6 +21,8 @@ namespace SCSS.Application.ScrapSeller.Models.ActivityModels
 
         public string AddressName { get; set; }
 
+        public string Address { get; set; }
+
         public long? Total { get; set; }
 
         [JsonIgnore]

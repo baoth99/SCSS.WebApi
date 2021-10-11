@@ -1,8 +1,6 @@
 ﻿using SCSS.MapService.Models;
-using System;
+using SCSS.MapService.Models.GoongMapResponseModels;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.MapService.Interfaces
@@ -15,5 +13,6 @@ namespace SCSS.MapService.Interfaces
         /// <param name="model">The model.</param>
         /// <returns></returns>
         Task<List<DistanceMatrixCoordinateResponseModel>> GetDistanceFromOriginToMultiDestinations(DistanceMatrixCoordinateRequestModel model);
+
     }
 }

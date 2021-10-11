@@ -46,9 +46,11 @@ namespace SCSS.WebApi.SystemConstants
             public const string SystemConfigInfo = SystemConfig + "/info";
             public const string ModifySystemConfig = SystemConfig + "/modify";
             public const string ModifyTransactionAward = SystemConfig + "/trans-award/modify";
-            public const string GetTransactionAward = SystemConfig + "/trans-award/get";
+            public const string GetSellCollectTransactionAward = SystemConfig + "/trans-award/sell-collect";
+            public const string GetCollectDealTransactionAward = SystemConfig + "/trans-award/collect-deal";
             public const string ModifyTransactionFee = SystemConfig + "/trans-fee/modify";
-            public const string GetTransactionFee = SystemConfig + "/trans-fee/get";
+            public const string GetSellCollectTransactionFee = SystemConfig + "/trans-fee/sell-collect";
+            public const string GetCollectDealTransactionFee = SystemConfig + "/trans-fee/collect-deal";
         }
 
         public static class ScrapCategoryApiUrl

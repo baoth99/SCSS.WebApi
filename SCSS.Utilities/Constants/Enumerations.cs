@@ -46,7 +46,7 @@
         PendingCollectingRequest,
         CollectingRequestReminders,
         OperatingTimeRange,
-        CancelRangeTime,
+        CancelTimeRange,
         TimeRangeRequestNow,
         FeedbackDeadline
     }

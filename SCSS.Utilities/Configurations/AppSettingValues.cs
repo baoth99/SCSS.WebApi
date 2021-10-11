@@ -89,6 +89,12 @@ namespace SCSS.Utilities.Configurations
 
         public static string GoongDirectionEndpoint => ConfigurationHelper.GetValue<string>(AppSettingKeys.GoongMap.GoongDirection);
 
+        public static string GoongAutoCompleteEndpoint => ConfigurationHelper.GetValue<string>(AppSettingKeys.GoongMap.GoongAutoComplete);
+
+        public static string GoongPlaceDetailEndpoint => ConfigurationHelper.GetValue<string>(AppSettingKeys.GoongMap.GoongPlaceDetail);
+
+        public static string GoongGeocodeEndpoint => ConfigurationHelper.GetValue<string>(AppSettingKeys.GoongMap.GoongGeocode);
+
         public static string LoggingConfig => ConfigurationHelper.GetValue<string>(AppSettingKeys.Logging.Config);
 
         public static string CollectingRequestSQLCommand => ConfigurationHelper.GetValue<string>(AppSettingKeys.SQLCommand.CollectorRequestCommand);

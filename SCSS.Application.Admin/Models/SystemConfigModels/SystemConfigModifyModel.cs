@@ -5,7 +5,7 @@ namespace SCSS.Application.Admin.Models.SystemConfigModels
 {
     public class SystemConfigModifyModel
     {
-        public int CancelRangeTime { get; set; }
+        public int CancelTimeRange { get; set; }
 
         public int TimeRangeRequestNow { get; set; }
 

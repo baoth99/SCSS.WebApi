@@ -24,4 +24,29 @@ namespace SCSS.MapService.Models.GoongMapResponseModels
         public float Value { get; set; }
     }
 
+
+    public class GoongMapAutoCompleteResponsePredictions
+    {
+        public List<AutoCompleteResponseModel> Predictions { get; set; }
+
+        public int Executed_time { get; set; }
+
+        public int Executed_time_all { get; set; }
+
+        public string Status { get; set; }
+    }
+
+    public class GoongMapGeocodingResponse
+    {
+        public object Plus_code { get; set; }
+
+        public List<GeocodingResponseModel> Results { get; set; }
+    }
+
+    public class GoongMapPlaceDetailResponse
+    {
+        public PlaceDetailResponseModel Result { get; set; }
+
+        public string Status { get; set; }
+    }
 }

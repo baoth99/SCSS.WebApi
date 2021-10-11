@@ -82,56 +82,60 @@ namespace SCSS.Application.Admin.Implementations
             var sellerRoleId = _roleRepository.GetAsNoTracking(x => x.Key == AccountRole.SELLER).Id;
             var collectorRoleId = _roleRepository.GetAsNoTracking(x => x.Key == AccountRole.COLLECTOR).Id;
 
-            var dataQuery = _collectingRequestRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.CollectingRequestCode) || x.CollectingRequestCode.Contains(model.CollectingRequestCode)) &&
-                                                                                  (ValidatorUtil.IsBlank(model.FromDate) || x.CollectingRequestDate.Value.Date.CompareTo(model.FromDate.ToDateTime()) >= NumberConstant.Zero) &&
-                                                                                  (ValidatorUtil.IsBlank(model.ToDate) || x.CollectingRequestDate.Value.Date.CompareTo(model.ToDate.ToDateTime()) <= NumberConstant.Zero) &&
-                                                                                  (model.Status == NumberConstant.Zero || x.Status == model.Status))
-                                                        .Join(_accountRepository.GetManyAsNoTracking(x => x.RoleId.Equals(sellerRoleId) &&
-                                                                                                          (ValidatorUtil.IsBlank(model.RequestedBy) || x.Name.Contains(model.RequestedBy))), x => x.SellerAccountId, y => y.Id,
-                                                                                                            (x, y) => new
-                                                                                                            {
-                                                                                                                CollectingRequestId = x.Id,
-                                                                                                                x.CollectingRequestCode,
-                                                                                                                x.CollectingRequestDate,
-                                                                                                                x.TimeFrom,
-                                                                                                                x.TimeTo,
-                                                                                                                CollectingRequestStatus = x.Status,
-                                                                                                                RequesterName = y.Name,
-                                                                                                                x.CollectorAccountId
-                                                                                                            })
-                                                        .GroupJoin(_accountRepository.GetManyAsNoTracking(x => x.RoleId.Equals(collectorRoleId) &&
-                                                                                                           (ValidatorUtil.IsBlank(model.ReceivedBy) || x.Name.Contains(model.ReceivedBy))), x => x.CollectorAccountId, y => y.Id,
-                                                                                                           (x, y) => new
-                                                                                                           {
-                                                                                                               x.CollectingRequestId,
-                                                                                                               x.CollectingRequestCode,
-                                                                                                               x.CollectingRequestDate,
-                                                                                                               x.TimeFrom,
-                                                                                                               x.TimeTo,
-                                                                                                               x.CollectingRequestStatus,
-                                                                                                               x.RequesterName,
-                                                                                                               CollectorInfo = y
-                                                                                                           })
-                                                                                                            .SelectMany(x => x.CollectorInfo.DefaultIfEmpty(), (x, y) => new
-                                                                                                            {
-                                                                                                                x.CollectingRequestId,
-                                                                                                                x.CollectingRequestCode,
-                                                                                                                x.CollectingRequestDate,
-                                                                                                                x.TimeFrom,
-                                                                                                                x.TimeTo,
-                                                                                                                x.CollectingRequestStatus,
-                                                                                                                x.RequesterName,
-                                                                                                                ReceiverName = y.Name
-                                                                                                            });
+            var dataDB = await _collectingRequestRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.CollectingRequestCode) || x.CollectingRequestCode.Contains(model.CollectingRequestCode)) &&
+                                                                                        (model.Status == NumberConstant.Zero || x.Status == model.Status)).ToListAsync();
+
+            var dataQuery = dataDB.Where(x => (ValidatorUtil.IsBlank(model.FromDate) || x.CollectingRequestDate.Value.Date.CompareTo(model.FromDate.ToDateTime()) >= NumberConstant.Zero) &&
+                                                (ValidatorUtil.IsBlank(model.ToDate) || x.CollectingRequestDate.Value.Date.CompareTo(model.ToDate.ToDateTime()) <= NumberConstant.Zero))
+                                                .Join(_accountRepository.GetManyAsNoTracking(x => x.RoleId.Equals(sellerRoleId) &&
+                                                                                                    (ValidatorUtil.IsBlank(model.RequestedBy) || x.Name.Contains(model.RequestedBy))), x => x.SellerAccountId, y => y.Id,
+                                                                                                    (x, y) => new
+                                                                                                    {
+                                                                                                        CollectingRequestId = x.Id,
+                                                                                                        x.CollectingRequestCode,
+                                                                                                        x.CollectingRequestDate,
+                                                                                                        x.TimeFrom,
+                                                                                                        x.TimeTo,
+                                                                                                        CollectingRequestStatus = x.Status,
+                                                                                                        RequesterName = y.Name,
+                                                                                                        x.CollectorAccountId,
+                                                                                                        x.CreatedTime,
+                                                                                                    })
+                                                .GroupJoin(_accountRepository.GetManyAsNoTracking(x => x.RoleId.Equals(collectorRoleId) &&
+                                                                                                    (ValidatorUtil.IsBlank(model.ReceivedBy) || x.Name.Contains(model.ReceivedBy))), x => x.CollectorAccountId, y => y.Id,
+                                                                                                    (x, y) => new
+                                                                                                    {
+                                                                                                        x.CollectingRequestId,
+                                                                                                        x.CollectingRequestCode,
+                                                                                                        x.CollectingRequestDate,
+                                                                                                        x.TimeFrom,
+                                                                                                        x.TimeTo,
+                                                                                                        x.CollectingRequestStatus,
+                                                                                                        x.RequesterName,
+                                                                                                        x.CreatedTime,
+                                                                                                        CollectorInfo = y
+                                                                                                    })
+                                                                                                    .SelectMany(x => x.CollectorInfo.DefaultIfEmpty(), (x, y) => new
+                                                                                                    {
+                                                                                                        x.CollectingRequestId,
+                                                                                                        x.CollectingRequestCode,
+                                                                                                        x.CollectingRequestDate,
+                                                                                                        x.TimeFrom,
+                                                                                                        x.TimeTo,
+                                                                                                        x.CollectingRequestStatus,
+                                                                                                        x.RequesterName,
+                                                                                                        x.CreatedTime,
+                                                                                                        ReceiverName = y?.Name
+                                                                                                    });
 
             if (!ValidatorUtil.IsBlank(model.ReceivedBy))
             {
                 dataQuery = dataQuery.Where(x => !string.IsNullOrEmpty(x.ReceiverName));
             }
 
-            var totalRecord = await dataQuery.CountAsync();
+            var totalRecord = dataQuery.Count();
 
-            var dataResult = dataQuery.OrderByDescending(x => x.CollectingRequestCode).Skip((model.Page - 1) * model.PageSize).Take(model.PageSize).Select(x => new CollectingRequestViewModel()
+            var dataResult = dataQuery.OrderByDescending(x => x.CreatedTime).Skip((model.Page - 1) * model.PageSize).Take(model.PageSize).Select(x => new CollectingRequestViewModel()
             {
                 Id = x.CollectingRequestId,
                 CollectingRequestCode = x.CollectingRequestCode,

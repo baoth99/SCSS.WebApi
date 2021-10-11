@@ -136,6 +136,60 @@ namespace SCSS.MapService
 
         #endregion
 
+        #region Get AutoComplete Endpoint
+
+        /// <summary>
+        /// Gets the automatic complete endpoint.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        protected string GetAutoCompleteEndpoint(PlaceAutoCompleteRequestModel model)
+        {
+            return string.Format(GoongMapRestApiFormat.AutoComplete, AppSettingValues.GoongMapApiURL,
+                                                                              AppSettingValues.GoongAutoCompleteEndpoint,
+                                                                              AppSettingValues.GoongMapApiKey,
+                                                                              model.Latitude + MarkConstant.COMMA + model.Longtitude,
+                                                                              model.KeyWord
+                                                                              );
+        }
+
+        #endregion
+
+        #region Get Place Detail Endpoint
+
+        /// <summary>
+        /// Gets the place detail endpoint.
+        /// </summary>
+        /// <param name="placeId">The place identifier.</param>
+        /// <returns></returns>
+        protected string GetPlaceDetailEndpoint(string placeId)
+        {
+            return string.Format(GoongMapRestApiFormat.PlaceDetail, AppSettingValues.GoongMapApiURL,
+                                                                    AppSettingValues.GoongPlaceDetailEndpoint,
+                                                                    placeId,
+                                                                    AppSettingValues.GoongMapApiKey);
+        }
+
+        #endregion
+
+        #region Get Getcode Endpoint
+
+        /// <summary>
+        /// Gets the geocode endpoint.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        protected string GetGeocodeEndpoint(GeocodeRequestModel model)
+        {
+            return string.Format(GoongMapRestApiFormat.Geocode, AppSettingValues.GoongMapApiURL,
+                                                                AppSettingValues.GoongGeocodeEndpoint,
+                                                                model.Latitude + MarkConstant.COMMA + model.Longtitude,
+                                                                AppSettingValues.GoongMapApiKey
+                                                                );
+        }
+
+        #endregion
+
         #region IDisposable
 
         /// <summary>

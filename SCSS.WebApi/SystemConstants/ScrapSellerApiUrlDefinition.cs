@@ -7,7 +7,8 @@
         private const string CollectingRequest = "collecting-request";
         private const string Notification = "notification";
         private const string Activity = "activity";
-        private const string Feedback = "Feedback";
+        private const string Feedback = "feedback";
+        private const string Map = "map";
         public static class DataApiUrl
         {
             public const string GetImage = "image/get";
@@ -56,6 +57,13 @@
         {
             public const string CreateTransFeedback = Feedback + "/trans-feedback/create";
             public const string CreateFeedbackToAdmin = Feedback + "/feedback-admin/create";
+        }
+
+        public static class MapApiUrl
+        {
+            public const string AutoComplete = Map + "/place/autoComplete";
+            public const string PlaceDetail = Map + "/place/detail";
+            public const string ReverseGeocoding = Map + "/geocode";
         }
     }
 

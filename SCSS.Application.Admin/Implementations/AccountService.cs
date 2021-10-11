@@ -5,6 +5,8 @@ using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
+using SCSS.TwilioService.Interfaces;
+using SCSS.TwilioService.Models;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
@@ -35,6 +37,12 @@ namespace SCSS.Application.Admin.Implementations
 
         #endregion
 
+        #region Services
+
+        private readonly ISMSService _SMSService;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -43,10 +51,11 @@ namespace SCSS.Application.Admin.Implementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger) : base(unitOfWork, userAuthSession, logger)
+        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, ISMSService SMSService) : base(unitOfWork, userAuthSession, logger)
         {
             _accountRepository = unitOfWork.AccountRepository;
             _roleRepository = unitOfWork.RoleRepository;
+            _SMSService = SMSService;
         }
 
         #endregion
@@ -172,12 +181,41 @@ namespace SCSS.Application.Admin.Implementations
             }
 
             var account = _accountRepository.GetById(model.Id);
-            account.Status = model.Status;
 
+            string message = "";
+
+            if (model.Status == AccountStatus.ACTIVE && account.Status == AccountStatus.NOT_APPROVED)
+            {
+                message = SMSMessage.ApprovedSMS();
+            }
+
+            if (model.Status == AccountStatus.ACTIVE && account.Status == AccountStatus.BANNING)
+            {
+                message = SMSMessage.UnBlockSMS();
+            }
+
+            if (model.Status == AccountStatus.BANNING)
+            {
+                message = SMSMessage.BlockSMS();
+            }
+
+            if (model.Status == AccountStatus.REJECT)
+            {
+                message = SMSMessage.RejectedSMS();
+            }
+
+            account.Status = model.Status;
             _accountRepository.Update(account);
 
             await UnitOfWork.CommitAsync();
 
+            var smsModel = new SendSMSModel()
+            {
+                Phone = account.Phone,
+                Content = message
+            };
+
+            await _SMSService.SendSMS(smsModel);
 
             return BaseApiResponse.OK();
         }

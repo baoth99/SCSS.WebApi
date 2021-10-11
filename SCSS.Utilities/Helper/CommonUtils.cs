@@ -80,12 +80,13 @@ namespace SCSS.Utilities.Helper
         }
 
         public static int GetFeedbackToSystemStatus(int? collectingRequestStatus,
-                                                    DateTime? approvedTime,
+                                                    Guid? collectorAccountId,
                                                     Guid? feedbackToSysId,
                                                     string adminReply)
         {
             if (collectingRequestStatus == CollectingRequestStatus.PENDING ||
-                (collectingRequestStatus == CollectingRequestStatus.CANCEL_BY_SELLER) && ValidatorUtil.IsBlank(approvedTime))
+                (collectingRequestStatus == CollectingRequestStatus.CANCEL_BY_SELLER) && ValidatorUtil.IsNull(collectorAccountId) ||
+                (collectingRequestStatus == CollectingRequestStatus.CANCEL_BY_SYSTEM) && ValidatorUtil.IsNull(collectorAccountId))
             {
                 return FeedbackToSystemStatus.CanNotGiveFeedback;
             }

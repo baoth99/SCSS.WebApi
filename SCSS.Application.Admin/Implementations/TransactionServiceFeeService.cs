@@ -3,6 +3,7 @@ using SCSS.Application.Admin.Models.TransactionServiceFeeModels;
 using SCSS.Data.Entities;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
+using SCSS.Utilities.Extensions;
 using SCSS.Utilities.ResponseModel;
 using System;
 using System.Linq;
@@ -52,31 +53,32 @@ namespace SCSS.Application.Admin.Implementations
 
         #endregion
 
+
         #region Get Transaction Service Fee
 
         /// <summary>
         /// Gets the transaction service fee.
         /// </summary>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> GetTransactionServiceFee()
+        public async Task<BaseApiResponseModel> GetTransactionServiceFee(int transactionType)
         {
-            var transactionFee = await _transactionServiceFeePercentRepository.GetManyAsNoTracking(x => x.IsActive).ToListAsync();
+            var transactionFee = await _transactionServiceFeePercentRepository.GetManyAsNoTracking(x => x.TransactionType == transactionType).ToListAsync();
 
-            var sellCollectTransFee = transactionFee.Where(x => x.TransactionType == TransactionType.SELL_COLLECT).Select(x => new TransactionServiceFeeViewModel()
+
+            var histories = transactionFee.Where(x => !x.IsActive).Select(x => new TransactionServiceFeeHistoryViewModel()
             {
-                TransactionType = x.TransactionType,
+                Percent = x.Percent,
+                DeActiveTime = x.UpdatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time_tt)
+            }).ToList();
+
+            var sellCollectTransFee = transactionFee.Where(x => x.IsActive).Select(x => new TransactionServiceFeeViewModel()
+            {
                 Percent = x.Percent
             }).FirstOrDefault();
 
-            var collectDealTransFee = transactionFee.Where(x => x.TransactionType == TransactionType.COLLECT_DEAL).Select(x => new TransactionServiceFeeViewModel()
-            {
-                TransactionType = x.TransactionType,
-                Percent = x.Percent
-            }).FirstOrDefault();
+            sellCollectTransFee.Histories = histories;
 
-            var dataResult = new Tuple<TransactionServiceFeeViewModel, TransactionServiceFeeViewModel>(sellCollectTransFee, collectDealTransFee);
-
-            return BaseApiResponse.OK(dataResult);
+            return BaseApiResponse.OK(sellCollectTransFee);
         }
 
         #endregion

@@ -164,7 +164,7 @@ namespace SCSS.Application.ScrapSeller
         /// <returns></returns>
         public async Task<int> CancelTimeRange()
         {
-            var count = await CacheService.GetStringCacheAsync(CacheRedisKey.CancelRangeTime);
+            var count = await CacheService.GetStringCacheAsync(CacheRedisKey.CancelTimeRange);
             if (ValidatorUtil.IsBlank(count))
             {
                 var entity = await UnitOfWork.CollectingRequestConfigRepository.GetManyAsNoTracking(x => x.IsActive).FirstOrDefaultAsync();
@@ -174,7 +174,7 @@ namespace SCSS.Application.ScrapSeller
                 }
                 var cancelTimeRange = entity.CancelTimeRange;
 
-                await CacheService.SetStringCacheAsync(CacheRedisKey.CancelRangeTime, cancelTimeRange.ToString());
+                await CacheService.SetStringCacheAsync(CacheRedisKey.CancelTimeRange, cancelTimeRange.ToString());
 
                 return cancelTimeRange;
             }

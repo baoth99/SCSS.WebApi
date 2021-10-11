@@ -32,7 +32,7 @@ namespace SCSS.Application.Admin.Interfaces
         /// Gets the transaction award amount.
         /// </summary>
         /// <returns></returns>
-        Task<BaseApiResponseModel> GetTransactionAwardAmount();
+        Task<BaseApiResponseModel> GetTransactionAwardAmount(int transactionType);
 
         /// <summary>
         /// Creates the transaction service fee.
@@ -45,6 +45,6 @@ namespace SCSS.Application.Admin.Interfaces
         /// Gets the transaction service fee.
         /// </summary>
         /// <returns></returns>
-        Task<BaseApiResponseModel> GetTransactionServiceFee();
+        Task<BaseApiResponseModel> GetTransactionServiceFee(int transactionType);
     }
 }

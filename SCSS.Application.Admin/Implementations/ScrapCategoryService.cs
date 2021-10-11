@@ -172,7 +172,7 @@ namespace SCSS.Application.Admin.Implementations
                 var dealerManagerId = account.ManagedBy;
                 string manageBy = string.Empty;
 
-                if (!ValidatorUtil.IsBlank(dealerManagerId))
+                if (!ValidatorUtil.IsNull(dealerManagerId))
                 {
                     var dealerManager = _dealerInformationRepository.GetAsNoTracking(x => x.DealerAccountId.Equals(dealerManagerId));
                     manageBy = dealerManager.DealerName;

@@ -85,9 +85,9 @@ namespace SCSS.Aplication.BackgroundService.Implementations
             var parameters = new DynamicParameters();
             parameters.Add("@CancelBySystemStatus", CollectingRequestStatus.CANCEL_BY_SYSTEM);
             parameters.Add("@UpdatedBy", Guid.Empty);
-            parameters.Add("@DateNow", DateTimeVN.DATETIME_NOW);
+            parameters.Add("@DateNow", DateTimeVN.DATE_NOW);
+            parameters.Add("@DateTimeNow", DateTimeVN.DATETIME_NOW);
             parameters.Add("@ApprovedStatus", CollectingRequestStatus.APPROVED);
-            parameters.Add("@PendingStatus", CollectingRequestStatus.PENDING);
 
             await _dapperService.SqlExecuteAsync(sql, parameters);
         }

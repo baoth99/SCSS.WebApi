@@ -95,7 +95,7 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #endregion
 
-        #region Get Transaction Award Amount is using
+        #region Get Sell-Collect Transaction Award Amount is using
 
         /// <summary>
         /// Gets the transaction award amount.
@@ -105,11 +105,30 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminApiUrlDefinition.SystemConfigApiUrl.GetTransactionAward)]
+        [Route(AdminApiUrlDefinition.SystemConfigApiUrl.GetSellCollectTransactionAward)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetTransactionAwardAmount()
+        public async Task<BaseApiResponseModel> GetSellCollectTransactionAwardAmount()
         {
-            return await _systemConfigService.GetTransactionAwardAmount();
+            return await _systemConfigService.GetTransactionAwardAmount(TransactionType.SELL_COLLECT);
+        }
+
+        #endregion
+
+        #region Get Collect-Deal Transaction Award Amount is using
+
+        /// <summary>
+        /// Gets the transaction award amount.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.SystemConfigApiUrl.GetCollectDealTransactionAward)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetCollectDealTransactionAwardAmount()
+        {
+            return await _systemConfigService.GetTransactionAwardAmount(TransactionType.COLLECT_DEAL);
         }
 
         #endregion
@@ -134,7 +153,7 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #endregion
 
-        #region Get Transaction Service Fee is using
+        #region Get Sell-Collect Transaction Service Fee is using
 
         /// <summary>
         /// Gets the transaction service fee.
@@ -144,11 +163,30 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminApiUrlDefinition.SystemConfigApiUrl. GetTransactionFee)]
+        [Route(AdminApiUrlDefinition.SystemConfigApiUrl. GetSellCollectTransactionFee)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetTransactionServiceFee()
+        public async Task<BaseApiResponseModel> GetSellCollectTransactionServiceFee()
         {
-            return await _systemConfigService.GetTransactionServiceFee();
+            return await _systemConfigService.GetTransactionServiceFee(TransactionType.SELL_COLLECT);
+        }
+
+        #endregion
+
+        #region Get Collect-Deal Transaction Service Fee is using
+
+        /// <summary>
+        /// Gets the transaction service fee.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.SystemConfigApiUrl.GetCollectDealTransactionFee)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetCollectDealTransactionServiceFee()
+        {
+            return await _systemConfigService.GetTransactionServiceFee(TransactionType.COLLECT_DEAL);
         }
 
         #endregion

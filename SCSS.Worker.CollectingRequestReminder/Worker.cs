@@ -51,7 +51,7 @@ namespace SCSS.Worker.CollectingRequestReminder
             while (!stoppingToken.IsCancellationRequested)
             {
                 await DoWork();
-                await Task.Delay(TimeSpan.FromMinutes(AppSettingValues.DelayMinutesSchedule), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(AppSettingValues.DelayMinutesSchedule));
             }
         }
 

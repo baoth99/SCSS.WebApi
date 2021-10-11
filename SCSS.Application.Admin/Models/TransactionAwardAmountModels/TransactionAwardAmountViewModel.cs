@@ -1,17 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+
 
 namespace SCSS.Application.Admin.Models.TransactionAwardAmountModels
 {
     public class TransactionAwardAmountViewModel
     {
-        public int? TransactionType { get; set; }
-
         public long? AppliedAmount { get; set; }
 
         public float? Amount { get; set; }
+
+        public List<TransactionAwardAmountHistoryViewModel> Histories { get; set; }
+    }
+
+    public class TransactionAwardAmountHistoryViewModel
+    {
+        public long? AppliedAmount { get; set; }
+
+        public float? Amount { get; set; }
+
+        public string DeActiveTime { get; set; }
     }
 }

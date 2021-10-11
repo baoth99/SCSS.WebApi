@@ -57,6 +57,8 @@ namespace SCSS.WebApi.SystemConfigurations
 
             // Goong Map
             services.AddScoped<IMapDistanceMatrixService, MapDistanceMatrixService>();
+            services.AddScoped<IMapPlaceService, MapPlaceService>();
+            services.AddScoped<IMapGeocodingService, MapGeocodingService>();
 
             #endregion
         }
