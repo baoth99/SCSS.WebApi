@@ -9,6 +9,13 @@
         private const string Activity = "activity";
         private const string Feedback = "feedback";
         private const string Map = "map";
+        private const string Dashboard = "dashboard";
+
+        public static class DashboardApiUrl
+        {
+            public const string NearestApprovedCR = Dashboard + "/nearest-approved-request";
+        }
+
         public static class DataApiUrl
         {
             public const string GetImage = "image/get";

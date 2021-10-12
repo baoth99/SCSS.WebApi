@@ -50,6 +50,7 @@ namespace SCSS.Utilities.Constants
         public const string DDMMyyyyhhmmss = @"ddMMyyyyhhmmss";
         public const string DDD_DD_MM_yyy_HH_mm = @"ddd, dd MM yyyy lúc HH:mm";
         public const string DDD_DD_MMM_yyy_HH_mm = @"ddd, dd MMM yyyy";
+        public const string DDD_DD_MM_yyyy = @"ddd, dd/MM/yyyy";
         public const string DDD_dd_MMM = "ddd ,dd MMM";
     }
 

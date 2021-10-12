@@ -36,6 +36,18 @@
     <None Update="AppData\SqlCommands\CollectorRequestCommands\TrailCollectingRequestInDay.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="AppData\SqlCommands\FeedbackCommands\CollectDealTransactionFeedback.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AppData\SqlCommands\FeedbackCommands\CollectorFeedbackToSystem.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AppData\SqlCommands\FeedbackCommands\SellCollectTransFeedback.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AppData\SqlCommands\FeedbackCommands\SellerFeedbackToSystem.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="AppData\SqlCommands\StatisticCommands\DealerDashboardStastistic.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

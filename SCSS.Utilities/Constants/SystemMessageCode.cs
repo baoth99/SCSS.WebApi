@@ -128,5 +128,13 @@ namespace SCSS.Utilities.Constants
         /// The fixed data.
         /// </value>
         public static string FixedData => "300013";
+
+        /// <summary>
+        /// Gets the existed data.
+        /// </summary>
+        /// <value>
+        /// The existed data.
+        /// </value>
+        public static string DataAlreadyExists => "300014";
     }
 }

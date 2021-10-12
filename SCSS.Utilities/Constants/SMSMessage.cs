@@ -8,33 +8,34 @@ namespace SCSS.Utilities.Constants
 {
     public class SMSMessage
     {
-        public const string Contact = "Mọi thắc mắc xin liên hệ email: vechaixanh.hotro@gmail.com hoặc số điện thoại: 0939872902";
+        public const string HeaderMessage = "Ung dung VeChaiXANH xin thong bao: \n";
+        public const string Contact = "Moi thac mac xin lien he email: vechaixanh.hotro@gmail.com hoac so dien thoai: 0939872902";
 
         public static string ApprovedSMS()
         {
-            var sms = "Ứng dụng VeChaiXANH Thu Gom xin thông báo: \n" +
-                      "Tài khoản của bạn đã được kích hoạt thành công. Hãy sử dụng tài khoản bạn đã đăng ký để đăng nhập vào ứng dụng. " + Contact;
+            var sms =  HeaderMessage +
+                      "Tai khoan cua ban da duoc kich hoat thanh cong. Hay su dung tai khoan ban da dang ky de dang nhap vao ung dung. " + Contact;
             return sms;
         }
 
         public static string BlockSMS()
         {
-            var sms = "Ứng dụng VeChaiXANH Thu Gom xin thông báo: \n" +
-                      "Tài khoản của bạn đã bị khóa tạm thời. " + Contact;
+            var sms = HeaderMessage +
+                      "Tai khoan cua ban da bi khoa tam thoi. " + Contact;
             return sms;
         }
 
         public static string UnBlockSMS()
         {
-            var sms = "Ứng dụng VeChaiXANH Thu Gom xin thông báo: \n" +
-                      "Tài khoản của bạn được mở khóa. " + Contact;
+            var sms = HeaderMessage +
+                      "Tai khoan cua ban duoc mo khoa. " + Contact;
             return sms;
         }
 
         public static string RejectedSMS()
         {
-            var sms = "Ứng dụng VeChaiXANH Thu Gom xin thông báo: \n" +
-                      "Tài khoản của bạn đã bị từ chối kích hoạt. " + Contact;
+            var sms = HeaderMessage +
+                      "Tai khoan cua ban da bi tu choi kich hoat. " + Contact;
             return sms;
         }
 

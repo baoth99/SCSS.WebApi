@@ -91,7 +91,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                       x.CloseTime
                                                                                   }) 
                                                                         .Join(_locationRepository.GetAllAsNoTracking(), x => x.LocationId, y => y.Id,
-                                                                                  (x, y) => new
+                                                                                  (x, y) => new             
                                                                                   {
                                                                                       DealerId = x.Id,
                                                                                       x.DealerName,
