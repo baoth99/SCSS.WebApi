@@ -31,6 +31,8 @@
 
         public static class AccountApiUrl
         {
+            public const string RegisterOTP = Account + "/register-otp";
+            public const string RestoreOTP = Account + "/restore-pass-otp";
             public const string RegisterSellerAccount = Account + "/register";
             public const string UpdateSellerAccount = Account + "/update";
             public const string InfoDetail = Account + "/seller-info";

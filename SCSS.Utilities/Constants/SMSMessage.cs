@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SCSS.Utilities.Constants
+﻿namespace SCSS.Utilities.Constants
 {
     public class SMSMessage
     {
         public const string HeaderMessage = "Ung dung VeChaiXANH xin thong bao: \n";
         public const string Contact = "Moi thac mac xin lien he email: vechaixanh.hotro@gmail.com hoac so dien thoai: 0939872902";
+
+        public static string OtpSMS(string otp)
+        {
+            var sms = HeaderMessage +
+                      $"Ma OTP cua ban la {otp}. OTP co hieu luc trong 3 phut. Tran trong !";
+            return sms;
+        }
 
         public static string ApprovedSMS()
         {

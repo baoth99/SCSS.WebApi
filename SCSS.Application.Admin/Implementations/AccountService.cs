@@ -2,11 +2,10 @@
 using SCSS.Application.Admin.Interfaces;
 using SCSS.Application.Admin.Models.AccountModels;
 using SCSS.AWSService.Interfaces;
+using SCSS.AWSService.Models.SQSModels;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
-using SCSS.TwilioService.Interfaces;
-using SCSS.TwilioService.Models;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
@@ -39,7 +38,7 @@ namespace SCSS.Application.Admin.Implementations
 
         #region Services
 
-        private readonly ISMSService _SMSService;
+        private readonly ISQSPublisherService _SQSPublisherService;
 
         #endregion
 
@@ -51,11 +50,11 @@ namespace SCSS.Application.Admin.Implementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, ISMSService SMSService) : base(unitOfWork, userAuthSession, logger)
+        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, ISQSPublisherService SQSPublisherService) : base(unitOfWork, userAuthSession, logger)
         {
             _accountRepository = unitOfWork.AccountRepository;
             _roleRepository = unitOfWork.RoleRepository;
-            _SMSService = SMSService;
+            _SQSPublisherService = SQSPublisherService;
         }
 
         #endregion
@@ -209,13 +208,13 @@ namespace SCSS.Application.Admin.Implementations
 
             await UnitOfWork.CommitAsync();
 
-            var smsModel = new SendSMSModel()
+            var smsModel = new SMSMessageQueueModel()
             {
                 Phone = account.Phone,
                 Content = message
             };
 
-            await _SMSService.SendSMS(smsModel);
+            await _SQSPublisherService.SMSMessageQueuePublisher.SendMessageAsync(smsModel);
 
             return BaseApiResponse.OK();
         }

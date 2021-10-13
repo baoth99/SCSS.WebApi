@@ -43,6 +43,10 @@ namespace SCSS.Utilities.Configurations
 
         public static string ID4RegisterSellerUrl => ConfigurationHelper.GetValue<string>(AppSettingKeys.IdentityServer.RegisterSeller);
 
+        public static string ID4RegisterOTP => ConfigurationHelper.GetValue<string>(AppSettingKeys.IdentityServer.RegisterOtp);
+
+        public static string ID4RestoreOTP => ConfigurationHelper.GetValue<string>(AppSettingKeys.IdentityServer.RestoreOtp);
+
         public static string AWSS3AccessKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.S3AccessKey);
 
         public static string AWSS3SecretKey => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSService.S3SecretKey);
@@ -66,6 +70,8 @@ namespace SCSS.Utilities.Configurations
         public static bool IsEnabledSubscriber => ConfigurationHelper.GetValue<bool>(AppSettingKeys.AWSSQSSetting.EnableSubscriber);
 
         public static string NotificationQueueUrl => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSSQSSetting.NotificationQueueUrl);
+
+        public static string SMSMessageQueueUrl => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSSQSSetting.SMSMessageQueueUrl);
 
         public static int MaxNumberOfMessages => ConfigurationHelper.GetValue<int>(AppSettingKeys.AWSSQSSetting.MaxNumberOfMessages);
 

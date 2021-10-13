@@ -38,6 +38,8 @@ namespace SCSS.Utilities.Configurations
             public const string RegisterDealerMember = "IdentityServer:RegisterDealerMember";
             public const string RegisterCollector = "IdentityServer:RegisterCollector";
             public const string RegisterSeller = "IdentityServer:RegisterSeller";
+            public const string RegisterOtp = "IdentityServer:RegisterOtp";
+            public const string RestoreOtp = "IdentityServer:RestoreOtp";
         }
 
         public static class AWSService
@@ -61,6 +63,7 @@ namespace SCSS.Utilities.Configurations
             public const string EnablePublisher = "AWSSQSSetting:EnablePublisher";
             public const string EnableSubscriber = "AWSSQSSetting:EnableSubscriber";
             public const string NotificationQueueUrl = "AWSSQSSetting:NotificationQueueUrl";
+            public const string SMSMessageQueueUrl = "AWSSQSSetting:SMSMessageQueueUrl";
             public const string MaxNumberOfMessages = "AWSSQSSetting:MaxNumberOfMessages";
             public const string WaitTimeSeconds = "AWSSQSSetting:WaitTimeSeconds";
         }

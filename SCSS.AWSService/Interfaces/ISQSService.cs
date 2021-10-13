@@ -1,10 +1,6 @@
 ﻿using SCSS.AWSService.Models.SQSModels;
 using SCSS.AWSService.SQSHandlers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SCSS.AWSService.Interfaces
 {
@@ -20,6 +16,14 @@ namespace SCSS.AWSService.Interfaces
         /// </value>
         ISQSPublisher<NotificationMessageQueueModel> NotificationMessageQueuePublisher { get; }
 
+        /// <summary>
+        /// Gets the SMS message queue publisher.
+        /// </summary>
+        /// <value>
+        /// The SMS message queue publisher.
+        /// </value>
+        ISQSPublisher<SMSMessageQueueModel> SMSMessageQueuePublisher { get; }
+
         #endregion
     }
 
@@ -34,6 +38,14 @@ namespace SCSS.AWSService.Interfaces
         /// The notification message queue subscriber.
         /// </value>
         ISQSSubscriber<NotificationMessageQueueModel> NotificationMessageQueueSubscriber { get; }
+
+        /// <summary>
+        /// Gets the SMS message queue subscriber.
+        /// </summary>
+        /// <value>
+        /// The SMS message queue subscriber.
+        /// </value>
+        ISQSSubscriber<SMSMessageQueueModel> SMSMessageQueueSubscriber { get; }
 
         #endregion
     }

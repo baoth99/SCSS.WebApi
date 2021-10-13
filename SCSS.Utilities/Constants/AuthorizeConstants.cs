@@ -42,6 +42,8 @@ namespace SCSS.Utilities.Constants
         public static string RegisterDealerMember => AppSettingValues.ID4RegisterDealerMemberUrl;
         public static string RegisterCollector => AppSettingValues.ID4RegisterCollectorUrl;
         public static string RegisterSeller => AppSettingValues.ID4RegisterSellerUrl;
+        public static string OtpForRegister => AppSettingValues.ID4RegisterOTP;
+        public static string OtpForRestorePassword => AppSettingValues.ID4RestoreOTP;
     }
 
     public class IdentityServer4Constant

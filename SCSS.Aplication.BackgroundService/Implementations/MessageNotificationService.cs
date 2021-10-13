@@ -15,7 +15,6 @@ namespace SCSS.Aplication.BackgroundService.Implementations
 {
     public class MessageNotificationService : BaseService, IMessageNotificationService
     {
-
         #region Repositoris
 
         /// <summary>
@@ -34,9 +33,13 @@ namespace SCSS.Aplication.BackgroundService.Implementations
 
         #endregion
 
-
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageNotificationService"/> class.
+        /// </summary>
+        /// <param name="unitOfWork">The unit of work.</param>
+        /// <param name="FCMService">The FCM service.</param>
         public MessageNotificationService(IUnitOfWork unitOfWork, IFCMService FCMService) : base(unitOfWork)
         {
             _notificationRepository = unitOfWork.NotificationRepository;

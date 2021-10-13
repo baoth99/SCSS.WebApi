@@ -28,9 +28,9 @@ namespace SCSS.WebApi.SystemConfigurations
             Environment.SetEnvironmentVariable(AppSettingValues.GoogleCredentials, AppSettingValues.FirebaseCredentialFile);
 
             // Connect to Twilio Service
-            string accountSid = AppSettingValues.TwilioAccountSID;
-            string authToken = AppSettingValues.TwilioAuthToken;
-            TwilioClient.Init(accountSid, authToken);
+            //string accountSid = AppSettingValues.TwilioAccountSID;
+            //string authToken = AppSettingValues.TwilioAuthToken;
+            //TwilioClient.Init(accountSid, authToken);
 
             // Connect to Firebase Service
             FirebaseApp.Create(new AppOptions()
@@ -47,7 +47,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<IFCMService, FCMService>();
 
             // Twilio
-            services.AddScoped<ISMSService, SMSService>();
+            //services.AddScoped<ISMSService, SMSService>();
 
             // AWS
             services.AddScoped<IStorageBlobS3Service, StorageBlobS3Service>();

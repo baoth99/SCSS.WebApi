@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SCSS.AWSService.Interfaces;
 using SCSS.AWSService.Models;
 using SCSS.AWSService.Models.SQSModels;
@@ -25,43 +26,30 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         //private ICacheListService _cacheListService;
 
-        //private ISMSService _SMSService;
-
-        //public DemoController(ISQSPublisherService sQSPublisherService, IQueueEngineFactory queueEngineFactory, IStringCacheService cacheService, ICacheListService cacheListService, ISMSService SMSService)
+        //public DemoController(ISQSPublisherService sQSPublisherService, IQueueEngineFactory queueEngineFactory, IStringCacheService cacheService, ICacheListService cacheListService)
         //{
         //    _SQSPublisherService = sQSPublisherService;
         //    _queueEngineFactory = queueEngineFactory;
         //    _cacheService = cacheService;
         //    _cacheListService = cacheListService;
-        //    _SMSService = SMSService;
         //}
 
-
+        //[AllowAnonymous]
         //[HttpGet]
         //[Route(AdminApiUrlDefinition.AccountApiUrl.Search + "/demo-sms")]
         //public async Task<string> TestDemo([FromQuery] string phone, [FromQuery] string name)
         //{
-        //    //var model = new NotificationMessageQueueModel()
-        //    //{
-        //    //    AccountId = Guid.Parse("b3c16d0f-2f4f-4440-8f72-24c141ab52ad"),
-        //    //    DeviceId = "dpgwwDPBRrakiNQWNcq94L:APA91bHT6-SowYIiHpSp3XpaK2drGxGYQvxb75sfnwlUU9ia-HSlZAMC2KX90V7-tS2itAagPDuBen3TLBnMmk-Mr9gXZG_W5NQnKKU6XCpitl0V_9MULXPZ6FRG-GCJ9nF-d62Lv8tb",
-        //    //    Title = "Test lại Tiến Ơi",
-        //    //    Body = "Test lại Tiến Ơi Test lại Tiến Ơi Test lại Tiến Ơi Test lại Tiến Ơi",
-        //    //    NotiType = 100,
-        //    //    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, "b3c16d0f-2f4f-4440-8f72-24c141ab52ad")
-        //    //};
-        //    //await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(model);
         //    string Contact = "Moi thac mac xin lien he email: vechaixanh.hotro@gmail.com hoac so dien thoai: 0939872902";
         //    var sms = "Ung dung VeChaiXANH Thu Gom xin thong bao: \n" +
         //             $"Chao mung {name}. Tai khoan cua ban da duoc kich hoat thanh cong. Hay su dung tai khoan ban da dang ky de dang nhap vao ung dung. " + Contact;
-        //    var model = new SendSMSModel()
+
+        //    var model = new SMSMessageQueueModel()
         //    {
         //        Phone = phone,
-        //        Content = sms
+        //        Content = name,
         //    };
 
-        //    await _SMSService.SendSMS(model);
-
+        //    await _SQSPublisherService.SMSMessageQueuePublisher.SendMessageAsync(model);
 
         //    return "DEMO";
         //}

@@ -22,6 +22,8 @@ namespace SCSS.AWSService.Implementations
 
         private ISQSPublisher<NotificationMessageQueueModel> _notificationMessageQueuePublisher;
 
+        private ISQSPublisher<SMSMessageQueueModel> _SMSMessageQueuePublisher;
+
         #endregion
 
         #region Constructor
@@ -40,6 +42,8 @@ namespace SCSS.AWSService.Implementations
         #region Publish Access
 
         public ISQSPublisher<NotificationMessageQueueModel> NotificationMessageQueuePublisher => _notificationMessageQueuePublisher ??= (_notificationMessageQueuePublisher = new SQSPublisher<NotificationMessageQueueModel>(AmazonSQS, AppSettingValues.NotificationQueueUrl, Logger));
+
+        public ISQSPublisher<SMSMessageQueueModel> SMSMessageQueuePublisher => _SMSMessageQueuePublisher ??= (_SMSMessageQueuePublisher = new SQSPublisher<SMSMessageQueueModel>(AmazonSQS, AppSettingValues.SMSMessageQueueUrl, Logger));
 
         #endregion
 
@@ -61,6 +65,8 @@ namespace SCSS.AWSService.Implementations
 
         private ISQSSubscriber<NotificationMessageQueueModel> _notificationMessageQueueSubscriber;
 
+        private ISQSSubscriber<SMSMessageQueueModel> _SMSMessageQueueSubscriber;
+
         #endregion
 
         #region Constructor
@@ -79,6 +85,8 @@ namespace SCSS.AWSService.Implementations
         #region  Publish Access
 
         public ISQSSubscriber<NotificationMessageQueueModel> NotificationMessageQueueSubscriber => _notificationMessageQueueSubscriber ??= (_notificationMessageQueueSubscriber = new SQSSubscriber<NotificationMessageQueueModel>(AmazonSQS, AppSettingValues.NotificationQueueUrl, Logger));
+
+        public ISQSSubscriber<SMSMessageQueueModel> SMSMessageQueueSubscriber => _SMSMessageQueueSubscriber ??= (_SMSMessageQueueSubscriber = new SQSSubscriber<SMSMessageQueueModel>(AmazonSQS, AppSettingValues.SMSMessageQueueUrl, Logger));
 
         #endregion
 

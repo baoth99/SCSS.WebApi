@@ -82,6 +82,8 @@ namespace SCSS.Application.Admin.Implementations
             var sellerRoleId = _roleRepository.GetAsNoTracking(x => x.Key == AccountRole.SELLER).Id;
             var collectorRoleId = _roleRepository.GetAsNoTracking(x => x.Key == AccountRole.COLLECTOR).Id;
 
+            //var testData = _collectingRequestRepository.GetManyAsNoTracking(x => DbFunctions.TruncateTime(x.CreatedTime))
+
             var dataDB = await _collectingRequestRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.CollectingRequestCode) || x.CollectingRequestCode.Contains(model.CollectingRequestCode)) &&
                                                                                         (model.Status == NumberConstant.Zero || x.Status == model.Status)).ToListAsync();
 
