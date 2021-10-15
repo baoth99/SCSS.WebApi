@@ -64,6 +64,8 @@ namespace SCSS.Application.Admin.Models.FeedbackModels
 
         public int TotalRecord { get; set; }
 
+        public DateTime? CreatedTime { get; set; }
+
     }
 
     public class CollectorFeedbackToSystemSqlModel
@@ -87,5 +89,8 @@ namespace SCSS.Application.Admin.Models.FeedbackModels
         public string RepliedContent { get; set; }
 
         public int TotalRecord { get; set; }
+
+        public DateTime? CreatedTime { get; set; }
+
     }
 }

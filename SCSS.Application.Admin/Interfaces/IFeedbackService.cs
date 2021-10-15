@@ -30,14 +30,14 @@ namespace SCSS.Application.Admin.Interfaces
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> GetSellerFeedbackToSystem(BaseFilterModel model);
+        Task<BaseApiResponseModel> GetSellerFeedbackToSystem(SystemFeedbackSellerRequestModel model);
 
         /// <summary>
         /// Gets the collector feedback to system.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> GetCollectorFeedbackToSystem(BaseFilterModel model);
+        Task<BaseApiResponseModel> GetCollectorFeedbackToSystem(SystemFeedbackCollectorRequestModel model);
 
         /// <summary>
         /// Replies the feedback.

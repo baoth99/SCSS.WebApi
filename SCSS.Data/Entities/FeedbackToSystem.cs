@@ -11,6 +11,8 @@ namespace SCSS.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
+        public int RoleFeedback { get; set; }
+
         [ForeignKey("Account")]
         public Guid? SellingAccountId { get; set; }
 

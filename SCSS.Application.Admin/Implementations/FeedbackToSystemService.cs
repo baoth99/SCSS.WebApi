@@ -4,6 +4,7 @@ using SCSS.Application.Admin.Models.FeedbackModels;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
+using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace SCSS.Application.Admin.Implementations
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> GetSellerFeedbackToSystem(BaseFilterModel model)
+        public async Task<BaseApiResponseModel> GetSellerFeedbackToSystem(SystemFeedbackSellerRequestModel model)
         {
             var sql = AppFileHelper.ReadContent(AppSettingValues.FeedbackSQLCommand, "SellerFeedbackToSystem.sql");
 
@@ -28,6 +29,11 @@ namespace SCSS.Application.Admin.Implementations
             var pageSize = model.PageSize < NumberConstant.Zero ? NumberConstant.Seven : model.PageSize;
             var page = (model.Page - 1) * pageSize;
             var parameters = new DynamicParameters();
+
+            parameters.Add("@TransactionCode", model.TransactionCode);
+            parameters.Add("@SellerName", model.SellerName);
+            parameters.Add("@CollectorName", model.CollectorName);
+            parameters.Add("@CollectorPhone", model.CollectorPhone);
             parameters.Add("@Page", page);
             parameters.Add("@PageSize", pageSize);
 
@@ -44,8 +50,9 @@ namespace SCSS.Application.Admin.Implementations
                 FeedbackContent = x.FeedbackContent,
                 SellingInfo = string.Format("{0}-{1}", x.SellingAccountPhone, x.SellingAccountName),
                 BuyingInfo = string.Format("{0}-{1}", x.BuyingAccountPhone, x.BuyingAccountName),
-                RepliedContent = x.RepliedContent,
-                WasReplied = !ValidatorUtil.IsBlank(x.RepliedContent)
+                RepliedContent = StringUtils.GetString(x.RepliedContent),
+                WasReplied = !ValidatorUtil.IsBlank(x.RepliedContent),
+                FeedbackTime = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time_tt)
             }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
@@ -55,7 +62,7 @@ namespace SCSS.Application.Admin.Implementations
 
         #region Get Collector Feedback ToSystem
 
-        public async Task<BaseApiResponseModel> GetCollectorFeedbackToSystem(BaseFilterModel model)
+        public async Task<BaseApiResponseModel> GetCollectorFeedbackToSystem(SystemFeedbackCollectorRequestModel model)
         {
             var sql = AppFileHelper.ReadContent(AppSettingValues.FeedbackSQLCommand, "CollectorFeedbackToSystem.sql");
 
@@ -63,6 +70,11 @@ namespace SCSS.Application.Admin.Implementations
             var pageSize = model.PageSize < NumberConstant.Zero ? NumberConstant.Seven : model.PageSize;
             var page = (model.Page - 1) * pageSize;
             var parameters = new DynamicParameters();
+
+            parameters.Add("@TransactionCode", model.TransactionCode);
+            parameters.Add("@DealerName", model.DealerName);
+            parameters.Add("@DealerPhone", model.DealerPhone);
+            parameters.Add("@CollectorName", model.CollectorName);
             parameters.Add("@Page", page);
             parameters.Add("@PageSize", pageSize);
 
@@ -81,8 +93,9 @@ namespace SCSS.Application.Admin.Implementations
                 SellingAccountInfo = string.Format("{0}-{1}", x.SellingAccountPhone, x.SellingAccountName),
                 BuyingAccountName = x.BuyingAccountName,
                 DealerInfo = string.Format("{0}-{1}", x.DealerPhone, x.DealerName),
-                RepliedContent = x.RepliedContent,
+                RepliedContent = StringUtils.GetString(x.RepliedContent),
                 WasReplied = !ValidatorUtil.IsBlank(x.RepliedContent),
+                FeedbackTime = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time_tt)
             }).ToList();
 
 

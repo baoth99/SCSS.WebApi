@@ -89,7 +89,7 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(AdminApiUrlDefinition.FeedbackApiUrl.GetSellerFeedbackToSystem)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetSellerFeedbackToSystem([FromQuery] BaseFilterModel model)
+        public async Task<BaseApiResponseModel> GetSellerFeedbackToSystem([FromQuery] SystemFeedbackSellerRequestModel model)
         {
             return await _feedbackService.GetSellerFeedbackToSystem(model);
         }
@@ -109,7 +109,7 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(AdminApiUrlDefinition.FeedbackApiUrl.GetCollectorFeedbackToSystem)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetCollectorFeedbackToSystem([FromQuery] BaseFilterModel model)
+        public async Task<BaseApiResponseModel> GetCollectorFeedbackToSystem([FromQuery] SystemFeedbackCollectorRequestModel model)
         {
             return await _feedbackService.GetCollectorFeedbackToSystem(model);
         }

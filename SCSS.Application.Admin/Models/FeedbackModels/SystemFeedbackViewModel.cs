@@ -18,6 +18,8 @@ namespace SCSS.Application.Admin.Models.FeedbackModels
 
         public bool WasReplied { get; set; }
 
+        public string FeedbackTime { get; set; }
+
     }
 
     public class CollectorFeedbackToSystemViewModel
@@ -37,5 +39,8 @@ namespace SCSS.Application.Admin.Models.FeedbackModels
         public string RepliedContent { get; set; }
 
         public bool WasReplied { get; set; }
+
+        public string FeedbackTime { get; set; }
+
     }
 }
