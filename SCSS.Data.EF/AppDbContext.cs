@@ -91,7 +91,13 @@ namespace SCSS.Data.EF
 
         public DbSet<CollectorCancelReason> CollectorCancelReason { get; set; }
 
-        public DbSet<FeedbackToSystem> FeedbackToSystem { get; set; }
+        public DbSet<Complaint> Complaint { get; set; }
+
+        public DbSet<SellerComplaint> SellerComplaint { get; set; }
+
+        public DbSet<CollectorComplaint> CollectorComplaint { get; set; }
+
+        public DbSet<DealerComplaint> DealerComplaint { get; set; }
 
         #endregion
 
@@ -169,6 +175,21 @@ namespace SCSS.Data.EF
             modelBuilder.Entity<Role>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
+            });
+
+            modelBuilder.Entity<SellerComplaint>(entity =>
+            {
+                entity.HasIndex(e => e.ComplaintId).IsUnique();
+            });
+
+            modelBuilder.Entity<CollectorComplaint>(entity =>
+            {
+                entity.HasIndex(e => e.ComplaintId).IsUnique();
+            });
+
+            modelBuilder.Entity<DealerComplaint>(entity =>
+            {
+                entity.HasIndex(e => e.ComplaintId).IsUnique();
             });
 
             #endregion

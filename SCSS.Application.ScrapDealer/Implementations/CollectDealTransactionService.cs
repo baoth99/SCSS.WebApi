@@ -58,6 +58,11 @@ namespace SCSS.Application.ScrapDealer.Implementations
         /// </summary>
         private readonly IRepository<Role> _roleRepository;
 
+        /// <summary>
+        /// The complaint respository
+        /// </summary>
+        private readonly IRepository<Complaint> _complaintRespository;
+
         #endregion
 
         #region Services
@@ -88,6 +93,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
             _accountRepository = unitOfWork.AccountRepository;
             _roleRepository = unitOfWork.RoleRepository;
             _promotionRepository = unitOfWork.PromotionRepository;
+            _complaintRespository = unitOfWork.ComplaintRepository;
             _SQSPublisherService = SQSPublisherService;
         }
 
@@ -278,6 +284,14 @@ namespace SCSS.Application.ScrapDealer.Implementations
             collectorAccount.TotalPoint += transactionEntity.AwardPoint;
 
             _accountRepository.Update(collectorAccount);
+
+            // Create Complaint
+            var complaint = new Complaint()
+            {
+                CollectDealTransactionId = insertEntity.Id
+            };
+
+            _complaintRespository.Insert(complaint);
 
             await UnitOfWork.CommitAsync();
 

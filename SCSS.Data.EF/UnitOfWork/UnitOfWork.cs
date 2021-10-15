@@ -43,7 +43,13 @@ namespace SCSS.Data.EF.UnitOfWork
 
         private IRepository<Feedback> _feedbackRepository;
 
-        private IRepository<FeedbackToSystem> _feedbackToSystemRepository;
+        private IRepository<Complaint> _complaintRepository;
+
+        private IRepository<SellerComplaint> _sellerComplaintRepository;
+
+        private IRepository<CollectorComplaint> _collectorComplaintRepository;
+
+        private IRepository<DealerComplaint> _dealerComplaintRepository;
 
         private IRepository<ImageSlider> _imageSliderRepository;
 
@@ -107,7 +113,13 @@ namespace SCSS.Data.EF.UnitOfWork
 
         public IRepository<Feedback> FeedbackRepository => _feedbackRepository ??= (_feedbackRepository = new Repository<Feedback>(AppDbContext));
 
-        public IRepository<FeedbackToSystem> FeedbackToSystemRepository => _feedbackToSystemRepository ??= (_feedbackToSystemRepository = new Repository<FeedbackToSystem>(AppDbContext));
+        public IRepository<Complaint> ComplaintRepository => _complaintRepository ??= (_complaintRepository = new Repository<Complaint>(AppDbContext));
+
+        public IRepository<SellerComplaint> SellerComplantRepository => _sellerComplaintRepository ??= (_sellerComplaintRepository = new Repository<SellerComplaint>(AppDbContext));
+
+        public IRepository<CollectorComplaint> CollectorComplaintRepository => _collectorComplaintRepository ??= (_collectorComplaintRepository = new Repository<CollectorComplaint>(AppDbContext));
+
+        public IRepository<DealerComplaint> DealerComplaintRepository => _dealerComplaintRepository ??= (_dealerComplaintRepository = new Repository<DealerComplaint>(AppDbContext));
 
         public IRepository<ImageSlider> ImageSliderRepository => _imageSliderRepository ??= (_imageSliderRepository = new Repository<ImageSlider>(AppDbContext));
 

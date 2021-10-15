@@ -79,31 +79,27 @@ namespace SCSS.Utilities.Helper
             };
         }
 
-        public static int GetFeedbackToSystemStatus(int? collectingRequestStatus,
-                                                    Guid? collectorAccountId,
-                                                    Guid? feedbackToSysId,
-                                                    string adminReply)
+        public static int GetComplaintStatus(Guid? complantId, Guid? sellerComplantId, string adminReply)
         {
-            if (collectingRequestStatus == CollectingRequestStatus.PENDING ||
-                (collectingRequestStatus == CollectingRequestStatus.CANCEL_BY_SELLER) && ValidatorUtil.IsNull(collectorAccountId) ||
-                (collectingRequestStatus == CollectingRequestStatus.CANCEL_BY_SYSTEM) && ValidatorUtil.IsNull(collectorAccountId))
+            if (ValidatorUtil.IsNull(complantId))
             {
-                return FeedbackToSystemStatus.CanNotGiveFeedback;
+                return ComplaintStatus.CanNotGiveComplaint;
             }
 
-            if (ValidatorUtil.IsNull(feedbackToSysId))
+            if (ValidatorUtil.IsNull(sellerComplantId))
             {
-                return FeedbackToSystemStatus.CanGiveFeedback;
+                return ComplaintStatus.CanGiveComplaint;
             }
 
-            if (!ValidatorUtil.IsNull(feedbackToSysId))
+            if (!ValidatorUtil.IsNull(sellerComplantId))
             {
                 if (!ValidatorUtil.IsBlank(adminReply))
                 {
-                    return FeedbackToSystemStatus.AdminReplied;
+                    return ComplaintStatus.AdminReplied;
                 }
             }
-            return FeedbackToSystemStatus.HaveGivenFeedback;
+
+            return ComplaintStatus.HaveGivenComplaint;
         }
 
     }

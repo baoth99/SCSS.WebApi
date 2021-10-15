@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SCSS.Application.Admin.Interfaces;
 using SCSS.Application.Admin.Models;
-using SCSS.Application.Admin.Models.FeedbackModels;
+using SCSS.Application.Admin.Models.ComplaintModels;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
@@ -11,34 +11,34 @@ using System.Threading.Tasks;
 namespace SCSS.WebApi.Controllers.AdminControllers
 {
     [ApiVersion(ApiVersions.ApiVersionV1)]
-    public class FeedbackController : BaseAdminController
+    public class ComplaintController : BaseAdminController
     {
         #region Services
 
         /// <summary>
         /// The feedback service
         /// </summary>
-        private readonly IFeedbackService _feedbackService;
+        private readonly IComplaintService _complaintService;
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FeedbackController"/> class.
+        /// Initializes a new instance of the <see cref="ComplaintController"/> class.
         /// </summary>
         /// <param name="feedbackService">The feedback service.</param>
-        public FeedbackController(IFeedbackService feedbackService)
+        public ComplaintController(IComplaintService feedbackService)
         {
-            _feedbackService = feedbackService;
+            _complaintService = feedbackService;
         }
 
         #endregion
 
-        #region Search Sell Collect Transaction Feedback
+        #region Search Seller Complaint
 
         /// <summary>
-        /// Searches the sell collect transaction feedbacks.
+        /// Searches the seller complaint.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
@@ -46,20 +46,19 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminApiUrlDefinition.FeedbackApiUrl.SearchSellCollectTransactionFeedbacks)]
+        [Route(AdminApiUrlDefinition.ComplaintApiUrl.GetSellerComplaint)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> SearchSellCollectTransactionFeedbacks([FromQuery] SellCollectTransactionFeedbackSearchModel model)
+        public async Task<BaseApiResponseModel> SearchSellerComplaint([FromQuery] SellerComplaintSearchModel model)
         {
-            return await _feedbackService.SearchSellCollectTransactionFeedbacks(model);
+            return await _complaintService.SearchSellerComplaint(model);
         }
-
 
         #endregion
 
-        #region Search Sell Collect Transaction Feedback
+        #region Search Collector Complaint
 
         /// <summary>
-        /// Searches the collect deal transaction feedbacks.
+        /// Searches the collector complaint.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
@@ -67,19 +66,19 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminApiUrlDefinition.FeedbackApiUrl.SearchCollectDealTransactionFeedbacks)]
+        [Route(AdminApiUrlDefinition.ComplaintApiUrl.GetCollectorComplaint)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> SearchCollectDealTransactionFeedbacks([FromQuery] CollectDealTransactionFeedbackSearchModel model)
+        public async Task<BaseApiResponseModel> SearchCollectorComplaint([FromQuery] CollectorComplaintSearchModel model)
         {
-            return await _feedbackService.SearchCollectDealTransactionFeedbacks(model);
+            return await _complaintService.SearchCollectorComplaint(model);
         }
 
         #endregion
 
-        #region Get Seller Feedback To System
+        #region Search Dealer Complaint
 
         /// <summary>
-        /// Gets the seller feedback to system.
+        /// Searches the dealer complaint.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
@@ -87,51 +86,71 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminApiUrlDefinition.FeedbackApiUrl.GetSellerFeedbackToSystem)]
+        [Route(AdminApiUrlDefinition.ComplaintApiUrl.GetDealerComplaint)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetSellerFeedbackToSystem([FromQuery] SystemFeedbackSellerRequestModel model)
+        public async Task<BaseApiResponseModel> SearchDealerComplaint([FromQuery] DealerComplaintSearchModel model)
         {
-            return await _feedbackService.GetSellerFeedbackToSystem(model);
+            return await _complaintService.SearchDealerComplaint(model);
         }
 
         #endregion
 
-        #region Get Collector Feedback To System
+        #region Reply Seller Complaint
 
         /// <summary>
-        /// Gets the collector feedback to system.
+        /// Replies the seller complaint.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminApiUrlDefinition.FeedbackApiUrl.GetCollectorFeedbackToSystem)]
+        [Route(AdminApiUrlDefinition.ComplaintApiUrl.ReplySellerComplaint)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetCollectorFeedbackToSystem([FromQuery] SystemFeedbackCollectorRequestModel model)
+        public async Task<BaseApiResponseModel> ReplySellerComplaint([FromBody] ComplaintReplyModel model)
         {
-            return await _feedbackService.GetCollectorFeedbackToSystem(model);
+            return await _complaintService.ReplySellerComplaint(model);
         }
 
         #endregion
 
-        #region Reply Feedback        
+        #region Reply Collector Complaint
 
         /// <summary>
-        /// Replies the feedback.
+        /// Replies the collector complaint.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpPost]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(AdminApiUrlDefinition.FeedbackApiUrl.AdminRepliesFeedback)]
+        [Route(AdminApiUrlDefinition.ComplaintApiUrl.ReplyCollectorComplaint)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> ReplyFeedback([FromBody] FeedbackReplyModel model)
+        public async Task<BaseApiResponseModel> ReplyCollectorComplaint([FromBody] ComplaintReplyModel model)
         {
-            return await _feedbackService.ReplyFeedback(model);
+            return await _complaintService.ReplyCollectorComplaint(model);
+        }
+
+        #endregion
+
+        #region Reply Dealer Complaint
+
+        /// <summary>
+        /// Replies the dealer complaint.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.ComplaintApiUrl.ReplyDealerComplaint)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> ReplyDealerComplaint([FromBody] ComplaintReplyModel model)
+        {
+            return await _complaintService.ReplyDealerComplaint(model);
         }
 
         #endregion

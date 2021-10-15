@@ -48,10 +48,11 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         private readonly IRepository<Account> _accountRepository;
 
+
         /// <summary>
-        /// The notification repository
+        /// The complaint repository
         /// </summary>
-        private readonly IRepository<Notification> _notificationRepository;
+        private readonly IRepository<Complaint> _complaintRepository;
 
         #endregion
 
@@ -100,7 +101,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             _collectingRequestRejectionRepository = unitOfWork.CollectingRequestRejectionRepository;
             _locationRepository = unitOfWork.LocationRepository;
             _accountRepository = unitOfWork.AccountRepository;
-            _notificationRepository = unitOfWork.NotificationRepository;
+            _complaintRepository = unitOfWork.ComplaintRepository;
             _mapDistanceMatrixService = mapDistanceMatrixService;
             _SQSPublisherService = SQSPublisherService;
             _cacheListService = cacheListService;
@@ -341,6 +342,13 @@ namespace SCSS.Application.ScrapCollector.Implementations
             collectingRequestEntity.ApprovedTime = DateTimeVN.DATETIME_NOW;
             _collectingRequestRepository.Update(collectingRequestEntity);
 
+            var complaint = new Complaint()
+            {
+                CollectingRequestId = collectingRequestEntity.Id,
+            };
+
+            _complaintRepository.Insert(complaint);
+
             try
             {
                 await UnitOfWork.CommitAsync();
@@ -387,7 +395,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
         }
 
         #endregion Receive the Collecting Request
-
 
         #region Send Notification To User
 

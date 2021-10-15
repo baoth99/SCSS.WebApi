@@ -31,7 +31,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <summary>
         /// The feedback to system repository/
         /// </summary>
-        private IRepository<FeedbackToSystem> _feedbackToSystemRepository;
+        private IRepository<Complaint> _complaintRepository;
 
         /// <summary>
         /// The collect deal transaction repository
@@ -62,7 +62,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         public FeedbackService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _feedbackRepository = unitOfWork.FeedbackRepository;
-            _feedbackToSystemRepository = unitOfWork.FeedbackToSystemRepository;
+            _complaintRepository = unitOfWork.ComplaintRepository;
             _collectDealTransactionRepository = unitOfWork.CollectDealTransactionRepository;
             _accountRepository = unitOfWork.AccountRepository;
             _dealerInformationRepository = unitOfWork.DealerInformationRepository;
@@ -148,31 +148,31 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> CreateFeedbackToAdmin(FeedbackAdminCreateModel model)
         {
-            var transaction = _collectDealTransactionRepository.GetAsNoTracking(x => x.Id.Equals(model.CollectDealTransactionId));
+            //var transaction = _collectDealTransactionRepository.GetAsNoTracking(x => x.Id.Equals(model.CollectDealTransactionId));
 
-            if (transaction == null)
-            {
-                return BaseApiResponse.NotFound();
-            }
+            //if (transaction == null)
+            //{
+            //    return BaseApiResponse.NotFound();
+            //}
 
-            var isExisted = _feedbackToSystemRepository.IsExisted(x => x.CollectDealTransactionId.Equals(model.CollectDealTransactionId) &&
-                                                                       x.CollectingRequestId == null);
+            //var isExisted = _feedbackToSystemRepository.IsExisted(x => x.CollectDealTransactionId.Equals(model.CollectDealTransactionId) &&
+            //                                                           x.CollectingRequestId == null);
 
-            if (isExisted)
-            {
-                return BaseApiResponse.Error(SystemMessageCode.DuplicateData);
-            }
-            var entity = new FeedbackToSystem()
-            {
-                SellingAccountId = UserAuthSession.UserSession.Id,
-                BuyingAccountId = transaction.DealerAccountId,
-                SellingFeedback = model.SellingFeedback,
-                CollectDealTransactionId = transaction.Id
-            };
+            //if (isExisted)
+            //{
+            //    return BaseApiResponse.Error(SystemMessageCode.DuplicateData);
+            //}
+            //var entity = new FeedbackToSystem()
+            //{
+            //    SellingAccountId = UserAuthSession.UserSession.Id,
+            //    BuyingAccountId = transaction.DealerAccountId,
+            //    SellingFeedback = model.SellingFeedback,
+            //    CollectDealTransactionId = transaction.Id
+            //};
 
-            _feedbackToSystemRepository.Insert(entity);
+            //_feedbackToSystemRepository.Insert(entity);
 
-            await UnitOfWork.CommitAsync();
+            //await UnitOfWork.CommitAsync();
 
             return BaseApiResponse.OK();
         }

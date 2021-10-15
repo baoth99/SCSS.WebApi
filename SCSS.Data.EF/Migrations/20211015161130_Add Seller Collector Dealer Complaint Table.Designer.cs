@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCSS.Data.EF;
 
 namespace SCSS.Data.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211015161130_Add Seller Collector Dealer Complaint Table")]
+    partial class AddSellerCollectorDealerComplaintTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -407,10 +409,6 @@ namespace SCSS.Data.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComplaintId")
-                        .IsUnique()
-                        .HasFilter("[ComplaintId] IS NOT NULL");
-
                     b.ToTable("CollectorComplaint");
                 });
 
@@ -467,10 +465,6 @@ namespace SCSS.Data.EF.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ComplaintId")
-                        .IsUnique()
-                        .HasFilter("[ComplaintId] IS NOT NULL");
 
                     b.ToTable("DealerComplaint");
                 });
@@ -956,10 +950,6 @@ namespace SCSS.Data.EF.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ComplaintId")
-                        .IsUnique()
-                        .HasFilter("[ComplaintId] IS NOT NULL");
 
                     b.ToTable("SellerComplaint");
                 });

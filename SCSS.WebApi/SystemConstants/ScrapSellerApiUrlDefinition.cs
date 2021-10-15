@@ -10,6 +10,7 @@
         private const string Feedback = "feedback";
         private const string Map = "map";
         private const string Dashboard = "dashboard";
+        private const string Complaint = "seller-complaint";
 
         public static class DashboardApiUrl
         {
@@ -65,7 +66,11 @@
         public static class FeedbackApiUrl
         {
             public const string CreateTransFeedback = Feedback + "/trans-feedback/create";
-            public const string CreateFeedbackToAdmin = Feedback + "/feedback-admin/create";
+        }
+
+        public static class ComplaintApiUrl
+        {
+            public const string CreateSellerComplaint = Complaint + "/create";
         }
 
         public static class MapApiUrl

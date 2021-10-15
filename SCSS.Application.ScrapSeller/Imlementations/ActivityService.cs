@@ -66,7 +66,12 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <summary>
         /// The feedback to system repository
         /// </summary>
-        private readonly IRepository<FeedbackToSystem> _feedbackToSystemRepository;
+        private readonly IRepository<Complaint> _complainRepository;
+
+        /// <summary>
+        /// The seller complaint repository
+        /// </summary>
+        private readonly IRepository<SellerComplaint> _sellerComplaintRepository;
 
         #endregion
 
@@ -89,7 +94,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             _scrapCategoryRepository = unitOfWork.ScrapCategoryRepository;
             _scrapCategoryDetailRepository = unitOfWork.ScrapCategoryDetailRepository;
             _feedbackRepository = unitOfWork.FeedbackRepository;
-            _feedbackToSystemRepository = unitOfWork.FeedbackToSystemRepository;
+            _complainRepository = unitOfWork.ComplaintRepository;
+            _sellerComplaintRepository = unitOfWork.SellerComplantRepository;
         }
 
         #endregion
@@ -237,15 +243,24 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 }
             }
 
-            var feedbackToSys = _feedbackToSystemRepository.GetAsNoTracking(x => x.CollectingRequestId.Equals(crEntity.Id) &&
-                                                                                 x.CollectDealTransactionId == null);
+            var complaint = _complainRepository.GetManyAsNoTracking(x => x.CollectingRequestId.Equals(crEntity.Id) &&
+                                                                         x.CollectDealTransactionId == null)
+                                                .Join(_sellerComplaintRepository.GetManyAsNoTracking(x => x.SellerAccountId.Equals(UserAuthSession.UserSession.Id)), x => x.Id, y => y.ComplaintId,
+                                                      (x, y) => new 
+                                                      {
+                                                          ComplaintId = x.Id,
+                                                          SellerComplaintId = y.Id,
+                                                          y.ComplaintContent,
+                                                          y.AdminReply,
+                                                      }).FirstOrDefault();
 
 
-            dataResult.FeedbackToSystemInfo = new FeedbackToSystemInfoResponse()
+            dataResult.Complaint = new ComplaintViewModel()
             {
-                SellingFeedback = feedbackToSys?.SellingFeedback,
-                AdminReply = feedbackToSys?.AdminReply,
-                FeedbackStatus = CommonUtils.GetFeedbackToSystemStatus(crEntity.Status, crEntity.CollectorAccountId, feedbackToSys?.Id, feedbackToSys?.AdminReply)
+                ComplaintId = complaint?.ComplaintId,
+                ComplaintContent = complaint?.ComplaintContent,
+                AdminReply = complaint?.AdminReply,
+                ComplaintStatus = CommonUtils.GetComplaintStatus(complaint?.ComplaintId, complaint?.SellerComplaintId, complaint?.AdminReply)
             };
 
 

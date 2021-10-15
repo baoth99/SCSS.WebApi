@@ -107,7 +107,7 @@ namespace SCSS.Utilities.Configurations
 
         public static string StatisticSQLCommand => ConfigurationHelper.GetValue<string>(AppSettingKeys.SQLCommand.StatisticCommands);
 
-        public static string FeedbackSQLCommand => ConfigurationHelper.GetValue<string>(AppSettingKeys.SQLCommand.FeedbackCommands);
+        public static string ComplaintSQLCommands => ConfigurationHelper.GetValue<string>(AppSettingKeys.SQLCommand.ComplaintCommands);
 
         public static int ResizeImageWidth => ConfigurationHelper.GetValue<int>(AppSettingKeys.ResizeImage.Width);
 

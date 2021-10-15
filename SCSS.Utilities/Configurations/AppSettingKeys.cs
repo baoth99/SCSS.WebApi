@@ -101,7 +101,7 @@ namespace SCSS.Utilities.Configurations
         {
             public const string CollectorRequestCommand = "SqlCommands:CollectorRequestCommands";
             public const string StatisticCommands = "SqlCommands:StatisticCommands";
-            public const string FeedbackCommands = "SqlCommands:FeedbackCommands";
+            public const string ComplaintCommands = "SqlCommands:ComplaintCommands";
         }
 
         public static class ResizeImage

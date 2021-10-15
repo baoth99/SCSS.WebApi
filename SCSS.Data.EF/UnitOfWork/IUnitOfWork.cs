@@ -65,12 +65,36 @@ namespace SCSS.Data.EF.UnitOfWork
         IRepository<Feedback> FeedbackRepository { get; }
 
         /// <summary>
-        /// Gets the feedback to system repository.
+        /// Gets the complaint repository.
         /// </summary>
         /// <value>
-        /// The feedback to system repository.
+        /// The complaint repository.
         /// </value>
-        IRepository<FeedbackToSystem> FeedbackToSystemRepository { get; }
+        IRepository<Complaint> ComplaintRepository { get; }
+
+        /// <summary>
+        /// Gets the seller complant repository.
+        /// </summary>
+        /// <value>
+        /// The seller complant repository.
+        /// </value>
+        IRepository<SellerComplaint> SellerComplantRepository { get; }
+
+        /// <summary>
+        /// Gets the collector complaint repository.
+        /// </summary>
+        /// <value>
+        /// The collector complaint repository.
+        /// </value>
+        IRepository<CollectorComplaint> CollectorComplaintRepository { get; }
+
+        /// <summary>
+        /// Gets the dealer complaint repository.
+        /// </summary>
+        /// <value>
+        /// The dealer complaint repository.
+        /// </value>
+        IRepository<DealerComplaint> DealerComplaintRepository { get; }
 
         /// <summary>
         /// Gets the image slider repository.

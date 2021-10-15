@@ -15,16 +15,16 @@ namespace SCSS.WebApi.SystemConstants
         private const string ColletingRequest = "collecting-request";
         private const string SystemConfig = "sys-conf";
         private const string CollectorCancelReason = "cancel-reason";
-        private const string TransFeedback = "trans-feedback";
-        private const string SysFeedback = "sys-feedback";
+        private const string Complaint = "complaint";
 
-        public static class FeedbackApiUrl
+        public static class ComplaintApiUrl
         {
-            public const string SearchSellCollectTransactionFeedbacks = TransFeedback + "/sell-collect/search";
-            public const string SearchCollectDealTransactionFeedbacks = TransFeedback + "/collect-deal/search";
-            public const string GetSellerFeedbackToSystem = SysFeedback + "/seller/get";
-            public const string GetCollectorFeedbackToSystem = SysFeedback + "/collector/get";
-            public const string AdminRepliesFeedback = SysFeedback + "/reply";
+            public const string GetSellerComplaint = Complaint + "/seller/get";
+            public const string GetCollectorComplaint = Complaint + "/collector/get";
+            public const string GetDealerComplaint = Complaint + "/dealer/get";
+            public const string ReplySellerComplaint = Complaint + "/seller/reply";
+            public const string ReplyCollectorComplaint = Complaint + "/collector/reply";
+            public const string ReplyDealerComplaint = Complaint + "/dealer/reply";
         }
 
         public static class CollectorCancelReasonApiUrl

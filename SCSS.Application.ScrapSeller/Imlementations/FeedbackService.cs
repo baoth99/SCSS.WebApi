@@ -27,11 +27,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         private IRepository<Feedback> _feedbackRepository;
 
         /// <summary>
-        /// The feedback to system repository
-        /// </summary>
-        private IRepository<FeedbackToSystem> _feedbackToSystemRepository;
-
-        /// <summary>
         /// The sell collect transaction repository
         /// </summary>
         private IRepository<SellCollectTransaction> _sellCollectTransactionRepository;
@@ -60,7 +55,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         public FeedbackService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _feedbackRepository = unitOfWork.FeedbackRepository;
-            _feedbackToSystemRepository = unitOfWork.FeedbackToSystemRepository;
             _sellCollectTransactionRepository = unitOfWork.SellCollectTransactionRepository;
             _accountRepository = unitOfWork.AccountRepository;
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
@@ -137,45 +131,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             _accountRepository.Update(collectorAccount);
 
             await UnitOfWork.CommitAsync();
-        }
-
-        #endregion
-
-        #region Create Feedback To Admin
-
-        /// <summary>
-        /// Creates the feedback to admin.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <returns></returns>
-        public async Task<BaseApiResponseModel> CreateFeedbackToAdmin(FeedbackAdminCreateModel model)
-        {
-            var collectingRequest = _collectingRequestRepository.GetAsNoTracking(x => x.Id.Equals(model.CollectingRequestId));
-
-            if (collectingRequest == null)
-            {
-                return BaseApiResponse.NotFound();
-            }
-
-            var isExisted = _feedbackToSystemRepository.IsExisted(x => x.CollectingRequestId.Equals(model.CollectingRequestId));
-
-            if (isExisted)
-            {
-                return BaseApiResponse.Error(SystemMessageCode.DuplicateData);
-            }
-            var entity = new FeedbackToSystem()
-            {
-                CollectingRequestId = model.CollectingRequestId,
-                SellingAccountId = UserAuthSession.UserSession.Id,
-                BuyingAccountId = collectingRequest.CollectorAccountId,
-                SellingFeedback = model.SellingFeedback,
-            };
-
-            _feedbackToSystemRepository.Insert(entity);
-
-            await UnitOfWork.CommitAsync();
-
-            return BaseApiResponse.OK();
         }
 
         #endregion

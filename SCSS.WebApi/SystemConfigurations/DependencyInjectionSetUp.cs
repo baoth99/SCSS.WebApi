@@ -42,7 +42,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.Admin.Interfaces.ICollectingRequestService, SCSS.Application.Admin.Implementations.CollectingRequestService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.ISystemConfigService, SCSS.Application.Admin.Implementations.SystemConfigService>();
             services.AddScoped<SCSS.Application.Admin.Interfaces.ICollectorCancelReasonService, SCSS.Application.Admin.Implementations.CollectorCancelReasonService>();
-            services.AddScoped<SCSS.Application.Admin.Interfaces.IFeedbackService, SCSS.Application.Admin.Implementations.FeedbackService>();
+            services.AddScoped<SCSS.Application.Admin.Interfaces.IComplaintService, SCSS.Application.Admin.Implementations.ComplaintService>();
 
             #endregion Admin Application
 
@@ -78,6 +78,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IActivityService, SCSS.Application.ScrapSeller.Imlementations.ActivityService>();
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IFeedbackService, SCSS.Application.ScrapSeller.Imlementations.FeedbackService>();
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IDashboardService, SCSS.Application.ScrapSeller.Imlementations.DashboardService>();
+            services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IComplaintService, SCSS.Application.ScrapSeller.Imlementations.ComplaintService>();
 
             #endregion Seller Application           
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCSS.Data.EF;
 
 namespace SCSS.Data.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211015160853_Add Structure Complaint Table")]
+    partial class AddStructureComplaintTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -382,38 +384,6 @@ namespace SCSS.Data.EF.Migrations
                     b.ToTable("CollectorCancelReason");
                 });
 
-            modelBuilder.Entity("SCSS.Data.Entities.CollectorComplaint", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AdminReply")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid?>("CollectorAccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ComplaintContent")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid?>("ComplaintId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ComplaintedAccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ComplaintId")
-                        .IsUnique()
-                        .HasFilter("[ComplaintId] IS NOT NULL");
-
-                    b.ToTable("CollectorComplaint");
-                });
-
             modelBuilder.Entity("SCSS.Data.Entities.Complaint", b =>
                 {
                     b.Property<Guid>("Id")
@@ -441,38 +411,6 @@ namespace SCSS.Data.EF.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Complaint");
-                });
-
-            modelBuilder.Entity("SCSS.Data.Entities.DealerComplaint", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AdminReply")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("ComplaintContent")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid?>("ComplaintId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ComplaintedAccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("DealerAccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ComplaintId")
-                        .IsUnique()
-                        .HasFilter("[ComplaintId] IS NOT NULL");
-
-                    b.ToTable("DealerComplaint");
                 });
 
             modelBuilder.Entity("SCSS.Data.Entities.DealerInformation", b =>
@@ -918,50 +856,6 @@ namespace SCSS.Data.EF.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("SellCollectTransactionDetail");
-                });
-
-            modelBuilder.Entity("SCSS.Data.Entities.SellerComplaint", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AdminReply")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("ComplaintContent")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid?>("ComplaintId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ComplaintedAccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("SellerAccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ComplaintId")
-                        .IsUnique()
-                        .HasFilter("[ComplaintId] IS NOT NULL");
-
-                    b.ToTable("SellerComplaint");
                 });
 
             modelBuilder.Entity("SCSS.Data.Entities.ServiceTransaction", b =>

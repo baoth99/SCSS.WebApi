@@ -43,7 +43,7 @@ namespace SCSS.Application.ScrapSeller.Models.ActivityModels
         // Transaction Information
         public TransactionInformation Transaction { get; set; }
 
-        public FeedbackToSystemInfoResponse FeedbackToSystemInfo { get; set; }
+        public ComplaintViewModel Complaint { get; set; }
 
         public string DoneActivityDate { get; set; }
 
@@ -92,11 +92,13 @@ namespace SCSS.Application.ScrapSeller.Models.ActivityModels
         public float? RatingFeedback { get; set; }
     }
 
-    public class FeedbackToSystemInfoResponse
+    public class ComplaintViewModel
     {
-        public int FeedbackStatus { get; set; }
+        public Guid? ComplaintId { get; set; }
 
-        public string SellingFeedback { get; set; }
+        public int ComplaintStatus { get; set; }
+
+        public string ComplaintContent { get; set; }
 
         public string AdminReply { get; set; }
     }

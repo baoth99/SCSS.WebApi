@@ -183,11 +183,11 @@ namespace SCSS.Utilities.Constants
         public const int TimeUpToGiveFeedback = 3;
     }
 
-    public class FeedbackToSystemStatus
+    public class ComplaintStatus
     {
-        public const int CanNotGiveFeedback = 1;
-        public const int CanGiveFeedback = 2;
-        public const int HaveGivenFeedback = 3;
+        public const int CanNotGiveComplaint = 1;
+        public const int CanGiveComplaint = 2;
+        public const int HaveGivenComplaint = 3;
         public const int AdminReplied = 4;
     }
 
