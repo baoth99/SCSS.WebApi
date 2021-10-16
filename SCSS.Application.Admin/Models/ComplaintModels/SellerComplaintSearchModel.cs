@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SCSS.Application.Admin.Models.ComplaintModels
+﻿namespace SCSS.Application.Admin.Models.ComplaintModels
 {
-    public class SellerComplaintSearchModel
+    public class SellerComplaintSearchModel : BaseFilterModel
     {
+        public string SellerPhone { get; set; }
+
+        public string SellerName { get; set; }
     }
 }

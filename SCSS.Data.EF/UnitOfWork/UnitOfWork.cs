@@ -115,7 +115,7 @@ namespace SCSS.Data.EF.UnitOfWork
 
         public IRepository<Complaint> ComplaintRepository => _complaintRepository ??= (_complaintRepository = new Repository<Complaint>(AppDbContext));
 
-        public IRepository<SellerComplaint> SellerComplantRepository => _sellerComplaintRepository ??= (_sellerComplaintRepository = new Repository<SellerComplaint>(AppDbContext));
+        public IRepository<SellerComplaint> SellerComplaintRepository => _sellerComplaintRepository ??= (_sellerComplaintRepository = new Repository<SellerComplaint>(AppDbContext));
 
         public IRepository<CollectorComplaint> CollectorComplaintRepository => _collectorComplaintRepository ??= (_collectorComplaintRepository = new Repository<CollectorComplaint>(AppDbContext));
 

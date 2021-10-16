@@ -67,7 +67,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
 
         #endregion
 
-        #region Upload Dealer Account Image
+        #region Upload Collector Account Image
 
         /// <summary>
         /// Uploads the dealer account image.
@@ -80,7 +80,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapCollectorApiUrlDefinition.AccountApiUrl.UploadImage)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> UploadDealerAccountImage([FromForm] ImageUploadModel model)
+        public async Task<BaseApiResponseModel> UploadCollectorAccountImage([FromForm] ImageUploadModel model)
         {
             var fileName = CommonUtils.GetFileName(PrefixFileName.CollectorAccount, model.Image.FileName);
             var imageUrl = await _storageBlobS3Service.UploadImageFile(model.Image, fileName, FileS3Path.CollectorAccountImages);

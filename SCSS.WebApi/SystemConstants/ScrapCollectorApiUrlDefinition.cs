@@ -13,6 +13,13 @@ namespace SCSS.WebApi.SystemConstants
         private const string Statistic = "statistic";
         private const string Notification = "notification";
         private const string Feedback = "feedback";
+        private const string Complaint = "complaint";
+
+        public static class ComplaintApiUrl
+        {
+            public const string CollectingRequest = Complaint + "/collecting-request";
+            public const string CollectDealTrans = Complaint + "/colect-deal-trans";
+        }
 
         public static class AccountApiUrl
         {

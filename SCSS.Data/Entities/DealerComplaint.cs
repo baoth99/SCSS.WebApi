@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SCSS.Data.Entities
 {
     [Table("DealerComplaint")]
-    public class DealerComplaint
+    public class DealerComplaint : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

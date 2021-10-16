@@ -78,7 +78,7 @@ namespace SCSS.Data.EF.UnitOfWork
         /// <value>
         /// The seller complant repository.
         /// </value>
-        IRepository<SellerComplaint> SellerComplantRepository { get; }
+        IRepository<SellerComplaint> SellerComplaintRepository { get; }
 
         /// <summary>
         /// Gets the collector complaint repository.

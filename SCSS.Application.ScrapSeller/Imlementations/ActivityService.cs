@@ -95,7 +95,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             _scrapCategoryDetailRepository = unitOfWork.ScrapCategoryDetailRepository;
             _feedbackRepository = unitOfWork.FeedbackRepository;
             _complainRepository = unitOfWork.ComplaintRepository;
-            _sellerComplaintRepository = unitOfWork.SellerComplantRepository;
+            _sellerComplaintRepository = unitOfWork.SellerComplaintRepository;
         }
 
         #endregion
@@ -243,16 +243,25 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 }
             }
 
-            var complaint = _complainRepository.GetManyAsNoTracking(x => x.CollectingRequestId.Equals(crEntity.Id) &&
-                                                                         x.CollectDealTransactionId == null)
-                                                .Join(_sellerComplaintRepository.GetManyAsNoTracking(x => x.SellerAccountId.Equals(UserAuthSession.UserSession.Id)), x => x.Id, y => y.ComplaintId,
-                                                      (x, y) => new 
-                                                      {
-                                                          ComplaintId = x.Id,
-                                                          SellerComplaintId = y.Id,
-                                                          y.ComplaintContent,
-                                                          y.AdminReply,
-                                                      }).FirstOrDefault();
+            var complaint = _complainRepository.GetMany(x => x.CollectingRequestId.Equals(crEntity.Id) &&
+                                                                        x.CollectDealTransactionId == null)
+                                            .GroupJoin(_sellerComplaintRepository.GetManyAsNoTracking(x => x.SellerAccountId.Equals(UserAuthSession.UserSession.Id)), x => x.Id, y => y.ComplaintId,
+                                                            (x, y) => new
+                                                            {
+                                                                ComplaintId = x.Id,
+                                                                SellerComplaint = y
+                                                            })
+                                            .SelectMany(x => x.SellerComplaint.DefaultIfEmpty(), (x, y) => new
+                                            {
+                                                x.ComplaintId,
+                                                SellerComplaint = y
+                                            }).ToList().Select(x => new
+                                            {
+                                                x.ComplaintId,
+                                                AdminReply = x.SellerComplaint?.AdminReply,
+                                                ComplaintContent = x.SellerComplaint?.ComplaintContent,
+                                                SellerComplaintId = x.SellerComplaint?.Id
+                                            }).FirstOrDefault();
 
 
             dataResult.Complaint = new ComplaintViewModel()

@@ -6,11 +6,8 @@ using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
+using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapSeller.Imlementations
@@ -38,8 +35,18 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ComplaintService"/> class.
+        /// </summary>
+        /// <param name="unitOfWork">The unit of work.</param>
+        /// <param name="userAuthSession">The user authentication session.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="cacheService"></param>
         public ComplaintService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
+            _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
+            _sellerComplaintRepository = unitOfWork.SellerComplaintRepository;
+            _complaintRepository = unitOfWork.ComplaintRepository;
         }
 
         #endregion
@@ -61,6 +68,12 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             {
                 return BaseApiResponse.NotFound();
             }
+
+            if (_sellerComplaintRepository.IsExisted(x => x.ComplaintId.Equals(complaintEntity.Id)))
+            {
+                return BaseApiResponse.Error(SystemMessageCode.DataAlreadyExists);
+            }
+
 
             var colletingRequest = _collectingRequestRepository.GetAsNoTracking(x => x.Id.Equals(model.CollectingRequestId));
 

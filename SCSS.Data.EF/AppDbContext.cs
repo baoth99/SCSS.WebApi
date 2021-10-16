@@ -177,21 +177,6 @@ namespace SCSS.Data.EF
                 entity.Property(e => e.Id).HasDefaultValueSql("newsequentialid()");
             });
 
-            modelBuilder.Entity<SellerComplaint>(entity =>
-            {
-                entity.HasIndex(e => e.ComplaintId).IsUnique();
-            });
-
-            modelBuilder.Entity<CollectorComplaint>(entity =>
-            {
-                entity.HasIndex(e => e.ComplaintId).IsUnique();
-            });
-
-            modelBuilder.Entity<DealerComplaint>(entity =>
-            {
-                entity.HasIndex(e => e.ComplaintId).IsUnique();
-            });
-
             #endregion
 
 
