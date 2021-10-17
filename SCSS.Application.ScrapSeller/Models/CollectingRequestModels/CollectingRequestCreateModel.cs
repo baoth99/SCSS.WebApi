@@ -6,6 +6,10 @@ namespace SCSS.Application.ScrapSeller.Models.CollectingRequestModels
 {
     public class CollectingRequestCreateModel
     {
+        public string District { get; set; }
+
+        public string City { get; set; }
+
         public string AddressName { get; set; }
 
         public string Address { get; set; }

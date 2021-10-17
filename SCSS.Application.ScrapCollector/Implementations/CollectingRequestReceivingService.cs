@@ -99,6 +99,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                  y.SellerName,
                                                                  x.DistanceVal,
                                                                  x.DistanceText,
+                                                                 x.DurationTimeVal,
+                                                                 x.DurationTimeText,
                                                              }).OrderBy(x => x.DistanceVal);
 
             var totalRecord = receivingData.Count();
@@ -119,6 +121,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 IsBulky = x.IsBulky,
                 Distance = x.DistanceVal,
                 DistanceText = x.DistanceText,
+                DurationTimeText = x.DurationTimeText,
+                DurationTimeVal = x.DurationTimeVal,
             }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
@@ -145,6 +149,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             var locationEntity = _locationRepository.GetAsNoTracking(x => x.Id.Equals(collectingRequestEntity.LocationId));
             var sellerInfo = _accountRepository.GetAsNoTracking(x => x.Id.Equals(collectingRequestEntity.SellerAccountId));
+
 
             var dataResult = new CollectingRequestDetailReceivingViewModel()
             {

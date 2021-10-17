@@ -17,6 +17,12 @@ namespace SCSS.Data.Entities
         [MaxLength(255)]
         public string Address { get; set; }
 
+        [MaxLength(100)]
+        public string District { get; set; }
+
+        [MaxLength(100)]
+        public string City { get; set; }
+
         public decimal? Latitude { get; set; }
 
         public decimal? Longitude { get; set; }

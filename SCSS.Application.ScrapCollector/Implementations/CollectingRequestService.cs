@@ -140,8 +140,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                     x.SellerAccountId,
                                                                     x.TimeFrom,
                                                                     x.TimeTo,
-                                                                    y.Address,
-                                                                    y.AddressName,
+                                                                    y.District,
+                                                                    y.City,
                                                                     y.Latitude,
                                                                     y.Longitude,
                                                                     x.IsBulky,
@@ -174,8 +174,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                            y.SellerAccountId,
                                                                                            y.TimeFrom,
                                                                                            y.TimeTo,
-                                                                                           y.Address,
-                                                                                           y.AddressName,
+                                                                                           y.District,
+                                                                                           y.City,
                                                                                            y.Latitude,
                                                                                            y.Longitude,
                                                                                            y.IsBulky
@@ -234,8 +234,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                        y.CollectingRequestDate,
                                                        y.TimeFrom,
                                                        y.TimeTo,
-                                                       y.Address,
-                                                       y.AddressName,
+                                                       y.District,
+                                                       y.City,
                                                        y.IsBulky,
                                                        y.Latitude,
                                                        y.Longitude,
@@ -250,8 +250,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                     {
                                                         x.CollectingRequestId,
                                                         x.CollectingRequestCode,
-                                                        CollectingAddress = x.Address,
-                                                        CollectingRequestAddressName = x.AddressName,
+                                                        x.District,
+                                                        x.City,
                                                         x.CollectingRequestDate,
                                                         x.DistanceVal,
                                                         x.DistanceText,
@@ -265,6 +265,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                         SellerName = y.Name
                                                     }).OrderBy(x => x.DistanceVal);
 
+
+
             var totalRecord = collectingRequestData.Count();
 
             // Convert query data  to response data
@@ -272,8 +274,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             {
                 Id = x.CollectingRequestId,
                 CollectingRequestCode = x.CollectingRequestCode,
-                CollectingAddress = x.CollectingAddress,
-                CollectingAddressName = x.CollectingRequestAddressName,
+                Area = $"{x.District}, {x.City}",
                 CollectingRequestDate = x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
                 DayOfWeek = x.CollectingRequestDate.GetDayOfWeek(),
                 Distance = x.DistanceVal,
@@ -509,8 +510,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 FromTime = collectingRequestEntity.TimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
                 ToTime = collectingRequestEntity.TimeTo.ToStringFormat(TimeSpanFormat.HH_MM),
                 // Location
-                CollectingAddress = locationEntity.Address,
-                CollectingAddressName = locationEntity.AddressName,
+                Area = $"{locationEntity.District}, {locationEntity.City}",
                 Latitude = locationEntity.Latitude,
                 Longtitude = locationEntity.Longitude,
                 IsBulky = collectingRequestEntity.IsBulky,

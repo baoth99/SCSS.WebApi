@@ -31,7 +31,7 @@ namespace SCSS.Utilities.Constants
     public class GoongMapRestApiFormat
     {
         public static string DestinationCoordinate => "{0},{1}";
-        public static string AutoComplete => "{0}{1}?api_key={2}&location={3}&input={4}";
+        public static string AutoComplete => "{0}{1}?api_key={2}&location={3}&input={4}&more_compound={5}";
         public static string PlaceDetail => "{0}{1}?place_id={2}&api_key={3}";
         public static string Geocode => "{0}{1}?latlng={2}&api_key={3}";
         public static string DistanceMatrixEndpoint(string destinations) => "{0}{1}?origins={2},{3}&destinations=" + destinations + "&vehicle={4}&api_key={5}";

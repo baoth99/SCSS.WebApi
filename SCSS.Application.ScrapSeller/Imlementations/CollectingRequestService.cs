@@ -128,7 +128,9 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 Address = model.Address,
                 AddressName = model.AddressName,
                 Latitude = model.Latitude,
-                Longitude = model.Longtitude
+                Longitude = model.Longtitude,
+                District = model.District,
+                City = model.City
             };
 
             // Insert Collecting Request Location Entity

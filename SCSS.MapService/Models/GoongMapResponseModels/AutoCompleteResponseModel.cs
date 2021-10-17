@@ -21,6 +21,17 @@
         public float Score { get; set; }
 
         public PlusCode Plus_code { get; set; }
+
+        public Compound Compound { get; set; }
+    }
+
+    public class Compound
+    {
+        public string District { get; set; }
+
+        public string Commune { get; set; }
+
+        public string Province { get; set; }
     }
 
     public class StructuredFormatting

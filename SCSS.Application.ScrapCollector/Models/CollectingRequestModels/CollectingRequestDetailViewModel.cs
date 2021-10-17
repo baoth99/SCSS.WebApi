@@ -23,9 +23,7 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
 
         // Location
 
-        public string CollectingAddressName { get; set; }
-
-        public string CollectingAddress { get; set; }
+        public string Area { get; set; }
 
         public decimal? Latitude { get; set; }
 

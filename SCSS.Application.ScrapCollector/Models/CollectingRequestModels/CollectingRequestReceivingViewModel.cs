@@ -30,5 +30,9 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
         public float Distance { get; set; }
 
         public string DistanceText { get; set; }
+
+        public string DurationTimeText { get; set; }
+
+        public float DurationTimeVal { get; set; }
     }
 }

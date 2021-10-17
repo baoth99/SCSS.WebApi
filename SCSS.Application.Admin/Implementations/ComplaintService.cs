@@ -129,9 +129,9 @@ namespace SCSS.Application.Admin.Implementations
             var dataResult = sqlQuery.Select(x => new SellerComplaintViewModel()
             {
                 Id = x.SellerComplaintId,
-                CollectingRequestCode = x.CollectingRequestCode,
-                BuyingInfo = string.Format("{0}-{1}", x.BuyingAccountPhone, x.BuyingAccountName),
-                SellingInfo = string.Format("{0}-{1}", x.SellingAccountPhone, x.SellingAccountName),
+                Code = x.CollectingRequestCode,
+                ComplaintedAccountInfo = string.Format("{0}-{1}", x.BuyingAccountPhone, x.BuyingAccountName),
+                OwnerInfo = string.Format("{0}-{1}", x.SellingAccountPhone, x.SellingAccountName),
                 ComplaintContent = x.ComplaintContent,
                 RepliedContent = x.RepliedContent,
                 WasReplied = !ValidatorUtil.IsBlank(x.RepliedContent),
@@ -238,7 +238,7 @@ namespace SCSS.Application.Admin.Implementations
                                                                                                         {
                                                                                                             Id = x.CollectorComplaintId,
                                                                                                             Code = x.Code,
-                                                                                                            CollectorInfo = x.CollectorInfo,
+                                                                                                            OwnerInfo = x.CollectorInfo,
                                                                                                             ComplaintedAccountInfo = x.ComplaintedAccountInfo,
                                                                                                             ComplaintContent = x.ComplaintContent,
                                                                                                             ComplaintTime = x.ComplaintTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time_tt),
@@ -308,7 +308,7 @@ namespace SCSS.Application.Admin.Implementations
                                                                                                          {
                                                                                                              Id = x.CollectorComplaintId,
                                                                                                              Code = x.Code,
-                                                                                                             CollectorInfo = x.CollectorInfo,
+                                                                                                             OwnerInfo = x.CollectorInfo,
                                                                                                              ComplaintedAccountInfo = x.ComplaintedAccountInfo,
                                                                                                              ComplaintContent = x.ComplaintContent,
                                                                                                              ComplaintTime = x.ComplaintTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time_tt),
@@ -355,11 +355,11 @@ namespace SCSS.Application.Admin.Implementations
             var dataResult = sqlQuery.Select(x => new DealerComplaintViewModel()
             {
                 Id = x.DealerComplaintId,
-                TransactionCode = x.CollectDealTransactionCode,
+                Code = x.CollectDealTransactionCode,
                 ComplaintContent = x.ComplaintContent,
-                SellingAccountInfo = string.Format("{0}-{1}", x.SellingAccountPhone, x.SellingAccountName),
-                DealerInfo = string.Format("{0}-{1}", x.DealerPhone, x.DealerName),
-                BuyingAccountName = x.BuyingAccountName,
+                ComplaintedAccountInfo = string.Format("{0}-{1}", x.SellingAccountPhone, x.SellingAccountName),
+                OwnerInfo = string.Format("{0}-{1}", x.DealerPhone, x.DealerName),
+                DealerAccountName = x.BuyingAccountName,
                 ComplaintTime = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time_tt),
                 RepliedContent = x.RepliedContent,
                 WasReplied = !ValidatorUtil.IsBlank(x.RepliedContent),

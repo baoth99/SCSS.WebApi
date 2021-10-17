@@ -12,5 +12,6 @@ namespace SCSS.MapService.Interfaces
         /// <param name="model">The model.</param>
         /// <returns></returns>
         Task<GoongMapGeocodingResponse> ReverseGeocoding(GeocodeRequestModel model);
+
     }
 }

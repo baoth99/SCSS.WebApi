@@ -20,14 +20,11 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
         public string ToTime { get; set; }
 
         // Address
-        public string CollectingAddressName { get; set; }
-
-        public string CollectingAddress { get; set; }
+        public string Area { get; set; }
 
         public string DurationTimeText { get; set; }
 
         public float DurationTimeVal { get; set; }
-
 
         public decimal? Latitude { get; set; }
 

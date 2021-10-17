@@ -149,7 +149,8 @@ namespace SCSS.MapService
                                                                               AppSettingValues.GoongAutoCompleteEndpoint,
                                                                               AppSettingValues.GoongMapApiKey,
                                                                               model.Latitude + MarkConstant.COMMA + model.Longtitude,
-                                                                              model.KeyWord
+                                                                              model.KeyWord,
+                                                                              BooleanConstants.TRUE ? "true" : "false"
                                                                               );
         }
 

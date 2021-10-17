@@ -7,13 +7,13 @@ namespace SCSS.Application.Admin.Models.ComplaintModels
     {
         public Guid Id { get; set; }
 
-        public string CollectingRequestCode { get; set; }
+        public string Code { get; set; }
 
         public string ComplaintContent { get; set; }
 
-        public string SellingInfo { get; set; }
+        public string OwnerInfo { get; set; }
 
-        public string BuyingInfo { get; set; }
+        public string ComplaintedAccountInfo { get; set; }
 
         public string RepliedContent { get; set; }
 

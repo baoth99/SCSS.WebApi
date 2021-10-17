@@ -11,7 +11,7 @@ namespace SCSS.Application.Admin.Models.ComplaintModels
 
         public string ComplaintContent { get; set; }
 
-        public string CollectorInfo { get; set; }
+        public string OwnerInfo { get; set; }
 
         public string ComplaintedAccountInfo { get; set; }
 
