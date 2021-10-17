@@ -24,6 +24,10 @@ namespace SCSS.MapService.Models
 
         public float DistanceVal { get; set; }
 
+        public string DurationTimeText { get; set; }
+
+        public float DurationTimeVal { get; set; }
+
     }
 
 }

@@ -241,6 +241,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                        y.Longitude,
                                                        x.DistanceText,
                                                        x.DistanceVal,
+                                                       x.DurationTimeText,
+                                                       x.DurationTimeVal,
                                                        y.SellerAccountId
                                                    })
                                                   .Join(_accountRepository.GetManyAsNoTracking(x => x.RoleId.Equals(sellerRoleId)), x => x.SellerAccountId, y => y.Id,
@@ -253,6 +255,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                         x.CollectingRequestDate,
                                                         x.DistanceVal,
                                                         x.DistanceText,
+                                                        x.DurationTimeText,
+                                                        x.DurationTimeVal,
                                                         FromTime = x.TimeFrom,
                                                         ToTime = x.TimeTo,
                                                         x.IsBulky,
@@ -274,6 +278,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 DayOfWeek = x.CollectingRequestDate.GetDayOfWeek(),
                 Distance = x.DistanceVal,
                 DistanceText = x.DistanceText,
+                DurationTimeText = x.DurationTimeText,
+                DurationTimeVal = x.DurationTimeVal,
                 FromTime = x.FromTime.ToStringFormat(TimeSpanFormat.HH_MM),
                 ToTime = x.ToTime.ToStringFormat(TimeSpanFormat.HH_MM),
                 IsBulky = x.IsBulky,

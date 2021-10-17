@@ -67,6 +67,8 @@ namespace SCSS.MapService.Implementations
             {
                 result[i].DistanceText = distanceElements[i].Distance.Text;
                 result[i].DistanceVal = distanceElements[i].Distance.Value;
+                result[i].DurationTimeText = distanceElements[i].Duration.Text;
+                result[i].DurationTimeVal = distanceElements[i].Duration.Value;
             }
 
             return result;

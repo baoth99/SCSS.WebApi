@@ -24,6 +24,11 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
 
         public string CollectingAddress { get; set; }
 
+        public string DurationTimeText { get; set; }
+
+        public float DurationTimeVal { get; set; }
+
+
         public decimal? Latitude { get; set; }
 
         public decimal? Longtitude { get; set; }
