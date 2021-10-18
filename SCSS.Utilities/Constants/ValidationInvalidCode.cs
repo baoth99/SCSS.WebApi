@@ -44,8 +44,10 @@
         public const string InvalidSeller = "IVSELL0001";
         public const string InvalidTimeTo = "IVTIMETO0001";
         public const string InvalidTimeFrom = "IVTIMEFRO0001";
-        public static string OverReceive = "OCR0001";
-
+        public const string OverReceive = "OCR0001";
+        public const string TimeUpToReceive = "TUTR0001";
+        public const string NoReceiveNow = "NRN0001";
+        public const string InvalidCR = "ICR0001";
 
     }
 }

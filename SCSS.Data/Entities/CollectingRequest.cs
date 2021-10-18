@@ -31,6 +31,8 @@ namespace SCSS.Data.Entities
         [ConcurrencyCheck]
         public Guid? CollectorAccountId { get; set; }
 
+        public int? RequestType { get; set; }
+
         public DateTime? ApprovedTime { get; set; }
 
         public bool IsBulky { get; set; }
@@ -45,6 +47,7 @@ namespace SCSS.Data.Entities
         public int? Status { get; set; }
 
         public bool IsDeleted { get; set; }
+
     }
 }
 

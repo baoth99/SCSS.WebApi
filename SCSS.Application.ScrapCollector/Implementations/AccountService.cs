@@ -33,6 +33,11 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         private readonly IRepository<Role> _roleRepository;
 
+        /// <summary>
+        /// The collector coordinate repository
+        /// </summary>
+        private readonly IRepository<CollectorCoordinate> _collectorCoordinateRepository;
+
         #endregion
 
         #region Services
@@ -59,6 +64,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         {
             _accountRepository = unitOfWork.AccountRepository;
             _roleRepository = unitOfWork.RoleRepository;
+            _collectorCoordinateRepository = unitOfWork.CollectorCoordinateRepository;
             _storageBlobS3Service = storageBlobS3Service;
         }
 
@@ -238,6 +244,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                                  RoleName = y.Name,
                                                                                                  Status = x.Status,
                                                                                                  TotalPoint = x.TotalPoint,
+                                                                                                 Rate = x.Rating,
                                                                                              }).FirstOrDefaultAsync();
             return BaseApiResponse.OK(accountInfo);
         }
@@ -260,6 +267,43 @@ namespace SCSS.Application.ScrapCollector.Implementations
             });
 
             return qrCode;
+        }
+
+        #endregion
+
+        #region Update Coordinate
+
+        /// <summary>
+        /// Updates the coordinate.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> UpdateCoordinate(CollectorCoordinateUpdateModel model)
+        {
+            var coordinate = _collectorCoordinateRepository.GetAsNoTracking(x => x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id));
+            if (coordinate == null)
+            {
+                var coordinateEntity = new CollectorCoordinate()
+                {
+                    CollectorAccountId = UserAuthSession.UserSession.Id,
+                    Longitude = model.Longitude,
+                    Latitude = model.Latitude
+                };
+
+                _collectorCoordinateRepository.Insert(coordinateEntity);
+            }
+
+            if (coordinate != null)
+            {
+                coordinate.Latitude = model.Latitude;
+                coordinate.Longitude = model.Longitude;
+
+                _collectorCoordinateRepository.Update(coordinate);
+            }
+
+            await UnitOfWork.CommitAsync();
+
+            return BaseApiResponse.OK();
         }
 
         #endregion

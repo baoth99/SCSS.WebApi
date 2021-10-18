@@ -86,6 +86,12 @@ namespace SCSS.Utilities.Extensions
             return isSuccess ? result : NumberConstant.Zero;
         }
 
+        public static double ToDouble(this string val)
+        {
+            var isSuccess = double.TryParse(val, out double result);
+            return isSuccess ? result : NumberConstant.Zero;
+        }
+
         public static T ToEnum<T>(this string val)
         {
             return (T)Enum.Parse(typeof(T), val);

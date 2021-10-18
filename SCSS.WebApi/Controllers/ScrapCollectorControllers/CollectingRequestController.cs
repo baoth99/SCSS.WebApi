@@ -51,10 +51,10 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
 
         #endregion
 
-        #region Get Collecting Request List
+        #region Ge tCurrent Collecting Requests
 
         /// <summary>
-        /// Gets the collecting request list.
+        /// Gets the current collecting requests.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
@@ -62,14 +62,35 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapCollectorApiUrlDefinition.CollectingRequestApiUrl.Get)]
+        [Route(ScrapCollectorApiUrlDefinition.CollectingRequestApiUrl.CurrentRequests)]
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetCollectingRequestList([FromQuery] CollectingRequestFilterModel model)
+        public async Task<BaseApiResponseModel> GetCurrentCollectingRequests([FromQuery] CollectingRequestFilterModel model)
         {
-            return await _collectingRequestService.GetCollectingRequestList(model);
+            return await _collectingRequestService.GetCollectingRequests(model, CollectingRequestType.GO_NOW);
         }
 
         #endregion Get Collecting Request List
+
+        #region Get Collecting Appointments
+
+        /// <summary>
+        /// Gets the collecting appointment.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapCollectorApiUrlDefinition.CollectingRequestApiUrl.Appointments)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetCollectingAppointment([FromQuery] CollectingRequestFilterModel model)
+        {
+            return await _collectingRequestService.GetCollectingRequests(model, CollectingRequestType.MAKE_AN_APPOINTMENT);
+        }
+
+        #endregion
+
 
         #region Get Collecting Request Detail
 
@@ -106,9 +127,13 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> ReceiveCollectingRequest([FromQuery] Guid id)
         {
-            var msgErrCode = await _collectingRequestService.CheckMaxNumberCollectingRequestsCollectorRecevice();
+            var msgErrCode = await _collectingRequestService.ValidateCollectingRequest(id);
             if (!ValidatorUtil.IsBlank(msgErrCode))
             {
+                if (msgErrCode == SystemMessageCode.DataNotFound)
+                {
+                    return BaseApiResponse.NotFound();
+                }
                 return BaseApiResponse.Error(msgErrCode);
             }
             var resTuple = await _collectingRequestService.ReceiveCollectingRequest(id);

@@ -139,6 +139,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             // Auto Generate CollectingRequestEntityCode from CollectingRequestDate, collectingRequestFromTime and collectingRequestToTime
             var collectingRequestEntityCode = await GenerateCollectingRequestCode(model.CollectingRequestDate.ToDateTime().Value, collectingRequestFromTime, collectingRequestToTime);
 
+            var requestType = model.CollectingRequestDate.ToDateTime().Value.Date.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW) ? CollectingRequestType.GO_NOW : CollectingRequestType.MAKE_AN_APPOINTMENT;
+
             // Create new Collecting Request Entity
             var collectingRequestEntity = new CollectingRequest()
             {
@@ -152,6 +154,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 Note = model.Note,
                 LocationId = locationInsertEntity.Id,
                 Status = CollectingRequestStatus.PENDING,
+                RequestType = requestType
             };
 
             // Insert Collecting Request Entity 
@@ -160,28 +163,46 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             // Commit Data into Database
             await UnitOfWork.CommitAsync();
 
-            var cacheModel = new PendingCollectingRequestCacheModel()
+            _ = Task.Run(async () =>
             {
-                Id = insertEntity.Id,
-                Date = insertEntity.CollectingRequestDate.Value.Date,
-                FromTime = insertEntity.TimeFrom,
-                ToTime = insertEntity.TimeTo
-            };
+                var cacheModel = new PendingCollectingRequestCacheModel()
+                {
+                    Id = insertEntity.Id,
+                    Date = insertEntity.CollectingRequestDate.Value.Date,
+                    FromTime = insertEntity.TimeFrom,
+                    ToTime = insertEntity.TimeTo
+                };
 
-            await _cacheListService.PendingCollectingRequestCache.PushAsync(cacheModel);
+                await _cacheListService.PendingCollectingRequestCache.PushAsync(cacheModel);
+            });
 
-
-            var message = new NotificationMessageQueueModel()
+            _ = Task.Run(async () =>
             {
-                AccountId = UserAuthSession.UserSession.Id,
-                DeviceId = UserAuthSession.UserSession.DeviceId,
-                DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, insertEntity.Id.ToString()), 
-                Title = NotificationMessage.SellerRequestCRTitle,
-                Body = NotificationMessage.SellerRequestCRBody(insertEntity.CollectingRequestCode),
-                NotiType = CollectingRequestStatus.PENDING
-            };
+                var message = new NotificationMessageQueueModel()
+                {
+                    AccountId = UserAuthSession.UserSession.Id,
+                    DeviceId = UserAuthSession.UserSession.DeviceId,
+                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, insertEntity.Id.ToString()),
+                    Title = NotificationMessage.SellerRequestCRTitle,
+                    Body = NotificationMessage.SellerRequestCRBody(insertEntity.CollectingRequestCode),
+                    NotiType = CollectingRequestStatus.PENDING
+                };
 
-            await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(message);
+                await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(message);
+            });
+
+            _ = Task.Run(async () =>
+            {
+                var messageQueue = new CollectingRequestNotiticationQueueModel()
+                {
+                    CollectingRequestId = insertEntity.Id,
+                    Latitude = locationInsertEntity.Latitude.Value,
+                    Longitude = locationInsertEntity.Longitude.Value,
+                    RequestType = requestType
+                };
+
+                await _SQSPublisherService.CollectingRequestNotiticationPublisher.SendMessageAsync(messageQueue);
+            });
 
             return BaseApiResponse.OK(insertEntity.Id);
         }

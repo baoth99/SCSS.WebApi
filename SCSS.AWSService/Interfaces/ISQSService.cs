@@ -24,6 +24,14 @@ namespace SCSS.AWSService.Interfaces
         /// </value>
         ISQSPublisher<SMSMessageQueueModel> SMSMessageQueuePublisher { get; }
 
+        /// <summary>
+        /// Gets the collecting request notitication publisher.
+        /// </summary>
+        /// <value>
+        /// The collecting request notitication publisher.
+        /// </value>
+        ISQSPublisher<CollectingRequestNotiticationQueueModel> CollectingRequestNotiticationPublisher { get; }
+
         #endregion
     }
 
@@ -46,6 +54,14 @@ namespace SCSS.AWSService.Interfaces
         /// The SMS message queue subscriber.
         /// </value>
         ISQSSubscriber<SMSMessageQueueModel> SMSMessageQueueSubscriber { get; }
+
+        /// <summary>
+        /// Gets the collecting request notitication subscriber.
+        /// </summary>
+        /// <value>
+        /// The collecting request notitication subscriber.
+        /// </value>
+        ISQSSubscriber<CollectingRequestNotiticationQueueModel> CollectingRequestNotiticationSubscriber { get; }
 
         #endregion
     }

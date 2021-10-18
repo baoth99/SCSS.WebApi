@@ -33,5 +33,7 @@ namespace SCSS.Application.ScrapCollector.Models.AccountModels
         public string CreatedTime { get; set; }
 
         public int? Status { get; set; }
+
+        public float? Rate { get; set; }
     }
 }

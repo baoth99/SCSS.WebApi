@@ -31,6 +31,8 @@ namespace SCSS.Data.EF.UnitOfWork
 
         private IRepository<Account> _accountRepository;
 
+        private IRepository<CollectorCoordinate> _collectorCoordinateRepository;
+
         private IRepository<DealerInformation> _dealerInformationRepository;
 
         private IRepository<CollectingRequest> _collectingRequestRepository;
@@ -101,6 +103,8 @@ namespace SCSS.Data.EF.UnitOfWork
 
         public IRepository<Account> AccountRepository => _accountRepository ??= (_accountRepository = new Repository<Account>(AppDbContext));
 
+        public IRepository<CollectorCoordinate> CollectorCoordinateRepository => _collectorCoordinateRepository ??= (_collectorCoordinateRepository = new Repository<CollectorCoordinate>(AppDbContext));
+
         public IRepository<DealerInformation> DealerInformationRepository => _dealerInformationRepository ??= (_dealerInformationRepository = new Repository<DealerInformation>(AppDbContext));
 
         public IRepository<CollectingRequest> CollectingRequestRepository => _collectingRequestRepository ??= (_collectingRequestRepository = new Repository<CollectingRequest>(AppDbContext));
@@ -148,7 +152,8 @@ namespace SCSS.Data.EF.UnitOfWork
         public IRepository<CollectingRequestRejection> CollectingRequestRejectionRepository => _collectingRequestRejectionRepository ??= (_collectingRequestRejectionRepository = new Repository<CollectingRequestRejection>(AppDbContext));
 
         public IRepository<CollectorCancelReason> CollectorCancelReasonRepository => _collectorCancelReasonRepository ??= (_collectorCancelReasonRepository = new Repository<CollectorCancelReason>(AppDbContext));
-        #endregion
+
+        #endregion Publish Access Repositories
 
         #region Commit Async
 

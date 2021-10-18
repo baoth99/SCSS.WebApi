@@ -23,5 +23,12 @@ namespace SCSS.Application.Admin.Models.SystemConfigModels
         [TimeSpanValidation(isCompareToNow: BooleanConstants.FALSE)]
         public string OperatingTimeTo{ get; set; }
 
+        public float? NearestDistance { get; set; }
+
+        public float? NearestDistanceOfAppointment { get; set; }
+
+        public float? PriorityRating { get; set; }
+
+        public double AvailableRadius { get; set; }
     }
 }

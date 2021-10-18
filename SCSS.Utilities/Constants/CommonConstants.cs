@@ -6,6 +6,7 @@ namespace SCSS.Utilities.Constants
         public const int Zero = 0;
         public const int One = 1;
         public const int Two = 2;
+        public const int Four = 4;
         public const int NegativeOne = -1;
         public const int Five = 5;
         public const int Seven = 7;
@@ -118,6 +119,12 @@ namespace SCSS.Utilities.Constants
         public const int APPROVED = 4;
         public const int COMPLETED = 5;
         public const int CANCEL_BY_SYSTEM = 6;
+    }
+
+    public class CollectingRequestType
+    {
+        public const int GO_NOW = 1;
+        public const int MAKE_AN_APPOINTMENT = 2;
     }
 
     public class TransactionType

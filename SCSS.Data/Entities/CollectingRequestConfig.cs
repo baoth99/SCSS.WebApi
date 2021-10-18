@@ -27,6 +27,14 @@ namespace SCSS.Data.Entities
 
         public TimeSpan? OperatingTimeTo { get; set; }
 
+        public float? NearestDistance { get; set; }
+
+        public float? NearestDistanceOfAppointment { get; set; }
+
+        public float? PriorityRating { get; set; }
+
+        public double AvailableRadius { get; set; }
+
         public bool IsActive { get; set; }
 
         public bool IsDeleted { get; set; }

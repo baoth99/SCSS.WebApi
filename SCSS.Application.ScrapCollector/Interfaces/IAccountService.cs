@@ -39,5 +39,12 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         /// </summary>
         /// <returns></returns>
         Task<MemoryStream> GetQRCode();
+
+        /// <summary>
+        /// Updates the coordinate.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> UpdateCoordinate(CollectorCoordinateUpdateModel model);
     }
 }

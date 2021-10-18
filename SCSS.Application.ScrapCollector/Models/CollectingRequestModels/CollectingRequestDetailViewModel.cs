@@ -32,5 +32,9 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
         public bool IsBulky { get; set; }
 
         public string Note { get; set; }
+
+        public int? RequestType { get; set; }
+
+        public bool IsAllowedToApprove { get; set; }
     }
 }

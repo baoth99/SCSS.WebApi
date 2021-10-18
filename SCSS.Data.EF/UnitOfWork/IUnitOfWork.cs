@@ -17,6 +17,14 @@ namespace SCSS.Data.EF.UnitOfWork
         IRepository<Account> AccountRepository { get; }
 
         /// <summary>
+        /// Gets the collector coordinate.
+        /// </summary>
+        /// <value>
+        /// The collector coordinate.
+        /// </value>
+        IRepository<CollectorCoordinate> CollectorCoordinateRepository { get; }
+
+        /// <summary>
         /// Gets the dealer information repository.
         /// </summary>
         /// <value>

@@ -6,7 +6,6 @@ using SCSS.AWSService.Models;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
-using SCSS.FirebaseService.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
@@ -98,6 +97,10 @@ namespace SCSS.Application.Admin.Implementations
                 CancelTimeRange = model.CancelTimeRange,
                 TimeRangeRequestNow = model.TimeRangeRequestNow,
                 FeedbackDealine = model.FeedbackDeadline,
+                NearestDistance = model.NearestDistance,
+                NearestDistanceOfAppointment = model.NearestDistanceOfAppointment,
+                PriorityRating = model.PriorityRating,
+                AvailableRadius = model.AvailableRadius
             };
 
             var insertedEntity = _collectingRequestConfigRepository.Insert(newConfig);
@@ -113,7 +116,11 @@ namespace SCSS.Application.Admin.Implementations
                 model.MaxNumberOfRequestDays,
                 model.CancelTimeRange,
                 model.TimeRangeRequestNow,
-                model.FeedbackDeadline
+                model.FeedbackDeadline,
+                model.NearestDistance,
+                model.NearestDistanceOfAppointment,
+                model.PriorityRating,
+                model.AvailableRadius
             };
 
             var dic = CommonUtils.ObjToDictionary(cacheModel).ToDictionary(x => x.Key.ToEnum<CacheRedisKey>(), y => y.Value);
@@ -158,7 +165,11 @@ namespace SCSS.Application.Admin.Implementations
                                                                             y.Name,
                                                                             x.CancelTimeRange,
                                                                             x.TimeRangeRequestNow,
-                                                                            x.FeedbackDealine
+                                                                            x.FeedbackDealine,
+                                                                            x.NearestDistance,
+                                                                            x.NearestDistanceOfAppointment,
+                                                                            x.PriorityRating,
+                                                                            x.AvailableRadius
                                                                         })
                                                                   .OrderByDescending(x => x.CreatedTime)
                                                                   .Select(x => new SystemConfigHistoryViewModel()
@@ -172,7 +183,12 @@ namespace SCSS.Application.Admin.Implementations
                                                                       DeActiveBy = x.Name,
                                                                       CancelTimeRange = x.CancelTimeRange,
                                                                       FeedbackDeadline = x.FeedbackDealine,
-                                                                      TimeRangeRequestNow = x.TimeRangeRequestNow
+                                                                      TimeRangeRequestNow = x.TimeRangeRequestNow,
+                                                                      NearestDistance = x.NearestDistance,
+                                                                      NearestDistanceOfAppointment = x.NearestDistanceOfAppointment,
+                                                                      PriorityRating = x.PriorityRating,
+                                                                      AvailableRadius = x.AvailableRadius
+                                                                      
                                                                   }).ToList();
             var dataResult = new SystemConfigViewModel()
             {
@@ -183,6 +199,10 @@ namespace SCSS.Application.Admin.Implementations
                 CancelTimeRange = configIsUsing.CancelTimeRange,
                 TimeRangeRequestNow = configIsUsing.TimeRangeRequestNow,
                 FeedbackDeadline = configIsUsing.FeedbackDealine,
+                NearestDistance = configIsUsing.NearestDistance,
+                NearestDistanceOfAppointment = configIsUsing.NearestDistanceOfAppointment,
+                PriorityRating = configIsUsing.PriorityRating,
+                AvailableRadius = configIsUsing.AvailableRadius,
                 ActiveTime = configIsUsing.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time_tt),
                 OperatingTimeFrom = configIsUsing.OperatingTimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
                 OperatingTimeTo = configIsUsing.OperatingTimeTo.ToStringFormat(TimeSpanFormat.HH_MM),

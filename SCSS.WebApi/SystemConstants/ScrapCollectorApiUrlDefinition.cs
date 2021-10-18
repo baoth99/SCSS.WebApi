@@ -29,6 +29,7 @@ namespace SCSS.WebApi.SystemConstants
             public const string UpdateDeviceId = Account + "/device-id";
             public const string UploadImage = Account + "/upload-image";
             public const string GetQRCode = Account + "/qr-code";
+            public const string UpdateCoordinate = Account + "/coordinate";
         }
 
         public static class StatisticApiUrl
@@ -73,7 +74,8 @@ namespace SCSS.WebApi.SystemConstants
 
         public static class CollectingRequestApiUrl
         {
-            public const string Get = CollectingRequest + "/get";
+            public const string CurrentRequests = CollectingRequest + "/current-requests";
+            public const string Appointments = CollectingRequest + "/appointments";
             public const string Detail = CollectingRequest + "/detail";
             public const string Receive = CollectingRequest + "/receive";
             public const string Reject = CollectingRequest + "/reject";

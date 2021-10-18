@@ -23,6 +23,14 @@ namespace SCSS.Application.Admin.Models.SystemConfigModels
 
         public int FeedbackDeadline { get; set; }
 
+        public float? NearestDistance { get; set; }
+
+        public float? NearestDistanceOfAppointment { get; set; }
+
+        public float? PriorityRating { get; set; }
+
+        public double AvailableRadius { get; set; }
+
         public string ActiveTime { get; set; }
 
         public List<SystemConfigHistoryViewModel> Histories { get; set; }
@@ -46,6 +54,14 @@ namespace SCSS.Application.Admin.Models.SystemConfigModels
         public int TimeRangeRequestNow { get; set; }
 
         public int FeedbackDeadline { get; set; }
+
+        public float? NearestDistance { get; set; }
+
+        public float? NearestDistanceOfAppointment { get; set; }
+
+        public float? PriorityRating { get; set; }
+
+        public double AvailableRadius { get; set; }
 
         public string DeActiveTime { get; set; }
 

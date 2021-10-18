@@ -223,6 +223,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 dataResult.IsCancelable = BooleanConstants.TRUE;
             }
 
+
+          
             var collectorInfo = _accountRepository.GetById(crEntity.CollectorAccountId);
 
             if (collectorInfo != null)
@@ -242,6 +244,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                     dataResult.ApprovedTime = crEntity.ApprovedTime.Value.TimeOfDay.ToStringFormat(TimeSpanFormat.HH_MM);
                 }
             }
+            
 
             var complaint = _complainRepository.GetMany(x => x.CollectingRequestId.Equals(crEntity.Id) &&
                                                                         x.CollectDealTransactionId == null)

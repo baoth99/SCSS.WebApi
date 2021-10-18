@@ -48,7 +48,11 @@
         OperatingTimeRange,
         CancelTimeRange,
         TimeRangeRequestNow,
-        FeedbackDeadline
+        FeedbackDeadline,
+        NearestDistance,
+        NearestDistanceOfAppointment,
+        PriorityRating,
+        AvailableRadius
     }
 
 

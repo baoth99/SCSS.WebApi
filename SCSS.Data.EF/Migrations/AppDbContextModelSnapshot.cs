@@ -228,6 +228,9 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("RequestType")
+                        .HasColumnType("int");
+
                     b.Property<string>("ScrapImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -263,6 +266,9 @@ namespace SCSS.Data.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<double>("AvailableRadius")
+                        .HasColumnType("float");
+
                     b.Property<int>("CancelTimeRange")
                         .HasColumnType("int");
 
@@ -284,11 +290,20 @@ namespace SCSS.Data.EF.Migrations
                     b.Property<int>("MaxNumberOfRequestDays")
                         .HasColumnType("int");
 
+                    b.Property<float?>("NearestDistance")
+                        .HasColumnType("real");
+
+                    b.Property<float?>("NearestDistanceOfAppointment")
+                        .HasColumnType("real");
+
                     b.Property<TimeSpan?>("OperatingTimeFrom")
                         .HasColumnType("time");
 
                     b.Property<TimeSpan?>("OperatingTimeTo")
                         .HasColumnType("time");
+
+                    b.Property<float?>("PriorityRating")
+                        .HasColumnType("real");
 
                     b.Property<int>("ReceiveQuantity")
                         .HasColumnType("int");
@@ -420,6 +435,38 @@ namespace SCSS.Data.EF.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CollectorComplaint");
+                });
+
+            modelBuilder.Entity("SCSS.Data.Entities.CollectorCoordinate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CollectorAccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("Latitude")
+                        .HasColumnType("decimal(8,6)");
+
+                    b.Property<decimal?>("Longitude")
+                        .HasColumnType("decimal(9,6)");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CollectorCoordinate");
                 });
 
             modelBuilder.Entity("SCSS.Data.Entities.Complaint", b =>

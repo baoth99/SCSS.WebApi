@@ -2,7 +2,7 @@
 
 namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
 {
-    public class CollectingRequestFilterModel
+    public class CollectingRequestFilterModel : BaseFilterModel
     {
         public double Radius { get; set; }
 
@@ -11,7 +11,5 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
 
         [CoordinateValidation]
         public decimal? OriginLongtitude { get; set; }
-
-        public string FilterDate { get; set; }
     }
 }

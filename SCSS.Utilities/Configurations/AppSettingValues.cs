@@ -73,6 +73,8 @@ namespace SCSS.Utilities.Configurations
 
         public static string SMSMessageQueueUrl => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSSQSSetting.SMSMessageQueueUrl);
 
+        public static string RequestNotifierQueueUrl => ConfigurationHelper.GetValue<string>(AppSettingKeys.AWSSQSSetting.RequestNotifierQueueUrl);
+
         public static int MaxNumberOfMessages => ConfigurationHelper.GetValue<int>(AppSettingKeys.AWSSQSSetting.MaxNumberOfMessages);
 
         public static int WaitTimeSeconds => ConfigurationHelper.GetValue<int>(AppSettingKeys.AWSSQSSetting.WaitTimeSeconds);

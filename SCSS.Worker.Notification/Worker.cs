@@ -113,6 +113,5 @@ namespace SCSS.Worker.Notification
 
         #endregion
 
-
     }
 }

@@ -45,5 +45,9 @@
         public static string CollectorReminderTitle(string code) => $"Yêu cầu thu gom {code} của bạn sắp đến";
 
         public static string CollectorReminderBody(string code, string addressName) => $"Yêu cầu thu gom {code} sắp đến, lịch hẹn thu gom ở {addressName}.";
+
+        public static string RequestGoNowTitle => "Yêu cầu thu gom đến ngay";
+
+        public static string RequestGoNowBody => "Có một yêu cầu thu gom mới ở gần bạn.";
     }
 }

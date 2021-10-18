@@ -51,6 +51,8 @@ namespace SCSS.Data.EF
         // Add Dbset here
         public DbSet<Account> Account { get; set; }
 
+        public DbSet<CollectorCoordinate> CollectorCoordinate { get; set; }
+
         public DbSet<DealerInformation> DealerInformation { get; set; }
 
         public DbSet<CollectingRequest> CollectingRequest { get; set; }
@@ -167,6 +169,12 @@ namespace SCSS.Data.EF
             });         
 
             modelBuilder.Entity<Location>(entity =>
+            {
+                entity.Property(e => e.Latitude).HasColumnType("decimal(8,6)");
+                entity.Property(e => e.Longitude).HasColumnType("decimal(9,6)");
+            });
+
+            modelBuilder.Entity<CollectorCoordinate>(entity =>
             {
                 entity.Property(e => e.Latitude).HasColumnType("decimal(8,6)");
                 entity.Property(e => e.Longitude).HasColumnType("decimal(9,6)");

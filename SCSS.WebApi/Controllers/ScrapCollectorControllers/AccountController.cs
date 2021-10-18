@@ -175,5 +175,25 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         }
 
         #endregion
+
+        #region Update Coordinate
+
+        /// <summary>
+        /// Updates the coordinate.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        [HttpPut]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapCollectorApiUrlDefinition.AccountApiUrl.UpdateCoordinate)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel>  UpdateCoordinate([FromBody] CollectorCoordinateUpdateModel model)
+        {
+            return await _accountService.UpdateCoordinate(model);
+        }
+
+        #endregion
     }
 }

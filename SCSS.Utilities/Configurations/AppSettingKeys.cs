@@ -64,6 +64,7 @@ namespace SCSS.Utilities.Configurations
             public const string EnableSubscriber = "AWSSQSSetting:EnableSubscriber";
             public const string NotificationQueueUrl = "AWSSQSSetting:NotificationQueueUrl";
             public const string SMSMessageQueueUrl = "AWSSQSSetting:SMSMessageQueueUrl";
+            public const string RequestNotifierQueueUrl = "AWSSQSSetting:RequestNotifierQueueUrl";
             public const string MaxNumberOfMessages = "AWSSQSSetting:MaxNumberOfMessages";
             public const string WaitTimeSeconds = "AWSSQSSetting:WaitTimeSeconds";
         }

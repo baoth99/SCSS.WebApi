@@ -110,27 +110,18 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion
 
-        #region Get Collecting Request List
+        #region Get Current Collecting Requests
 
         /// <summary>
         /// Gets the collecting request list.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> GetCollectingRequestList(CollectingRequestFilterModel model)
+        public async Task<BaseApiResponseModel> GetCollectingRequests(CollectingRequestFilterModel model, int requestType)
         {
-            var filterDate = model.FilterDate.ToDateTime();
 
-            if (filterDate != null)
-            {
-                if (filterDate.IsCompareDateTimeLessThan(DateTimeVN.DATE_NOW))
-                {
-                    filterDate = DateTimeVN.DATE_NOW;
-                }
-            }
-
-            var collectingRequestdataQuery = _collectingRequestRepository.GetMany(x => (ValidatorUtil.IsBlank(filterDate) || x.CollectingRequestDate.Value.Date.CompareTo(filterDate.Value.Date) == NumberConstant.Zero) &&
-                                                                                  x.Status == CollectingRequestStatus.PENDING && x.CollectorAccountId == null)                                                       
+            var collectingRequestdataQuery = _collectingRequestRepository.GetMany(x => x.RequestType == requestType &&
+                                                                                       x.Status == CollectingRequestStatus.PENDING && x.CollectorAccountId == null)                                             
                                                         .Join(_locationRepository.GetAll(), x => x.LocationId, y => y.Id,
                                                                 (x, y) => new
                                                                 {
@@ -146,7 +137,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                     y.Longitude,
                                                                     x.IsBulky,
                                                                 });
-
 
 
             var expiredRequests = collectingRequestdataQuery.Where(x => x.CollectingRequestDate.Value.Date.CompareTo(DateTimeVN.DATE_NOW) == NumberConstant.Zero &&
@@ -193,7 +183,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             }
 
             // Get Destination List
-            // Caculate
+            // Calculate
             model.Radius = model.Radius <= NumberConstant.Zero ? DefaultConstant.Radius : model.Radius;
 
             var destinationCoordinateRequest = collectingRequestdataQuery.ToList().Where(x => CoordinateHelper.IsInRadius(model.OriginLatitude, model.OriginLongtitude, x.Latitude, x.Longitude, model.Radius.KilometerToMeter()))
@@ -269,8 +259,11 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             var totalRecord = collectingRequestData.Count();
 
+            var page = model.Page <= NumberConstant.Zero ? NumberConstant.One : model.Page;
+            var pageSize = model.PageSize <= NumberConstant.Zero ? NumberConstant.Ten : model.PageSize;
+
             // Convert query data  to response data
-            var resData = collectingRequestData.Select(x => new CollectingRequestViewModel()
+            var resData = collectingRequestData.Skip((page - 1) * pageSize).Take(pageSize).Select(x => new CollectingRequestViewModel()
             {
                 Id = x.CollectingRequestId,
                 CollectingRequestCode = x.CollectingRequestCode,
@@ -294,21 +287,57 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion
 
-        #region Check Max Number Of Collecting Requests that Collector Can Receive;
+
+        #region Validate Collecting Request To Recevice
 
         /// <summary>
-        /// Checks the maximum number collecting requests collector recevices.
+        /// Checks the maximum number collecting requests collector recevice.
         /// </summary>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<string> CheckMaxNumberCollectingRequestsCollectorRecevice()
+        public async Task<string> ValidateCollectingRequest(Guid id)
         {
-            var maxRequest = await MaxNumberCollectingRequestCollectorReceive();
+            var collectingRequestEntity = _collectingRequestRepository.GetAsNoTracking(x => x.Id.Equals(id));
 
-            var collectingRequests = _collectingRequestRepository.GetManyAsNoTracking(x => x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id) &&
-                                                                                          x.Status == CollectingRequestStatus.APPROVED).ToList();
-            if (collectingRequests.Count >= maxRequest)
+            if (collectingRequestEntity == null)
             {
-                return InvalidCollectingRequestCode.OverReceive;
+                return SystemMessageCode.DataNotFound;
+            }
+
+            if (collectingRequestEntity.Status != CollectingRequestStatus.PENDING || collectingRequestEntity.CollectorAccountId != null)
+            {
+                return InvalidCollectingRequestCode.InvalidCR;
+            }
+
+            var collectingRequests = _collectingRequestRepository.GetManyAsNoTracking(x => x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id));
+
+            if (collectingRequestEntity.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT)
+            {
+                var maxNumberOfRequests = await MaxNumberCollectingRequestCollectorReceive();
+
+                var collectingAppointment = collectingRequests.Where(x => x.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT &&
+                                                                                      x.Status == CollectingRequestStatus.APPROVED).ToList();
+                if (collectingAppointment.Count >= maxNumberOfRequests)
+                {
+                    return InvalidCollectingRequestCode.OverReceive;
+                }
+            }
+
+            if (collectingRequestEntity.RequestType == CollectingRequestType.GO_NOW)
+            {
+                var collectingRequestsNow = collectingRequests.Where(x => x.RequestType == CollectingRequestType.GO_NOW &&
+                                                                          x.CollectingRequestDate.Value.Date.CompareTo(DateTimeVN.DATE_NOW) == NumberConstant.Zero &&
+                                                                          x.Status == CollectingRequestStatus.APPROVED).ToList();
+                if (collectingRequestsNow.Any())
+                {
+                    return InvalidCollectingRequestCode.NoReceiveNow;
+                }
+            }
+
+            if (collectingRequestEntity.CollectingRequestDate.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW) &&
+                collectingRequestEntity.TimeTo.IsCompareTimeSpanLessThan(DateTimeVN.TIMESPAN_NOW))
+            {
+                return InvalidCollectingRequestCode.TimeUpToReceive;
             }
 
             return string.Empty;
@@ -326,23 +355,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
         public async Task<Tuple<Guid?, Guid, string>> ReceiveCollectingRequest(Guid id)
         {
             var collectingRequestEntity = _collectingRequestRepository.GetById(id);
-
-            if (collectingRequestEntity == null)
-            {
-                return null;
-            }
-
-            if (collectingRequestEntity.Status != CollectingRequestStatus.PENDING || collectingRequestEntity.CollectorAccountId != null)
-            {
-                return null;
-            }
-
-            if (collectingRequestEntity.CollectingRequestDate.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW) &&
-                collectingRequestEntity.TimeTo.IsCompareTimeSpanLessThan(DateTimeVN.TIMESPAN_NOW))
-            {
-                return null;
-            }
-
 
             collectingRequestEntity.CollectorAccountId = UserAuthSession.UserSession.Id;
             collectingRequestEntity.Status = CollectingRequestStatus.APPROVED;
@@ -498,6 +510,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
             var locationEntity = _locationRepository.GetById(collectingRequestEntity.LocationId);
             var accountSellerName = _accountRepository.GetById(collectingRequestEntity.SellerAccountId).Name;
 
+            var isAllowedToApprove = await IsAllowedToApprove(collectingRequestEntity.RequestType);
+
             var responseEntity = new CollectingRequestDetailViewModel()
             {
                 Id = collectingRequestEntity.Id,
@@ -515,11 +529,35 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 Longtitude = locationEntity.Longitude,
                 IsBulky = collectingRequestEntity.IsBulky,
                 Note = collectingRequestEntity.Note,
+                RequestType = collectingRequestEntity.RequestType,
+                IsAllowedToApprove = isAllowedToApprove
             };
 
             return BaseApiResponse.OK(responseEntity);
         }
 
         #endregion
+
+
+        private async Task<bool> IsAllowedToApprove(int? requestType)
+        {
+            var collectingRequests = _collectingRequestRepository.GetManyAsNoTracking(x => x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id));
+
+            if (requestType == CollectingRequestType.MAKE_AN_APPOINTMENT)
+            {
+                var maxRequest = await MaxNumberCollectingRequestCollectorReceive();
+
+                var collectingRequestsMakeAppointment = collectingRequests.Where(x => x.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT &&
+                                                                                      x.Status == CollectingRequestStatus.APPROVED).ToList();
+                return !(collectingRequestsMakeAppointment.Count >= maxRequest);
+            }
+
+            var collectingRequestsNow = collectingRequests.Where(x => x.RequestType == CollectingRequestType.GO_NOW &&
+                                                                          x.CollectingRequestDate.Value.Date.CompareTo(DateTimeVN.DATE_NOW) == NumberConstant.Zero &&
+                                                                          x.Status == CollectingRequestStatus.APPROVED).ToList();
+           
+            return !(collectingRequestsNow.Any());
+            
+        }
     }
 }
