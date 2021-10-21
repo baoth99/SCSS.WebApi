@@ -27,6 +27,8 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
 
         public bool IsBulky { get; set; }
 
+        public int? RequestType { get; set; }
+
         public float Distance { get; set; }
 
         public string DistanceText { get; set; }

@@ -58,6 +58,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.ICollectDealTransactionService, SCSS.Application.ScrapCollector.Implementations.CollectDealTransactionService>();
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IFeedbackService, SCSS.Application.ScrapCollector.Implementations.FeedbackService>();
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IComplaintService, SCSS.Application.ScrapCollector.Implementations.ComplaintService>();
+            services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IDashboardService, SCSS.Application.ScrapCollector.Implementations.DashboardService>();
 
             #endregion Collector Application
 

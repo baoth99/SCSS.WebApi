@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
+namespace SCSS.Application.ScrapCollector.Models.DashboardModels
 {
-    public class CollectingRequestViewModel
+    public class DashboardCollectingRequestRecevingViewModel
     {
         public Guid Id { get; set; }
 
@@ -19,16 +19,10 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
 
         public string ToTime { get; set; }
 
-        // Address
-        public string Area { get; set; }
+        // Location
+        public string CollectingAddressName { get; set; }
 
-        public string DurationTimeText { get; set; }
-
-        public float DurationTimeVal { get; set; }
-
-        public decimal? Latitude { get; set; }
-
-        public decimal? Longtitude { get; set; }
+        public string CollectingAddress { get; set; }
 
         public bool IsBulky { get; set; }
 
@@ -37,5 +31,9 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
         public float Distance { get; set; }
 
         public string DistanceText { get; set; }
+
+        public string DurationTimeText { get; set; }
+
+        public float DurationTimeVal { get; set; }
     }
 }

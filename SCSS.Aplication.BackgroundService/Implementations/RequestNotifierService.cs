@@ -6,6 +6,7 @@ using SCSS.AWSService.Models.SQSModels;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
+using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
@@ -240,11 +241,9 @@ namespace SCSS.Aplication.BackgroundService.Implementations
 
             var redisKey = requestType == CollectingRequestType.GO_NOW ? CacheRedisKey.NearestDistance : CacheRedisKey.NearestDistanceOfAppointment;
 
-            var nearestDistanceKm = await GetNearestDistance(redisKey);
+            var nearestDistance = await GetNearestDistance(redisKey);
 
-            var nearestDistanceM = nearestDistanceKm.KilometerToMeter();
-
-            var nearestCollectors = dataQuery.Where(x => CoordinateHelper.IsInRadius(x.Latitude, x.Longitude, latitude, longtitude, nearestDistanceM))
+            var nearestCollectors = dataQuery.Where(x => CoordinateHelper.IsInRadius(x.Latitude, x.Longitude, latitude, longtitude, nearestDistance))
                                             .Select(x => new
                                             {
                                                 x.CollectorAccountId,

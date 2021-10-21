@@ -1,7 +1,7 @@
 ﻿
 namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
 {
-    public class CollectingRequestReceivingFilterModel
+    public class CollectingRequestReceivingFilterModel : BaseFilterModel
     {
         public string SellerPhone { get; set; }
 

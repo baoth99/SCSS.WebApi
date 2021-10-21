@@ -36,7 +36,7 @@
         public const string LimitCR = "LIMITCR001";
         public const string ToTimeGreaterThanToTime = "TTGTTT";
         public const string LessThan15Minutes = "LT15MS";
-        public const string TimeRangeNotValid = "TRNVD001";
+        public const string InValidTimeRange = "TRNVD001";
         public const string Coordinate = "IVCDN001";
         public const string InvalidDate = "IVDATE0001";
         public const string InvalidStatus = "IVSTATUS0001";

@@ -91,7 +91,6 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
 
         #endregion
 
-
         #region Get Collecting Request Detail
 
         /// <summary>
@@ -111,6 +110,20 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         }
 
         #endregion Get Collecting Request Detail
+
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+        [HttpPut]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapCollectorApiUrlDefinition.CollectingRequestApiUrl.Receive + "/test-signalr")]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> TestSignalR([FromQuery] Guid id)
+        {
+            await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(id);
+            return BaseApiResponse.OK();
+        }
+
 
         #region Receive the Collecting Request 
 

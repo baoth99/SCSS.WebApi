@@ -374,7 +374,7 @@ namespace SCSS.Utilities.Extensions
         /// </summary>
         /// <param name="time">The time.</param>
         /// <returns></returns>
-        public static TimeSpan? StripMilliseconds(this TimeSpan time)
+        public static TimeSpan? StripSeconds(this TimeSpan time)
         {
             return new TimeSpan(time.Hours, time.Minutes, 00);
         }

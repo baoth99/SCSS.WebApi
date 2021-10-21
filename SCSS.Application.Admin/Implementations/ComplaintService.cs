@@ -161,7 +161,7 @@ namespace SCSS.Application.Admin.Implementations
                                                                                       AdminReply = x.AdminReply,
                                                                                       CreatedTime = x.CreatedTime,
                                                                                       ComplaintedAccountId = x.ComplaintedAccountId,
-                                                                                      CollectorComplaintId = y.Id,
+                                                                                      CollectorComplaintId = x.Id,
                                                                                       CollectingRequestId = y.CollectingRequestId,
                                                                                       CollectDealTransactionId = y.CollectDealTransactionId
                                                                                   }).ToList();
@@ -200,13 +200,13 @@ namespace SCSS.Application.Admin.Implementations
                                                                 x.CollectorComplaintId,
                                                                 Code = y.CollectingRequestCode,
                                                                             //
-                                                                            x.ComplaintContent,
+                                                                x.ComplaintContent,
                                                                 x.AdminReply,
                                                                             //
-                                                                            x.CollectorAccountId,
+                                                                x.CollectorAccountId,
                                                                 x.ComplaintedAccountId,
                                                                             //
-                                                                            ComplaintTime = x.CreatedTime
+                                                                ComplaintTime = x.CreatedTime
                                                             })
                                                         .Join(_accountRepository.GetManyAsNoTracking(x => (ValidatorUtil.IsBlank(model.CollectorName) || x.Name.Contains(model.CollectorName)) &&
                                                                                                             (ValidatorUtil.IsBlank(model.CollectorPhone) || x.Phone.Contains(model.CollectorPhone))),
@@ -226,12 +226,12 @@ namespace SCSS.Application.Admin.Implementations
                                                         {
                                                             x.Code,
                                                                         //
-                                                                        x.CollectorComplaintId,
+                                                            x.CollectorComplaintId,
                                                             x.ComplaintContent,
                                                             x.AdminReply,
                                                             x.ComplaintTime,
                                                                         //
-                                                                        x.CollectorInfo,
+                                                            x.CollectorInfo,
                                                             ComplaintedAccountInfo = string.Format("{0}-{1}", y.Phone, y.Name)
                                                         })
                                                                                                         .Select(x => new CollectorComplainViewModel()

@@ -17,8 +17,6 @@ namespace SCSS.Worker.RequestNotifier
     {
         #region Services
 
-        private readonly ILogger<Worker> _logger;
-
         /// <summary>
         /// The SQS subscriber service
         /// </summary>
@@ -33,9 +31,13 @@ namespace SCSS.Worker.RequestNotifier
 
         #region Constructor
 
-        public Worker(ILogger<Worker> logger, ISQSSubscriberService SQSSubscriberService, IServiceScopeFactory scopeFactory)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Worker"/> class.
+        /// </summary>
+        /// <param name="SQSSubscriberService">The SQS subscriber service.</param>
+        /// <param name="scopeFactory">The scope factory.</param>
+        public Worker(ISQSSubscriberService SQSSubscriberService, IServiceScopeFactory scopeFactory)
         {
-            _logger = logger;
             _SQSSubscriberService = SQSSubscriberService;
             _scopeFactory = scopeFactory;
         }

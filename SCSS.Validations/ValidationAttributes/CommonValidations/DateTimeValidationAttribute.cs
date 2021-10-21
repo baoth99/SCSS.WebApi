@@ -62,7 +62,7 @@ namespace SCSS.Validations.ValidationAttributes.CommonValidations
 
             if (_isCompareToNow)
             {
-                if (timeSpan.IsCompareTimeSpanLessThan(DateTimeVN.TIMESPAN_NOW.StripMilliseconds()))
+                if (timeSpan.IsCompareTimeSpanLessThan(DateTimeVN.TIMESPAN_NOW.StripSeconds()))
                 {
                     return new ValidationResult(InvalidTextCode.DateTimeNow);
                 }

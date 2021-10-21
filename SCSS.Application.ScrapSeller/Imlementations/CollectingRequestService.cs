@@ -136,6 +136,14 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             // Insert Collecting Request Location Entity
             var locationInsertEntity = _locationRepository.Insert(locationEntity);
 
+            if (model.CollectingRequestDate.ToDateTime().Value.Date.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW))
+            {
+                var timeRange = await TimeRangeRequestNow();
+
+                collectingRequestFromTime = DateTimeVN.TIMESPAN_NOW.StripSeconds().Value.Add(new TimeSpan(00, timeRange, 00));
+                collectingRequestToTime = collectingRequestFromTime.Add(new TimeSpan(00, 20, 00));
+            }
+
             // Auto Generate CollectingRequestEntityCode from CollectingRequestDate, collectingRequestFromTime and collectingRequestToTime
             var collectingRequestEntityCode = await GenerateCollectingRequestCode(model.CollectingRequestDate.ToDateTime().Value, collectingRequestFromTime, collectingRequestToTime);
 
@@ -250,9 +258,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 return BaseApiResponse.NotFound();
             }
 
-            var errorList = await ValidateCollectingRequest(entity.SellerAccountId, entity.Status, 
-                                                            entity.CollectingRequestDate, 
-                                                            entity.TimeFrom);
+            var errorList = await ValidateCollectingRequest(entity);
 
             if (errorList.Any())
             {
@@ -330,31 +336,54 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <param name="status">The status.</param>
         /// <param name="collectorAccountId">The collector account identifier.</param>
         /// <returns></returns>
-        private async Task<List<string>> ValidateCollectingRequest(Guid? sellerAccountId, int? status, DateTime? collectingRequestDate, TimeSpan? timeFrom)
+        private async Task<List<string>> ValidateCollectingRequest(CollectingRequest model)
         {
             var errorList = new List<string>();
-            if (!sellerAccountId.Equals(UserAuthSession.UserSession.Id))
+            if (!model.SellerAccountId.Equals(UserAuthSession.UserSession.Id))
             {
                 errorList.Add(InvalidCollectingRequestCode.InvalidSeller);
             }
 
-            if (status == CollectingRequestStatus.COMPLETED || status == CollectingRequestStatus.CANCEL_BY_COLLECTOR)
+            if (model.Status == CollectingRequestStatus.COMPLETED || model.Status == CollectingRequestStatus.CANCEL_BY_COLLECTOR)
             {
                 errorList.Add(InvalidCollectingRequestCode.InvalidStatus);
             }
 
 
-            if (status == CollectingRequestStatus.APPROVED)
+            if (model.Status == CollectingRequestStatus.APPROVED)
             {
-                var cancelTimeRange = await CancelTimeRange();
-
-                var dateTimeFrom = collectingRequestDate.Value.Add(timeFrom.Value);
-                var timeRange = (int)dateTimeFrom.Subtract(DateTimeVN.DATETIME_NOW.StripSecondAndMilliseconds()).TotalMinutes;
-                if (timeRange <= cancelTimeRange)
+                if (model.RequestType == CollectingRequestType.GO_NOW)
                 {
-                    errorList.Add(InvalidCollectingRequestCode.TimeRangeNotValid);
+                    var approvedTime = model.ApprovedTime.Value.TimeOfDay;
+                    var timeRange = (int)DateTimeVN.TIMESPAN_NOW.Subtract(approvedTime).TotalMinutes;
+
+                    int limitedMinutes = 30;
+
+                    if (timeRange < limitedMinutes)
+                    {
+                        errorList.Add(InvalidCollectingRequestCode.InValidTimeRange);
+                    }
+                }
+
+                if (model.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT)
+                {
+                    var cancelTimeRange = await CancelTimeRange();
+
+                    var dateTimeFrom = model.CollectingRequestDate.Value.Add(model.TimeFrom.Value);
+                    var timeRange = (int)dateTimeFrom.Subtract(DateTimeVN.DATETIME_NOW.StripSecondAndMilliseconds()).TotalMinutes;
+                    if (timeRange <= cancelTimeRange)
+                    {
+                        errorList.Add(InvalidCollectingRequestCode.InValidTimeRange);
+                    }
                 }
             }
+
+
+            
+
+
+
+            
 
             return errorList;
         }
@@ -395,52 +424,45 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 errorList.Add(new ValidationError("MaxNumberCR", InvalidCollectingRequestCode.LimitCR));
             }
 
-            //  Check CollectingRequestFromTime with CollectingRequestToTime
-            //  If CollectingRequestFromTime is greater than CollectingRequestFromTime 
-            if (fromTime.IsCompareTimeSpanGreaterOrEqual(toTime))
-            {
-                errorList.Add(new ValidationError("FromTimeToTime", InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
-            }
-
-            // Check Operating Time Range
             var operatingTimeRange = await OperatingTimeRange();
 
-            if (operatingTimeRange != null)
+
+            if (!collectingRequestDate.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW))
             {
-                var IsValidFromTime = (fromTime.IsCompareTimeSpanGreaterOrEqual(operatingTimeRange.Item1) && fromTime.IsCompareTimeSpanLessOrEqual(operatingTimeRange.Item2));
-                var IsValidToTime = (toTime.IsCompareTimeSpanGreaterOrEqual(operatingTimeRange.Item1) && toTime.IsCompareTimeSpanLessOrEqual(operatingTimeRange.Item2));
-                if (!(IsValidFromTime && IsValidToTime))
+                //  Check CollectingRequestFromTime with CollectingRequestToTime
+                //  If CollectingRequestFromTime is greater than CollectingRequestFromTime 
+                if (fromTime.IsCompareTimeSpanGreaterOrEqual(toTime))
                 {
-                    errorList.Add(new ValidationError("OperatingTime", InvalidCollectingRequestCode.TimeRangeNotValid));
+                    errorList.Add(new ValidationError("FromTimeToTime", InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
+                }
+
+                // Check Operating Time Range
+
+                if (operatingTimeRange != null)
+                {
+                    var IsValidFromTime = (fromTime.IsCompareTimeSpanGreaterOrEqual(operatingTimeRange.Item1) && fromTime.IsCompareTimeSpanLessOrEqual(operatingTimeRange.Item2));
+                    var IsValidToTime = (toTime.IsCompareTimeSpanGreaterOrEqual(operatingTimeRange.Item1) && toTime.IsCompareTimeSpanLessOrEqual(operatingTimeRange.Item2));
+                    if (!(IsValidFromTime && IsValidToTime))
+                    {
+                        errorList.Add(new ValidationError("OperatingTime", InvalidCollectingRequestCode.InValidTimeRange));
+                    }
+                }
+
+                // Check minutes between fromTime and toTime. if it is less than 15 minutes => error
+                if (!DateTimeUtils.IsMoreThanOrEqualMinutes(fromTime, toTime))
+                {
+                    errorList.Add(new ValidationError("Between", InvalidCollectingRequestCode.LessThan15Minutes));
                 }
             }
+            
 
             // Check CollectingRequestFromTime and CollectingRequestToTime in day
             if (collectingRequestDate.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW))
             {
-                if (fromTime.IsCompareTimeSpanLessThan(DateTimeVN.TIMESPAN_NOW.StripMilliseconds()))
+                if (DateTimeVN.TIMESPAN_NOW.IsCompareTimeSpanGreaterOrEqual(operatingTimeRange.Item2))
                 {
-                    errorList.Add(new ValidationError(nameof(fromTime), InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
+                    errorList.Add(new ValidationError("TimeSpanNow", SystemMessageCode.TimeUp));
                 }
-                if (toTime.IsCompareTimeSpanLessThan(DateTimeVN.TIMESPAN_NOW.StripMilliseconds()))
-                {
-                    errorList.Add(new ValidationError(nameof(toTime), InvalidCollectingRequestCode.FromTimeGreaterThanToTime));
-                }
-
-                // Check FromTime in Day
-                var timeRange = await TimeRangeRequestNow();
-
-                var isValid = DateTimeUtils.IsMoreThanOrEqualMinutes(DateTimeVN.TIMESPAN_NOW, fromTime, timeRange);
-                if (!isValid)
-                {
-                    errorList.Add(new ValidationError(nameof(fromTime), InvalidCollectingRequestCode.InvalidTimeFrom));
-                }
-            }
-
-            // Check minutes between fromTime and toTime. if it is less than 15 minutes => error
-            if (!DateTimeUtils.IsMoreThanOrEqualMinutes(fromTime, toTime))
-            {
-                errorList.Add(new ValidationError("Between", InvalidCollectingRequestCode.LessThan15Minutes));
             }
 
             return errorList;

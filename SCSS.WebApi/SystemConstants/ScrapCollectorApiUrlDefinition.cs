@@ -47,7 +47,7 @@ namespace SCSS.WebApi.SystemConstants
 
         public static class HubApiUrl
         {
-            public const string CollectingRequest = Hub;
+            public const string CollectingRequest = Hub + "/collecting-request";
         }
 
         public static class DealerInformationApiUrl

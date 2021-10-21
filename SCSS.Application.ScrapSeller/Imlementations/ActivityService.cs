@@ -278,11 +278,24 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             if (dataResult.Status == CollectingRequestStatus.APPROVED)
             {
-                var cancelTimeRange = await CancelTimeRange();
+                if (crEntity.RequestType == CollectingRequestType.GO_NOW)
+                {
+                    var approvedTime = crEntity.ApprovedTime.Value.TimeOfDay;
+                    var timeRange = (int)DateTimeVN.TIMESPAN_NOW.Subtract(approvedTime).TotalMinutes;
 
-                var dateTimeFrom = crEntity.CollectingRequestDate.Value.Add(crEntity.TimeFrom.Value);
-                var timeRange = (int)dateTimeFrom.Subtract(DateTimeVN.DATETIME_NOW.StripSecondAndMilliseconds()).TotalMinutes;
-                dataResult.IsCancelable = !(timeRange <= cancelTimeRange);
+                    int limitedMinutes = 30;
+
+                    dataResult.IsCancelable = (timeRange >= limitedMinutes);
+                }
+
+
+                if (crEntity.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT)
+                {
+                    var cancelTimeRange = await CancelTimeRange();
+                    var dateTimeFrom = crEntity.CollectingRequestDate.Value.Add(crEntity.TimeFrom.Value);
+                    var timeRange = (int)dateTimeFrom.Subtract(DateTimeVN.DATETIME_NOW.StripSecondAndMilliseconds()).TotalMinutes;
+                    dataResult.IsCancelable = !(timeRange <= cancelTimeRange);
+                }
             }
 
 

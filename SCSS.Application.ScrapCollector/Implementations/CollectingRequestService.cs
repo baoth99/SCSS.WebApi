@@ -48,7 +48,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         private readonly IRepository<Account> _accountRepository;
 
-
         /// <summary>
         /// The complaint repository
         /// </summary>
@@ -110,7 +109,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion
 
-        #region Get Current Collecting Requests
+        #region Get Collecting Requests
 
         /// <summary>
         /// Gets the collecting request list.
@@ -136,6 +135,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                     y.Latitude,
                                                                     y.Longitude,
                                                                     x.IsBulky,
+                                                                    x.RequestType
                                                                 });
 
 
@@ -168,7 +168,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                            y.City,
                                                                                            y.Latitude,
                                                                                            y.Longitude,
-                                                                                           y.IsBulky
+                                                                                           y.IsBulky,
+                                                                                           y.RequestType
                                                                                        });
             // Check if [collectingRequestRejection] is any 
             if (collectingRequestRejection.Any())
@@ -183,10 +184,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
             }
 
             // Get Destination List
-            // Calculate
-            model.Radius = model.Radius <= NumberConstant.Zero ? DefaultConstant.Radius : model.Radius;
+            var radius = await AvailableRadius();
 
-            var destinationCoordinateRequest = collectingRequestdataQuery.ToList().Where(x => CoordinateHelper.IsInRadius(model.OriginLatitude, model.OriginLongtitude, x.Latitude, x.Longitude, model.Radius.KilometerToMeter()))
+            var destinationCoordinateRequest = collectingRequestdataQuery.ToList().Where(x => CoordinateHelper.IsInRadius(model.OriginLatitude, model.OriginLongtitude, x.Latitude, x.Longitude, radius))
                                                                                 .Select(x => new DestinationCoordinateModel()
                                                                                 {
                                                                                     Id = x.CollectingRequestId,
@@ -233,7 +233,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                        x.DistanceVal,
                                                        x.DurationTimeText,
                                                        x.DurationTimeVal,
-                                                       y.SellerAccountId
+                                                       y.SellerAccountId,
+                                                       y.RequestType
                                                    })
                                                   .Join(_accountRepository.GetManyAsNoTracking(x => x.RoleId.Equals(sellerRoleId)), x => x.SellerAccountId, y => y.Id,
                                                     (x, y) => new
@@ -252,6 +253,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                         x.IsBulky,
                                                         x.Latitude,
                                                         x.Longitude,
+                                                        x.RequestType,
                                                         SellerName = y.Name
                                                     }).OrderBy(x => x.DistanceVal);
 
@@ -279,14 +281,14 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 IsBulky = x.IsBulky,
                 Latitude = x.Latitude,
                 Longtitude = x.Longitude,
-                SellerName = x.SellerName
+                SellerName = x.SellerName,
+                RequestType = x.RequestType
             }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: resData);
         }
 
         #endregion
-
 
         #region Validate Collecting Request To Recevice
 
@@ -538,7 +540,15 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion
 
+        #region Is Allowed To Approve
 
+        /// <summary>
+        /// Determines whether [is allowed to approve] [the specified request type].
+        /// </summary>
+        /// <param name="requestType">Type of the request.</param>
+        /// <returns>
+        ///   <c>true</c> if [is allowed to approve] [the specified request type]; otherwise, <c>false</c>.
+        /// </returns>
         private async Task<bool> IsAllowedToApprove(int? requestType)
         {
             var collectingRequests = _collectingRequestRepository.GetManyAsNoTracking(x => x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id));
@@ -555,9 +565,13 @@ namespace SCSS.Application.ScrapCollector.Implementations
             var collectingRequestsNow = collectingRequests.Where(x => x.RequestType == CollectingRequestType.GO_NOW &&
                                                                           x.CollectingRequestDate.Value.Date.CompareTo(DateTimeVN.DATE_NOW) == NumberConstant.Zero &&
                                                                           x.Status == CollectingRequestStatus.APPROVED).ToList();
-           
+
             return !(collectingRequestsNow.Any());
-            
+
         }
+
+        #endregion
+
+
     }
 }

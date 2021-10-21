@@ -38,6 +38,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                    x.TimeFrom,
                                                                                    x.TimeTo,
                                                                                    x.IsBulky,
+                                                                                   x.RequestType,
                                                                                    y.Address,
                                                                                    y.AddressName,
                                                                                    y.Latitude,
@@ -54,6 +55,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                   x.IsBulky,
                                                                                   x.Address,
                                                                                   x.AddressName,
+                                                                                  x.RequestType,
                                                                                   x.Latitude,
                                                                                   x.Longitude,
                                                                                   SellerName = y.Name,
@@ -85,7 +87,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             // Get Seller Role 
             var sellerRoleId = UnitOfWork.RoleRepository.Get(x => x.Key.Equals(AccountRole.SELLER)).Id;
 
-            var receivingData = destinationDistancesRes.Join(receivingDataQuery, x => x.DestinationId, y => y.CollectingRequestId,
+            var receivedData = destinationDistancesRes.Join(receivingDataQuery, x => x.DestinationId, y => y.CollectingRequestId,
                                                              (x, y) => new
                                                              {
                                                                  y.CollectingRequestId,
@@ -97,15 +99,24 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                  y.AddressName,
                                                                  y.IsBulky,
                                                                  y.SellerName,
+                                                                 y.RequestType,
                                                                  x.DistanceVal,
                                                                  x.DistanceText,
                                                                  x.DurationTimeVal,
                                                                  x.DurationTimeText,
                                                              }).OrderBy(x => x.DistanceVal);
 
-            var totalRecord = receivingData.Count();
+            var currentRequest = receivedData.Where(x => x.RequestType == CollectingRequestType.GO_NOW);
+            var appointment = receivedData.Where(x => x.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT).OrderByDescending(x => x.CollectingRequestDate).AsEnumerable();
 
-            var dataResult = receivingData.Select(x => new CollectingRequestReceivingViewModel()
+            var collectingRequests = currentRequest.Concat(appointment);
+
+            var totalRecord = collectingRequests.Count();
+
+            var page = model.Page <= NumberConstant.Zero ? NumberConstant.One : model.Page;
+            var pageSize = model.PageSize <= NumberConstant.Zero ? NumberConstant.Ten : model.PageSize;
+
+            var dataResult = collectingRequests.Skip((page - 1) * pageSize).Take(pageSize).Select(x => new CollectingRequestReceivingViewModel()
             {
                 Id = x.CollectingRequestId,
                 CollectingRequestCode = x.CollectingRequestCode,
@@ -123,6 +134,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 DistanceText = x.DistanceText,
                 DurationTimeText = x.DurationTimeText,
                 DurationTimeVal = x.DurationTimeVal,
+                RequestType = x.RequestType
             }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);

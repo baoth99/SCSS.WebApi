@@ -26,5 +26,9 @@ namespace SCSS.Application.ScrapCollector.Models.DealerInformationModels
 
         public string DistanceText { get; set; }
 
+        public string DurationTimeText { get; set; }
+
+        public float DurationTimeVal { get; set; }
+
     }
 }

@@ -53,7 +53,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> GetNotifications(BaseFilterModel model)
         {
-            var dataQuery = _notificationRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id)).OrderByDescending(x => x.CreatedTime);
+            var dataQuery = _notificationRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id) && !x.Title.Equals(NotificationMessage.RequestGoNowTitle)).OrderByDescending(x => x.CreatedTime);
 
             var totalRecord = await dataQuery.CountAsync();
 

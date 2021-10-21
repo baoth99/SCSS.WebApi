@@ -104,10 +104,10 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                       x.DealerImageUrl,
                                                                                       x.OpenTime,
                                                                                       x.CloseTime,
-                                                                                  })
+                                                                                  }).ToList()
                                                                          .Where(x => (ValidatorUtil.IsBlank(model.SearchWord) || 
-                                                                                      x.UnSignDealerAddress.ToLower().Contains(model.SearchWord.ToLower()) ||
-                                                                                      x.UnSignDealerName.ToLower().Contains(model.SearchWord.ToLower()))).ToList();
+                                                                                      x.UnSignDealerAddress.ToLower().Contains(model.SearchWord.RemoveSignVietnameseString().ToLower()) ||
+                                                                                      x.UnSignDealerName.ToLower().Contains(model.SearchWord.RemoveSignVietnameseString().ToLower()))).ToList();
 
 
             if (!dealerDataQuery.Any())
@@ -148,6 +148,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                               y.Longitude,
                                                               x.DistanceText,
                                                               x.DistanceVal,
+                                                              x.DurationTimeText,
+                                                              x.DurationTimeVal
                                                           }).OrderBy(x => x.DistanceVal);
             var totalRecord = dealerData.Count();
 
@@ -167,7 +169,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 Distance = x.DistanceVal,
                 DistanceText = x.DistanceText,
                 IsActive = x.IsActive,
-
+                DurationTimeText = x.DurationTimeText,
+                DurationTimeVal = x.DurationTimeVal
             }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);

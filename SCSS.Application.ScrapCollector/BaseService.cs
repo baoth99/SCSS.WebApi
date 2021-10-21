@@ -200,5 +200,32 @@ namespace SCSS.Application.ScrapCollector
         }
 
         #endregion
+
+        #region Get Available Radius
+
+        /// <summary>
+        /// Gets the available radius.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<double> AvailableRadius()
+        {
+            var availableRadius = await CacheService.GetStringCacheAsync(CacheRedisKey.AvailableRadius);
+            if (ValidatorUtil.IsBlank(availableRadius))
+            {
+                var entity = await UnitOfWork.CollectingRequestConfigRepository.GetManyAsNoTracking(x => x.IsActive).FirstOrDefaultAsync();
+                if (entity == null)
+                {
+                    return NumberConstant.Five;
+                }
+                var radius = entity.AvailableRadius;
+
+                await CacheService.SetStringCacheAsync(CacheRedisKey.AvailableRadius, radius.ToString());
+
+                return radius;
+            }
+            return availableRadius.ToDouble();
+        }
+
+        #endregion
     }
 }
