@@ -1,4 +1,5 @@
-﻿using SCSS.Application.ScrapCollector.Models.CollectingRequestModels;
+﻿using Microsoft.EntityFrameworkCore;
+using SCSS.Application.ScrapCollector.Models.CollectingRequestModels;
 using SCSS.AWSService.Models.SQSModels;
 using SCSS.MapService.Models;
 using SCSS.Utilities.BaseResponse;
@@ -189,6 +190,20 @@ namespace SCSS.Application.ScrapCollector.Implementations
         }
 
         #endregion Get Collecting Request Detail which was received by collector
+
+        #region Get Cancel Reasons
+
+        /// <summary>
+        /// Gets the cancel reasons.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> GetCancelReasons()
+        {
+            var cancelReasons = await  _collectorCancelReasonRepository.GetAllAsNoTracking().Select(x => x.Content).ToListAsync();
+            return BaseApiResponse.OK(cancelReasons);
+        }
+
+        #endregion
 
         #region Cancel Collecting Request By Collector
 

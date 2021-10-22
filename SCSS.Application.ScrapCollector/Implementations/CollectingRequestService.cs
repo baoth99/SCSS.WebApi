@@ -53,6 +53,11 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         private readonly IRepository<Complaint> _complaintRepository;
 
+        /// <summary>
+        /// The collector cancel reason repository
+        /// </summary>
+        private readonly IRepository<CollectorCancelReason> _collectorCancelReasonRepository;
+
         #endregion
 
         #region Service
@@ -101,6 +106,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             _locationRepository = unitOfWork.LocationRepository;
             _accountRepository = unitOfWork.AccountRepository;
             _complaintRepository = unitOfWork.ComplaintRepository;
+            _collectorCancelReasonRepository = unitOfWork.CollectorCancelReasonRepository;
             _mapDistanceMatrixService = mapDistanceMatrixService;
             _SQSPublisherService = SQSPublisherService;
             _cacheListService = cacheListService;

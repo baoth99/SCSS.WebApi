@@ -242,5 +242,24 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         }
 
         #endregion
+
+        #region Collecting Request
+
+        /// <summary>
+        /// Gets the cancel reasons.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapCollectorApiUrlDefinition.CollectingRequestApiUrl.CancelReasons)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetCancelReasons()
+        {
+            return await _collectingRequestService.GetCancelReasons();
+        }
+
+        #endregion
     }
 }

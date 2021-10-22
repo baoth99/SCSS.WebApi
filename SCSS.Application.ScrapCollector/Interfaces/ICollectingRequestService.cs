@@ -63,6 +63,13 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         Task<BaseApiResponseModel> GetCollectingRequestDetailReceived(Guid id);
 
         /// <summary>
+        /// Gets the cancel reasons.
+        /// </summary>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetCancelReasons();
+
+
+        /// <summary>
         /// Cancels the collecting request received.
         /// </summary>
         /// <param name="model">The model.</param>
