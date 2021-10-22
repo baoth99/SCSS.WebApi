@@ -106,7 +106,7 @@ namespace SCSS.MapService
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        protected string GetDirectionEndpoint(DirectionCoordinateModel model)
+        protected string GetDirectionEndpoint(DirectionCoordinateRequestModel model)
         {
             var destinations = GetDestinationCoordinates(model.DestinationItems);
 
@@ -131,6 +131,12 @@ namespace SCSS.MapService
         private string GetDestinationCoordinates(List<DestinationCoordinateModel> destinationItems)
         {
             var destinationCoordinates =  destinationItems.Select(x => string.Format(GoongMapRestApiFormat.DestinationCoordinate, x.DestinationLatitude, x.DestinationLongtitude));
+            return destinationCoordinates.ToStringFormat(MarkConstant.SLASH);
+        }
+
+        private string GetDestinationCoordinates(List<DirectionCoordinateModel> destinationItems)
+        {
+            var destinationCoordinates = destinationItems.Select(x => string.Format(GoongMapRestApiFormat.DestinationCoordinate, x.DestinationLatitude, x.DestinationLongtitude));
             return destinationCoordinates.ToStringFormat(MarkConstant.SLASH);
         }
 

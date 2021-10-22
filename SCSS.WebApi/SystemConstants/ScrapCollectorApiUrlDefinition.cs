@@ -14,6 +14,13 @@ namespace SCSS.WebApi.SystemConstants
         private const string Notification = "notification";
         private const string Feedback = "feedback";
         private const string Complaint = "complaint";
+        private const string Map = "map";
+
+        public static class MapApiUrl
+        {
+            public const string GetDirection = Map + "/direction";
+            public const string GetDirections = Map + "/directions";
+        }
 
         public static class ComplaintApiUrl
         {

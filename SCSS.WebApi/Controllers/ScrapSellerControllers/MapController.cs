@@ -12,7 +12,7 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
 {
     
     [ApiVersion(ApiVersions.ApiVersionV2)]
-    public class GoongMapController : BaseScrapSellerControllers
+    public class MapController : BaseScrapSellerControllers
     {
         #region Services
 
@@ -29,12 +29,13 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         #endregion
 
         #region Constructor        
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="GoongMapController"/> class.
+        /// Initializes a new instance of the <see cref="MapController"/> class.
         /// </summary>
         /// <param name="mapPlaceService">The map place service.</param>
         /// <param name="mapGeocodingService">The map geocoding service.</param>
-        public GoongMapController(IMapPlaceService mapPlaceService, IMapGeocodingService mapGeocodingService)
+        public MapController(IMapPlaceService mapPlaceService, IMapGeocodingService mapGeocodingService)
         {
             _mapPlaceService = mapPlaceService;
             _mapGeocodingService = mapGeocodingService;
@@ -100,7 +101,8 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
             return await _mapGeocodingService.ReverseGeocoding(model);
         }
 
-        #endregion
+        #endregion   
+
     }
 }
 

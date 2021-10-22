@@ -14,5 +14,12 @@ namespace SCSS.MapService.Interfaces
         /// <returns></returns>
         Task<List<DistanceMatrixCoordinateResponseModel>> GetDistanceFromOriginToMultiDestinations(DistanceMatrixCoordinateRequestModel model);
 
+        /// <summary>
+        /// Gets the directions.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        Task<DirectionCoordinateResponseModel> GetDirections(DirectionCoordinateRequestModel model);
+
     }
 }

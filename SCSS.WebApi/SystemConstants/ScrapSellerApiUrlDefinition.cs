@@ -78,6 +78,7 @@
             public const string AutoComplete = Map + "/place/autoComplete";
             public const string PlaceDetail = Map + "/place/detail";
             public const string ReverseGeocoding = Map + "/geocode";
+            public const string Direction = Map + "/direction";
         }
     }
 

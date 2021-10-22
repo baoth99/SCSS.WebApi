@@ -76,5 +76,34 @@ namespace SCSS.MapService.Implementations
 
         #endregion Gets the distance matrix from origin to multiple destinations.
 
+        #region Get Directions
+
+        /// <summary>
+        /// Gets the directions.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public async Task<DirectionCoordinateResponseModel> GetDirections(DirectionCoordinateRequestModel model)
+        {
+            if (!model.DestinationItems.Any())
+            {
+                return new DirectionCoordinateResponseModel();
+            }
+
+            // Get Request URL 
+            var requestUri = GetDirectionEndpoint(model);
+
+            // Call to Goong Server
+            var httpResponse = await ConnectToGoongMapService(requestUri);
+
+            // Get Response Data (Json String)
+            var responseContent = await httpResponse.Content.ReadAsStringAsync();
+
+            var resultData = responseContent.ToMapperObject<DirectionCoordinateResponseModel>();
+
+            return resultData;
+        }
+
+        #endregion Get Directions
     }
 }
