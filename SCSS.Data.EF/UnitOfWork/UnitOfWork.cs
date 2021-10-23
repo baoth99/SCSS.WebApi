@@ -77,8 +77,6 @@ namespace SCSS.Data.EF.UnitOfWork
 
         private IRepository<TransactionAwardAmount> _transactionAwardAmountRepository;
 
-        private IRepository<CollectingRequestRejection> _collectingRequestRejectionRepository;
-
         private IRepository<CollectorCancelReason> _collectorCancelReasonRepository;
 
         #endregion
@@ -148,8 +146,6 @@ namespace SCSS.Data.EF.UnitOfWork
         public IRepository<TransactionServiceFeePercent> TransactionServiceFeePercentRepository => _transactionServiceFeePercentRepository ??= (_transactionServiceFeePercentRepository = new Repository<TransactionServiceFeePercent>(AppDbContext));
 
         public IRepository<TransactionAwardAmount> TransactionAwardAmountRepository => _transactionAwardAmountRepository ??= (_transactionAwardAmountRepository = new Repository<TransactionAwardAmount>(AppDbContext));
-
-        public IRepository<CollectingRequestRejection> CollectingRequestRejectionRepository => _collectingRequestRejectionRepository ??= (_collectingRequestRejectionRepository = new Repository<CollectingRequestRejection>(AppDbContext));
 
         public IRepository<CollectorCancelReason> CollectorCancelReasonRepository => _collectorCancelReasonRepository ??= (_collectorCancelReasonRepository = new Repository<CollectorCancelReason>(AppDbContext));
 

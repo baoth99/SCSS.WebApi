@@ -223,8 +223,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 dataResult.IsCancelable = BooleanConstants.TRUE;
             }
 
-
-          
             var collectorInfo = _accountRepository.GetById(crEntity.CollectorAccountId);
 
             if (collectorInfo != null)

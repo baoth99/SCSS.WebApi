@@ -51,7 +51,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
 
         #endregion
 
-        #region Ge tCurrent Collecting Requests
+        #region Get Current Collecting Requests
 
         /// <summary>
         /// Gets the current collecting requests.
@@ -69,7 +69,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
             return await _collectingRequestService.GetCollectingRequests(model, CollectingRequestType.GO_NOW);
         }
 
-        #endregion Get Collecting Request List
+        #endregion Get Current Collecting Requests
 
         #region Get Collecting Appointments
 
@@ -162,26 +162,6 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         }
 
         #endregion Receive the Collecting Request 
-
-        #region Reject the Collecting Request
-
-        /// <summary>
-        /// Rejects the collecting request.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <returns></returns>
-        [HttpPut]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapCollectorApiUrlDefinition.CollectingRequestApiUrl.Reject)]
-        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> RejectCollectingRequest([FromBody] CollectingRequestRejectModel model)
-        {
-            return await _collectingRequestService.RejectCollectingRequest(model);
-        }
-
-        #endregion Reject the Collecting Request
 
         #region Get List Of Collecting Request which was received by collector
 

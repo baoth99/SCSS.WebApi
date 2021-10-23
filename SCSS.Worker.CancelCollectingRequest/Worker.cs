@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SCSS.Aplication.BackgroundService.Interfaces;
 using SCSS.Utilities.Configurations;
+using SCSS.Utilities.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,6 @@ namespace SCSS.Worker.CancelCollectingRequest
 {
     public class Worker : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
-
         #region Services
 
         /// <summary>
@@ -31,9 +30,8 @@ namespace SCSS.Worker.CancelCollectingRequest
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="scopeFactory">The scope factory.</param>
-        public Worker(ILogger<Worker> logger, IServiceScopeFactory scopeFactory)
+        public Worker(IServiceScopeFactory scopeFactory)
         {
-            _logger = logger;
             _scopeFactory = scopeFactory;
         }
 
@@ -49,7 +47,8 @@ namespace SCSS.Worker.CancelCollectingRequest
         /// <param name="stoppingToken">Triggered when <see cref="M:Microsoft.Extensions.Hosting.IHostedService.StopAsync(System.Threading.CancellationToken)" /> is called.</param>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            //!stoppingToken.IsCancellationRequested
+            while (BooleanConstants.TRUE)
             {
                 await DoWork();
                 await Task.Delay(TimeSpan.FromMinutes(AppSettingValues.DelayMinutesSchedule));

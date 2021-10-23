@@ -201,14 +201,6 @@ namespace SCSS.Data.EF.UnitOfWork
         IRepository<TransactionAwardAmount> TransactionAwardAmountRepository { get; }
 
         /// <summary>
-        /// Gets the collecting request rejection repository.
-        /// </summary>
-        /// <value>
-        /// The collecting request rejection repository.
-        /// </value>
-        IRepository<CollectingRequestRejection> CollectingRequestRejectionRepository { get; }
-
-        /// <summary>
         /// Gets the collector cancel reason repository.
         /// </summary>
         /// <value>

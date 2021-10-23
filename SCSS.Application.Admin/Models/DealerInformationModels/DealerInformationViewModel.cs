@@ -12,8 +12,6 @@ namespace SCSS.Application.Admin.Models.DealerInformationModels
 
         public string ManagedBy { get; set; }
 
-        public bool IsSubcribed { get; set; }
-
         public int DealerType { get; set; }
 
         public bool Status { get; set; }

@@ -32,8 +32,6 @@ namespace SCSS.Data.Entities
 
         public float Rating { get; set; }
 
-        public bool IsSubcribed { get; set; }
-
         public bool IsActive { get; set; }
 
         public bool IsDeleted { get; set; }

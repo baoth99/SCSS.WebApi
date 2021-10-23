@@ -10,12 +10,9 @@ using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
-using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapCollector.Implementations
@@ -28,11 +25,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// The collecting request repository
         /// </summary>
         private readonly IRepository<CollectingRequest> _collectingRequestRepository;
-
-        /// <summary>
-        /// The collecting request rejection repository
-        /// </summary>
-        private readonly IRepository<CollectingRequestRejection> _collectingRequestRejectionRepository;
 
         /// <summary>
         /// The location repository
@@ -62,11 +54,18 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DashboardService"/> class.
+        /// </summary>
+        /// <param name="unitOfWork">The unit of work.</param>
+        /// <param name="userAuthSession">The user authentication session.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="cacheService">The cache service.</param>
+        /// <param name="mapDistanceMatrixService">The map distance matrix service.</param>
         public DashboardService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, 
                                 IStringCacheService cacheService, IMapDistanceMatrixService mapDistanceMatrixService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
-            _collectingRequestRejectionRepository = unitOfWork.CollectingRequestRejectionRepository;
             _locationRepository = unitOfWork.LocationRepository;
             _accountRepository = unitOfWork.AccountRepository;
             _complaintRepository = unitOfWork.ComplaintRepository;

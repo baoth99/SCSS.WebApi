@@ -37,8 +37,6 @@ namespace SCSS.Application.Admin.Models.DealerInformationModels
 
         public string DealerCloseTime { get; set; }
 
-        public bool DealerIsSubcribed { get; set; }
-
         public bool DealerIsActive { get; set; }
 
     }

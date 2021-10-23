@@ -140,8 +140,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             {
                 var timeRange = await TimeRangeRequestNow();
 
-                collectingRequestFromTime = DateTimeVN.TIMESPAN_NOW.StripSeconds().Value.Add(new TimeSpan(00, timeRange, 00));
-                collectingRequestToTime = collectingRequestFromTime.Add(new TimeSpan(00, 20, 00));
+                collectingRequestFromTime = DateTimeVN.TIMESPAN_NOW.StripSeconds().Value;
+                collectingRequestToTime = collectingRequestFromTime.Add(new TimeSpan(00, 30, 00));
             }
 
             // Auto Generate CollectingRequestEntityCode from CollectingRequestDate, collectingRequestFromTime and collectingRequestToTime

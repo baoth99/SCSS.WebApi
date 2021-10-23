@@ -29,11 +29,6 @@ namespace SCSS.Application.Admin.Implementations
         private readonly IRepository<CollectingRequest> _collectingRequestRepository;
 
         /// <summary>
-        /// The collecting request rejection repository
-        /// </summary>
-        private readonly IRepository<CollectingRequestRejection> _collectingRequestRejectionRepository;
-
-        /// <summary>
         /// The account repository
         /// </summary>
         private readonly IRepository<Account> _accountRepository;
@@ -63,7 +58,6 @@ namespace SCSS.Application.Admin.Implementations
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _accountRepository = unitOfWork.AccountRepository;
-            _collectingRequestRejectionRepository = unitOfWork.CollectingRequestRejectionRepository;
             _roleRepository = unitOfWork.RoleRepository;
             _locationRepository = unitOfWork.LocationRepository;
         }
@@ -180,13 +174,6 @@ namespace SCSS.Application.Admin.Implementations
             var collectorRoleId = _roleRepository.GetAsNoTracking(x => x.Key == AccountRole.COLLECTOR).Id;
 
 
-            var crRejections = _collectingRequestRejectionRepository.GetManyAsNoTracking(x => x.CollectingRequestId.Equals(dataEntity.Id))
-                                                                    .Join(_accountRepository.GetManyAsNoTracking(x => x.RoleId.Equals(collectorRoleId)),
-                                                                           x => x.CollectorId, y => y.Id, (x, y) => new CollectingRequestRejectionViewModel()
-                                                                           {
-                                                                               RejecterName = y.Name,
-                                                                               Reason = x.Reason
-                                                                           }).ToList();
             var dataResult = new CollectingRequestDetailViewModel()
             {
                 Id = dataEntity.Id,
@@ -199,7 +186,6 @@ namespace SCSS.Application.Admin.Implementations
                 Note = dataEntity.Note,
                 RequestedBy = sellerInfo.Name,
                 Status = dataEntity.Status,
-                RejectionItems = crRejections,
                 ReceivedBy = collectorInfo == null ? CommonConstants.Null : collectorInfo.Name
             };
 

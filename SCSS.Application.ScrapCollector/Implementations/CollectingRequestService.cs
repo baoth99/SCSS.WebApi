@@ -34,11 +34,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
         private readonly IRepository<CollectingRequest> _collectingRequestRepository;
 
         /// <summary>
-        /// The collecting request rejection repository
-        /// </summary>
-        private readonly IRepository<CollectingRequestRejection> _collectingRequestRejectionRepository;
-
-        /// <summary>
         /// The location repository
         /// </summary>
         private readonly IRepository<Location> _locationRepository;
@@ -102,7 +97,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                         IStringCacheService cacheService, IQueueEngineFactory queueEngineFactory) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
-            _collectingRequestRejectionRepository = unitOfWork.CollectingRequestRejectionRepository;
             _locationRepository = unitOfWork.LocationRepository;
             _accountRepository = unitOfWork.AccountRepository;
             _complaintRepository = unitOfWork.ComplaintRepository;
@@ -153,36 +147,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 collectingRequestdataQuery.Except(expiredRequests);
             }
 
-
-            if (!collectingRequestdataQuery.Any())
-            {
-                return BaseApiResponse.OK(CollectionConstants.Empty<CollectingRequestViewModel>());
-            }
-
-            // Get Collecting Request List is pending that Collector rejected
-            var collectingRequestRejection = _collectingRequestRejectionRepository.GetManyAsNoTracking(x => (x.CollectorId.Equals(UserAuthSession.UserSession.Id)))
-                                                                                  .Join(collectingRequestdataQuery, x => x.CollectingRequestId, y => y.CollectingRequestId,
-                                                                                       (x, y) => new
-                                                                                       {
-                                                                                           y.CollectingRequestId,
-                                                                                           y.CollectingRequestCode,
-                                                                                           y.CollectingRequestDate,
-                                                                                           y.SellerAccountId,
-                                                                                           y.TimeFrom,
-                                                                                           y.TimeTo,
-                                                                                           y.District,
-                                                                                           y.City,
-                                                                                           y.Latitude,
-                                                                                           y.Longitude,
-                                                                                           y.IsBulky,
-                                                                                           y.RequestType
-                                                                                       });
-            // Check if [collectingRequestRejection] is any 
-            if (collectingRequestRejection.Any())
-            {
-                // Exclude [collectingRequestRejection] from [collectingRequestdataQuery] List
-                collectingRequestdataQuery = collectingRequestdataQuery.Except(collectingRequestRejection);
-            }
 
             if (!collectingRequestdataQuery.Any())
             {
@@ -464,39 +428,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion
 
-        #region Reject the Colleting Request
-
-        /// <summary>
-        /// Rejects the collecting request.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public async Task<BaseApiResponseModel> RejectCollectingRequest(CollectingRequestRejectModel model)
-        {
-            var isExisted = _collectingRequestRepository.IsExisted(x => x.Id.Equals(model.Id) &&
-                                                                        x.Status == CollectingRequestStatus.PENDING);
-
-            if (!isExisted)
-            {
-                return BaseApiResponse.NotFound();
-            }
-
-            var rejectionEntity = new CollectingRequestRejection()
-            {
-                CollectingRequestId = model.Id,
-                CollectorId = UserAuthSession.UserSession.Id,
-                Reason = model.Reason
-            };
-
-            _collectingRequestRejectionRepository.Insert(rejectionEntity);
-
-            await UnitOfWork.CommitAsync();
-
-            return BaseApiResponse.OK();
-        }
-
-        #endregion
-
         #region View Collecting Request Detail to Receive
 
         /// <summary>
@@ -577,7 +508,5 @@ namespace SCSS.Application.ScrapCollector.Implementations
         }
 
         #endregion
-
-
     }
 }

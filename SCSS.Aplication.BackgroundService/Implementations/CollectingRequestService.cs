@@ -31,6 +31,11 @@ namespace SCSS.Aplication.BackgroundService.Implementations
         /// </summary>
         private readonly IRepository<CollectingRequest> _collectingRequestRepository;
 
+        /// <summary>
+        /// The location repository
+        /// </summary>
+        private readonly IRepository<Location> _locationRepository;
+
         #endregion
 
         #region Services
@@ -64,6 +69,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
         {
             _accountRepository = unitOfWork.AccountRepository;
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
+            _locationRepository = unitOfWork.LocationRepository;
             _dapperService = dapperService;
             _cacheListService = cacheListService;
             _SQSPublisherService = SQSPublisherService;
@@ -167,6 +173,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
         public async Task ScanToCancelCollectingRequest()
         {
             var pendingCRCache = _cacheListService.PendingCollectingRequestCache;
+
             var cache = await pendingCRCache.GetAllAsync();
 
             if (cache.Any())
@@ -175,17 +182,46 @@ namespace SCSS.Aplication.BackgroundService.Implementations
 
                 foreach (var item in cacheList)
                 {
-                    if (item.Date.Value.Date.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW) && item.ToTime.IsCompareTimeSpanLessOrEqual(DateTimeVN.TIMESPAN_NOW))
+                    if (item.Date.Value.Date.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW))
                     {
-                        // Remove From Cache
-                        await pendingCRCache.RemoveAsync(item);
-
-                        // Update DB
-                        var res = await CancelCollectingRequest(item.Id);
-                        if (res > NumberConstant.Zero)
+                        if (item.ToTime.IsCompareTimeSpanLessOrEqual(DateTimeVN.TIMESPAN_NOW))
                         {
-                            // Publish Message To Amazon SQS
-                            await PublishMessageToSQS(item.Id);
+                            // Remove From Cache
+                            await pendingCRCache.RemoveAsync(item);
+
+                            // Update DB
+                            var res = await CancelCollectingRequest(item.Id);
+                            if (res > NumberConstant.Zero)
+                            {
+                                // Publish Message To Amazon SQS
+                                await PublishMessageToSQS(item.Id);
+                            }
+                            continue;
+                        }
+
+                        var itemFromTime = item.FromTime.Value.Subtract(new TimeSpan(00, 15, 00));
+
+                        if (itemFromTime.IsCompareTimeSpanLessOrEqual(DateTimeVN.TIMESPAN_NOW))
+                        {
+                            var request = _collectingRequestRepository.GetAsNoTracking(x => x.Id.Equals(item.Id));
+                            if (request.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT && request.Status == CollectingRequestStatus.PENDING)
+                            {
+                                var executedRes = await ChangeRequetType(item.Id);
+                                if (executedRes > NumberConstant.Zero)
+                                {
+                                    var location = _locationRepository.GetById(request.LocationId);
+
+                                    var notifierQueue = new CollectingRequestNotiticationQueueModel()
+                                    {
+                                        CollectingRequestId = request.Id,
+                                        Latitude = location.Latitude.Value,
+                                        Longitude = location.Longitude.Value,
+                                        RequestType = CollectingRequestType.GO_NOW
+                                    };
+                                    // Publish Message To Amazon SQS
+                                    await _SQSPublisherService.CollectingRequestNotiticationPublisher.SendMessageAsync(notifierQueue);
+                                }
+                            }
                         }
                     }
                 }
@@ -193,6 +229,38 @@ namespace SCSS.Aplication.BackgroundService.Implementations
         }
 
         #endregion
+
+
+        #region Change Collecting Request Type
+
+        /// <summary>
+        /// Changes the type of the requet.
+        /// </summary>
+        /// <param name="crId">The cr identifier.</param>
+        /// <returns></returns>
+        private async Task<int> ChangeRequetType(Guid crId)
+        {
+            var sql = "UPDATE [CollectingRequest] " + 
+                      "SET [RequestType] = @RequestType, " +
+                      "[UpdatedBy] = @UpdatedBy, [UpdatedTime] = @DateNow " +
+                      "WHERE [Id] = @CollectingRequestId AND " +
+                      "[Status] = @PendingStatus AND " +
+                      "[CollectorAccountId] IS NULL"; 
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@RequestType", CollectingRequestType.GO_NOW);
+            parameters.Add("@CollectingRequestId", crId);
+            parameters.Add("@UpdatedBy", Guid.Empty);
+            parameters.Add("@DateNow", DateTimeVN.DATETIME_NOW);
+            parameters.Add("@PendingStatus", CollectingRequestStatus.PENDING);
+
+            return await _dapperService.SqlExecuteAsync(sql, parameters);
+
+        }
+
+        #endregion
+
+
 
         #region Cancel Collecting Request
 

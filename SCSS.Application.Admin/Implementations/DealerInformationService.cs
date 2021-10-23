@@ -78,7 +78,6 @@ namespace SCSS.Application.Admin.Implementations
                                                                                       x.DealerName,
                                                                                       x.DealerPhone,
                                                                                       x.IsActive,
-                                                                                      x.IsSubcribed,
                                                                                       x.CreatedTime,
                                                                                       x.DealerAccountId
                                                                                   });
@@ -90,7 +89,6 @@ namespace SCSS.Application.Admin.Implementations
                                                     x.DealerName,
                                                     x.DealerPhone,
                                                     DealerStatus = x.IsActive,
-                                                    IsDealerSubcribe = x.IsSubcribed,
                                                     DealerCreatedTime = x.CreatedTime,
                                                     y.Name,
                                                     y.ManagedBy
@@ -128,7 +126,6 @@ namespace SCSS.Application.Admin.Implementations
                                             DealerType = CommonUtils.GetDealerType(x.ManagedBy), // Leader is One, Member is Two
                                             CreatedTime = x.DealerCreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
                                             ManagedBy = x.Name,
-                                            IsSubcribed = x.IsDealerSubcribe,
                                             Status = x.DealerStatus
                                         }).ToList();
 
@@ -176,7 +173,6 @@ namespace SCSS.Application.Admin.Implementations
                 DealerCreatedTime = dealerInfo.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
                 DealerOpenTime = dealerInfo.OpenTime.ToStringFormat(TimeSpanFormat.HH_MM_TT),
                 DealerCloseTime = dealerInfo.CloseTime.ToStringFormat(TimeSpanFormat.HH_MM_TT),
-                DealerIsSubcribed = dealerInfo.IsSubcribed,
                 DealerIsActive = dealerInfo.IsActive,
                 DealerType = ValidatorUtil.IsNull(dealerAccount.ManagedBy) ? DealerType.LEADER : DealerType.MEMBER,
             };

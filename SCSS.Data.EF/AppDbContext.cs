@@ -89,8 +89,6 @@ namespace SCSS.Data.EF
 
         public DbSet<TransactionAwardAmount> TransactionAwardAmount { get; set; }
 
-        public DbSet<CollectingRequestRejection> CollectingRequestRejection { get; set; }
-
         public DbSet<CollectorCancelReason> CollectorCancelReason { get; set; }
 
         public DbSet<Complaint> Complaint { get; set; }

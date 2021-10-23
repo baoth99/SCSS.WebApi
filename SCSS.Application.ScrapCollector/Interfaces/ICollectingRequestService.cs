@@ -35,13 +35,6 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         Task<BaseApiResponseModel> SendNotification(Guid? sellerId, Guid? requestId, string collectingRequestCode);
 
         /// <summary>
-        /// Rejects the collecting request.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
-        Task<BaseApiResponseModel> RejectCollectingRequest(CollectingRequestRejectModel model);
-
-        /// <summary>
         /// Gets the collecting request detail.
         /// </summary>
         /// <param name="id">The identifier.</param>

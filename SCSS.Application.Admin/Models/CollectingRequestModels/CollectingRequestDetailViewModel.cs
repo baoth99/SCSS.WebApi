@@ -25,14 +25,5 @@ namespace SCSS.Application.Admin.Models.CollectingRequestModels
 
         public string Note { get; set; }
 
-        public List<CollectingRequestRejectionViewModel> RejectionItems { get; set; }
-
-    }
-
-    public class CollectingRequestRejectionViewModel
-    {
-        public string RejecterName { get; set; }
-
-        public string Reason { get; set; }
     }
 }
