@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SCSS.Application.ScrapDealer.Interfaces;
 using SCSS.AWSService.Interfaces;
 using SCSS.Utilities.Constants;
@@ -27,14 +28,26 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         /// </summary>
         private readonly ICollectDealTransactionService _collectDealTransactionService;
 
+        /// <summary>
+        /// The account service
+        /// </summary>
+        private readonly IAccountService _accountService;
+
         #endregion
 
         #region Constructor
 
-        public DataController(IStorageBlobS3Service storageBlobS3Service, ICollectDealTransactionService collectDealTransactionService)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataController"/> class.
+        /// </summary>
+        /// <param name="storageBlobS3Service">The storage BLOB s3 service.</param>
+        /// <param name="collectDealTransactionService">The collect deal transaction service.</param>
+        /// <param name="accountService">The account service.</param>
+        public DataController(IStorageBlobS3Service storageBlobS3Service, ICollectDealTransactionService collectDealTransactionService, IAccountService accountService)
         {
             _storageBlobS3Service = storageBlobS3Service;
             _collectDealTransactionService = collectDealTransactionService;
+            _accountService = accountService;
         }
 
         #endregion
@@ -121,6 +134,25 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         public async Task<BaseApiResponseModel> AutoCompleteCollectorPhone() 
         {
             return await _collectDealTransactionService.AutoCompleteCollectorPhone();
+        }
+
+        #endregion
+
+        #region Get Dealer Leader List
+
+        /// <summary>
+        /// Gets the dealer leader list.
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapDealerApiUrlDefinition.DataApiUrl.DealerLeaderList)]
+        public async Task<BaseApiResponseModel> GetDealerLeaderList()
+        {
+            return await _accountService.GetDealerLeaderList();
         }
 
         #endregion

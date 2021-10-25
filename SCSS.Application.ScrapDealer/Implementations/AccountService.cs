@@ -2,6 +2,7 @@
 using SCSS.Application.ScrapDealer.Interfaces;
 using SCSS.Application.ScrapDealer.Models.AccountModels;
 using SCSS.AWSService.Interfaces;
+using SCSS.AWSService.Models.SQSModels;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
@@ -50,6 +51,11 @@ namespace SCSS.Application.ScrapDealer.Implementations
         /// </summary>
         private readonly IStorageBlobS3Service _storageBlobS3Service;
 
+        /// <summary>
+        /// The SQS publisher service
+        /// </summary>
+        private readonly ISQSPublisherService _SQSPublisherService;
+
         #endregion Services
 
         #region Constructor
@@ -62,17 +68,107 @@ namespace SCSS.Application.ScrapDealer.Implementations
         /// <param name="logger">The logger.</param>
         /// <param name="cacheService">The cache service.</param>
         /// <param name="storageBlobS3Service">The storage BLOB s3 service.</param>
+        /// <param name="SQSPublisherService">The SQS publisher service.</param>
         public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService,
-                                IStorageBlobS3Service storageBlobS3Service) : base(unitOfWork, userAuthSession, logger, cacheService)
+                                IStorageBlobS3Service storageBlobS3Service, ISQSPublisherService SQSPublisherService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _accountRepository = unitOfWork.AccountRepository;
             _dealerInformationRepository = unitOfWork.DealerInformationRepository;
             _roleRepository = unitOfWork.RoleRepository;
             _locationRepository = unitOfWork.LocationRepository;
             _storageBlobS3Service = storageBlobS3Service;
+            _SQSPublisherService = SQSPublisherService;
         }
 
         #endregion Constructor
+
+        #region Send Otp To Register
+
+        /// <summary>
+        /// Sends the otp to register.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> SendOtpToRegister(SendOTPRequestModel model)
+        {
+            if (_accountRepository.IsExisted(x => x.Phone == model.Phone))
+            {
+                return BaseApiResponse.Error(SystemMessageCode.DataAlreadyExists);
+            }
+
+            var dictionary = new Dictionary<string, string>()
+            {
+                {"phone", model.Phone }
+            };
+
+            var res = await IDHttpClientHelper.IDHttpClientPost(IdentityServer4Route.OtpForRegister, ClientIdConstant.DealerMobileApp, dictionary);
+
+            if (res == null)
+            {
+                return BaseApiResponse.Error(SystemMessageCode.OtherException);
+            }
+
+            var otp = res.Data as string;
+
+            var smsModel = new SMSMessageQueueModel()
+            {
+                Phone = model.Phone,
+                Content = SMSMessage.OtpSMS(otp)
+            };
+
+            _ = Task.Run(async () =>
+            {
+                await _SQSPublisherService.SMSMessageQueuePublisher.SendMessageAsync(smsModel);
+            });
+
+            return BaseApiResponse.OK();
+        }
+
+        #endregion
+
+        #region Send OTP to restore Password
+
+        /// <summary>
+        /// Sends the otp restore pass.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> SendOtpRestorePass(SendOTPRequestModel model)
+        {
+            if (!_accountRepository.IsExisted(x => x.Phone == model.Phone))
+            {
+                return BaseApiResponse.Error(SystemMessageCode.DataNotFound);
+            }
+
+            var dictionary = new Dictionary<string, string>()
+            {
+                {"phone", model.Phone }
+            };
+
+            var res = await IDHttpClientHelper.IDHttpClientPost(IdentityServer4Route.OtpForRestorePassword, ClientIdConstant.DealerMobileApp, dictionary);
+
+            if (res == null)
+            {
+                return BaseApiResponse.Error(SystemMessageCode.OtherException);
+            }
+
+            var otp = res.Data as string;
+
+            var smsModel = new SMSMessageQueueModel()
+            {
+                Phone = model.Phone,
+                Content = SMSMessage.OtpSMS(otp)
+            };
+
+            _ = Task.Run(async () =>
+            {
+                await _SQSPublisherService.SMSMessageQueuePublisher.SendMessageAsync(smsModel);
+            });
+
+            return BaseApiResponse.OK();
+        }
+
+        #endregion
 
         #region Register Scrap Dealer Account
 
@@ -295,5 +391,37 @@ namespace SCSS.Application.ScrapDealer.Implementations
         }
 
         #endregion
+
+        #region Get Dealer Leader List
+
+        /// <summary>
+        /// Gets the dealer leader list.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> GetDealerLeaderList()
+        {
+            var dealerLeaderRoleId = _roleRepository.GetAsNoTracking(x => x.Key == AccountRole.DEALER).Id;
+
+            var dataQuery = _accountRepository.GetManyAsNoTracking(x => x.RoleId.Equals(dealerLeaderRoleId) && x.Status == AccountStatus.ACTIVE)
+                                              .Join(_dealerInformationRepository.GetAllAsNoTracking(), x => x.Id, y => y.DealerAccountId,
+                                                    (x, y) => new
+                                                    {
+                                                        DealerAccId = x.Id,
+                                                        y.DealerName
+                                                    }).OrderByDescending(x => x.DealerName);
+
+            var totalRecord = await dataQuery.CountAsync();
+
+            var dataResult = dataQuery.Select(x => new DealerLeaderViewModel()
+            {
+                DealerAccId = x.DealerAccId,
+                DealerName = x.DealerName
+            }).ToList();
+
+            return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
+        }
+
+        #endregion
+
     }
 }

@@ -107,7 +107,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                  x.DurationTimeText,
                                                              }).OrderBy(x => x.DistanceVal);
 
-            var currentRequest = receivedData.Where(x => x.RequestType == CollectingRequestType.GO_NOW);
+            var currentRequest = receivedData.Where(x => x.RequestType == CollectingRequestType.CURRENT_REQUEST);
             var appointment = receivedData.Where(x => x.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT).OrderByDescending(x => x.CollectingRequestDate).AsEnumerable();
 
             var collectingRequests = currentRequest.Concat(appointment);

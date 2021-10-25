@@ -10,6 +10,10 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
 
         public string SellerName { get; set; }
 
+        public int SellerGender { get; set; }
+
+        public string SellerProfileUrl { get; set; }
+
         public string ScrapImageUrl { get; set; }
 
         // Date

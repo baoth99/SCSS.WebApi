@@ -1,6 +1,7 @@
 ﻿using SCSS.Application.ScrapCollector.Models.CollectingRequestModels;
 using SCSS.Utilities.ResponseModel;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SCSS.Application.ScrapCollector.Interfaces
@@ -12,7 +13,7 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> GetCollectingRequests(CollectingRequestFilterModel model, int requestType);
+        Task<BaseApiResponseModel> GetCollectingRequests(CollectingRequestFilterModel model, List<int> requestTypes);
 
         /// <summary>
         /// Checks the maximum number collecting requests collector recevice.

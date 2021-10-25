@@ -239,7 +239,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                 return CollectionConstants.Empty<NearestCollectorModel>();
             }
 
-            var redisKey = requestType == CollectingRequestType.GO_NOW ? CacheRedisKey.NearestDistance : CacheRedisKey.NearestDistanceOfAppointment;
+            var redisKey = requestType == CollectingRequestType.CURRENT_REQUEST ? CacheRedisKey.NearestDistance : CacheRedisKey.NearestDistanceOfAppointment;
 
             var nearestDistance = await GetNearestDistance(redisKey);
 
@@ -256,11 +256,11 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                 return CollectionConstants.Empty<NearestCollectorModel>();
             }
 
-            if (requestType == CollectingRequestType.GO_NOW)
+            if (requestType == CollectingRequestType.CURRENT_REQUEST)
             {
                 
                 // Check collector can recevice collecting request
-                var collectingRequestNow = _collectingRequestRepository.GetManyAsNoTracking(x => x.RequestType == CollectingRequestType.GO_NOW &&
+                var collectingRequestNow = _collectingRequestRepository.GetManyAsNoTracking(x => x.RequestType == CollectingRequestType.CURRENT_REQUEST &&
                                                                                                  x.Status == CollectingRequestStatus.APPROVED &&
                                                                                                  x.CollectingRequestDate.Value.Date.CompareTo(DateTimeVN.DATE_NOW) == NumberConstant.Zero);
 

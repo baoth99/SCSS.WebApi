@@ -123,8 +123,9 @@ namespace SCSS.Utilities.Constants
 
     public class CollectingRequestType
     {
-        public const int GO_NOW = 1;
+        public const int CURRENT_REQUEST = 1;
         public const int MAKE_AN_APPOINTMENT = 2;
+        public const int SWITCH_TO_CURRENT_REQUEST = 3; // MAKE_AN_APPOINTMENT => CURRENT_REQUEST 
     }
 
     public class TransactionType
@@ -175,12 +176,6 @@ namespace SCSS.Utilities.Constants
         public const string HYPHEN = "-";
         public const string PERCENT = "%";
         public const string SLASH = "|";
-    }
-
-    public class FeedbackType
-    {
-        public const int Transaction = 1;
-        public const int FeedbackToAdmin = 2;
     }
 
     public class FeedbackStatus

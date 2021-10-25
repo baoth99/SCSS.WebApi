@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SCSS.Application.ScrapCollector.Interfaces;
 using SCSS.Application.ScrapCollector.Models.AccountModels;
 using SCSS.AWSService.Interfaces;
+using SCSS.AWSService.Models.SQSModels;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
@@ -47,6 +48,11 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         private readonly IStorageBlobS3Service _storageBlobS3Service;
 
+        /// <summary>
+        /// The SQS publisher service
+        /// </summary>
+        private readonly ISQSPublisherService _SQSPublisherService;
+
         #endregion
 
         #region Constructor
@@ -60,12 +66,102 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <param name="logger">The logger.</param>
         /// <param name="fcmService">The FCM service.</param>
         /// <param name="cacheService">The cache service.</param>
-        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, IStorageBlobS3Service storageBlobS3Service, ILoggerService logger, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
+        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, IStorageBlobS3Service storageBlobS3Service, ILoggerService logger, 
+                                IStringCacheService cacheService, ISQSPublisherService SQSPublisherService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _accountRepository = unitOfWork.AccountRepository;
             _roleRepository = unitOfWork.RoleRepository;
             _collectorCoordinateRepository = unitOfWork.CollectorCoordinateRepository;
             _storageBlobS3Service = storageBlobS3Service;
+            _SQSPublisherService = SQSPublisherService;
+        }
+
+        #endregion
+
+        #region Send Otp To Register
+
+        /// <summary>
+        /// Sends the otp to register.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> SendOtpToRegister(SendOTPRequestModel model)
+        {
+            if (_accountRepository.IsExisted(x => x.Phone == model.Phone))
+            {
+                return BaseApiResponse.Error(SystemMessageCode.DataAlreadyExists);
+            }
+
+            var dictionary = new Dictionary<string, string>()
+            {
+                {"phone", model.Phone }
+            };
+
+            var res = await IDHttpClientHelper.IDHttpClientPost(IdentityServer4Route.OtpForRegister, ClientIdConstant.CollectorMobileApp, dictionary);
+
+            if (res == null)
+            {
+                return BaseApiResponse.Error(SystemMessageCode.OtherException);
+            }
+
+            var otp = res.Data as string;
+
+            var smsModel = new SMSMessageQueueModel()
+            {
+                Phone = model.Phone,
+                Content = SMSMessage.OtpSMS(otp)
+            };
+
+            _ = Task.Run(async () =>
+            {
+                await _SQSPublisherService.SMSMessageQueuePublisher.SendMessageAsync(smsModel);
+            });
+
+            return BaseApiResponse.OK();
+        }
+
+        #endregion
+
+        #region Send OTP to restore Password
+
+        /// <summary>
+        /// Sends the otp restore pass.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> SendOtpRestorePass(SendOTPRequestModel model)
+        {
+            if (!_accountRepository.IsExisted(x => x.Phone == model.Phone))
+            {
+                return BaseApiResponse.Error(SystemMessageCode.DataNotFound);
+            }
+
+            var dictionary = new Dictionary<string, string>()
+            {
+                {"phone", model.Phone }
+            };
+
+            var res = await IDHttpClientHelper.IDHttpClientPost(IdentityServer4Route.OtpForRestorePassword, ClientIdConstant.CollectorMobileApp, dictionary);
+
+            if (res == null)
+            {
+                return BaseApiResponse.Error(SystemMessageCode.OtherException);
+            }
+
+            var otp = res.Data as string;
+
+            var smsModel = new SMSMessageQueueModel()
+            {
+                Phone = model.Phone,
+                Content = SMSMessage.OtpSMS(otp)
+            };
+
+            _ = Task.Run(async () =>
+            {
+                await _SQSPublisherService.SMSMessageQueuePublisher.SendMessageAsync(smsModel);
+            });
+
+            return BaseApiResponse.OK();
         }
 
         #endregion

@@ -163,7 +163,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                  x.DurationTimeText,
                                                              });
 
-            var currentRequest = receivedData.Where(x => x.RequestType == CollectingRequestType.GO_NOW);
+            var currentRequest = receivedData.Where(x => x.RequestType == CollectingRequestType.CURRENT_REQUEST);
             var appointment = receivedData.Where(x => x.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT).OrderByDescending(x => x.CollectingRequestDate).AsEnumerable();
 
             var result = currentRequest.Concat(appointment).Select(x => new DashboardCollectingRequestRecevingViewModel()

@@ -113,6 +113,17 @@ namespace SCSS.Utilities.Constants
             CacheRedisKey.SellCollectTransactionAwardAmount,
             CacheRedisKey.CollectDealTransactionAwardAmount,
         };
+
+        public static readonly List<int> CurrentRequests = new List<int>()
+        {
+            CollectingRequestType.CURRENT_REQUEST,
+            CollectingRequestType.SWITCH_TO_CURRENT_REQUEST
+        };
+
+        public static readonly List<int> Appointments = new List<int>()
+        {
+            CollectingRequestType.MAKE_AN_APPOINTMENT
+        };
     }
 
     public class DictionaryConstants

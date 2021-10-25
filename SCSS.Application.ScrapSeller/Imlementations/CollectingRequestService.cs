@@ -147,7 +147,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             // Auto Generate CollectingRequestEntityCode from CollectingRequestDate, collectingRequestFromTime and collectingRequestToTime
             var collectingRequestEntityCode = await GenerateCollectingRequestCode(model.CollectingRequestDate.ToDateTime().Value, collectingRequestFromTime, collectingRequestToTime);
 
-            var requestType = model.CollectingRequestDate.ToDateTime().Value.Date.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW) ? CollectingRequestType.GO_NOW : CollectingRequestType.MAKE_AN_APPOINTMENT;
+            var requestType = model.CollectingRequestDate.ToDateTime().Value.Date.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW) ? CollectingRequestType.CURRENT_REQUEST : CollectingRequestType.MAKE_AN_APPOINTMENT;
 
             // Create new Collecting Request Entity
             var collectingRequestEntity = new CollectingRequest()
@@ -352,7 +352,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             if (model.Status == CollectingRequestStatus.APPROVED)
             {
-                if (model.RequestType == CollectingRequestType.GO_NOW)
+                if (model.RequestType == CollectingRequestType.CURRENT_REQUEST)
                 {
                     var approvedTime = model.ApprovedTime.Value.TimeOfDay;
                     var timeRange = (int)DateTimeVN.TIMESPAN_NOW.Subtract(approvedTime).TotalMinutes;

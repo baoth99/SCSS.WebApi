@@ -30,6 +30,8 @@ namespace SCSS.WebApi.SystemConstants
 
         public static class AccountApiUrl
         {
+            public const string RegisterOTP = Account + "/register-otp";
+            public const string RestoreOTP = Account + "/restore-pass-otp";
             public const string RegisterCollectorAccount = Account + "/register";
             public const string UpdateCollectorAccount = Account + "/update";
             public const string InfoDetail = Account + "/collector-info";

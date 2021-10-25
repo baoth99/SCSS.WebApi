@@ -82,7 +82,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 {"phone", model.Phone }
             };
 
-
             var res = await IDHttpClientHelper.IDHttpClientPost(IdentityServer4Route.OtpForRegister, ClientIdConstant.SellerMobileApp, dictionary);
 
             if (res == null)

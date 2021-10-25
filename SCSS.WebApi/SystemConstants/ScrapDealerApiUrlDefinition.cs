@@ -16,6 +16,7 @@
             public const string TransScrapCategories = "trans/scrap-categories";
             public const string TransSCDetail = "trans/scrap-category-detail";
             public const string AutoCompleteCollectorPhone = "auto-complete/collector-phone";
+            public const string DealerLeaderList = "dealer/leaders";
         }
 
         public static class StatisticApiUrl
@@ -33,6 +34,8 @@
 
         public static class AccountApiUrl
         {
+            public const string RegisterOTP = Account + "/register-otp";
+            public const string RestoreOTP = Account + "/restore-pass-otp";
             public const string RegisterDealerAccount = Account + "/register";
             public const string UpdateDealerAccount = Account + "/update";
             public const string InfoDetail = Account + "/dealer-info";

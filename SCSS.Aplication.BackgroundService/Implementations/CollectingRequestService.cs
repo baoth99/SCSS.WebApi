@@ -216,7 +216,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                         CollectingRequestId = request.Id,
                                         Latitude = location.Latitude.Value,
                                         Longitude = location.Longitude.Value,
-                                        RequestType = CollectingRequestType.GO_NOW
+                                        RequestType = CollectingRequestType.CURRENT_REQUEST
                                     };
                                     // Publish Message To Amazon SQS
                                     await _SQSPublisherService.CollectingRequestNotiticationPublisher.SendMessageAsync(notifierQueue);
@@ -248,14 +248,13 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                       "[CollectorAccountId] IS NULL"; 
 
             var parameters = new DynamicParameters();
-            parameters.Add("@RequestType", CollectingRequestType.GO_NOW);
+            parameters.Add("@RequestType", CollectingRequestType.SWITCH_TO_CURRENT_REQUEST);
             parameters.Add("@CollectingRequestId", crId);
             parameters.Add("@UpdatedBy", Guid.Empty);
             parameters.Add("@DateNow", DateTimeVN.DATETIME_NOW);
             parameters.Add("@PendingStatus", CollectingRequestStatus.PENDING);
 
             return await _dapperService.SqlExecuteAsync(sql, parameters);
-
         }
 
         #endregion

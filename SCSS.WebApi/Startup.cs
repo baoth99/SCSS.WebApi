@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using SCSS.Utilities.Configurations;
-using SCSS.Utilities.Constants;
 using SCSS.Utilities.Helper;
 using SCSS.WebApi.AuthenticationFilter;
 using SCSS.WebApi.SystemConfigurations;

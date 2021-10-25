@@ -116,10 +116,10 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> GetCollectingRequests(CollectingRequestFilterModel model, int requestType)
+        public async Task<BaseApiResponseModel> GetCollectingRequests(CollectingRequestFilterModel model, List<int> requestTypes)
         {
 
-            var collectingRequestdataQuery = _collectingRequestRepository.GetMany(x => x.RequestType == requestType &&
+            var collectingRequestdataQuery = _collectingRequestRepository.GetMany(x => requestTypes.Contains(x.RequestType.Value) &&
                                                                                        x.Status == CollectingRequestStatus.PENDING && x.CollectorAccountId == null)                                             
                                                         .Join(_locationRepository.GetAll(), x => x.LocationId, y => y.Id,
                                                                 (x, y) => new
@@ -295,9 +295,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 }
             }
 
-            if (collectingRequestEntity.RequestType == CollectingRequestType.GO_NOW)
+            if (collectingRequestEntity.RequestType == CollectingRequestType.CURRENT_REQUEST)
             {
-                var collectingRequestsNow = collectingRequests.Where(x => x.RequestType == CollectingRequestType.GO_NOW &&
+                var collectingRequestsNow = collectingRequests.Where(x => x.RequestType == CollectingRequestType.CURRENT_REQUEST &&
                                                                           x.CollectingRequestDate.Value.Date.CompareTo(DateTimeVN.DATE_NOW) == NumberConstant.Zero &&
                                                                           x.Status == CollectingRequestStatus.APPROVED).ToList();
                 if (collectingRequestsNow.Any())
@@ -447,7 +447,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             }
 
             var locationEntity = _locationRepository.GetById(collectingRequestEntity.LocationId);
-            var accountSellerName = _accountRepository.GetById(collectingRequestEntity.SellerAccountId).Name;
+            var sellerAccount = _accountRepository.GetById(collectingRequestEntity.SellerAccountId);
 
             var isAllowedToApprove = await IsAllowedToApprove(collectingRequestEntity.RequestType);
 
@@ -456,7 +456,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 Id = collectingRequestEntity.Id,
                 CollectingRequestCode = collectingRequestEntity.CollectingRequestCode,
                 ScrapImageUrl = collectingRequestEntity.ScrapImageUrl,
-                SellerName = accountSellerName,
+                SellerName = sellerAccount.Name,
+                SellerGender = sellerAccount.Gender.Value,
+                SellerProfileUrl = sellerAccount.ImageUrl,
                 // Date
                 DayOfWeek = collectingRequestEntity.CollectingRequestDate.GetDayOfWeek(),
                 CollectingRequestDate = collectingRequestEntity.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
@@ -499,7 +501,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 return !(collectingRequestsMakeAppointment.Count >= maxRequest);
             }
 
-            var collectingRequestsNow = collectingRequests.Where(x => x.RequestType == CollectingRequestType.GO_NOW &&
+            var collectingRequestsNow = collectingRequests.Where(x => x.RequestType == CollectingRequestType.CURRENT_REQUEST &&
                                                                           x.CollectingRequestDate.Value.Date.CompareTo(DateTimeVN.DATE_NOW) == NumberConstant.Zero &&
                                                                           x.Status == CollectingRequestStatus.APPROVED).ToList();
 

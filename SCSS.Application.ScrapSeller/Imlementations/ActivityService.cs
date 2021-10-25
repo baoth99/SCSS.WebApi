@@ -276,7 +276,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             if (dataResult.Status == CollectingRequestStatus.APPROVED)
             {
-                if (crEntity.RequestType == CollectingRequestType.GO_NOW)
+                if (crEntity.RequestType == CollectingRequestType.CURRENT_REQUEST)
                 {
                     var approvedTime = crEntity.ApprovedTime.Value.TimeOfDay;
                     var timeRange = (int)DateTimeVN.TIMESPAN_NOW.Subtract(approvedTime).TotalMinutes;

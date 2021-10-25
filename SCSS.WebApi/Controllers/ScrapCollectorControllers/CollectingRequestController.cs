@@ -66,7 +66,8 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> GetCurrentCollectingRequests([FromQuery] CollectingRequestFilterModel model)
         {
-            return await _collectingRequestService.GetCollectingRequests(model, CollectingRequestType.GO_NOW);
+
+            return await _collectingRequestService.GetCollectingRequests(model, CollectionConstants.CurrentRequests);
         }
 
         #endregion Get Current Collecting Requests
@@ -86,7 +87,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> GetCollectingAppointment([FromQuery] CollectingRequestFilterModel model)
         {
-            return await _collectingRequestService.GetCollectingRequests(model, CollectingRequestType.MAKE_AN_APPOINTMENT);
+            return await _collectingRequestService.GetCollectingRequests(model, CollectionConstants.Appointments);
         }
 
         #endregion
@@ -117,7 +118,6 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapCollectorApiUrlDefinition.CollectingRequestApiUrl.Receive + "/test-signalr")]
-        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> TestSignalR([FromQuery] Guid id)
         {
             await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(id);

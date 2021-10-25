@@ -47,6 +47,46 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
 
         #endregion
 
+        #region Send OTP to Register
+
+        /// <summary>
+        /// Sends the otp to register.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapCollectorApiUrlDefinition.AccountApiUrl.RegisterOTP)]
+        public async Task<BaseApiResponseModel> SendOtpToRegister([FromBody] SendOTPRequestModel model)
+        {
+            return await _accountService.SendOtpToRegister(model);
+        }
+
+        #endregion
+
+        #region Send Otp To Restore Password
+
+        /// <summary>
+        /// Sends the otp to restore pass.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapCollectorApiUrlDefinition.AccountApiUrl.RestoreOTP)]
+        public async Task<BaseApiResponseModel> SendOtpToRestorePass([FromBody] SendOTPRequestModel model)
+        {
+            return await _accountService.SendOtpRestorePass(model);
+        }
+
+        #endregion
+
         #region Register Scrap Collector Account
 
         /// <summary>
