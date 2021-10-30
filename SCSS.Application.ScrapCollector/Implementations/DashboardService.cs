@@ -163,8 +163,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                  x.DurationTimeText,
                                                              });
 
-            var currentRequest = receivedData.Where(x => x.RequestType == CollectingRequestType.CURRENT_REQUEST);
-            var appointment = receivedData.Where(x => x.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT).OrderByDescending(x => x.CollectingRequestDate).AsEnumerable();
+            var currentRequest = receivedData.Where(x => x.RequestType == CollectingRequestType.CURRENT_REQUEST).OrderBy(x => x.DistanceVal);
+            var appointment = receivedData.Where(x => x.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT).OrderBy(x => x.CollectingRequestDate);
 
             var result = currentRequest.Concat(appointment).Select(x => new DashboardCollectingRequestRecevingViewModel()
             {
@@ -191,7 +191,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
         }
 
         #endregion
-
 
     }
 }

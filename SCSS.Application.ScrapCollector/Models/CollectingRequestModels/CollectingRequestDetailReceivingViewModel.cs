@@ -44,5 +44,7 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
 
         public string SellerPhone { get; set; }
 
+        public int? SellerGender { get; set; }
+
     }
 }

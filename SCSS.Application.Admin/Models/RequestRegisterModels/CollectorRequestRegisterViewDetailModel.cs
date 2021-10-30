@@ -13,6 +13,8 @@ namespace SCSS.Application.Admin.Models.RequestRegisterModels
 
         public string BirthDate { get; set; }
 
+        public string ImageUrl { get; set; }
+
         public int? Status { get; set; }
 
         public int? Gender { get; set; }

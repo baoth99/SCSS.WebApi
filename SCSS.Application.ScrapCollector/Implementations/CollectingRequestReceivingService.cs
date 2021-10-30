@@ -60,6 +60,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                   x.Latitude,
                                                                                   x.Longitude,
                                                                                   SellerName = y.Name,
+                                                                                  SellerPhone = y.Phone
                                                                               });
             if (!receivingDataQuery.Any())
             {
@@ -100,6 +101,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                  y.AddressName,
                                                                  y.IsBulky,
                                                                  y.SellerName,
+                                                                 y.SellerPhone,
                                                                  y.RequestType,
                                                                  x.DistanceVal,
                                                                  x.DistanceText,
@@ -107,8 +109,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                  x.DurationTimeText,
                                                              }).OrderBy(x => x.DistanceVal);
 
-            var currentRequest = receivedData.Where(x => x.RequestType == CollectingRequestType.CURRENT_REQUEST);
-            var appointment = receivedData.Where(x => x.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT).OrderByDescending(x => x.CollectingRequestDate).AsEnumerable();
+            var currentRequest = receivedData.Where(x => x.RequestType == CollectingRequestType.CURRENT_REQUEST).OrderBy(x => x.DistanceVal);
+            var appointment = receivedData.Where(x => x.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT).OrderBy(x => x.CollectingRequestDate);
 
             var collectingRequests = currentRequest.Concat(appointment);
 
@@ -122,6 +124,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 Id = x.CollectingRequestId,
                 CollectingRequestCode = x.CollectingRequestCode,
                 SellerName = x.SellerName,
+                SellerPhone = x.SellerPhone,
                 // Date
                 DayOfWeek = x.CollectingRequestDate.GetDayOfWeek(),
                 CollectingRequestDate = x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
@@ -168,7 +171,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             {
                 Id = collectingRequestEntity.Id,
                 CollectingRequestCode = collectingRequestEntity.CollectingRequestCode,
-                CollectingRequestDate = collectingRequestEntity.CollectingRequestDate.ToStringFormat(DateTimeFormat.DDD_dd_MMM),
+                CollectingRequestDate = collectingRequestEntity.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
                 DayOfWeek = collectingRequestEntity.CollectingRequestDate.GetDayOfWeek(),
                 FromTime = collectingRequestEntity.TimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
                 ToTime = collectingRequestEntity.TimeTo.ToStringFormat(TimeSpanFormat.HH_MM),
@@ -177,13 +180,14 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 ScrapImgUrl = collectingRequestEntity.ScrapImageUrl,
                 // Location
                 CollectingAddressName = locationEntity.AddressName,
-                CollectingAddress = locationEntity.AddressName,
+                CollectingAddress = locationEntity.Address,
                 Latitude = locationEntity.Latitude,
                 Longtitude = locationEntity.Longitude,
                 // Seller Information
                 SellerName = sellerInfo.Name,
                 SellerImgUrl = sellerInfo.ImageUrl,
-                SellerPhone = sellerInfo.Phone
+                SellerPhone = sellerInfo.Phone,
+                SellerGender = sellerInfo.Gender
             };
 
             return BaseApiResponse.OK(dataResult);

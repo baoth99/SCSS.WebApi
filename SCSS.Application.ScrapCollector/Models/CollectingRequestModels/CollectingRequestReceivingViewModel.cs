@@ -11,6 +11,8 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
 
         public string SellerName { get; set; }
 
+        public string SellerPhone { get; set; }
+
         // Date
         public int? DayOfWeek { get; set; }
 

@@ -147,6 +147,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                                                                                     BonusAmount = x.BonusAmount.ToLongValue(),
                                                                                     Quantity = x.Quantity,
                                                                                     Total = x.Total,
+                                                                                    Unit = x.Unit,
                                                                                     IsBonus = !ValidatorUtil.IsBlank(x.PromotionId)
                                                                                 }).ToList();
 
@@ -156,6 +157,8 @@ namespace SCSS.Application.ScrapDealer.Implementations
             var dataResult = new TransactionHistoryDetailViewModel()
             {
                 CollectorName = collectorInfo.Name,
+                ProfileURL = collectorInfo.ImageUrl,
+                Gender = collectorInfo.Gender,
                 TransactionCode = transEntity.TransactionCode,
                 TransactionDate = transEntity.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
                 TransactionTime = transEntity.CreatedTime.Value.TimeOfDay.ToStringFormat(TimeSpanFormat.HH_MM),

@@ -31,6 +31,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                              (x, y) => new
                                                                              {
                                                                                  CollectingRequestId = x.Id,
+                                                                                 x.SellerAccountId,
                                                                                  x.CollectingRequestCode,
                                                                                  CollectingUpdateTime = x.UpdatedTime,
                                                                                  x.Status,
@@ -41,12 +42,25 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                              {
                                                                                  x.CollectingRequestId,
                                                                                  x.CollectingRequestCode,
+                                                                                 x.SellerAccountId,
                                                                                  x.Status,
                                                                                  y.Total,
                                                                                  y.TransactionServiceFee,
                                                                                  TransactionDate = y.CreatedTime,
                                                                                  x.CollectingUpdateTime
-                                                                             });
+                                                                             })
+                                                        .Join(_accountRepository.GetAllAsNoTracking(), x => x.SellerAccountId, y => y.Id,
+                                                                            (x, y) => new
+                                                                            {
+                                                                                x.CollectingRequestId,
+                                                                                x.CollectingRequestCode,
+                                                                                SellerName = y.Name,
+                                                                                x.Status,
+                                                                                x.Total,
+                                                                                x.TransactionServiceFee,
+                                                                                x.TransactionDate,
+                                                                                x.CollectingUpdateTime
+                                                                            });
 
             var totalRecord = await dataQuery.CountAsync();
 
@@ -56,6 +70,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             var dataResult = dataQuery.Skip((page - 1) * pageSize).Take(pageSize).Select(x => new SellCollectTransactionHistoryViewModel()
             {
                 CollectingRequestId = x.CollectingRequestId,
+                SellerName = x.SellerName,
                 CollectingRequestCode = x.CollectingRequestCode,
                 DoneDateTime = DateTimeUtils.GetTransactionHistoryDate(x.Status.Value, x.TransactionDate, x.CollectingUpdateTime),
                 Status = x.Status,

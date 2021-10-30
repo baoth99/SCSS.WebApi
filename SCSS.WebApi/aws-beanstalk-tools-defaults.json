@@ -5,7 +5,7 @@
     "region"  : "ap-southeast-1",
     "application" : "SCSS.WebAPI",
     "environment" : "Scsswebapi-env",
-    "solution-stack" : "64bit Windows Server 2019 v2.7.1 running IIS 10.0",
+    "solution-stack" : "64bit Windows Server 2019 v2.7.2 running IIS 10.0",
     "iis-website"    : "Default Web Site",
     "app-path"       : "/",
     "enable-xray"    : false

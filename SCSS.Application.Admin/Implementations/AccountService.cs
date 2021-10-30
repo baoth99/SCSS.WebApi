@@ -38,6 +38,9 @@ namespace SCSS.Application.Admin.Implementations
 
         #region Services
 
+        /// <summary>
+        /// The SQS publisher service
+        /// </summary>
         private readonly ISQSPublisherService _SQSPublisherService;
 
         #endregion
@@ -234,7 +237,7 @@ namespace SCSS.Application.Admin.Implementations
             return BaseApiResponse.OK(data);
         }
 
-        #endregion
+        #endregion   
 
     }
 }

@@ -220,11 +220,12 @@ namespace SCSS.Application.Admin.Implementations
                 Id = dataQuery.Id,
                 Name = dataQuery.Name,
                 Address = dataQuery.Address,
-                BirthDate = dataQuery.BirthDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
+                BirthDate = dataQuery.BirthDate.ToStringFormat(DateTimeFormat.yyyy_MM_DD),
                 Gender = dataQuery.Gender,
                 IDCard = dataQuery.IdCard,
                 Phone = dataQuery.Phone,
                 RegisterTime = dataQuery.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),
+                ImageUrl = dataQuery.ImageUrl,
                 Status = dataQuery.Status
             };
 
@@ -297,6 +298,33 @@ namespace SCSS.Application.Admin.Implementations
             }
             
             return BaseApiResponse.OK(dataResult);
+        }
+
+        #endregion
+
+        #region Update Collector Profile
+
+        /// <summary>
+        /// Updates the collector profile.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> UpdateCollectorProfile(CollectorAccountUpdateModel model)
+        {
+            var collectorEntity = _accountRepository.GetById(model.Id);
+
+            //collectorEntity.ImageUrl = model.ImageUrl;
+            //collectorEntity.Name = model.Name;
+            //collectorEntity.Gender = model.Gender;
+            //collectorEntity.Address = model.Address;
+            //collectorEntity.BirthDate = model.BirthDate.ToDateTime();
+            //collectorEntity.IdCard = model.IDCard;
+
+            //_accountRepository.Update(collectorEntity);
+
+            //await UnitOfWork.CommitAsync();
+
+            return BaseApiResponse.OK();
         }
 
         #endregion

@@ -37,5 +37,13 @@ namespace SCSS.Application.Admin.Interfaces
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
         Task<BaseApiResponseModel> GetDealerRequestRegister(Guid id);
+
+        /// <summary>
+        /// Updates the collector profile.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> UpdateCollectorProfile(CollectorAccountUpdateModel model);
+
     }
 }

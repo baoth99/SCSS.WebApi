@@ -6,6 +6,8 @@ namespace SCSS.Application.ScrapCollector.Models.SellCollectTransactionModels
     {
         public Guid CollectingRequestId { get; set; }
 
+        public string SellerName { get; set; }
+
         public string CollectingRequestCode { get; set; }
 
         public DateTime? DoneDateTime { get; set; }

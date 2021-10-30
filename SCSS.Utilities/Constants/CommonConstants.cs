@@ -46,7 +46,7 @@ namespace SCSS.Utilities.Constants
         public const string DD_MM_yyyy_time_tt = @"dd-MM-yyyy hh:mm tt";
         public const string DD_MM_yyyy_time = @"dd-MM-yyyy hh:mm";
         public const string DD_MM_yyyy = @"dd-MM-yyyy";
-        public const string yyyy_MM_DD = @"yyyy-MM-DD";
+        public const string yyyy_MM_DD = @"yyyy-MM-dd";
         public const string DD_MMM_yyyy = @"dd MMM, yyyy";
         public const string DDMMyyyyhhmmss = @"ddMMyyyyhhmmss";
         public const string DDD_DD_MM_yyy_HH_mm = @"ddd, dd MM yyyy lúc HH:mm";

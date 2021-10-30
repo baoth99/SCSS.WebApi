@@ -7,6 +7,10 @@ namespace SCSS.Application.ScrapDealer.Models.CollectDealTransactionModels
     {
         public string CollectorName { get; set; }
 
+        public string ProfileURL { get; set; }
+
+        public int? Gender { get; set; }
+
         // Transaction
         public string TransactionCode { get; set; }
 
@@ -29,6 +33,8 @@ namespace SCSS.Application.ScrapDealer.Models.CollectDealTransactionModels
         public string ScrapCategoryName { get; set; }
 
         public float? Quantity { get; set; }
+
+        public string Unit { get; set; }
 
         public long? Total { get; set; }
 
