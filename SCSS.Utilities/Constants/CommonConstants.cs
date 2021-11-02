@@ -239,10 +239,12 @@ namespace SCSS.Utilities.Constants
     {
         public const string CollectingRequestScreen = "1";
         public const string HistoryScreen = "2";
+        public const string DealerHistoryScreen = "3";
+
     }
 
     public class DealerAppScreen
     {
-
+        public const string TransactionScreen = "1";
     }
 }

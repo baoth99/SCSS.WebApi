@@ -12,10 +12,17 @@ namespace SCSS.Application.ScrapCollector.Models.CollectDealTransactionModels
 
         public string DealerImageURL { get; set; }
 
-        public DateTime TransactionDate { get; set; }
+        public string TransactionDate { get; set; }
 
         public string TransactionTime { get; set; }
 
+        public int? DayOfWeek { get; set; }
+
         public long? Total { get; set; }
+
+
+        public long? TransactionServiceFee { get; set; }
+
+        public long? Bonus { get; set; }
     }
 }

@@ -28,6 +28,7 @@
             public const string GetDetail = Notification + "/get-detail";
             public const string GetNumberOfUnReadNotifications = Notification + "/unread-count";
             public const string Read = Notification + "/read";
+            public const string ReadAll = Notification + "/read-all";
         }
 
         public static class AccountApiUrl

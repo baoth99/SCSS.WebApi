@@ -49,5 +49,18 @@
         public static string RequestGoNowTitle => "Yêu cầu thu gom đến ngay";
 
         public static string RequestGoNowBody => "Có một yêu cầu thu gom mới ở gần bạn.";
+
+
+
+
+        public static string CompletedCollectDealTransCollectorTitle => $"Giao dịch bán cho vựa hoàn tất";
+
+        public static string CompletedCollectDealTransCollectorBody(string code) => $"Giao dịch bán {code} của bạn đã hoàn tất. Hãy đánh giá trải nghiệm bán cho vựa của bạn nhé";
+
+
+        public static string CompletedCollectDealTransDealerTitle => $"Giao dịch thu gom hoàn tất";
+
+        public static string CompletedCollectDealTransDealerBody(string code) => $"Giao dịch thu gom {code} của bạn đã hoàn tất. Hãy đánh giá trải nghiệm thu gom của bạn nhé";
+
     }
 }

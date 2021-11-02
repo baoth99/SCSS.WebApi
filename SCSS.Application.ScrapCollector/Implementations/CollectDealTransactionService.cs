@@ -120,8 +120,11 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 TransactionCode = x.TransactionCode,
                 DealerName = x.DealerName,
                 DealerImageURL = x.DealerImageUrl,
-                Total = ((x.Total - x.TransactionServiceFee) + x.BonusAmount),
-                TransactionDate = x.CreatedTime.Value.Date,
+                Total = x.Total,
+                TransactionServiceFee = x.TransactionServiceFee,
+                Bonus = x.BonusAmount,
+                TransactionDate = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
+                DayOfWeek = x.CreatedTime.GetDayOfWeek(),
                 TransactionTime = x.CreatedTime.Value.TimeOfDay.ToStringFormat(TimeSpanFormat.HH_MM),
             }).ToList();
 
@@ -164,7 +167,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 DealerInfo = new TransDealerInformationViewModel()
                 {
                     DealerName = dealerInfo?.DealerName,
-                    DealerPhone = dealerInfo?.DealerPhone
+                    DealerPhone = dealerInfo?.DealerPhone,
+                    DealerImageUrl = dealerInfo?.DealerImageUrl
                 },
                 Feedback = feedbackInfo,
                 ItemDetails = itemDetails
@@ -224,6 +228,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                         ScrapCategoryName = x.ScrapCategoryName,
                                                                                         Quantity = x.Quantity,
                                                                                         Total = x.Total,
+                                                                                        Unit = x.Unit,
                                                                                         BonusAmount = x.BonusAmount,
                                                                                         IsBonus = !ValidatorUtil.IsBlank(x.PromotionId)
                                                                                     }).ToListAsync();

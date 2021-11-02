@@ -304,22 +304,23 @@ namespace SCSS.Application.ScrapDealer.Implementations
                     AccountId = UserAuthSession.UserSession.Id,
                     DeviceId = UserAuthSession.UserSession.DeviceId,
                     NotiType = CollectingRequestStatus.COMPLETED,
-                    Title = "",
-                    Body = "",
-                    DataCustom = null
+                    Title = NotificationMessage.CompletedCollectDealTransDealerTitle,
+                    Body = NotificationMessage.CompletedCollectDealTransDealerBody(insertEntity.TransactionCode),
+                    DataCustom = DictionaryConstants.FirebaseCustomData(DealerAppScreen.TransactionScreen, insertEntity.Id.ToString())
                 },
                 new NotificationMessageQueueModel()
                 {
                     AccountId = collectorAccount.Id,
                     DeviceId = collectorAccount.DeviceId,
                     NotiType = CollectingRequestStatus.COMPLETED,
-                    Title = "",
-                    Body = "",
-                    DataCustom = null
+                    Title = NotificationMessage.CompletedCollectDealTransCollectorTitle,
+                    Body = NotificationMessage.CompletedCollectDealTransCollectorBody(insertEntity.TransactionCode),
+                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.DealerHistoryScreen, insertEntity.Id.ToString())
                 }
             };
 
-            // TODO:
+            await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(notifications);
+
             return BaseApiResponse.OK();
         }
 

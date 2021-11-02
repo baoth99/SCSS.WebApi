@@ -153,7 +153,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                                             DeviceId = x.CollectorDeviceId,
                                                             Title = NotificationMessage.SystemCancelCRTitle,
                                                             Body = NotificationMessage.SystemCancelCRCollectorBody(x.CollectingRequestCode, x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy)),
-                                                            DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.HistoryScreen, x.CollectingRequestId.ToString()),
+                                                            DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, x.CollectingRequestId.ToString()),
                                                             NotiType = CollectingRequestStatus.CANCEL_BY_SYSTEM
                                                         }).ToList();
 

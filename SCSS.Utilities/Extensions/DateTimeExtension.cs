@@ -87,6 +87,20 @@ namespace SCSS.Utilities.Extensions
             return res >= 0;
         }
 
+        /// <summary>
+        /// Determines whether [is compare date time greater or equal] [the specified date time2].
+        /// </summary>
+        /// <param name="dateTime1">The date time1.</param>
+        /// <param name="dateTime2">The date time2.</param>
+        /// <returns>
+        ///   <c>true</c> if [is compare date time greater or equal] [the specified date time2]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsCompareDateTimeGreaterOrEqual(this DateTime dateTime1, DateTime? dateTime2)
+        {
+            var res = dateTime1.CompareTo(dateTime2.Value);
+            return res >= 0;
+        }
+
         #endregion Compare DateTime Greater Or Equal
 
         #region Compare DateTime Less Or Equal
@@ -172,6 +186,39 @@ namespace SCSS.Utilities.Extensions
 
         #endregion Compare DateTime Less Than
 
+        #region Compare DateTime Less Than Or Equal
+
+        /// <summary>
+        /// Determines whether [is compare date time less than or equal] [the specified date time2].
+        /// </summary>
+        /// <param name="dateTime1">The date time1.</param>
+        /// <param name="dateTime2">The date time2.</param>
+        /// <returns>
+        ///   <c>true</c> if [is compare date time less than or equal] [the specified date time2]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsCompareDateTimeLessThanOrEqual(this DateTime? dateTime1, DateTime? dateTime2)
+        {
+            var res = dateTime1.Value.CompareTo(dateTime2.Value);
+            return res <= 0;
+        }
+
+        /// <summary>
+        /// Determines whether [is compare date time less than or equal] [the specified date time2].
+        /// </summary>
+        /// <param name="dateTime1">The date time1.</param>
+        /// <param name="dateTime2">The date time2.</param>
+        /// <returns>
+        ///   <c>true</c> if [is compare date time less than or equal] [the specified date time2]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsCompareDateTimeLessThanOrEqual(this DateTime dateTime1, DateTime? dateTime2)
+        {
+            var res = dateTime1.CompareTo(dateTime2.Value);
+            return res <= 0;
+        }
+
+        #endregion Compare DateTime Less Than
+
+
         #region Compare DateTime Equal
 
         /// <summary>
@@ -203,6 +250,9 @@ namespace SCSS.Utilities.Extensions
         }
 
         #endregion Compare DateTime Equal
+
+
+
 
         #region Compare TimeSpan Greater Or Equal
 

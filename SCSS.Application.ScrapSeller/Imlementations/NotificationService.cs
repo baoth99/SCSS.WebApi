@@ -127,5 +127,32 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
         #endregion
 
+        #region Read All Notifications
+
+        /// <summary>
+        /// Reads all notifications.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> ReadAllNotifications()
+        {
+            var unreadNotifications = _notificationRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id) &&
+                                                                                       x.IsRead == BooleanConstants.FALSE).ToList()
+                                                             .Select(x =>
+                                                             {
+                                                                 x.IsRead = BooleanConstants.TRUE;
+                                                                 return x;
+                                                             }).ToList();
+
+            if (unreadNotifications.Any())
+            {
+                _notificationRepository.UpdateRange(unreadNotifications);
+
+                await UnitOfWork.CommitAsync();
+            }
+
+            return BaseApiResponse.OK();
+        }
+
+        #endregion
     }
 }

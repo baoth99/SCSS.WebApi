@@ -32,5 +32,11 @@ namespace SCSS.Application.ScrapSeller.Interfaces
         /// </summary>
         /// <returns></returns>
         Task<BaseApiResponseModel> GetNumberOfUnReadNotifications();
+
+        /// <summary>
+        /// Reads all notifications.
+        /// </summary>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> ReadAllNotifications();
     }
 }

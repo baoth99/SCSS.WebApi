@@ -16,6 +16,8 @@ namespace SCSS.WebApi.SystemConstants
         private const string SystemConfig = "sys-conf";
         private const string CollectorCancelReason = "cancel-reason";
         private const string Complaint = "complaint";
+        private const string SellCollectTransaction = "transaction/sell-collect";
+        private const string CollectDealTransaction = "transaction/collect-deal";
 
         public static class ComplaintApiUrl
         {
@@ -35,6 +37,17 @@ namespace SCSS.WebApi.SystemConstants
             public const string Get = CollectorCancelReason + "/get";
         }
 
+        public static class SellCollectTransactionApiUrl
+        {
+            public const string Search = SellCollectTransaction + "/search";
+            public const string GetDetail = SellCollectTransaction + "/detail";
+        }
+
+        public static class CollectDealTransactionApiUrl
+        {
+            public const string Search = CollectDealTransaction + "/search";
+            public const string GetDetail = CollectDealTransaction + "/detail";
+        }
 
         public static class TransactionAwardAmountApiUrl
         {

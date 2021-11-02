@@ -30,6 +30,8 @@ namespace SCSS.Application.ScrapCollector.Models.CollectDealTransactionModels
         public string DealerName { get; set; }
 
         public string DealerPhone { get; set; }
+
+        public string DealerImageUrl { get; set; }
     }
 
     public class CollectDealTransFeedbackViewModel
@@ -42,6 +44,8 @@ namespace SCSS.Application.ScrapCollector.Models.CollectDealTransactionModels
     public class TransHistoryScrapCategoryViewModel
     {
         public string ScrapCategoryName { get; set; }
+
+        public string Unit { get; set; }
 
         public float? Quantity { get; set; }
 

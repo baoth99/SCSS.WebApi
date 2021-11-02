@@ -139,45 +139,5 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
         #endregion Create Dealer Feedback
 
-        #region Create Feedback To Admin
-
-        /// <summary>
-        /// Creates the feedback to admin.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <returns></returns>
-        public async Task<BaseApiResponseModel> CreateFeedbackToAdmin(FeedbackAdminCreateModel model)
-        {
-            //var transaction = _collectDealTransactionRepository.GetAsNoTracking(x => x.Id.Equals(model.CollectDealTransactionId));
-
-            //if (transaction == null)
-            //{
-            //    return BaseApiResponse.NotFound();
-            //}
-
-            //var isExisted = _feedbackToSystemRepository.IsExisted(x => x.CollectDealTransactionId.Equals(model.CollectDealTransactionId) &&
-            //                                                           x.CollectingRequestId == null);
-
-            //if (isExisted)
-            //{
-            //    return BaseApiResponse.Error(SystemMessageCode.DuplicateData);
-            //}
-            //var entity = new FeedbackToSystem()
-            //{
-            //    SellingAccountId = UserAuthSession.UserSession.Id,
-            //    BuyingAccountId = transaction.DealerAccountId,
-            //    SellingFeedback = model.SellingFeedback,
-            //    CollectDealTransactionId = transaction.Id
-            //};
-
-            //_feedbackToSystemRepository.Insert(entity);
-
-            //await UnitOfWork.CommitAsync();
-
-            return BaseApiResponse.OK();
-        }
-
-        #endregion
-
     }
 }

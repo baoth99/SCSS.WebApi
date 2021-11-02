@@ -37,7 +37,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                  x.Status,
                                                                                  Transaction = y
                                                                              })
-                                                        .SelectMany(x => x.Transaction.DefaultIfEmpty(), 
+                                                        .SelectMany(x => x.Transaction.DefaultIfEmpty(),
                                                                              (x, y) => new
                                                                              {
                                                                                  x.CollectingRequestId,
@@ -61,24 +61,39 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                 x.TransactionDate,
                                                                                 x.CollectingUpdateTime
                                                                             });
+                                                        
+                                                        
 
             var totalRecord = await dataQuery.CountAsync();
+
+            var sortedList = dataQuery.ToList().Select(x => new
+            {
+                x.CollectingRequestId,
+                x.SellerName,
+                x.CollectingRequestCode,
+                x.Status,
+                x.TransactionDate,
+                x.CollectingUpdateTime,
+                x.Total,
+                DoneDateTime = DateTimeUtils.GetTransactionHistoryDate(x.Status.Value, x.TransactionDate, x.CollectingUpdateTime)
+            }).OrderByDescending(x => x.DoneDateTime);
+
 
             var page = model.Page <= NumberConstant.Zero ? NumberConstant.One : model.Page;
             var pageSize = model.PageSize <= NumberConstant.Zero ? NumberConstant.Ten : model.PageSize;
 
-            var dataResult = dataQuery.Skip((page - 1) * pageSize).Take(pageSize).Select(x => new SellCollectTransactionHistoryViewModel()
+            var dataResult = sortedList.Skip((page - 1) * pageSize).Take(pageSize).Select(x => new SellCollectTransactionHistoryViewModel()
             {
                 CollectingRequestId = x.CollectingRequestId,
                 SellerName = x.SellerName,
                 CollectingRequestCode = x.CollectingRequestCode,
-                DoneDateTime = DateTimeUtils.GetTransactionHistoryDate(x.Status.Value, x.TransactionDate, x.CollectingUpdateTime),
+                DoneDateTime = x.DoneDateTime,
                 Status = x.Status,
                 Date = DateTimeUtils.GetTransactionHistoryDate(x.Status.Value, x.TransactionDate, x.CollectingUpdateTime).ToStringFormat(DateTimeFormat.DD_MM_yyyy),
-                DayOfWeek = DateTimeUtils.GetTransactionHistoryDate(x.Status.Value,x.TransactionDate, x.CollectingUpdateTime).GetDayOfWeek(),
+                DayOfWeek = DateTimeUtils.GetTransactionHistoryDate(x.Status.Value, x.TransactionDate, x.CollectingUpdateTime).GetDayOfWeek(),
                 Time = DateTimeUtils.GetTransactionHistoryDate(x.Status.Value, x.TransactionDate, x.CollectingUpdateTime).Value.TimeOfDay.ToString(TimeSpanFormat.HH_MM),
                 Total = x.Total
-            });
+            }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
         }

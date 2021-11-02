@@ -10,6 +10,11 @@ namespace SCSS.Utilities.Helper
             return string.IsNullOrEmpty(text);
         }
 
+        public static bool IsBlank(TimeSpan? timeSpan)
+        {
+            return timeSpan == null;
+        }
+
         public static bool IsBlank(DateTime? dateTime)
         {
             return dateTime == null;

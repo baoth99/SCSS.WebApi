@@ -116,5 +116,25 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         }
 
         #endregion
+
+
+        #region Read All Notifications
+
+        /// <summary>
+        /// Reads all notifications.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapDealerApiUrlDefinition.NotificationApiUrl.ReadAll)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> ReadAllNotifications()
+        {
+            return await _notificationService.ReadAllNotifications();
+        }
+
+        #endregion
     }
 }

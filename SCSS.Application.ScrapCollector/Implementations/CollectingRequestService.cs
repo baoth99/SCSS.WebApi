@@ -415,7 +415,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     AccountId = UserAuthSession.UserSession.Id,
                     Title = NotificationMessage.CollectorCollectingRequestReceviedTitle,
                     Body = NotificationMessage.CollectorCollectingRequestReceviedBody(collectingRequestCode), 
-                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.HistoryScreen, requestId.ToString()), 
+                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, requestId.ToString()), 
                     DeviceId = UserAuthSession.UserSession.DeviceId,
                     NotiType = CollectingRequestStatus.APPROVED
                 }

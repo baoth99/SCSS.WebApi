@@ -53,25 +53,6 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         }
 
         #endregion Create Dealer Feedback
-
-        #region Create Feedback To Admin
-
-        /// <summary>
-        /// Creates the feedback to admin.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <returns></returns>
-        [HttpPost]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapCollectorApiUrlDefinition.FeedbackApiUrl.CreateFeedbackToAdmin)]
-        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> CreateFeedbackToAdmin([FromBody] FeedbackAdminCreateModel model)
-        {
-            return await _feedbackService.CreateFeedbackToAdmin(model);
-        }
-
-        #endregion Create Feedback To Admin
+        
     }
 }
