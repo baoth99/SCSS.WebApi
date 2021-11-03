@@ -58,6 +58,16 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         private IRepository<TransactionAwardAmount> _transactionAwardAmountRepository;
 
+        /// <summary>
+        /// The complaint repository
+        /// </summary>
+        private IRepository<Complaint> _complaintRepository;
+
+        /// <summary>
+        /// The collector complaint repository
+        /// </summary>
+        private IRepository<CollectorComplaint> _collectorComplaintRepository;
+
         #endregion
 
         #region Services
@@ -95,6 +105,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
             _scrapCategoryRepository = unitOfWork.ScrapCategoryRepository;
             _accountRepository = unitOfWork.AccountRepository;
             _transactionAwardAmountRepository = unitOfWork.TransactionAwardAmountRepository;
+            _complaintRepository = unitOfWork.ComplaintRepository;
+            _collectorComplaintRepository = unitOfWork.CollectorComplaintRepository;
             _SQSPublisherService = SQSPublisherService;
             _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _cacheListService = cacheListService;

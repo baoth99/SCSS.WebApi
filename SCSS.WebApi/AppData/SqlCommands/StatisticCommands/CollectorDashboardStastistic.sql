@@ -17,16 +17,16 @@
 		FROM [CollectingRequest]
 		WHERE [CollectorAccountId] = @CollectorId AND
 		      [Status] = @CompleteStatus AND
-			  [CreatedTime] >= @FromDate AND
-			  [CreatedTime] <= @ToDate
+			  [UpdatedTime] >= @FromDate AND
+			  [UpdatedTime] <= @ToDate
 	),
 	  TotalCancelCR AS (
 		SELECT COUNT([Id]) AS TotalCancelCR
 		FROM [CollectingRequest]
 		WHERE [CollectorAccountId] = @CollectorId AND
 			  ([Status] = @CancelByCollectorStatus OR [Status] = @CancelBySystemStatus) AND
-			  [CreatedTime] >= @FromDate AND
-			  [CreatedTime] <= @ToDate
+			  [UpdatedTime] >= @FromDate AND
+			  [UpdatedTime] <= @ToDate
 	)
 SELECT A.TotalCollecting, 
 	   B.TotalSale, 

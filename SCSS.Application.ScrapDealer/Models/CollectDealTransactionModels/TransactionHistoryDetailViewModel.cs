@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 
 namespace SCSS.Application.ScrapDealer.Models.CollectDealTransactionModels
@@ -26,6 +27,7 @@ namespace SCSS.Application.ScrapDealer.Models.CollectDealTransactionModels
 
         public List<TransactionHistoryScrapCategoryViewModel> ItemDetail { get; set; }
 
+        public ComplaintViewModel Complaint { get; set; }
     }
 
     public class TransactionHistoryScrapCategoryViewModel
@@ -41,7 +43,16 @@ namespace SCSS.Application.ScrapDealer.Models.CollectDealTransactionModels
         public bool IsBonus { get; set; }
 
         public long? BonusAmount { get; set; }
+    }
 
+    public class ComplaintViewModel
+    {
+        public Guid? ComplaintId { get; set; }
 
+        public int ComplaintStatus { get; set; }
+
+        public string ComplaintContent { get; set; }
+
+        public string AdminReply { get; set; }
     }
 }

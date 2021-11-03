@@ -120,6 +120,34 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             var transaction = await _sellCollectTransactionRepository.GetAsync(x => x.CollectingRequestId.Equals(collectingRequest.Id));
 
+            var complaint = _complaintRepository.GetMany(x => x.CollectingRequestId.Equals(collectingRequestId) &&
+                                                                        x.CollectDealTransactionId == null)
+                                            .GroupJoin(_collectorComplaintRepository.GetManyAsNoTracking(x => x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id)), x => x.Id, y => y.ComplaintId,
+                                                            (x, y) => new
+                                                            {
+                                                                ComplaintId = x.Id,
+                                                                CollectorComplaint = y
+                                                            })
+                                            .SelectMany(x => x.CollectorComplaint.DefaultIfEmpty(), (x, y) => new
+                                            {
+                                                x.ComplaintId,
+                                                CollectorComplaint = y
+                                            }).ToList().Select(x => new
+                                            {
+                                                x?.ComplaintId,
+                                                AdminReply = x?.CollectorComplaint?.AdminReply,
+                                                ComplaintContent = x?.CollectorComplaint?.ComplaintContent,
+                                                CollectorComplaintId = x?.CollectorComplaint?.Id
+                                            }).FirstOrDefault();
+            
+            var complaintRes = new ComplaintViewModel()
+            {
+                ComplaintId = complaint?.ComplaintId,
+                ComplaintContent = complaint?.ComplaintContent,
+                AdminReply = complaint?.AdminReply,
+                ComplaintStatus = CommonUtils.GetComplaintStatus(complaint?.ComplaintId, complaint?.CollectorComplaintId, complaint?.AdminReply)
+            };
+
             if (collectingRequest.Status == CollectingRequestStatus.COMPLETED && transaction != null)
             {
                 var transactionDetailItems = _sellCollectTransactionDetailRepository.GetManyAsNoTracking(x => x.SellCollectTransactionId.Equals(transaction.Id))
@@ -163,6 +191,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     DayOfWeek = transaction.CreatedTime.GetDayOfWeek(),
                     Date = transaction.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
                     Time = transaction.CreatedTime.Value.TimeOfDay.ToString(TimeSpanFormat.HH_MM),
+                    Complaint = complaintRes,
                     Total = transaction.Total,
                     Status = collectingRequest.Status,
                     TransactionFee = transaction.TransactionServiceFee,
@@ -175,11 +204,12 @@ namespace SCSS.Application.ScrapCollector.Implementations
             var dataRes = new SellCollectTransactionHistoryDetailViewModel()
             {
                 CollectingRequestCode = collectingRequest.CollectingRequestCode,
+                SellerName = sellerName,
                 Status = collectingRequest.Status,
                 DayOfWeek = collectingRequest.UpdatedTime.GetDayOfWeek(),
                 Date = collectingRequest.UpdatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
                 Time = collectingRequest.UpdatedTime.Value.TimeOfDay.ToString(TimeSpanFormat.HH_MM),
-                SellerName = sellerName
+                Complaint = complaintRes
             };
 
             return BaseApiResponse.OK(dataRes);

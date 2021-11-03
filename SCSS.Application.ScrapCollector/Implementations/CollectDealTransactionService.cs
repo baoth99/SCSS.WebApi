@@ -59,6 +59,21 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         private readonly IRepository<ScrapCategoryDetail> _scrapCategoryDetailRepository;
 
+        /// <summary>
+        /// The complaint repository
+        /// </summary>
+        private IRepository<Complaint> _complaintRepository;
+
+        /// <summary>
+        /// The collector complaint repository
+        /// </summary>
+        private IRepository<CollectorComplaint> _collectorComplaintRepository;
+
+        /// <summary>
+        /// The promotion repository
+        /// </summary>
+        private IRepository<Promotion> _promotionRepository;
+
         #endregion Repositories
 
         #region Constructor
@@ -80,6 +95,9 @@ namespace SCSS.Application.ScrapCollector.Implementations
             _feedbackRepository = unitOfWork.FeedbackRepository;
             _scrapCategoryRepository = unitOfWork.ScrapCategoryRepository;
             _scrapCategoryDetailRepository = unitOfWork.ScrapCategoryDetailRepository;
+            _complaintRepository = unitOfWork.ComplaintRepository;
+            _collectorComplaintRepository = unitOfWork.CollectorComplaintRepository;
+            _promotionRepository = unitOfWork.PromotionRepository;
 
         }
 
@@ -154,6 +172,35 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             var feedbackInfo = await GetFeedbackInfo(transEntity.Id, transEntity.CreatedTime);
 
+            var complaint = _complaintRepository.GetMany(x => x.CollectDealTransactionId.Equals(transId) &&
+                                                                       x.CollectingRequestId == null)
+                                           .GroupJoin(_collectorComplaintRepository.GetManyAsNoTracking(x => x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id)), x => x.Id, y => y.ComplaintId,
+                                                           (x, y) => new
+                                                           {
+                                                               ComplaintId = x.Id,
+                                                               CollectorComplaint = y
+                                                           })
+                                           .SelectMany(x => x.CollectorComplaint.DefaultIfEmpty(), (x, y) => new
+                                           {
+                                               x.ComplaintId,
+                                               CollectorComplaint = y
+                                           }).ToList().Select(x => new
+                                           {
+                                               x?.ComplaintId,
+                                               AdminReply = x?.CollectorComplaint?.AdminReply,
+                                               ComplaintContent = x?.CollectorComplaint?.ComplaintContent,
+                                               CollectorComplaintId = x?.CollectorComplaint?.Id
+                                           }).FirstOrDefault();
+
+            var complaintRes = new ComplaintViewModel()
+            {
+                ComplaintId = complaint?.ComplaintId,
+                ComplaintContent = complaint?.ComplaintContent,
+                AdminReply = complaint?.AdminReply,
+                ComplaintStatus = CommonUtils.GetComplaintStatus(complaint?.ComplaintId, complaint?.CollectorComplaintId, complaint?.AdminReply)
+            };
+
+
             var itemDetails = await GetTransactionInfoDetails(transId);
 
             var entityResponse = new CollectDealTransactionDetailViewModel()
@@ -171,7 +218,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     DealerImageUrl = dealerInfo?.DealerImageUrl
                 },
                 Feedback = feedbackInfo,
-                ItemDetails = itemDetails
+                ItemDetails = itemDetails,
+                Complaint = complaintRes
             };
 
             return BaseApiResponse.OK(entityResponse);
@@ -223,15 +271,40 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                         x.Unit,
                                                                                         x.PromotionId,
                                                                                         ScrapCategoryName = y.Name
-                                                                                    }).Select(x => new TransHistoryScrapCategoryViewModel()
-                                                                                    {
-                                                                                        ScrapCategoryName = x.ScrapCategoryName,
-                                                                                        Quantity = x.Quantity,
-                                                                                        Total = x.Total,
-                                                                                        Unit = x.Unit,
-                                                                                        BonusAmount = x.BonusAmount,
-                                                                                        IsBonus = !ValidatorUtil.IsBlank(x.PromotionId)
-                                                                                    }).ToListAsync();
+                                                                                    })
+                                                                                 .GroupJoin(_promotionRepository.GetAllAsNoTracking(), x => x.PromotionId, y => y.Id, (x, y) => new
+                                                                                 {
+                                                                                     x.Quantity,
+                                                                                     x.Total,
+                                                                                     x.BonusAmount,
+                                                                                     x.Unit,
+                                                                                     x.PromotionId,
+                                                                                     x.ScrapCategoryName,
+                                                                                     Promotion = y
+                                                                                 }).SelectMany(x => x.Promotion.DefaultIfEmpty(), (x, y) => new
+                                                                                 {
+                                                                                     x.Quantity,
+                                                                                     x.Total,
+                                                                                     x.BonusAmount,
+                                                                                     x.Unit,
+                                                                                     x.PromotionId,
+                                                                                     x.ScrapCategoryName,
+                                                                                     PromoCode = y.Code,
+                                                                                     PromoBonus = y.BonusAmount,
+                                                                                     PromoAppliedBonus = y.AppliedAmount
+                                                                                 })
+                                                                                .Select(x => new TransHistoryScrapCategoryViewModel()
+                                                                                {
+                                                                                    ScrapCategoryName = x.ScrapCategoryName,
+                                                                                    PromoBonus = x.PromoBonus,
+                                                                                    PromoAppliedBonus = x.PromoAppliedBonus,
+                                                                                    PromotionCode = x.PromoCode,
+                                                                                    Quantity = x.Quantity,
+                                                                                    Total = x.Total,
+                                                                                    Unit = x.Unit,
+                                                                                    BonusAmount = x.BonusAmount,
+                                                                                    IsBonus = !ValidatorUtil.IsBlank(x.PromotionId)
+                                                                                }).ToListAsync();
             return transactionDetailItems;
         }
 

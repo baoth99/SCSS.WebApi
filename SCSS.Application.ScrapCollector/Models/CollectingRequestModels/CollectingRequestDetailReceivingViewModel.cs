@@ -46,5 +46,18 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
 
         public int? SellerGender { get; set; }
 
+        public ComplaintViewModel Complaint { get; set; }
+
+    }
+
+    public class ComplaintViewModel
+    {
+        public Guid? ComplaintId { get; set; }
+
+        public int ComplaintStatus { get; set; }
+
+        public string ComplaintContent { get; set; }
+
+        public string AdminReply { get; set; }
     }
 }

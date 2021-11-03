@@ -291,7 +291,6 @@ namespace SCSS.Application.Admin.Implementations
                 TransactionDetails = transactionDetailItems
             };
 
-
             return BaseApiResponse.OK(dataResult);
         }
 

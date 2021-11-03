@@ -43,6 +43,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                     {
                         return BaseApiResponse.Forbidden();
                     }
+
                     dealerId = model.DealerAccountId.Value;
                 }
             }
@@ -104,6 +105,33 @@ namespace SCSS.Application.ScrapDealer.Implementations
 
             var collectorInfo = _accountRepository.GetById(transEntity.CollectorAccountId);
 
+            var complaint = _complaintRepository.GetMany(x => x.CollectDealTransactionId.Equals(transEntity.Id) &&
+                                                                        x.CollectingRequestId == null)
+                                            .GroupJoin(_dealerComplaintRepository.GetManyAsNoTracking(x => x.DealerAccountId.Equals(UserAuthSession.UserSession.Id)), x => x.Id, y => y.ComplaintId,
+                                                            (x, y) => new
+                                                            {
+                                                                ComplaintId = x.Id,
+                                                                DealerComplaint = y
+                                                            })
+                                            .SelectMany(x => x.DealerComplaint.DefaultIfEmpty(), (x, y) => new
+                                            {
+                                                x.ComplaintId,
+                                                DealerComplaint = y
+                                            }).ToList().Select(x => new
+                                            {
+                                                x?.ComplaintId,
+                                                AdminReply = x?.DealerComplaint?.AdminReply,
+                                                ComplaintContent = x?.DealerComplaint?.ComplaintContent,
+                                                DealerComplaintId = x?.DealerComplaint?.Id
+                                            }).FirstOrDefault();
+
+            var complaintRes = new ComplaintViewModel()
+            {
+                ComplaintId = complaint?.ComplaintId,
+                ComplaintContent = complaint?.ComplaintContent,
+                AdminReply = complaint?.AdminReply,
+                ComplaintStatus = CommonUtils.GetComplaintStatus(complaint?.ComplaintId, complaint?.DealerComplaintId, complaint?.AdminReply)
+            };
 
             var transactionDetailItems = _collectDealTransactionDetailRepository.GetManyAsNoTracking(x => x.CollectDealTransactionId.Equals(transEntity.Id))
                                                                                 .GroupJoin(_scrapCategoryDetailRepository.GetAllAsNoTracking(), x => x.DealerCategoryDetailId, y => y.Id,
@@ -165,7 +193,8 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 Total = transEntity.Total,
                 TotalBonus = totalBonus,
                 TransactionFee = transEntity.TransactionServiceFee,
-                ItemDetail = transactionDetailItems
+                ItemDetail = transactionDetailItems,
+                Complaint = complaintRes
             };
 
             return BaseApiResponse.OK(dataResult);

@@ -15,6 +15,8 @@ namespace SCSS.Application.ScrapCollector.Models.CollectDealTransactionModels
 
         public CollectDealTransFeedbackViewModel Feedback { get; set; }
 
+        public ComplaintViewModel Complaint { get; set; }
+
         public List<TransHistoryScrapCategoryViewModel> ItemDetails { get; set; }
 
         public long? Total { get; set; }
@@ -23,6 +25,17 @@ namespace SCSS.Application.ScrapCollector.Models.CollectDealTransactionModels
 
         public float? AwardPoint { get; set; }
 
+    }
+
+    public class ComplaintViewModel
+    {
+        public Guid? ComplaintId { get; set; }
+
+        public int ComplaintStatus { get; set; }
+
+        public string ComplaintContent { get; set; }
+
+        public string AdminReply { get; set; }
     }
 
     public class TransDealerInformationViewModel
@@ -43,6 +56,12 @@ namespace SCSS.Application.ScrapCollector.Models.CollectDealTransactionModels
 
     public class TransHistoryScrapCategoryViewModel
     {
+        public string PromotionCode { get; set; }
+
+        public long? PromoBonus { get; set; }
+
+        public long? PromoAppliedBonus { get; set; }
+
         public string ScrapCategoryName { get; set; }
 
         public string Unit { get; set; }

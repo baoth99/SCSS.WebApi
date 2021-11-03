@@ -166,7 +166,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
             var locationEntity = _locationRepository.GetAsNoTracking(x => x.Id.Equals(collectingRequestEntity.LocationId));
             var sellerInfo = _accountRepository.GetAsNoTracking(x => x.Id.Equals(collectingRequestEntity.SellerAccountId));
 
-
             var dataResult = new CollectingRequestDetailReceivingViewModel()
             {
                 Id = collectingRequestEntity.Id,
@@ -189,6 +188,37 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 SellerPhone = sellerInfo.Phone,
                 SellerGender = sellerInfo.Gender
             };
+
+            var complaint = _complaintRepository.GetMany(x => x.CollectingRequestId.Equals(id) &&
+                                                                        x.CollectDealTransactionId == null)
+                                            .GroupJoin(_collectorComplaintRepository.GetManyAsNoTracking(x => x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id)), x => x.Id, y => y.ComplaintId,
+                                                            (x, y) => new
+                                                            {
+                                                                ComplaintId = x.Id,
+                                                                CollectorComplaint = y
+                                                            })
+                                            .SelectMany(x => x.CollectorComplaint.DefaultIfEmpty(), (x, y) => new
+                                            {
+                                                x.ComplaintId,
+                                                CollectorComplaint = y
+                                            }).ToList().Select(x => new
+                                            {
+                                                x?.ComplaintId,
+                                                AdminReply = x?.CollectorComplaint?.AdminReply,
+                                                ComplaintContent = x?.CollectorComplaint?.ComplaintContent,
+                                                CollectorComplaintId = x?.CollectorComplaint?.Id
+                                            }).FirstOrDefault();
+
+            if (complaint != null)
+            {
+                dataResult.Complaint = new ComplaintViewModel()
+                {
+                    ComplaintId = complaint?.ComplaintId,
+                    ComplaintContent = complaint?.ComplaintContent,
+                    AdminReply = complaint?.AdminReply,
+                    ComplaintStatus = CommonUtils.GetComplaintStatus(complaint?.ComplaintId, complaint?.CollectorComplaintId, complaint?.AdminReply)
+                };
+            }
 
             return BaseApiResponse.OK(dataResult);
         }

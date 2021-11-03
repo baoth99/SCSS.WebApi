@@ -79,19 +79,19 @@ namespace SCSS.Utilities.Helper
             };
         }
 
-        public static int GetComplaintStatus(Guid? complantId, Guid? sellerComplantId, string adminReply)
+        public static int GetComplaintStatus(Guid? complantId, Guid? accountComplantId, string adminReply)
         {
             if (ValidatorUtil.IsNull(complantId))
             {
                 return ComplaintStatus.CanNotGiveComplaint;
             }
 
-            if (ValidatorUtil.IsNull(sellerComplantId))
+            if (ValidatorUtil.IsNull(accountComplantId))
             {
                 return ComplaintStatus.CanGiveComplaint;
             }
 
-            if (!ValidatorUtil.IsNull(sellerComplantId))
+            if (!ValidatorUtil.IsNull(accountComplantId))
             {
                 if (!ValidatorUtil.IsBlank(adminReply))
                 {

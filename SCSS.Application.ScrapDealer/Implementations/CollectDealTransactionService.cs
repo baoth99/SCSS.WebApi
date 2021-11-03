@@ -61,7 +61,12 @@ namespace SCSS.Application.ScrapDealer.Implementations
         /// <summary>
         /// The complaint respository
         /// </summary>
-        private readonly IRepository<Complaint> _complaintRespository;
+        private readonly IRepository<Complaint> _complaintRepository;
+
+        /// <summary>
+        /// The dealer complaint repository
+        /// </summary>
+        private readonly IRepository<DealerComplaint> _dealerComplaintRepository;
 
         #endregion
 
@@ -93,7 +98,8 @@ namespace SCSS.Application.ScrapDealer.Implementations
             _accountRepository = unitOfWork.AccountRepository;
             _roleRepository = unitOfWork.RoleRepository;
             _promotionRepository = unitOfWork.PromotionRepository;
-            _complaintRespository = unitOfWork.ComplaintRepository;
+            _complaintRepository = unitOfWork.ComplaintRepository;
+            _dealerComplaintRepository = unitOfWork.DealerComplaintRepository;
             _SQSPublisherService = SQSPublisherService;
         }
 
@@ -291,7 +297,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 CollectDealTransactionId = insertEntity.Id
             };
 
-            _complaintRespository.Insert(complaint);
+            _complaintRepository.Insert(complaint);
 
             await UnitOfWork.CommitAsync();
 
