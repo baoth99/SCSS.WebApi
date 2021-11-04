@@ -234,7 +234,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     Title = NotificationMessage.CompletedSellerCRTitle, 
                     Body = NotificationMessage.CompletedCollectorCRBody(collectingRequest.CollectingRequestCode), 
                     DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, collectingRequest.Id.ToString()),
-                    NotiType = CollectingRequestStatus.COMPLETED
                 },
                 new NotificationMessageQueueModel()
                 {
@@ -243,7 +242,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     Title = NotificationMessage.CompletedSellerCRTitle, 
                     Body = NotificationMessage.CompletedSellerCRBody(collectingRequest.CollectingRequestCode), 
                     DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, collectingRequest.Id.ToString()),
-                    NotiType = CollectingRequestStatus.COMPLETED
                 }
             };
 

@@ -309,7 +309,6 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 {
                     AccountId = UserAuthSession.UserSession.Id,
                     DeviceId = UserAuthSession.UserSession.DeviceId,
-                    NotiType = CollectingRequestStatus.COMPLETED,
                     Title = NotificationMessage.CompletedCollectDealTransDealerTitle,
                     Body = NotificationMessage.CompletedCollectDealTransDealerBody(insertEntity.TransactionCode),
                     DataCustom = DictionaryConstants.FirebaseCustomData(DealerAppScreen.TransactionScreen, insertEntity.Id.ToString())
@@ -318,7 +317,6 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 {
                     AccountId = collectorAccount.Id,
                     DeviceId = collectorAccount.DeviceId,
-                    NotiType = CollectingRequestStatus.COMPLETED,
                     Title = NotificationMessage.CompletedCollectDealTransCollectorTitle,
                     Body = NotificationMessage.CompletedCollectDealTransCollectorBody(insertEntity.TransactionCode),
                     DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.DealerHistoryScreen, insertEntity.Id.ToString())

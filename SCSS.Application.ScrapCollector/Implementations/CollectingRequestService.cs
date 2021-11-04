@@ -414,7 +414,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     Body = NotificationMessage.SellerCollectingRequestReceviedBody(collectingRequestCode),
                     DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, requestId.ToString()),
                     DeviceId = sellerInfo.DeviceId,
-                    NotiType = CollectingRequestStatus.APPROVED
                 },
                 new NotificationMessageQueueModel()
                 {
@@ -423,7 +422,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     Body = NotificationMessage.CollectorCollectingRequestReceviedBody(collectingRequestCode), 
                     DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, requestId.ToString()), 
                     DeviceId = UserAuthSession.UserSession.DeviceId,
-                    NotiType = CollectingRequestStatus.APPROVED
                 }
             };
 

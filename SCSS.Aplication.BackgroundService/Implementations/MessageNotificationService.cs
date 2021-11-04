@@ -65,7 +65,6 @@ namespace SCSS.Aplication.BackgroundService.Implementations
             var notificationEntity = new Notification()
             {
                 AccountId = model.AccountId,
-                NotiType = model.NotiType,
                 Title = model.Title,
                 Body = model.Body,
                 DataCustom = model.DataCustom != null ? model.DataCustom.ToJson<string, string>() : string.Empty,
@@ -106,7 +105,6 @@ namespace SCSS.Aplication.BackgroundService.Implementations
             {
                 AccountId = x.AccountId,
                 Title = x.Title,
-                NotiType = x.NotiType,
                 Body = x.Body,
                 DataCustom = x.DataCustom != null ? x.DataCustom.ToJson<string, string>() : string.Empty,
                 IsRead = BooleanConstants.FALSE,

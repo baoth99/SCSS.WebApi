@@ -200,7 +200,6 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                         DeviceId = x.DeviceId,
                         Title = NotificationMessage.RequestGoNowTitle,
                         Body = NotificationMessage.RequestGoNowBody,
-                        NotiType = CollectingRequestStatus.PENDING,
                         DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, item.CollectingRequestId.ToString())
                     }).ToList();
 

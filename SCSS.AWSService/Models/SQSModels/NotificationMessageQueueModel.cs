@@ -13,8 +13,6 @@ namespace SCSS.AWSService.Models.SQSModels
 
         public string Body { get; set; }
 
-        public int NotiType { get; set; }
-
         public Dictionary<string, string> DataCustom { get; set; }
     }
 }

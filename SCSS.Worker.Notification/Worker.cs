@@ -16,7 +16,6 @@ namespace SCSS.Worker.Notification
 {
     public class Worker : BackgroundService
     {
-
         #region Services
 
         private readonly ILogger<Worker> _logger;
@@ -49,7 +48,6 @@ namespace SCSS.Worker.Notification
         }
 
         #endregion
-
 
         #region Execute Async
 
@@ -86,7 +84,6 @@ namespace SCSS.Worker.Notification
                     DataCustom = x.DataCustom,
                     DeviceId = x.DeviceId,
                     Title = x.Title,
-                    NotiType = x.NotiType
                 }).ToList();
 
                 using (var scope = _scopeFactory.CreateScope())
@@ -98,7 +95,6 @@ namespace SCSS.Worker.Notification
         }
 
         #endregion
-
 
         #region Processes the queue
 

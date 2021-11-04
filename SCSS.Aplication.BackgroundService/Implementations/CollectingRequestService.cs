@@ -128,7 +128,6 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                                                 Title = NotificationMessage.SystemCancelCRTitle,
                                                                 Body = NotificationMessage.SystemCancelCRSellerBody(x.CollectingRequestCode, x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy)),
                                                                 DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, x.CollectingRequestId.ToString()),
-                                                                NotiType = CollectingRequestStatus.CANCEL_BY_SYSTEM
                                                             }).ToList();
             if (sellerAccountNotifications.Any())
             {
@@ -154,7 +153,6 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                                             Title = NotificationMessage.SystemCancelCRTitle,
                                                             Body = NotificationMessage.SystemCancelCRCollectorBody(x.CollectingRequestCode, x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy)),
                                                             DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, x.CollectingRequestId.ToString()),
-                                                            NotiType = CollectingRequestStatus.CANCEL_BY_SYSTEM
                                                         }).ToList();
 
             if (collectorAccountNotifications.Any())
@@ -314,7 +312,6 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                     Body = NotificationMessage.CancelCollectingRequestBodySystem(messageInfo.CollectingRequestCode),
                     DeviceId = messageInfo.DeviceId,
                     DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, messageInfo.CollectingRequestId.ToString()),
-                    NotiType = CollectingRequestStatus.CANCEL_BY_SYSTEM
                 };
 
                 await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(publishModel);
