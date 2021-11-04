@@ -63,6 +63,11 @@ namespace SCSS.Application.Admin.Implementations
         /// </summary>
         private readonly IRepository<Feedback> _feedbackRepository;
 
+        /// <summary>
+        /// The promotion repository
+        /// </summary>
+        private readonly IRepository<Promotion> _promotionRepository;
+
         #endregion
 
         #region Constructor
@@ -83,6 +88,7 @@ namespace SCSS.Application.Admin.Implementations
             _dealerInformationRepository = unitOfWork.DealerInformationRepository;
             _locationRepository = unitOfWork.LocationRepository;
             _feedbackRepository = unitOfWork.FeedbackRepository;
+            _promotionRepository = unitOfWork.PromotionRepository;
         }
 
         #endregion
@@ -185,6 +191,7 @@ namespace SCSS.Application.Admin.Implementations
                                                                         x.TransactionCode,
                                                                         x.CreatedTime,
                                                                         x.AwardPoint,
+                                                                        x.Total,
                                                                         CollectorName = y.Name,
                                                                         CollectorPhone = y.Phone,
                                                                         x.DealerAccountId
@@ -198,6 +205,7 @@ namespace SCSS.Application.Admin.Implementations
                                                                         x.AwardPoint,
                                                                         x.CollectorName,
                                                                         x.CollectorPhone,
+                                                                        x.Total,
                                                                         DealerOwnerName = y.Name,
                                                                         AccId = y.Id,
                                                                     })
@@ -211,6 +219,7 @@ namespace SCSS.Application.Admin.Implementations
                                                                         x.CollectorName,
                                                                         x.CollectorPhone,
                                                                         x.DealerOwnerName,
+                                                                        x.Total,
                                                                         y.DealerName,
                                                                         y.DealerPhone,
                                                                         y.LocationId
@@ -227,13 +236,14 @@ namespace SCSS.Application.Admin.Implementations
                                                                         x.DealerOwnerName,
                                                                         x.DealerName,
                                                                         x.DealerPhone,
+                                                                        x.Total,
                                                                         y.Address
                                                                     })
                                                              .FirstOrDefaultAsync();
 
             var feedback = _feedbackRepository.GetAsNoTracking(x => x.CollectDealTransactionId.Equals(transInfo.TransId));
 
-            var transactionDetailItems = _collectDealTransactionDetailRepository.GetManyAsNoTracking(x => x.CollectDealTransactionId.Equals(transInfo.TransId))
+            var transactionDetails = _collectDealTransactionDetailRepository.GetManyAsNoTracking(x => x.CollectDealTransactionId.Equals(transInfo.TransId))
                                                                                 .GroupJoin(_scrapCategoryDetailRepository.GetAllAsNoTracking(), x => x.DealerCategoryDetailId, y => y.Id,
                                                                                     (x, y) => new
                                                                                     {
@@ -268,14 +278,40 @@ namespace SCSS.Application.Admin.Implementations
                                                                                         x.Unit,
                                                                                         x.PromotionId,
                                                                                         ScrapCategoryName = y.Name
-                                                                                    }).Select(x => new CollectDealTransactionDetailViewModel()
+                                                                                    })
+                                                                                .GroupJoin(_promotionRepository.GetAllAsNoTracking(), x => x.PromotionId, y => y.Id,
+                                                                                    (x, y) => new
                                                                                     {
-                                                                                        ScrapCategoryName = x.ScrapCategoryName,
-                                                                                        Quantity = x.Quantity,
-                                                                                        Total = x.Total,
-                                                                                        Unit = x.Unit,
-                                                                                        BonusAmount = x.BonusAmount
-                                                                                    }).ToList();
+                                                                                        x.Quantity,
+                                                                                        x.Total,
+                                                                                        x.BonusAmount,
+                                                                                        x.Unit,
+                                                                                        x.PromotionId,
+                                                                                        x.ScrapCategoryName,
+                                                                                        Promotion = y
+                                                                                    }).SelectMany(x => x.Promotion.DefaultIfEmpty(), (x, y) => new
+                                                                                    {
+                                                                                        x.Quantity,
+                                                                                        x.Total,
+                                                                                        x.BonusAmount,
+                                                                                        x.Unit,
+                                                                                        x.PromotionId,
+                                                                                        x.ScrapCategoryName,
+                                                                                        PromotionName = y.Name,
+                                                                                    });
+
+            var promotions = string.Join(MarkConstant.COMMA, transactionDetails.Select(x => x.PromotionName).ToList());
+
+            var bonusAmountTotal = transactionDetails.Select(x => x.BonusAmount).Sum();
+
+            var transDetailResponse = transactionDetails.Select(x => new CollectDealTransactionDetailViewModel()
+            {
+                ScrapCategoryName = StringUtils.GetString(x.ScrapCategoryName),
+                Quantity = x.Quantity == NumberConstant.Zero ? CommonConstants.Null : $"{x.Quantity} {x.Unit}",
+                Total = x.Total,
+                Unit = x.Unit,
+                BonusAmount = x.BonusAmount == NumberConstant.Zero ? CommonConstants.Null : $"{x.BonusAmount} VND"
+            }).ToList();
 
             var dataResult = new CollectDealTransactionViewDetailModel()
             {
@@ -288,7 +324,10 @@ namespace SCSS.Application.Admin.Implementations
                 DealerOwnerName = transInfo?.DealerOwnerName,
                 DealerPhone = transInfo?.DealerPhone,
                 CollectorFeedback = feedback?.SellingReview,
-                TransactionDetails = transactionDetailItems
+                TransactionDetails = transDetailResponse,
+                Total = transInfo?.Total,
+                BonusAmountTotal = bonusAmountTotal,
+                Promotions = promotions == MarkConstant.COMMA ? string.Empty : promotions
             };
 
             return BaseApiResponse.OK(dataResult);

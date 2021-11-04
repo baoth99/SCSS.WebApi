@@ -10,6 +10,10 @@ namespace SCSS.Application.Admin.Models.TransactionModels
 
         public string Address { get; set; }
 
+        public string Feedback { get; set; }
+
+        public float? Rating { get; set; }
+
         public string SellerName { get; set; }
 
         public string SellerPhone { get; set; }
@@ -31,7 +35,7 @@ namespace SCSS.Application.Admin.Models.TransactionModels
     {
         public string ScrapCategoryName { get; set; }
 
-        public float? Quantity { get; set; }
+        public string Quantity { get; set; }
 
         public string Unit { get; set; }
 

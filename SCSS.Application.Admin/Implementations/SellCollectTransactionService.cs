@@ -58,6 +58,11 @@ namespace SCSS.Application.Admin.Implementations
         /// </summary>
         private readonly IRepository<Location> _locationRepository;
 
+        /// <summary>
+        /// The feedback repository
+        /// </summary>
+        private readonly IRepository<Feedback> _feedbackRepository;
+
         #endregion
 
         #region Constructor
@@ -77,6 +82,7 @@ namespace SCSS.Application.Admin.Implementations
             _sellCollectTransactionDetailRepository = unitOfWork.SellCollectTransactionDetailRepository;
             _scrapCategoryRepository = unitOfWork.ScrapCategoryRepository;
             _scrapCategoryDetailRepository = unitOfWork.ScrapCategoryDetailRepository;
+            _feedbackRepository = unitOfWork.FeedbackRepository;
         }
 
         #endregion
@@ -208,6 +214,8 @@ namespace SCSS.Application.Admin.Implementations
                                                                     })
                                                               .FirstOrDefault();
 
+
+
             var transactionDetailItems = _sellCollectTransactionDetailRepository.GetManyAsNoTracking(x => x.SellCollectTransactionId.Equals(transaction.Id))
                                                                                .GroupJoin(_scrapCategoryDetailRepository.GetAllAsNoTracking(), x => x.CollectorCategoryDetailId, y => y.Id,
                                                                                          (x, y) => new
@@ -237,11 +245,12 @@ namespace SCSS.Application.Admin.Implementations
                                                                                              y.Name
                                                                                          }).Select(x => new SellCollectTransactionDetailViewModel()
                                                                                          {
-                                                                                             Quantity = x.Quantity,
-                                                                                             ScrapCategoryName = x.Name,
+                                                                                             Quantity = x.Quantity == NumberConstant.Zero ? CommonConstants.Null : $"{x.Quantity} {x.Unit}",
+                                                                                             ScrapCategoryName = StringUtils.GetString(x.Name),
                                                                                              Unit = x.Unit,
                                                                                              Total = x.Total,
                                                                                          }).ToList();
+            var feedback = _feedbackRepository.GetAsNoTracking(x => x.CollectDealTransactionId.Equals(transaction.Id) && x.SellCollectTransactionId == null);
 
 
             var dataResult = new SellCollectTransactionViewDetailModel()
@@ -256,7 +265,9 @@ namespace SCSS.Application.Admin.Implementations
                 SellerPhone = collectingRequest?.SellerPhone,
                 CollectorPhone = collectingRequest?.CollectorPhone,
                 CollectorName = collectingRequest?.CollectorName,
-                TransDetails = transactionDetailItems 
+                TransDetails = transactionDetailItems,
+                Feedback = feedback?.SellingReview,
+                Rating = feedback?.Rate
             };
 
             return BaseApiResponse.OK(dataResult);

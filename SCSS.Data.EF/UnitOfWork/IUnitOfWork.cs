@@ -1,6 +1,7 @@
 ﻿using SCSS.Data.EF.Repositories;
 using SCSS.Data.Entities;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace SCSS.Data.EF.UnitOfWork
 {
@@ -207,6 +208,31 @@ namespace SCSS.Data.EF.UnitOfWork
         /// The collector cancel reason repository.
         /// </value>
         IRepository<CollectorCancelReason> CollectorCancelReasonRepository { get; }
+
+        #endregion
+
+        #region Transaction Methods
+
+        /// <summary>
+        /// Sets the isolation level.
+        /// </summary>
+        /// <param name="isolationLevel">The isolation level.</param>
+        void SetIsolationLevel(IsolationLevel isolationLevel);
+
+        /// <summary>
+        /// Begins the transaction.
+        /// </summary>
+        void BeginTransaction();
+
+        /// <summary>
+        /// Commits the transaction.
+        /// </summary>
+        void CommitTransaction();
+
+        /// <summary>
+        /// Rollbacks the transaction.
+        /// </summary>
+        void RollbackTransaction();
 
         #endregion
 

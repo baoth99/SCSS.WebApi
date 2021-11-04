@@ -21,6 +21,12 @@ namespace SCSS.Application.Admin.Models.TransactionModels
 
         public float? AwardPoint { get; set; }
 
+        public long? Total { get; set; }
+
+        public long? BonusAmountTotal { get; set; }
+
+        public string Promotions { get; set; }
+
         public string CollectorFeedback { get; set; }
 
         public List<CollectDealTransactionDetailViewModel> TransactionDetails { get; set; }
@@ -31,9 +37,9 @@ namespace SCSS.Application.Admin.Models.TransactionModels
     {
         public string ScrapCategoryName { get; set; }
 
-        public float? Quantity { get; set; }
+        public string Quantity { get; set; }
 
-        public long? BonusAmount { get; set; }
+        public string BonusAmount { get; set; }
 
         public string Unit { get; set; }
 

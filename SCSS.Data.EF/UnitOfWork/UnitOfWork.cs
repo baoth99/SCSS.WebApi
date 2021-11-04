@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.Entities;
 using SCSS.Utilities.Configurations;
 using System;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace SCSS.Data.EF.UnitOfWork
 {
@@ -15,6 +17,26 @@ namespace SCSS.Data.EF.UnitOfWork
         /// The application database context
         /// </summary>
         private readonly AppDbContext AppDbContext;
+
+
+        #endregion
+
+        #region Fields
+
+        /// <summary>
+        /// The isolation level
+        /// </summary>
+        private IsolationLevel? _isolationLevel;
+
+        /// <summary>
+        /// The transaction
+        /// </summary>
+        private IDbContextTransaction Transaction;
+
+        /// <summary>
+        /// The transaction scope
+        /// </summary>
+        private TransactionScope TransactionScope;
 
         #endregion
 
@@ -151,6 +173,71 @@ namespace SCSS.Data.EF.UnitOfWork
 
         #endregion Publish Access Repositories
 
+        #region Transaction Methods
+
+        /// <summary>
+        /// Sets the isolation level for new transactions.
+        /// </summary>
+        /// <param name="isolationLevel">The isolation level.</param>
+        public void SetIsolationLevel(IsolationLevel isolationLevel)
+        {
+            _isolationLevel = isolationLevel;
+        }
+
+        /// <summary>
+        /// Begins the transaction.
+        /// </summary>
+        public void BeginTransaction()
+        {
+            if (Transaction == null)
+            {
+                if (_isolationLevel.HasValue)
+                {
+
+                    Transaction = AppDbContext.Database.BeginTransaction();
+                }
+                else
+                {
+                    Transaction = AppDbContext.Database.BeginTransaction();
+                }
+            }
+            AppDbContext.Database.OpenConnection();
+        }
+
+        /// <summary>
+        /// Commits the transaction.
+        /// </summary>
+        public void CommitTransaction()
+        {
+            if (Transaction != null)
+            {
+                Transaction.Commit();
+                Transaction.Dispose();
+                Transaction = null;
+            }
+
+            AppDbContext.Database.CloseConnection();
+        }
+
+        /// <summary>
+        /// Rollbacks the transaction.
+        /// </summary>
+        public void RollbackTransaction()
+        {
+            if (Transaction == null)
+            {
+                return;
+            }
+
+            Transaction.Rollback();
+            Transaction.Dispose();
+            Transaction = null;
+            _isolationLevel = null;
+            AppDbContext.Database.CloseConnection();
+        }
+
+        #endregion
+
         #region Commit Async
 
         /// <summary>
@@ -161,9 +248,11 @@ namespace SCSS.Data.EF.UnitOfWork
             try
             {
                 await AppDbContext.SaveChangesAsync();
+                CommitTransaction();
             }
             catch (Exception ex)
             {
+                RollbackTransaction();
                 throw ex;
             }
         }
