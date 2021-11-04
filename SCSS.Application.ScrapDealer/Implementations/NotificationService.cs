@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SCSS.Application.ScrapSeller.Interfaces;
-using SCSS.Application.ScrapSeller.Models;
-using SCSS.Application.ScrapSeller.Models.NotificationModels;
+using SCSS.Application.ScrapDealer.Interfaces;
+using SCSS.Application.ScrapDealer.Models;
+using SCSS.Application.ScrapDealer.Models.NotificationModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
@@ -13,10 +13,12 @@ using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace SCSS.Application.ScrapSeller.Imlementations
+namespace SCSS.Application.ScrapDealer.Implementations
 {
     public class NotificationService : BaseService, INotificationService
     {
@@ -26,11 +28,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// The notification repository
         /// </summary>
         private readonly IRepository<Notification> _notificationRepository;
-
-        /// <summary>
-        /// The collecting request repository
-        /// </summary>
-        private readonly IRepository<CollectingRequest> _collectingRequestRepository;
 
         #endregion
 
@@ -42,11 +39,10 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        /// <param name="cacheService"></param>
+        /// <param name="cacheService">The cache service.</param>
         public NotificationService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, IStringCacheService cacheService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
             _notificationRepository = unitOfWork.NotificationRepository;
-            _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
         }
 
         #endregion
@@ -56,33 +52,11 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// <summary>
         /// Gets the notifications.
         /// </summary>
+        /// <param name="model">The model.</param>
         /// <returns></returns>
         public async Task<BaseApiResponseModel> GetNotifications(BaseFilterModel model)
         {
-            var dataQuery = _notificationRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id))
-                                                        .GroupJoin(_collectingRequestRepository.GetManyAsNoTracking(x => x.SellerAccountId.Equals(UserAuthSession.UserSession.Id)),
-                                                            x => x.ReferenceRecordId, y => y.Id, (x, y) => new
-                                                            {
-                                                                x.NotificationType,
-                                                                NotiId = x.Id,
-                                                                x.Title,
-                                                                x.Body,
-                                                                x.CreatedTime,
-                                                                x.DataCustom,
-                                                                x.IsRead,
-                                                                x.ReferenceRecordId,
-                                                                CollectingRequest = y
-                                                            })
-                                                          .SelectMany(x => x.CollectingRequest.DefaultIfEmpty(), (x, y) => new
-                                                          {
-                                                              x.NotiId,
-                                                              x.Title,
-                                                              x.Body,
-                                                              x.IsRead,
-                                                              x.DataCustom,
-                                                              NotiType = y != null ? y.Status : NumberConstant.Zero,
-                                                              x.CreatedTime
-                                                          }).OrderByDescending(x => x.CreatedTime);
+            var dataQuery = _notificationRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id)).OrderByDescending(x => x.CreatedTime);
 
             var totalRecord = await dataQuery.CountAsync();
 
@@ -91,52 +65,17 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             var dataResult = dataQuery.Skip((page - 1) * pageSize).Take(pageSize).Select(x => new NotificationViewModel()
             {
-                Id = x.NotiId,
+                Id = x.Id,
                 Title = x.Title,
                 Body = x.Body,
                 IsRead = x.IsRead,
                 PreviousTime = DateTimeUtils.GetPreviousTime(x.CreatedTime),
                 DataCustom = x.DataCustom,
                 Date = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
-                NotiType = x.NotiType
+                NotiType = NumberConstant.Zero,
             }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);
-        }
-
-        #endregion
-
-        #region Read The Notification
-
-        /// <summary>
-        /// Reads the notification.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
-        public async Task<BaseApiResponseModel> ReadNotification(Guid id)
-        {
-            var entity = _notificationRepository.GetById(id);
-
-            if (entity == null)
-            {
-                return BaseApiResponse.NotFound();
-            }
-
-            entity.IsRead = BooleanConstants.TRUE;
-            _notificationRepository.Update(entity);
-
-            await UnitOfWork.CommitAsync();
-
-            return BaseApiResponse.OK();
-        }
-
-        #endregion
-
-        #region Get Notification Detail
-
-        public async Task<BaseApiResponseModel> GetNotificationDetail(Guid id)
-        {
-            return BaseApiResponse.OK();
         }
 
         #endregion
@@ -183,6 +122,31 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         }
 
         #endregion
-    }
 
+        #region Read Notification
+
+        /// <summary>
+        /// Reads the notification.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> ReadNotification(Guid id)
+        {
+            var entity = _notificationRepository.GetById(id);
+
+            if (entity == null)
+            {
+                return BaseApiResponse.NotFound();
+            }
+
+            entity.IsRead = BooleanConstants.TRUE;
+            _notificationRepository.Update(entity);
+
+            await UnitOfWork.CommitAsync();
+
+            return BaseApiResponse.OK();
+        }
+
+        #endregion
+    }
 }

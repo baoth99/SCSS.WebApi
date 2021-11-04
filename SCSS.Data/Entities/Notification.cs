@@ -22,7 +22,9 @@ namespace SCSS.Data.Entities
 
         public string DataCustom { get; set; }
 
-        public int? NotiType { get; set; }
+        public string NotificationType { get; set; }
+
+        public Guid? ReferenceRecordId { get; set; }
 
         public bool IsRead { get; set; }
 

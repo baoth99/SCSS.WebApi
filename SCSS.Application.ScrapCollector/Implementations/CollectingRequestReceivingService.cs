@@ -287,7 +287,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     Title = NotificationMessage.CollectingRequestCancelTitle(),
                     DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, entity.Id.ToString()), 
                     DeviceId = sellerInfo.DeviceId,
-                    NotiType = CollectingRequestStatus.CANCEL_BY_COLLECTOR
+                    NotiType = NotificationType.CollectingRequest,
+                    ReferenceRecordId = entity.Id
                 },
                 new NotificationMessageQueueModel()
                 {
@@ -296,7 +297,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     Title = NotificationMessage.CancelCRByCollector(entity.CollectingRequestCode), 
                     DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.HistoryScreen, entity.Id.ToString()),
                     DeviceId = UserAuthSession.UserSession.DeviceId,
-                    NotiType = CollectingRequestStatus.CANCEL_BY_COLLECTOR
+                    NotiType = NotificationType.CollectingRequest,
+                    ReferenceRecordId = entity.Id
                 }
             };
 

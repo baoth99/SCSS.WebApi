@@ -61,6 +61,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IFeedbackService, SCSS.Application.ScrapCollector.Implementations.FeedbackService>();
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IComplaintService, SCSS.Application.ScrapCollector.Implementations.ComplaintService>();
             services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.IDashboardService, SCSS.Application.ScrapCollector.Implementations.DashboardService>();
+            services.AddScoped<SCSS.Application.ScrapCollector.Interfaces.INotificationService, SCSS.Application.ScrapCollector.Implementations.NotificationService>();
 
             #endregion Collector Application
 
@@ -71,6 +72,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IPromotionService, SCSS.Application.ScrapDealer.Implementations.PromotionService>();
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IStatisticService, SCSS.Application.ScrapDealer.Implementations.StatisticService>();
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.ICollectDealTransactionService, SCSS.Application.ScrapDealer.Implementations.CollectDealTransactionService>();
+            services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.INotificationService, SCSS.Application.ScrapDealer.Implementations.NotificationService>();
 
             #endregion Dealer Application
 

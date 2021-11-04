@@ -247,4 +247,14 @@ namespace SCSS.Utilities.Constants
     {
         public const string TransactionScreen = "1";
     }
+
+    public class NotificationType
+    {
+        public const string CollectingRequest = "CollectingRequest";
+        public const string CollectingRequestReminder = "CollectingRequestReminder";
+        public const string SellCollectTransaction = "SellCollectTransaction";
+        public const string CollectDealTransaction = "CollectDealTransaction";
+        public const string RequestNotifier = "RequestNotifier";
+        public const string NormalNotification = "NormalNotification";
+    }
 }

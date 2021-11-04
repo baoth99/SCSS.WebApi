@@ -65,11 +65,12 @@ namespace SCSS.Aplication.BackgroundService.Implementations
             var notificationEntity = new Notification()
             {
                 AccountId = model.AccountId,
-                NotiType = model.NotiType,
+                NotificationType = model.NotiType,
                 Title = model.Title,
                 Body = model.Body,
                 DataCustom = model.DataCustom != null ? model.DataCustom.ToJson<string, string>() : string.Empty,
                 IsRead = BooleanConstants.FALSE,
+                ReferenceRecordId = model.ReferenceRecordId
             };
 
             _notificationRepository.Insert(notificationEntity);
@@ -106,7 +107,8 @@ namespace SCSS.Aplication.BackgroundService.Implementations
             {
                 AccountId = x.AccountId,
                 Title = x.Title,
-                NotiType = x.NotiType,
+                NotificationType = x.NotiType,
+                ReferenceRecordId = x.ReferenceRecordId,
                 Body = x.Body,
                 DataCustom = x.DataCustom != null ? x.DataCustom.ToJson<string, string>() : string.Empty,
                 IsRead = BooleanConstants.FALSE,

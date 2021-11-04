@@ -193,7 +193,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                     DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, insertEntity.Id.ToString()),
                     Title = NotificationMessage.SellerRequestCRTitle,
                     Body = NotificationMessage.SellerRequestCRBody(insertEntity.CollectingRequestCode),
-                    NotiType = CollectingRequestStatus.PENDING
+                    NotiType = NotificationType.CollectingRequest,
+                    ReferenceRecordId = insertEntity.Id
                 };
 
                 await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(message);
@@ -274,7 +275,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                     DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, entity.Id.ToString()),
                     Title = NotificationMessage.CancelCRBySellerTitle,
                     Body = NotificationMessage.CancelCRBySellerBody(entity.CollectingRequestCode),
-                    NotiType = CollectingRequestStatus.CANCEL_BY_SELLER
+                    NotiType = NotificationType.CollectingRequest,
+                    ReferenceRecordId = entity.Id
                 }
             };
 
@@ -285,7 +287,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 {
                     AccountId = entity.CollectorAccountId,
                     DeviceId = collectorDeviceId,
-                    NotiType = CollectingRequestStatus.CANCEL_BY_SELLER,
+                    NotiType = NotificationType.CollectingRequest,
+                    ReferenceRecordId = entity.Id,
                     Title = NotificationMessage.CancelCRBySellerTitle,
                     Body = NotificationMessage.CancelCRBySellerToCollectorBody(entity.CollectingRequestCode),
                     DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.HistoryScreen, entity.CollectorAccountId.ToString())
@@ -377,13 +380,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                     }
                 }
             }
-
-
-            
-
-
-
-            
 
             return errorList;
         }

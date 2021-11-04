@@ -50,7 +50,6 @@ namespace SCSS.Worker.Notification
 
         #endregion
 
-
         #region Execute Async
 
         /// <summary>
@@ -86,7 +85,8 @@ namespace SCSS.Worker.Notification
                     DataCustom = x.DataCustom,
                     DeviceId = x.DeviceId,
                     Title = x.Title,
-                    NotiType = x.NotiType
+                    NotiType = x.NotiType,
+                    ReferenceRecordId = x.ReferenceRecordId
                 }).ToList();
 
                 using (var scope = _scopeFactory.CreateScope())
@@ -98,7 +98,6 @@ namespace SCSS.Worker.Notification
         }
 
         #endregion
-
 
         #region Processes the queue
 

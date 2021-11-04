@@ -51,8 +51,6 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
         #endregion
 
-
-
         #region Create Seller Complaint
 
         /// <summary>

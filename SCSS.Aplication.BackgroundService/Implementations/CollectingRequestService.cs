@@ -128,7 +128,8 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                                                 Title = NotificationMessage.SystemCancelCRTitle,
                                                                 Body = NotificationMessage.SystemCancelCRSellerBody(x.CollectingRequestCode, x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy)),
                                                                 DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, x.CollectingRequestId.ToString()),
-                                                                NotiType = CollectingRequestStatus.CANCEL_BY_SYSTEM
+                                                                NotiType = NotificationType.CollectingRequest,
+                                                                ReferenceRecordId = x.CollectingRequestId
                                                             }).ToList();
             if (sellerAccountNotifications.Any())
             {
@@ -154,7 +155,8 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                                             Title = NotificationMessage.SystemCancelCRTitle,
                                                             Body = NotificationMessage.SystemCancelCRCollectorBody(x.CollectingRequestCode, x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy)),
                                                             DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, x.CollectingRequestId.ToString()),
-                                                            NotiType = CollectingRequestStatus.CANCEL_BY_SYSTEM
+                                                            NotiType = NotificationType.CollectingRequest,
+                                                            ReferenceRecordId = x.CollectingRequestId
                                                         }).ToList();
 
             if (collectorAccountNotifications.Any())
@@ -230,7 +232,6 @@ namespace SCSS.Aplication.BackgroundService.Implementations
 
         #endregion
 
-
         #region Change Collecting Request Type
 
         /// <summary>
@@ -258,8 +259,6 @@ namespace SCSS.Aplication.BackgroundService.Implementations
         }
 
         #endregion
-
-
 
         #region Cancel Collecting Request
 
@@ -314,7 +313,8 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                     Body = NotificationMessage.CancelCollectingRequestBodySystem(messageInfo.CollectingRequestCode),
                     DeviceId = messageInfo.DeviceId,
                     DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, messageInfo.CollectingRequestId.ToString()),
-                    NotiType = CollectingRequestStatus.CANCEL_BY_SYSTEM
+                    NotiType = NotificationType.CollectingRequest,
+                    ReferenceRecordId = messageInfo.CollectingRequestId
                 };
 
                 await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(publishModel);

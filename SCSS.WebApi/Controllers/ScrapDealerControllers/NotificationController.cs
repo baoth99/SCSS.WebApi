@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SCSS.Application.ScrapSeller.Interfaces;
-using SCSS.Application.ScrapSeller.Models;
+using SCSS.Application.ScrapDealer.Interfaces;
+using SCSS.Application.ScrapDealer.Models;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
@@ -74,26 +74,6 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         public async Task<BaseApiResponseModel> ReadNotification([FromQuery] Guid id)
         {
             return await _notificationService.ReadNotification(id);
-        }
-
-        #endregion
-
-        #region Get Notification Detail
-
-        /// <summary>
-        /// Gets the notification detail.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
-        [HttpGet]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
-        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
-        [Route(ScrapDealerApiUrlDefinition.NotificationApiUrl.GetDetail)]
-        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
-        public async Task<BaseApiResponseModel> GetNotificationDetail([FromQuery] Guid id)
-        {
-            return await _notificationService.GetNotificationDetail(id);
         }
 
         #endregion

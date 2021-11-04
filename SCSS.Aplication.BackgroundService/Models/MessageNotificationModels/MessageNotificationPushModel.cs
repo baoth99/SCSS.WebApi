@@ -13,7 +13,9 @@ namespace SCSS.Aplication.BackgroundService.Models.MessageNotificationModels
 
         public string Body { get; set; }
 
-        public int NotiType { get; set; }
+        public string NotiType { get; set; }
+
+        public Guid? ReferenceRecordId { get; set; }
 
         public Dictionary<string, string> DataCustom { get; set; }
     }
