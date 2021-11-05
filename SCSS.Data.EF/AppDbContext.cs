@@ -51,6 +51,8 @@ namespace SCSS.Data.EF
         // Add Dbset here
         public DbSet<Account> Account { get; set; }
 
+        public DbSet<AuditTrailLog> AuditTrailLog { get; set; }
+
         public DbSet<CollectorCoordinate> CollectorCoordinate { get; set; }
 
         public DbSet<DealerInformation> DealerInformation { get; set; }
@@ -254,7 +256,7 @@ namespace SCSS.Data.EF
                         if (entry.Entity is Account addAccountEntity)
                         {
                             addAccountEntity.CreatedTime = DateTimeVN.DATETIME_NOW;
-                        }                       
+                        }
                         break;
 
                     case EntityState.Deleted:

@@ -138,6 +138,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                                                                                           (x, y) => new
                                                                                           {
                                                                                               x.Quantity,
+                                                                                              x.ScrapCategoryName,
                                                                                               x.PromotionId,
                                                                                               x.Total,
                                                                                               x.BonusAmount,
@@ -145,29 +146,12 @@ namespace SCSS.Application.ScrapDealer.Implementations
                                                                                           }).SelectMany(x => x.ScrapCategoryDetail.DefaultIfEmpty(), (x, y) => new
                                                                                           {
                                                                                               x.Quantity,
+                                                                                              x.ScrapCategoryName,
                                                                                               x.Total,
                                                                                               x.BonusAmount,
                                                                                               x.PromotionId,
                                                                                               y.ScrapCategoryId,
                                                                                               y.Unit
-                                                                                          })
-                                                                                .GroupJoin(_scrapCategoryRepository.GetAllAsNoTracking(), x => x.ScrapCategoryId, y => y.Id,
-                                                                                          (x, y) => new
-                                                                                          {
-                                                                                              x.Quantity,
-                                                                                              x.Total,
-                                                                                              x.BonusAmount,
-                                                                                              x.Unit,
-                                                                                              x.PromotionId,
-                                                                                              ScrapCategory = y
-                                                                                          }).SelectMany(x => x.ScrapCategory.DefaultIfEmpty(), (x, y) => new
-                                                                                          {
-                                                                                              x.Quantity,
-                                                                                              ScrapCategoryName = y.Name,
-                                                                                              x.BonusAmount,
-                                                                                              x.Unit,
-                                                                                              x.Total,
-                                                                                              x.PromotionId
                                                                                           })
                                                                                 .Select(x => new TransactionHistoryScrapCategoryViewModel()
                                                                                 {

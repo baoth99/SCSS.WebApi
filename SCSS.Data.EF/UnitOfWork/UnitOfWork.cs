@@ -53,6 +53,8 @@ namespace SCSS.Data.EF.UnitOfWork
 
         private IRepository<Account> _accountRepository;
 
+        private IRepository<AuditTrailLog> _auditTrailLogRepository;
+
         private IRepository<CollectorCoordinate> _collectorCoordinateRepository;
 
         private IRepository<DealerInformation> _dealerInformationRepository;
@@ -122,6 +124,8 @@ namespace SCSS.Data.EF.UnitOfWork
         #region Publish Access Repositories
 
         public IRepository<Account> AccountRepository => _accountRepository ??= (_accountRepository = new Repository<Account>(AppDbContext));
+
+        public IRepository<AuditTrailLog> AuditTrailLogRepository => _auditTrailLogRepository ??= (_auditTrailLogRepository = new Repository<AuditTrailLog>(AppDbContext));
 
         public IRepository<CollectorCoordinate> CollectorCoordinateRepository => _collectorCoordinateRepository ??= (_collectorCoordinateRepository = new Repository<CollectorCoordinate>(AppDbContext));
 

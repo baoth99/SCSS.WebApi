@@ -18,6 +18,14 @@ namespace SCSS.Data.EF.UnitOfWork
         IRepository<Account> AccountRepository { get; }
 
         /// <summary>
+        /// Gets the audit trail log repository.
+        /// </summary>
+        /// <value>
+        /// The audit trail log repository.
+        /// </value>
+        IRepository<AuditTrailLog> AuditTrailLogRepository { get; }
+
+        /// <summary>
         /// Gets the collector coordinate.
         /// </summary>
         /// <value>

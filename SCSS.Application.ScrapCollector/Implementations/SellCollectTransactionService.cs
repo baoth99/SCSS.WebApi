@@ -196,10 +196,48 @@ namespace SCSS.Application.ScrapCollector.Implementations
             }
             var insertEntity =  _sellCollectTransactionRepository.Insert(sellCollectTransactionEntity);
 
+
+            var sellCollecTransDetails = model.ScrapCategoryItems.GroupJoin(_scrapCategoryDetailRepository.GetAllAsNoTracking(),
+                                                        x => x.CollectorCategoryDetailId, y => y.Id, (x, y) => new
+                                                        {
+                                                            x.CollectorCategoryDetailId,
+                                                            x.Total,
+                                                            x.Quantity,
+                                                            x.Price,
+                                                            ScrapCategoryDetail = y
+                                                        })
+                                                        .SelectMany(x => x.ScrapCategoryDetail.DefaultIfEmpty(), (x, y) => new
+                                                        {
+                                                            x.CollectorCategoryDetailId,
+                                                            x.Total,
+                                                            x.Quantity,
+                                                            x.Price,
+                                                            ScrapCategoryId = y.ScrapCategoryId
+                                                        })
+                                                     .GroupJoin(_scrapCategoryRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id)),
+                                                        x => x.ScrapCategoryId, y => y.Id, (x, y) => new
+                                                        {
+                                                            x.CollectorCategoryDetailId,
+                                                            x.Total,
+                                                            x.Quantity,
+                                                            x.Price,
+                                                            ScrapCategory = y
+                                                        })
+                                                        .SelectMany(x => x.ScrapCategory.DefaultIfEmpty(), (x, y) => new
+                                                        {
+                                                            x.CollectorCategoryDetailId,
+                                                            x.Total,
+                                                            x.Quantity,
+                                                            x.Price,
+                                                            ScrapCategoryName = y.Name
+                                                        }).ToList();
+
+
             // Insert SellCollectTransactionDetail
-            var transactionDetails = model.ScrapCategoryItems.Select(x => new SellCollectTransactionDetail()
+            var transactionDetails = sellCollecTransDetails.Select(x => new SellCollectTransactionDetail()
             {
                 CollectorCategoryDetailId = x.CollectorCategoryDetailId,
+                ScrapCategoryName = x.ScrapCategoryName,
                 SellCollectTransactionId = insertEntity.Id,
                 Quantity = x.Quantity,
                 Price = x.Price,

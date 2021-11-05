@@ -160,6 +160,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
             };
 
             return BaseApiResponse.OK(dataResult);
+
         }
 
         #endregion
@@ -224,6 +225,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
 
             var dataQuery = _scrapCategoryDetailRepository.GetManyAsNoTracking(x => x.ScrapCategoryId.Equals(id) &&
                                                                                     x.Status == ScrapCategoryStatus.ACTIVE);
+                                                           
 
             var totalRecord = await dataQuery.CountAsync();
 
@@ -271,11 +273,55 @@ namespace SCSS.Application.ScrapDealer.Implementations
 
             var insertEntity = _collectDealTransactionRepository.Insert(transactionEntity);
 
+            var collectDealTransDetails = model.Items.GroupJoin(_scrapCategoryDetailRepository.GetAllAsNoTracking(),
+                                                        x => x.DealerCategoryDetailId, y => y.Id, (x, y) => new
+                                                        {
+                                                            x.DealerCategoryDetailId,
+                                                            x.Total,
+                                                            x.Quantity,
+                                                            x.PromotionId,
+                                                            x.Price,
+                                                            x.BonusAmount,
+                                                            ScrapCategoryDetail = y
+                                                        })
+                                                        .SelectMany(x => x.ScrapCategoryDetail.DefaultIfEmpty(), (x, y) => new
+                                                        {
+                                                            x.DealerCategoryDetailId,
+                                                            x.Total,
+                                                            x.Quantity,
+                                                            x.PromotionId,
+                                                            x.Price,
+                                                            x.BonusAmount,
+                                                            ScrapCategoryId = y.ScrapCategoryId
+                                                        })
+                                                     .GroupJoin(_scrapCategoryRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id)),
+                                                        x => x.ScrapCategoryId, y => y.Id, (x, y) => new
+                                                        {
+                                                            x.DealerCategoryDetailId,
+                                                            x.Total,
+                                                            x.Quantity,
+                                                            x.PromotionId,
+                                                            x.Price,
+                                                            x.BonusAmount,
+                                                            ScrapCategory = y
+                                                        })
+                                                        .SelectMany(x => x.ScrapCategory.DefaultIfEmpty(), (x, y) => new
+                                                        {
+                                                            x.DealerCategoryDetailId,
+                                                            x.Total,
+                                                            x.Quantity,
+                                                            x.PromotionId,
+                                                            x.Price,
+                                                            x.BonusAmount,
+                                                            ScrapCategoryName = y.Name
+                                                        }).ToList();
+
             // Insert CollectDeal Transaction Detail
-            var transactionDetail = model.Items.Select(x => new CollectDealTransactionDetail()
+            var transactionDetail = collectDealTransDetails.Select(x => new CollectDealTransactionDetail()
             {
                 DealerCategoryDetailId = x.DealerCategoryDetailId,
                 CollectDealTransactionId = insertEntity.Id,
+                ScrapCategoryName = x.ScrapCategoryName,
                 Quantity = x.Quantity,
                 Price = x.Price,
                 Total = x.Total,

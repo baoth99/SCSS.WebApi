@@ -18,6 +18,8 @@ namespace SCSS.Data.Entities
         [ForeignKey("ScrapCategoryDetail")]
         public Guid? DealerCategoryDetailId { get; set; }
 
+        public string ScrapCategoryName { get; set; }
+
         public float? Quantity { get; set; }
 
         [ForeignKey("Promotion")]

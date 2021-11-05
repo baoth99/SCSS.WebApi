@@ -240,6 +240,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                 .GroupJoin(_scrapCategoryDetailRepository.GetAllAsNoTracking(), x => x.DealerCategoryDetailId, y => y.Id,
                                                                                     (x, y) => new
                                                                                     {
+                                                                                        x.ScrapCategoryName,
                                                                                         x.Quantity,
                                                                                         x.Total,
                                                                                         x.BonusAmount,
@@ -248,29 +249,12 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                                     }).SelectMany(x => x.ScrapCategoryDetail.DefaultIfEmpty(), (x, y) => new
                                                                                     {
                                                                                         x.Quantity,
+                                                                                        x.ScrapCategoryName,
                                                                                         x.Total,
                                                                                         x.BonusAmount,
                                                                                         x.PromotionId,
                                                                                         y.ScrapCategoryId,
                                                                                         y.Unit
-                                                                                    })
-                                                                                .GroupJoin(_scrapCategoryRepository.GetAllAsNoTracking(), x => x.ScrapCategoryId, y => y.Id,
-                                                                                    (x, y) => new
-                                                                                    {
-                                                                                        x.Quantity,
-                                                                                        x.Total,
-                                                                                        x.Unit,
-                                                                                        x.BonusAmount,
-                                                                                        x.PromotionId,
-                                                                                        ScrapCategory = y
-                                                                                    }).SelectMany(x => x.ScrapCategory.DefaultIfEmpty(), (x, y) => new
-                                                                                    {
-                                                                                        x.Quantity,
-                                                                                        x.Total,
-                                                                                        x.BonusAmount,
-                                                                                        x.Unit,
-                                                                                        x.PromotionId,
-                                                                                        ScrapCategoryName = y.Name
                                                                                     })
                                                                                  .GroupJoin(_promotionRepository.GetAllAsNoTracking(), x => x.PromotionId, y => y.Id, (x, y) => new
                                                                                  {

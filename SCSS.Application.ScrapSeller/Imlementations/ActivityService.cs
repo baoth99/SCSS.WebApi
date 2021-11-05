@@ -343,33 +343,22 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                                                                                     .GroupJoin(_scrapCategoryDetailRepository.GetAllAsNoTracking(), x => x.CollectorCategoryDetailId, y => y.Id,
                                                                                          (x, y) => new
                                                                                          {
+                                                                                             x.ScrapCategoryName,
                                                                                              x.Quantity,
                                                                                              x.Total,
                                                                                              ScrapCategoryDetail = y
                                                                                          }).SelectMany(x => x.ScrapCategoryDetail.DefaultIfEmpty(), (x, y) => new
                                                                                          {
+                                                                                             x.ScrapCategoryName,
                                                                                              x.Quantity,
                                                                                              x.Total,
                                                                                              y.ScrapCategoryId,
                                                                                              y.Unit,
                                                                                          })
-                                                                                    .GroupJoin(_scrapCategoryRepository.GetAllAsNoTracking(), x => x.ScrapCategoryId, y => y.Id,
-                                                                                         (x, y) => new
-                                                                                         {
-                                                                                             x.Quantity,
-                                                                                             x.Total,
-                                                                                             x.Unit,
-                                                                                             ScrapCategory = y
-                                                                                         }).SelectMany(x => x.ScrapCategory.DefaultIfEmpty(), (x, y) => new
-                                                                                         {
-                                                                                             x.Quantity,
-                                                                                             x.Total,
-                                                                                             x.Unit,
-                                                                                             y.Name
-                                                                                         }).Select(x => new TransactionInformationDetail()
+                                                                                    .Select(x => new TransactionInformationDetail()
                                                                                          {
                                                                                              Quantity = x.Quantity,
-                                                                                             ScrapCategoryName = x.Name,
+                                                                                             ScrapCategoryName = x.ScrapCategoryName,
                                                                                              Unit = x.Unit,
                                                                                              Total = x.Total,
                                                                                          }).ToListAsync();
