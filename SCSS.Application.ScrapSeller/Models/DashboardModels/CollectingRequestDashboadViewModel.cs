@@ -8,7 +8,7 @@ namespace SCSS.Application.ScrapSeller.Models.DashboardModels
 
         public string CollectingRequestCode { get; set; }
 
-        public string CollectingRequestDate { get; set; }
+        public DateTime? CollectingRequestDate { get; set; }
 
         public string FromTime { get; set; }
 

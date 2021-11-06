@@ -146,7 +146,8 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             {
                 CollectingRequestId = x.Id,
                 CollectingRequestCode = x.CollectingRequestCode,
-                CollectingRequestDate = x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DDD_DD_MMM_yyy_HH_mm),
+                CollectingRequestDate = x.CollectingRequestDate,
+                DoneActivityTime = x.UpdatedTime,
                 AddressName = x.AddressName,
                 Address = x.Address,
                 FromTime = x.TimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),

@@ -83,7 +83,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                                                           {
                                                               CollectingRequestId = x.CollectingRequestId,
                                                               CollectingRequestCode = x.CollectingRequestCode,
-                                                              CollectingRequestDate = x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DDD_DD_MM_yyyy),
+                                                              CollectingRequestDate = x.CollectingRequestDate,
                                                               FromTime = x.TimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
                                                               ToTime = x.TimeTo.ToStringFormat(TimeSpanFormat.HH_MM),
                                                               Address = x.Address,

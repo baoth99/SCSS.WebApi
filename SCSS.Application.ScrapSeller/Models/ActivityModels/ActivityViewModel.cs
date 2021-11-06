@@ -9,7 +9,9 @@ namespace SCSS.Application.ScrapSeller.Models.ActivityModels
 
         public string CollectingRequestCode { get; set; }
 
-        public string CollectingRequestDate { get; set; }
+        public DateTime? DoneActivityTime { get; set; }
+
+        public DateTime? CollectingRequestDate { get; set; }
 
         public string FromTime { get; set; }
 
