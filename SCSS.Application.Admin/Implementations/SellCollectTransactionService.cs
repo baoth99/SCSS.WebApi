@@ -221,6 +221,7 @@ namespace SCSS.Application.Admin.Implementations
                                                                                          (x, y) => new
                                                                                          {
                                                                                              x.Quantity,
+                                                                                             x.ScrapCategoryName,
                                                                                              x.Total,
                                                                                              ScrapCategoryDetail = y
                                                                                          }).SelectMany(x => x.ScrapCategoryDetail.DefaultIfEmpty(), (x, y) => new
@@ -229,24 +230,12 @@ namespace SCSS.Application.Admin.Implementations
                                                                                              x.Total,
                                                                                              y.ScrapCategoryId,
                                                                                              y.Unit,
+                                                                                             x.ScrapCategoryName
                                                                                          })
-                                                                               .GroupJoin(_scrapCategoryRepository.GetAllAsNoTracking(), x => x.ScrapCategoryId, y => y.Id,
-                                                                                         (x, y) => new
-                                                                                         {
-                                                                                             x.Quantity,
-                                                                                             x.Total,
-                                                                                             x.Unit,
-                                                                                             ScrapCategory = y
-                                                                                         }).SelectMany(x => x.ScrapCategory.DefaultIfEmpty(), (x, y) => new
-                                                                                         {
-                                                                                             x.Quantity,
-                                                                                             x.Total,
-                                                                                             x.Unit,
-                                                                                             y.Name
-                                                                                         }).Select(x => new SellCollectTransactionDetailViewModel()
+                                                                                         .Select(x => new SellCollectTransactionDetailViewModel()
                                                                                          {
                                                                                              Quantity = x.Quantity == NumberConstant.Zero ? CommonConstants.Null : $"{x.Quantity} {x.Unit}",
-                                                                                             ScrapCategoryName = StringUtils.GetString(x.Name),
+                                                                                             ScrapCategoryName = StringUtils.GetString(x.ScrapCategoryName),
                                                                                              Unit = x.Unit,
                                                                                              Total = x.Total,
                                                                                          }).ToList();
