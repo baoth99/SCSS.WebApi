@@ -99,6 +99,13 @@ namespace SCSS.Application.ScrapDealer.Implementations
             // Auto Generate Promotion Code by GeneratePromotionCodeParamsModel
             var promotionCode = await GeneratePromotionCode(generateParamModel);
 
+            var promotionStatus = PromotionStatus.ACTIVE;
+
+            if (promotionFromTime.IsCompareDateTimeGreaterThan(DateTimeVN.DATE_NOW))
+            {
+                promotionStatus = PromotionStatus.FUTURE;
+            }
+
             var entity = new Promotion()
             {
                 Code = promotionCode,
@@ -109,7 +116,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 ToTime = promotionToTime,
                 DealerCategoryId = model.PromotionScrapCategoryId,
                 DealerAccountId = dealerAccountId,
-                Status = PromotionStatus.ACTIVE
+                Status = promotionStatus
             };
 
             var entityResult = _promotionRepository.Insert(entity);

@@ -19,6 +19,8 @@ namespace SCSS.Application.Admin.Models.CollectingRequestModels
 
         public string CollectingRequestRangeTime { get; set; }
 
+        public string ScrapImageUrl { get; set; }
+
         public int? Status { get; set; }
 
         public string Address { get; set; }

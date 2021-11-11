@@ -102,5 +102,7 @@ namespace SCSS.Utilities.Helper
             return ComplaintStatus.HaveGivenComplaint;
         }
 
+        public static string GetDealerLeader(int role) => role == AccountRole.DEALER ? MarkConstant.STAR : string.Empty;
+
     }
 }

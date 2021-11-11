@@ -73,6 +73,7 @@ namespace SCSS.Utilities.Constants
     {
         public const float TotalPoint = 0;
         public const double Radius = 5;
+        public const float Rating = 5;
     }
 
     public class RegularExpression
@@ -100,6 +101,7 @@ namespace SCSS.Utilities.Constants
     {
         public const int ACTIVE = 1;
         public const int DEACTIVE = 2;
+        public const int FUTURE = 3;
     }
 
     public class Gender
@@ -167,6 +169,7 @@ namespace SCSS.Utilities.Constants
     public class MarkConstant
     {
         public const string NO_WHITE_SPACE = "";
+        public const string STAR = "*";
         public const string WHITE_SPACE = " ";
         public const string COMMA = ",";
         public const string DOT = ".";

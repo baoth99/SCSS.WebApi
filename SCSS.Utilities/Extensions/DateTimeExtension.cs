@@ -218,7 +218,6 @@ namespace SCSS.Utilities.Extensions
 
         #endregion Compare DateTime Less Than
 
-
         #region Compare DateTime Equal
 
         /// <summary>
@@ -250,9 +249,6 @@ namespace SCSS.Utilities.Extensions
         }
 
         #endregion Compare DateTime Equal
-
-
-
 
         #region Compare TimeSpan Greater Or Equal
 
@@ -501,6 +497,22 @@ namespace SCSS.Utilities.Extensions
         }
 
         #endregion
+
+        #region Add TimeSpan
+
+        /// <summary>
+        /// Adds the time span.
+        /// </summary>
+        /// <param name="dateTime">The date time.</param>
+        /// <param name="timeSpan">The time span.</param>
+        /// <returns></returns>
+        public static DateTime AddTimeSpan(this DateTime dateTime, TimeSpan timeSpan)
+        {
+            return dateTime.AddHours(timeSpan.Hours).AddMinutes(timeSpan.Minutes).AddSeconds(timeSpan.Seconds);
+        }
+
+        #endregion
+
 
     }
 }

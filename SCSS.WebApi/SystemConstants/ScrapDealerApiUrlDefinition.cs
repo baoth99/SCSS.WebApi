@@ -9,7 +9,7 @@
         private const string Statistic = "statistic";
         private const string Notification = "notification";
         private const string CollectDealTransaction = "transaction/collect-deal";
-
+        private const string Complaint = "complaint";
         public static class DataApiUrl
         {
             public const string GetImage = "image/get";
@@ -22,6 +22,11 @@
         public static class StatisticApiUrl
         {
             public const string GetStatistic = Statistic + "/get";
+        }
+
+        public static class ComplaintApiUrl
+        {
+            public const string ComplaintToCollector = Complaint + "/collect-deal-trans";
         }
 
         public static class CollectDealTransactionApiUrl

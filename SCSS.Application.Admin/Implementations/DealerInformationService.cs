@@ -91,8 +91,20 @@ namespace SCSS.Application.Admin.Implementations
                                                     DealerStatus = x.IsActive,
                                                     DealerCreatedTime = x.CreatedTime,
                                                     y.Name,
-                                                    y.ManagedBy
-                                                });
+                                                    y.ManagedBy,
+                                                    y.RoleId
+                                                })
+                                            .Join(UnitOfWork.RoleRepository.GetAllAsNoTracking(), x => x.RoleId, y => y.Id, (x, y) => new
+                                            {
+                                                x.DealerId,
+                                                x.DealerName,
+                                                x.DealerPhone,
+                                                x.DealerStatus,
+                                                x.DealerCreatedTime,
+                                                x.Name,
+                                                x.ManagedBy,
+                                                RoleKey = y.Key
+                                            });
 
             // Check dataQuery is Empty !!
             if (!dataQuery.Any())
@@ -121,7 +133,7 @@ namespace SCSS.Application.Admin.Implementations
                                         .Select(x => new DealerInformationViewModel()
                                         {
                                             Id = x.DealerId,
-                                            DealerName = x.DealerName,
+                                            DealerName = x.DealerName + CommonUtils.GetDealerLeader(x.RoleKey),
                                             DealerPhone = x.DealerPhone,
                                             DealerType = CommonUtils.GetDealerType(x.ManagedBy), // Leader is One, Member is Two
                                             CreatedTime = x.DealerCreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy_time),

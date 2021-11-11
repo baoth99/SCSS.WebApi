@@ -2,7 +2,9 @@
 using SCSS.Application.ScrapDealer.Interfaces;
 using SCSS.Application.ScrapDealer.Models.StatisticModels;
 using SCSS.AWSService.Interfaces;
+using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
+using SCSS.Data.Entities;
 using SCSS.ORM.Dapper.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
@@ -18,6 +20,16 @@ namespace SCSS.Application.ScrapDealer.Implementations
 {
     public class StatisticService : BaseService, IStatisticService
     {
+        #region Repositories
+
+        /// <summary>
+        /// The account repository
+        /// </summary>
+        private readonly IRepository<Account> _accountRepository;
+
+        #endregion
+
+
         #region Services
 
         /// <summary>
@@ -41,6 +53,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
         public StatisticService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, 
                                 IStringCacheService cacheService, IDapperService dapperService) : base(unitOfWork, userAuthSession, logger, cacheService)
         {
+            _accountRepository = unitOfWork.AccountRepository;
             _dapperService = dapperService;
         }
 
@@ -58,6 +71,32 @@ namespace SCSS.Application.ScrapDealer.Implementations
             var dateFrom = model.FromDate.ToDateTime();
             var dateTo = model.ToDate.ToDateTime();
 
+            //var account = _accountRepository.GetManyAsNoTracking(x => x.Id.Equals(model.DealerAccountId)).Join(UnitOfWork.RoleRepository.GetAllAsNoTracking(), x => x.RoleId, y => y.Id, (x, y) => y.Key).FirstOrDefault();
+
+            if (!_accountRepository.IsExisted(x => x.Id.Equals(model.DealerAccountId)))
+            {
+                return BaseApiResponse.NotFound();
+            }
+
+            if (UserAuthSession.UserSession.Role == AccountRole.DEALER_MEMBER)
+            {
+                if (UserAuthSession.UserSession.Id != model.DealerAccountId)
+                {
+                    return BaseApiResponse.Forbidden();
+                }
+            }
+
+            if (UserAuthSession.UserSession.Role == AccountRole.DEALER)
+            {
+                if (UserAuthSession.UserSession.Id != model.DealerAccountId)
+                {
+                    if (!_accountRepository.IsExisted(x => x.Id.Equals(model.DealerAccountId) && x.ManagedBy.Equals(UserAuthSession.UserSession.Id)))
+                    {
+                        return BaseApiResponse.Forbidden();
+                    }
+                }
+            }
+
             // Handle DateTime
             if (dateTo.IsCompareDateTimeGreaterThan(DateTimeVN.DATE_NOW))
             {
@@ -74,7 +113,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
             var sql = AppFileHelper.ReadContent(AppSettingValues.StatisticSQLCommand, "DealerDashboardStastistic.sql");
 
             var parameters = new DynamicParameters();
-            parameters.Add("@DealerId", UserAuthSession.UserSession.Id);
+            parameters.Add("@DealerId", model.DealerAccountId);
             parameters.Add("@FromDate", dateFrom);
             parameters.Add("@ToDate", dateTo);
 
@@ -94,7 +133,6 @@ namespace SCSS.Application.ScrapDealer.Implementations
         }
 
         #endregion
-
 
     }
 }

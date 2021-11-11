@@ -128,5 +128,9 @@ namespace SCSS.Utilities.Configurations
         public static int DelayMinutesSchedule => ConfigurationHelper.GetValue<int>(AppSettingKeys.TaskSchedule.DelayMinutes);
 
         public static string NoticeToCollector => ConfigurationHelper.GetValue<string>(AppSettingKeys.TaskSchedule.NoticeToCollector);
+
+        public static string TraceExpiredPromotionStart => ConfigurationHelper.GetValue<string>(AppSettingKeys.TaskSchedule.TraceExpiredPromotionStart);
+
+        public static string TraceFuturePromotionStart => ConfigurationHelper.GetValue<string>(AppSettingKeys.TaskSchedule.TraceFuturePromotionStart);
     }
 }

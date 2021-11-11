@@ -292,7 +292,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                                                             x.PromotionId,
                                                             x.Price,
                                                             x.BonusAmount,
-                                                            ScrapCategoryId = y.ScrapCategoryId
+                                                            ScrapCategoryId = y?.ScrapCategoryId
                                                         })
                                                      .GroupJoin(_scrapCategoryRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id)),
                                                         x => x.ScrapCategoryId, y => y.Id, (x, y) => new
@@ -313,7 +313,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                                                             x.PromotionId,
                                                             x.Price,
                                                             x.BonusAmount,
-                                                            ScrapCategoryName = y.Name
+                                                            ScrapCategoryName = y?.Name
                                                         }).ToList();
 
             // Insert CollectDeal Transaction Detail

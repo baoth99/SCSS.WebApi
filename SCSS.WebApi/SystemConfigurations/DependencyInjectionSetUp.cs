@@ -73,6 +73,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IStatisticService, SCSS.Application.ScrapDealer.Implementations.StatisticService>();
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.ICollectDealTransactionService, SCSS.Application.ScrapDealer.Implementations.CollectDealTransactionService>();
             services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.INotificationService, SCSS.Application.ScrapDealer.Implementations.NotificationService>();
+            services.AddScoped<SCSS.Application.ScrapDealer.Interfaces.IComplaintService, SCSS.Application.ScrapDealer.Implementations.ComplaintService>();
 
             #endregion Dealer Application
 
@@ -92,6 +93,7 @@ namespace SCSS.WebApi.SystemConfigurations
 
             services.AddHostedService<TrailCollectingRequestHostedService>();
             services.AddHostedService<ScanExpiredPromotionHostedService>();
+            services.AddHostedService<ScanFuturePromotionHostedService>();
             services.AddHostedService<CRReminderHostService>();
 
             #endregion

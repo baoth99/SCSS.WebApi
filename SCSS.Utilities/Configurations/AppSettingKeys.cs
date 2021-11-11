@@ -118,6 +118,8 @@ namespace SCSS.Utilities.Configurations
         {
             public const string CollectingRequestTrailPeriod = "TaskSchedule:CollectingRequestTrailPeriod";
             public const string CollectingRequestTrailStart = "TaskSchedule:CollectingRequestTrailStart";
+            public const string TraceExpiredPromotionStart = "TaskSchedule:TraceExpiredPromotionStart";
+            public const string TraceFuturePromotionStart = "TaskSchedule:TraceFuturePromotionStart";
             public const string DelayMinutes = "TaskSchedule:DelayMinutes";
             public const string NoticeToCollector = "TaskSchedule:NoticeToCollector";
         }

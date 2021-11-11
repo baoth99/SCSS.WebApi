@@ -131,9 +131,18 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> SendOtpRestorePass(SendOTPRequestModel model)
         {
-            if (!_accountRepository.IsExisted(x => x.Phone == model.Phone))
+            var account = _accountRepository.GetAsNoTracking(x => x.Phone == model.Phone);
+
+            if (account == null)
             {
                 return BaseApiResponse.Error(SystemMessageCode.DataNotFound);
+            }
+
+            var role = _roleRepository.GetById(account.RoleId);
+
+            if (role.Key != AccountRole.COLLECTOR)
+            {
+                return BaseApiResponse.Error(SystemMessageCode.Forbidden);
             }
 
             var dictionary = new Dictionary<string, string>()
@@ -213,7 +222,8 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 Address = model.Address,
                 IdCard = model.IDCard,
                 Status = AccountStatus.NOT_APPROVED,
-                TotalPoint = DefaultConstant.TotalPoint
+                TotalPoint = DefaultConstant.TotalPoint,
+                Rating = DefaultConstant.Rating,
             };
 
             _accountRepository.Insert(entity);

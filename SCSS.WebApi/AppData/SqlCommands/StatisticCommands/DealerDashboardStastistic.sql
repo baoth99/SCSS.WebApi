@@ -4,5 +4,5 @@
 	   COUNT([Id]) AS NumOfCompletedTrans
 FROM [CollectDealTransaction]
 WHERE [DealerAccountId] = @DealerId AND
-	  [CreatedTime] >= @FromDate AND
-	  [CreatedTime] <= @ToDate
+	  CONVERT(DATE, [CreatedTime]) >= @FromDate AND
+	  CONVERT(DATE, [CreatedTime]) <= @ToDate

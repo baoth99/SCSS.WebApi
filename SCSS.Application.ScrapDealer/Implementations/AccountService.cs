@@ -135,9 +135,18 @@ namespace SCSS.Application.ScrapDealer.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> SendOtpRestorePass(SendOTPRequestModel model)
         {
-            if (!_accountRepository.IsExisted(x => x.Phone == model.Phone))
+            var account = _accountRepository.GetAsNoTracking(x => x.Phone == model.Phone);
+
+            if (account == null)
             {
                 return BaseApiResponse.Error(SystemMessageCode.DataNotFound);
+            }
+
+            var role = _roleRepository.GetById(account.RoleId);
+
+            if (!CollectionConstants.DealerRoles.Contains(role.Key))
+            {
+                return BaseApiResponse.Error(SystemMessageCode.Forbidden);
             }
 
             var dictionary = new Dictionary<string, string>()

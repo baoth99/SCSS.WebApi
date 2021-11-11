@@ -183,10 +183,11 @@ namespace SCSS.Application.Admin.Implementations
                 CollectingRequestRangeTime = string.Format("{0}-{1}", dataEntity.TimeFrom.ToStringFormat(TimeSpanFormat.HH_MM),
                                                                       dataEntity.TimeTo.ToStringFormat(TimeSpanFormat.HH_MM)),
                 IsBulky = dataEntity.IsBulky,
+                ScrapImageUrl = dataEntity.ScrapImageUrl,
                 Note = dataEntity.Note,
-                RequestedBy = sellerInfo.Name,
+                RequestedBy = $"{sellerInfo.Name} - {sellerInfo.Phone}" ,
                 Status = dataEntity.Status,
-                ReceivedBy = collectorInfo == null ? CommonConstants.Null : collectorInfo.Name
+                ReceivedBy = collectorInfo == null ? CommonConstants.Null : $"{collectorInfo.Name} - {collectorInfo.Phone}" 
             };
 
             return BaseApiResponse.OK(dataResult);

@@ -15,6 +15,12 @@ namespace SCSS.Utilities.Constants
             AccountStatus.BANNING,
         };
 
+        public static readonly List<int> DealerRoles = new List<int>()
+        {
+            AccountRole.DEALER,
+            AccountRole.DEALER_MEMBER
+        };
+
         public static readonly List<int> CollectingRequestHistory = new List<int>()
         {
             CollectingRequestStatus.COMPLETED,

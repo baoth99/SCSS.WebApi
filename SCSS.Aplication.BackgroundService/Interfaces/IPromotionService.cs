@@ -9,5 +9,11 @@ namespace SCSS.Aplication.BackgroundService.Interfaces
         /// </summary>
         /// <returns></returns>
         Task ScanExpiredPromotion();
+
+        /// <summary>
+        /// Scans the future promotion.
+        /// </summary>
+        /// <returns></returns>
+        Task ScanFuturePromotion();
     }
 }

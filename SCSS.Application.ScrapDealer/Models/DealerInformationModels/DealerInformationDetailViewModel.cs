@@ -26,5 +26,7 @@ namespace SCSS.Application.ScrapDealer.Models.DealerInformationModels
 
         public string CloseTime { get; set; }
 
+        public bool IsActive { get; set; }
+
     }
 }

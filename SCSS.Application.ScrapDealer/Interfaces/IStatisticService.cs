@@ -12,5 +12,6 @@ namespace SCSS.Application.ScrapDealer.Interfaces
         /// <param name="model">The model.</param>
         /// <returns></returns>
         Task<BaseApiResponseModel> GetStatisticInRangeTime(StatisticDateFilterModel model);
+
     }
 }

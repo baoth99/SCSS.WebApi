@@ -91,7 +91,8 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 DealerLongtitude = dealerLocation.Longitude,
                 OpenTime = dealerInformation.OpenTime.ToStringFormat(TimeSpanFormat.HH_MM),
                 CloseTime = dealerInformation.OpenTime.ToStringFormat(TimeSpanFormat.HH_MM),
-                DealerImageUrl = dealerInformation.DealerImageUrl
+                DealerImageUrl = dealerInformation.DealerImageUrl,
+                IsActive = dealerInformation.IsActive,
             };
 
             return BaseApiResponse.OK(resData);
@@ -259,6 +260,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                                                         (x, y) => new
                                                         {
                                                             x.Id,
+                                                            x.RoleId,
                                                             y.DealerName
                                                         }).OrderByDescending(x => x.DealerName);
 
@@ -274,7 +276,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
             dataResult.Insert(NumberConstant.Zero, new DealerBranchViewModel()
             {
                 DealerAccountId = dealerAccountId,
-                DealerName = dealer.DealerName
+                DealerName = dealer.DealerName + " *"
             });
 
             var totalRecord = dataResult.Count();

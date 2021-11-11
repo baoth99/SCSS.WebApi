@@ -33,7 +33,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
         /// </summary>
         public async Task ScanExpiredPromotion()
         {
-            var dataQuery = _promotionRepository.GetManyAsNoTracking(x => x.ToTime.Value.CompareTo(DateTimeVN.DATE_NOW) == NumberConstant.Zero).ToList();
+            var dataQuery = _promotionRepository.GetManyAsNoTracking(x => (x.ToTime.Value.CompareTo(DateTimeVN.DATE_NOW) == NumberConstant.Zero) && x.Status == PromotionStatus.ACTIVE).ToList();
 
             var updateEntities = dataQuery.Select(x =>
             {
@@ -44,6 +44,34 @@ namespace SCSS.Aplication.BackgroundService.Implementations
             if (updateEntities.Any())
             {
                 _promotionRepository.UpdateRange(updateEntities);
+            }
+
+            await UnitOfWork.CommitAsync();
+        }
+
+        #endregion
+
+        #region Scan Future Promotion 
+
+        /// <summary>
+        /// Scans the future promotion.
+        /// </summary>
+        public async Task ScanFuturePromotion()
+        {
+            var futurePromotion = _promotionRepository.GetManyAsNoTracking(x => x.Status == PromotionStatus.FUTURE).ToList();
+
+            if (futurePromotion.Any())
+            {
+                var updateFuturePromotions = futurePromotion.Where(x => x.FromTime.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW))
+                                                            .Select(x =>
+                                                            {
+                                                                x.Status = PromotionStatus.ACTIVE;
+                                                                return x;
+                                                            }).ToList();
+                if (updateFuturePromotions.Any())
+                {
+                    _promotionRepository.UpdateRange(updateFuturePromotions);
+                }
             }
 
             await UnitOfWork.CommitAsync();

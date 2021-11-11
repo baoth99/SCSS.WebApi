@@ -4,6 +4,7 @@ using SCSS.Aplication.BackgroundService.Interfaces;
 using SCSS.AWSService.Interfaces;
 using SCSS.Utilities.Configurations;
 using SCSS.Utilities.Constants;
+using SCSS.Utilities.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SCSS.WebApi.BackgroundJobs
 {
-    public class ScanExpiredPromotionHostedService : IHostedService, IDisposable
+    public class ScanFuturePromotionHostedService : IHostedService, IDisposable
     {
         #region Services
 
@@ -36,17 +37,18 @@ namespace SCSS.WebApi.BackgroundJobs
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ScanExpiredPromotionHostedService"/> class.
+        /// Initializes a new instance of the <see cref="ScanFuturePromotionHostedService"/> class.
         /// </summary>
         /// <param name="loggerService">The logger service.</param>
         /// <param name="scopeFactory">The scope factory.</param>
-        public ScanExpiredPromotionHostedService(ILoggerService loggerService, IServiceScopeFactory scopeFactory)
+        public ScanFuturePromotionHostedService(ILoggerService loggerService, IServiceScopeFactory scopeFactory)
         {
             _loggerService = loggerService;
             _scopeFactory = scopeFactory;
         }
 
         #endregion
+
 
         #region Start Async
 
@@ -57,8 +59,8 @@ namespace SCSS.WebApi.BackgroundJobs
         /// <returns></returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            TimeSpan intervalTime = TimeSpan.Parse(AppSettingValues.TraceExpiredPromotionStart);
-            var totalMinutes = TimeSpan.Parse(AppSettingValues.TraceExpiredPromotionStart).Subtract(DateTimeVN.TIMESPAN_NOW).TotalMinutes;
+            TimeSpan intervalTime = TimeSpan.Parse(AppSettingValues.TraceFuturePromotionStart);
+            var totalMinutes = DateTimeVN.DATE_NOW.AddDays(1).AddTimeSpan(TimeSpan.Parse(AppSettingValues.TraceFuturePromotionStart)).Subtract(DateTimeVN.DATETIME_NOW).TotalMinutes;
             _timer = new Timer(callback: async o => await DoWork(), state: null, dueTime: TimeSpan.FromMinutes(totalMinutes), period: intervalTime);
 
             return Task.CompletedTask;
@@ -77,7 +79,7 @@ namespace SCSS.WebApi.BackgroundJobs
             using (var scope = _scopeFactory.CreateScope())
             {
                 var scanExpiredPromotion = scope.ServiceProvider.GetRequiredService<IPromotionService>();
-                await scanExpiredPromotion.ScanExpiredPromotion();
+                await scanExpiredPromotion.ScanFuturePromotion();
             }
         }
 
