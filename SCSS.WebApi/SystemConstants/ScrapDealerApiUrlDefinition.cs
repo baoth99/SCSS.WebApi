@@ -50,6 +50,7 @@
 
         public static class PromotionApiUrl
         {
+            public const string FinishPromotion = Promotion + "/finish";
             public const string GetPromotions = Promotion + "/get";
             public const string GetPromotionDetail = Promotion + "/get-detail";
             public const string CreateNewPromotion = Promotion + "/create";

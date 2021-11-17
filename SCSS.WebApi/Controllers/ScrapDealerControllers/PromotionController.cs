@@ -93,5 +93,25 @@ namespace SCSS.WebApi.Controllers.ScrapDealerControllers
         }
 
         #endregion
+
+        #region Finish Promotion
+
+        /// <summary>
+        /// Finishes the promotion.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        [HttpPut]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapDealerApiUrlDefinition.PromotionApiUrl.FinishPromotion)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> FinishPromotion([FromQuery] Guid id) 
+        {
+            return await _promotionService.FinishPromotion(id);
+        }
+
+        #endregion
     }
 }

@@ -13,7 +13,7 @@ namespace SCSS.Application.ScrapCollector.Models.CollectingRequestModels
         // Date
         public int? DayOfWeek { get; set; }
 
-        public string CollectingRequestDate { get; set; }
+        public DateTime? CollectingRequestDate { get; set; }
 
         public string FromTime { get; set; }
 

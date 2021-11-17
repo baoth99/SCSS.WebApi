@@ -18,6 +18,13 @@ namespace SCSS.WebApi.SystemConstants
         private const string Complaint = "complaint";
         private const string SellCollectTransaction = "transaction/sell-collect";
         private const string CollectDealTransaction = "transaction/collect-deal";
+        private const string Register = "account-register";
+
+        public static class RegisterApiUrl
+        {
+            public const string CollectorOtp = Register + "/collector-otp";
+            public const string DealerOtp = Register + "/dealer-otp";
+        }
 
         public static class ComplaintApiUrl
         {

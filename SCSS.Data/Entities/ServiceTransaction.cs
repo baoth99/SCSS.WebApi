@@ -2,11 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace SCSS.Data.Entities
 {
     [Table("ServiceTransaction")]
-    public class ServiceTransaction : BaseEntity, IHasSoftDelete
+    public class ServiceTransaction : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,8 +16,12 @@ namespace SCSS.Data.Entities
 
         public long? Amount { get; set; }
 
-        public DateTime? Period { get; set; }
+        public DateTime? DateTimeFrom { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public DateTime? DateTimeTo { get; set; }
+
+        public string Period { get; set; }
+
+        public bool IsFinished { get; set; }
     }
 }

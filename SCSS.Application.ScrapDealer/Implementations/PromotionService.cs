@@ -9,6 +9,7 @@ using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
+using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using System;
 using System.Collections.Generic;
@@ -104,6 +105,11 @@ namespace SCSS.Application.ScrapDealer.Implementations
             if (promotionFromTime.IsCompareDateTimeGreaterThan(DateTimeVN.DATE_NOW))
             {
                 promotionStatus = PromotionStatus.FUTURE;
+            }
+
+            if (ValidatorUtil.IsBlank(model.PromotionName))
+            {
+                model.PromotionName = $"Khuyến Mãi {scrapCategory.Name}";
             }
 
             var entity = new Promotion()
@@ -241,9 +247,26 @@ namespace SCSS.Application.ScrapDealer.Implementations
 
         #endregion
 
-        #region Active/DeActive Promotion
+        #region Finish Promotion
 
-        // TODO:
+        public async Task<BaseApiResponseModel> FinishPromotion(Guid id)
+        {
+            var promotion = _promotionRepository.GetAsNoTracking(x => x.Id.Equals(id) &&
+                                                                      x.DealerAccountId.Equals(UserAuthSession.UserSession.Id));
+
+            if (promotion == null)
+            {
+                return BaseApiResponse.NotFound();
+            }
+
+            promotion.Status = PromotionStatus.DEACTIVE;
+
+            _promotionRepository.Update(promotion);
+
+            await UnitOfWork.CommitAsync();
+
+            return BaseApiResponse.OK();
+        }
 
         #endregion
     }

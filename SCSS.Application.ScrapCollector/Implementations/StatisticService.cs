@@ -1,5 +1,7 @@
 ﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using SCSS.Application.ScrapCollector.Interfaces;
+using SCSS.Application.ScrapCollector.Models;
 using SCSS.Application.ScrapCollector.Models.StatisticModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.Data.EF.UnitOfWork;
@@ -96,6 +98,30 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 TotalCompletedCR = sqlModel.TotalCompletedCR.ToIntValue()
             };
             return BaseApiResponse.OK(dataResult);
+        }
+
+        #endregion
+
+        #region Get ServiceFee In Month
+
+        /// <summary>
+        /// Gets the service fee in month.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> GetServiceFeeInMonth()
+        {
+            var dataQuery = UnitOfWork.ServiceTransactionRepository.GetManyAsNoTracking(x => x.CollectorId.Equals(UserAuthSession.UserSession.Id)).OrderBy(x => x.DateTimeTo);
+
+            var total = await dataQuery.CountAsync();
+
+            var dataResult = dataQuery.Select(x => new TransactionServiceFeeViewModel()
+            {
+                Id = x.Id,
+                Amount = x.Amount,
+                TimePeriod = x.DateTimeTo.ToStringFormat(DateTimeFormat.MMMM_yyyy)
+            }).ToList();
+
+            return BaseApiResponse.OK(resData: dataResult, totalRecord: total);
         }
 
         #endregion

@@ -246,7 +246,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 Id = x.CollectingRequestId,
                 CollectingRequestCode = x.CollectingRequestCode,
                 Area = $"{x.District}, {x.City}",
-                CollectingRequestDate = x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
+                CollectingRequestDate = x.CollectingRequestDate,
                 DayOfWeek = x.CollectingRequestDate.GetDayOfWeek(),
                 Distance = x.DistanceVal,
                 DistanceText = x.DistanceText,
@@ -311,9 +311,10 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     return InvalidCollectingRequestCode.NoReceiveNow;
                 }
             }
+            
+            var collectingRequestDealine = collectingRequestEntity.CollectingRequestDate.Value.AddTimeSpan(collectingRequestEntity.TimeTo.Value);
 
-            if (collectingRequestEntity.CollectingRequestDate.IsCompareDateTimeEqual(DateTimeVN.DATE_NOW) &&
-                collectingRequestEntity.TimeTo.IsCompareTimeSpanLessThan(DateTimeVN.TIMESPAN_NOW))
+            if (DateTimeVN.DATETIME_NOW.StripSecondAndMilliseconds().IsCompareDateTimeGreaterThan(collectingRequestDealine))
             {
                 return InvalidCollectingRequestCode.TimeUpToReceive;
             }

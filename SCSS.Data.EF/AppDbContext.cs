@@ -278,10 +278,6 @@ namespace SCSS.Data.EF
                             updateAccountEntity.UpdatedBy = accountId;
                             updateAccountEntity.UpdatedTime = DateTimeVN.DATETIME_NOW;
                         }
-                        if (entry.Entity is CollectingRequest modifyCollectingRequest)
-                        {
-                            entry.State = EntityState.Modified;
-                        }
                         break;
                 }
             }

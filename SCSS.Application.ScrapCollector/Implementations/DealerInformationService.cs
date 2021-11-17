@@ -79,35 +79,35 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> SearchDealerInfo(DealerInformationFilterModel model)
         {
-            var dealerDataQuery = _dealerInformationRepository.GetAll().Join(_accountRepository.GetManyAsNoTracking(x => x.Status == AccountStatus.ACTIVE), x => x.DealerAccountId, y => y.Id,
-                                                                                  (x, y) => new
-                                                                                  {
-                                                                                      x.Id,
-                                                                                      x.DealerName,
-                                                                                      x.IsActive,
-                                                                                      x.LocationId,
-                                                                                      x.DealerImageUrl,
-                                                                                      x.OpenTime,
-                                                                                      x.CloseTime
-                                                                                  }) 
-                                                                        .Join(_locationRepository.GetAllAsNoTracking(), x => x.LocationId, y => y.Id,
-                                                                                  (x, y) => new             
-                                                                                  {
-                                                                                      DealerId = x.Id,
-                                                                                      x.DealerName,
-                                                                                      x.IsActive,
-                                                                                      UnSignDealerName = x.DealerName.RemoveSignVietnameseString().ToLower(),
-                                                                                      DealerAddress = y.Address,
-                                                                                      UnSignDealerAddress = y.Address.RemoveSignVietnameseString().ToLower(),
-                                                                                      y.Latitude,
-                                                                                      y.Longitude,
-                                                                                      x.DealerImageUrl,
-                                                                                      x.OpenTime,
-                                                                                      x.CloseTime,
-                                                                                  }).ToList()
-                                                                         .Where(x => (ValidatorUtil.IsBlank(model.SearchWord) || 
-                                                                                      x.UnSignDealerAddress.ToLower().Contains(model.SearchWord.RemoveSignVietnameseString().ToLower()) ||
-                                                                                      x.UnSignDealerName.ToLower().Contains(model.SearchWord.RemoveSignVietnameseString().ToLower()))).ToList();
+            var dealerDataQuery = _dealerInformationRepository.GetManyAsNoTracking(x => x.IsActive).Join(_accountRepository.GetManyAsNoTracking(x => x.Status == AccountStatus.ACTIVE), x => x.DealerAccountId, y => y.Id,
+                                                                                                              (x, y) => new
+                                                                                                              {
+                                                                                                                  x.Id,
+                                                                                                                  x.DealerName,
+                                                                                                                  x.IsActive,
+                                                                                                                  x.LocationId,
+                                                                                                                  x.DealerImageUrl,
+                                                                                                                  x.OpenTime,
+                                                                                                                  x.CloseTime
+                                                                                                              }) 
+                                                                                                    .Join(_locationRepository.GetAllAsNoTracking(), x => x.LocationId, y => y.Id,
+                                                                                                              (x, y) => new             
+                                                                                                              {
+                                                                                                                  DealerId = x.Id,
+                                                                                                                  x.DealerName,
+                                                                                                                  x.IsActive,
+                                                                                                                  UnSignDealerName = x.DealerName.RemoveSignVietnameseString().ToLower(),
+                                                                                                                  DealerAddress = y.Address,
+                                                                                                                  UnSignDealerAddress = y.Address.RemoveSignVietnameseString().ToLower(),
+                                                                                                                  y.Latitude,
+                                                                                                                  y.Longitude,
+                                                                                                                  x.DealerImageUrl,
+                                                                                                                  x.OpenTime,
+                                                                                                                  x.CloseTime,
+                                                                                                              }).ToList()
+                                                                                                     .Where(x => (ValidatorUtil.IsBlank(model.SearchWord) || 
+                                                                                                                  x.UnSignDealerAddress.ToLower().Contains(model.SearchWord.RemoveSignVietnameseString().ToLower()) ||
+                                                                                                                  x.UnSignDealerName.ToLower().Contains(model.SearchWord.RemoveSignVietnameseString().ToLower()))).ToList();
 
 
             if (!dealerDataQuery.Any())

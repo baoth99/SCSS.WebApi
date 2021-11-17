@@ -20,11 +20,18 @@ namespace SCSS.Aplication.BackgroundService.Implementations
 
         #endregion
 
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PromotionService"/> class.
+        /// </summary>
+        /// <param name="unitOfWork">The unit of work.</param>
         public PromotionService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _promotionRepository = unitOfWork.PromotionRepository;
         }
 
+        #endregion
 
         #region Scan Expired Promotion
 

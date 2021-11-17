@@ -53,6 +53,7 @@ namespace SCSS.Utilities.Constants
         public const string DDD_DD_MMM_yyy_HH_mm = @"ddd, dd MMM yyyy";
         public const string DDD_DD_MM_yyyy = @"ddd, dd/MM/yyyy";
         public const string DDD_dd_MMM = "ddd, dd MMM";
+        public const string MMMM_yyyy = "MMMM, yyyy";
     }
 
     public class TimeSpanFormat

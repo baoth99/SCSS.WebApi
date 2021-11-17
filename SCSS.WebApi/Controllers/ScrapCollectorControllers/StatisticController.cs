@@ -30,7 +30,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
 
         #endregion
 
-        #region MyRegion
+        #region Get Statistic
 
         /// <summary>
         /// Gets the statistic.
@@ -50,5 +50,25 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
 
         #endregion
 
+
+        #region Get Statistic
+
+        /// <summary>
+        /// Gets the statistic.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapCollectorApiUrlDefinition.StatisticApiUrl.GetServiceFee)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetServiceFee()
+        {
+            return await _statisticService.GetServiceFeeInMonth();
+        }
+
+        #endregion
     }
 }

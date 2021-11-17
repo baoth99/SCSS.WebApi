@@ -259,8 +259,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
             _accountRepository.Update(sellerAccount);
 
             await UnitOfWork.CommitAsync();
-
-
             // Send Notification to Seller
 
             var notifications = new List<NotificationMessageQueueModel>()

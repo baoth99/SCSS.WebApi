@@ -249,16 +249,22 @@ namespace SCSS.Data.EF.UnitOfWork
         /// </summary>
         public async Task CommitAsync()
         {
-            try
-            {
-                await AppDbContext.SaveChangesAsync();
-                CommitTransaction();
-            }
-            catch (Exception ex)
-            {
-                RollbackTransaction();
-                throw ex;
-            }
+            var executionStrategy = AppDbContext.Database.CreateExecutionStrategy();
+
+            await executionStrategy.ExecuteAsync(async () =>
+                    {
+                        try
+                        {
+                            BeginTransaction();
+                            await AppDbContext.SaveChangesAsync();
+                            CommitTransaction();
+                        }
+                        catch (Exception ex)
+                        {
+                            RollbackTransaction();
+                            throw ex;
+                        }
+                    });
         }
 
         #endregion

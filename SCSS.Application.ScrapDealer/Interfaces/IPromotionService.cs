@@ -29,5 +29,12 @@ namespace SCSS.Application.ScrapDealer.Interfaces
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
         Task<BaseApiResponseModel> GetPromotionDetail(Guid id);
+
+        /// <summary>
+        /// Finishes the promotion.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> FinishPromotion(Guid id);
     }
 }

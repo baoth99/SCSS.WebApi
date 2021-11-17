@@ -44,6 +44,7 @@ namespace SCSS.WebApi.SystemConstants
         public static class StatisticApiUrl
         {
             public const string GetStatistic = Statistic + "/get";
+            public const string GetServiceFee = Statistic + "/service-fee";
         }
 
         public static class NotificationApiUrl

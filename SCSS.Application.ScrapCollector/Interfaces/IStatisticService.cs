@@ -1,4 +1,5 @@
-﻿using SCSS.Application.ScrapCollector.Models.StatisticModels;
+﻿using SCSS.Application.ScrapCollector.Models;
+using SCSS.Application.ScrapCollector.Models.StatisticModels;
 using SCSS.Utilities.ResponseModel;
 using System;
 using System.Collections.Generic;
@@ -17,5 +18,10 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         /// <returns></returns>
         Task<BaseApiResponseModel> GetStatisticInTimeRange(StatisticDateFilterModel model);
 
+        /// <summary>
+        /// Gets the service fee in month.
+        /// </summary>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> GetServiceFeeInMonth();
     }
 }
