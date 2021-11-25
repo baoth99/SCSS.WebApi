@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SCSS.Application.ScrapCollector.Models.StatisticModels
 {
@@ -11,6 +8,12 @@ namespace SCSS.Application.ScrapCollector.Models.StatisticModels
         public Guid Id { get; set; }
 
         public string TimePeriod { get; set; }
+
+        public DateTime? DateTimeFrom { get; set; }
+
+        public DateTime? DateTimeTo { get; set; }
+
+        public bool IsFinished { get; set; }
 
         public long? Amount { get; set; }
     }

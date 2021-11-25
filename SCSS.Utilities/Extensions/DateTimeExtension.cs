@@ -513,6 +513,33 @@ namespace SCSS.Utilities.Extensions
 
         #endregion
 
+        #region Get First Day Of Month
+
+        /// <summary>
+        /// Firsts the day of month.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public static DateTime GetFirstDayOfMonth(this DateTime value)
+        {
+            return new DateTime(value.Year, value.Month, 1);
+        }
+
+        #endregion
+
+        #region Get Last Day Of Month
+
+        /// <summary>
+        /// Gets the last day of month.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public static DateTime GetLastDayOfMonth(this DateTime value)
+        {
+            return new DateTime(value.Year, value.Month, DateTime.DaysInMonth(value.Year, value.Month));
+        }
+
+        #endregion
 
     }
 }

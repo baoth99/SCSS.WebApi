@@ -22,7 +22,7 @@ namespace SCSS.Worker.RequestNotifier
                 var environment = Environment.CurrentDirectory;
                 if (env.IsProduction())
                 {
-                    environment = Environment.GetEnvironmentVariable("NLog.SCSS.Worker.RequestNotifier");
+                    environment = Environment.GetEnvironmentVariable("SCSS.Worker.RequestNotifier");
                 }
                 config.SetBasePath(environment).AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
                 config.AddEnvironmentVariables();

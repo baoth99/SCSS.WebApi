@@ -122,6 +122,7 @@ namespace SCSS.Utilities.Configurations
             public const string TraceFuturePromotionStart = "TaskSchedule:TraceFuturePromotionStart";
             public const string DelayMinutes = "TaskSchedule:DelayMinutes";
             public const string NoticeToCollector = "TaskSchedule:NoticeToCollector";
+            public const string SummaryServiceTransaction = "TaskSchedule:SummaryServiceTransaction";
         }
     }
 }

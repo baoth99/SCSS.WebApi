@@ -348,7 +348,11 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </returns>
         private async Task<bool> IsDuplicateSCName(string name)
         {
-            return await _scrapCategoryRepository.IsExistedAsync(x => x.Name.Equals(name) && x.Status == ScrapCategoryStatus.ACTIVE && x.AccountId.Equals(UserAuthSession.UserSession.Id));
+            var scrapCategory = await _scrapCategoryRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id) && x.Status == ScrapCategoryStatus.ACTIVE).ToListAsync();
+
+            var isExisted = scrapCategory.Where(x => x.Name.Equals(name)).Any();
+
+            return isExisted;
         }
 
         #endregion

@@ -258,6 +258,14 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             _accountRepository.Update(sellerAccount);
 
+            var serviceTransactionNow = UnitOfWork.ServiceTransactionRepository.GetAsNoTracking(x => x.CollectorId.Equals(UserAuthSession.UserSession.Id) &&
+                                                                                                     !x.IsFinished);
+            if (serviceTransactionNow != null)
+            {
+                serviceTransactionNow.Amount += insertEntity.TransactionServiceFee;
+                UnitOfWork.ServiceTransactionRepository.Update(serviceTransactionNow);
+            }
+
             await UnitOfWork.CommitAsync();
             // Send Notification to Seller
 

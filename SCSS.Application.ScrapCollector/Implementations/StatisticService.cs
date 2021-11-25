@@ -110,7 +110,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> GetServiceFeeInMonth()
         {
-            var dataQuery = UnitOfWork.ServiceTransactionRepository.GetManyAsNoTracking(x => x.CollectorId.Equals(UserAuthSession.UserSession.Id)).OrderBy(x => x.DateTimeTo);
+            var dataQuery = UnitOfWork.ServiceTransactionRepository.GetManyAsNoTracking(x => x.CollectorId.Equals(UserAuthSession.UserSession.Id)).OrderByDescending(x => x.DateTimeTo);
 
             var total = await dataQuery.CountAsync();
 
@@ -118,7 +118,10 @@ namespace SCSS.Application.ScrapCollector.Implementations
             {
                 Id = x.Id,
                 Amount = x.Amount,
-                TimePeriod = x.DateTimeTo.ToStringFormat(DateTimeFormat.MMMM_yyyy)
+                DateTimeFrom = x.DateTimeFrom,
+                DateTimeTo = x.DateTimeTo,
+                IsFinished = x.IsFinished,
+                TimePeriod = x.Period
             }).ToList();
 
             return BaseApiResponse.OK(resData: dataResult, totalRecord: total);

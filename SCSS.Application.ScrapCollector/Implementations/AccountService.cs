@@ -39,6 +39,11 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         private readonly IRepository<CollectorCoordinate> _collectorCoordinateRepository;
 
+        /// <summary>
+        /// The service transaction repository
+        /// </summary>
+        private readonly IRepository<ServiceTransaction> _serviceTransactionRepository;
+
         #endregion
 
         #region Services
@@ -72,6 +77,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
             _accountRepository = unitOfWork.AccountRepository;
             _roleRepository = unitOfWork.RoleRepository;
             _collectorCoordinateRepository = unitOfWork.CollectorCoordinateRepository;
+            _serviceTransactionRepository = unitOfWork.ServiceTransactionRepository;
             _storageBlobS3Service = storageBlobS3Service;
             _SQSPublisherService = SQSPublisherService;
         }
@@ -226,7 +232,20 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 Rating = DefaultConstant.Rating,
             };
 
-            _accountRepository.Insert(entity);
+            var insertedAccount = _accountRepository.Insert(entity);
+
+            var dateTimeFrom = DateTimeVN.DATE_NOW.GetFirstDayOfMonth();
+            var dateTimeTo = dateTimeFrom.GetLastDayOfMonth();
+
+            var serviceTransaction = new ServiceTransaction()
+            {
+                Amount = 0,
+                CollectorId = insertedAccount.Id,
+                IsFinished = BooleanConstants.FALSE,
+                DateTimeFrom = dateTimeFrom,
+                DateTimeTo = dateTimeTo,
+                Period = dateTimeFrom.ToStringFormat(DateTimeFormat.MMMM_yyyy)
+            };
 
             await UnitOfWork.CommitAsync();
             Logger.LogInfo(AccountRegistrationLoggerMessage.RegistrationSuccess(model.Phone, AccountRoleConstants.COLLECTOR));

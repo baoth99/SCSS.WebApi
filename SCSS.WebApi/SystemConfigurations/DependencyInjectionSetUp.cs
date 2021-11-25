@@ -28,6 +28,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Aplication.BackgroundService.Interfaces.ICollectingRequestService, SCSS.Aplication.BackgroundService.Implementations.CollectingRequestService>();
             services.AddScoped<SCSS.Aplication.BackgroundService.Interfaces.IPromotionService, SCSS.Aplication.BackgroundService.Implementations.PromotionService>();
             services.AddSingleton<SCSS.Aplication.BackgroundService.Interfaces.IQueueHandlingService, SCSS.Aplication.BackgroundService.Implementations.QueueHandlingService>();
+            services.AddScoped<SCSS.Aplication.BackgroundService.Interfaces.IServiceTransactionService, SCSS.Aplication.BackgroundService.Implementations.ServiceTransactionService>();
 
             #endregion
 
@@ -95,6 +96,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddHostedService<ScanExpiredPromotionHostedService>();
             services.AddHostedService<ScanFuturePromotionHostedService>();
             services.AddHostedService<CRReminderHostService>();
+            services.AddHostedService<ServiceTransactionHostedService>();
 
             #endregion
 

@@ -132,5 +132,7 @@ namespace SCSS.Utilities.Configurations
         public static string TraceExpiredPromotionStart => ConfigurationHelper.GetValue<string>(AppSettingKeys.TaskSchedule.TraceExpiredPromotionStart);
 
         public static string TraceFuturePromotionStart => ConfigurationHelper.GetValue<string>(AppSettingKeys.TaskSchedule.TraceFuturePromotionStart);
+
+        public static string SummaryServiceTransaction => ConfigurationHelper.GetValue<string>(AppSettingKeys.TaskSchedule.SummaryServiceTransaction);
     }
 }
