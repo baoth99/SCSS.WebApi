@@ -65,6 +65,8 @@ namespace SCSS.Data.EF
 
         public DbSet<CollectDealTransactionDetail> CollectDealTransactionDetail { get; set; }
 
+        public DbSet<PersonalSellerLocation> PersonalSellerLocation { get; set; }
+
         public DbSet<Feedback> Feedback { get; set; }
 
         public DbSet<ImageSlider> ImageSlider { get; set; }

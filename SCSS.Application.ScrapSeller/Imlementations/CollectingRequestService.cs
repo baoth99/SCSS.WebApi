@@ -355,7 +355,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             if (model.Status == CollectingRequestStatus.APPROVED)
             {
-                if (model.RequestType == CollectingRequestType.CURRENT_REQUEST)
+                if (CollectionConstants.CurrentRequests.Contains(model.RequestType.Value)) // TODO: 
                 {
                     var approvedTime = model.ApprovedTime.Value.TimeOfDay;
                     var timeRange = (int)DateTimeVN.TIMESPAN_NOW.Subtract(approvedTime).TotalMinutes;

@@ -27,7 +27,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         public async Task<BaseApiResponseModel> GetCollectingRequestReceivedList(CollectingRequestReceivingFilterModel model)
         {
             var collectorId = UserAuthSession.UserSession.Id;
-            var receivingDataQuery = _collectingRequestRepository.GetMany(x => x.CollectorAccountId.Equals(collectorId) &&
+            var receivingDataQuery = _collectingRequestRepository.GetMany(x => x.CollectorAccountId == collectorId &&
                                                                                x.Status == CollectingRequestStatus.APPROVED)
                                                                   .Join(_locationRepository.GetAllAsNoTracking(), x => x.LocationId, y => y.Id,
                                                                                (x, y) => new
@@ -109,7 +109,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                                                                  x.DurationTimeText,
                                                              }).OrderBy(x => x.DistanceVal);
 
-            var currentRequest = receivedData.Where(x => x.RequestType == CollectingRequestType.CURRENT_REQUEST).OrderBy(x => x.DistanceVal);
+            var currentRequest = receivedData.Where(x => CollectionConstants.CurrentRequests.Contains(x.RequestType.Value)).OrderBy(x => x.DistanceVal);
             var appointment = receivedData.Where(x => x.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT).OrderBy(x => x.CollectingRequestDate);
 
             var collectingRequests = currentRequest.Concat(appointment);

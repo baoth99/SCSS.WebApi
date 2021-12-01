@@ -138,6 +138,15 @@ namespace SCSS.Data.EF.UnitOfWork
         IRepository<Notification> NotificationRepository { get; }
 
         /// <summary>
+        /// Gets or sets the personal seller location repository.
+        /// </summary>
+        /// <value>
+        /// The personal seller location repository.
+        /// </value>
+        IRepository<PersonalSellerLocation> PersonalSellerLocationRepository { get; }
+
+
+        /// <summary>
         /// Gets the promotion repository.
         /// </summary>
         /// <value>

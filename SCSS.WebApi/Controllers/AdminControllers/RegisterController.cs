@@ -13,6 +13,7 @@ using CollectorSendOTPRequestModel = SCSS.Application.ScrapCollector.Models.Acco
 using IDealerAccountService = SCSS.Application.ScrapDealer.Interfaces.IAccountService;
 using DealerSendOTPRequestModel = SCSS.Application.ScrapDealer.Models.AccountModels.SendOTPRequestModel;
 using SCSS.WebApi.AuthenticationFilter;
+using SCSS.Application.ScrapDealer.Models.AccountModels;
 
 namespace SCSS.WebApi.Controllers.AdminControllers
 {
@@ -68,14 +69,30 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #endregion
 
-
-        #region Send OTP to Register
+        #region Create Collector Account
 
         /// <summary>
-        /// Sends the otp to register.
+        /// Creates the collector.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.RegisterApiUrl.CreateCollector)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> CreateCollector([FromBody] CollectorAccountRegisterRequestModel model)
+        {
+            return await _collectorAccountService.RegisterCollectorAccount(model);
+        }
+
+
+        #endregion
+
+
+        #region Send Dealer OTP to Register
+
         //[HttpPost]
         //[ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
         //[ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
@@ -86,6 +103,26 @@ namespace SCSS.WebApi.Controllers.AdminControllers
         //{
         //    return await _dealerAccountService.SendOtpToRegister(model);
         //}
+
+        #endregion
+
+        #region Create Dealer Account
+
+        /// <summary>
+        /// Creates the collector.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.RegisterApiUrl.CreateDealer)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> CreateDealer([FromBody] DealerAccountRegisterRequestModel model)
+        {
+            return await _dealerAccountService.RegisterDealerAccount(model);
+        }
 
         #endregion
     }

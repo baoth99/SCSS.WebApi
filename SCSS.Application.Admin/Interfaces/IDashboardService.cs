@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SCSS.Utilities.ResponseModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,12 +9,6 @@ namespace SCSS.Application.Admin.Interfaces
 {
     public interface IDashboardService
     {
-        Task<int> GetAmountOfCollectingRequestInDay(DateTime dateTimeFrom, DateTime dateTimeTo);
-
-        Task<int> GetAmountOfTransactionInDay(DateTime dateTimeFrom, DateTime dateTimeTo);
-
-        Task<int> GetAmountOfNewUser();
-
-
+        Task<BaseApiResponseModel> GetStatisticInDay();
     }
 }

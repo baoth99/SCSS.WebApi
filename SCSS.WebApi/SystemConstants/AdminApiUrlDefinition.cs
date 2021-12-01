@@ -19,11 +19,19 @@ namespace SCSS.WebApi.SystemConstants
         private const string SellCollectTransaction = "transaction/sell-collect";
         private const string CollectDealTransaction = "transaction/collect-deal";
         private const string Register = "account-register";
+        private const string Dashboard = "dashboard";
+
+        public static class DashboardApiUrl
+        {
+            public const string Statistic = Dashboard;
+        }
 
         public static class RegisterApiUrl
         {
             public const string CollectorOtp = Register + "/collector-otp";
+            public const string CreateCollector = Register + "/collector";
             public const string DealerOtp = Register + "/dealer-otp";
+            public const string CreateDealer = Register + "/dealer";
         }
 
         public static class ComplaintApiUrl
@@ -96,11 +104,6 @@ namespace SCSS.WebApi.SystemConstants
             public const string AmountNewAccount = Hub + "/amount/new-user";
             public const string AmountCollectingRequest = Hub + "/amount/collecting-request";
             public const string AmountTransaction = Hub + "/amount/transaction";
-        }
-
-        public static class DashboardApiUrl
-        {
-            public const string Dashboard = "dashboard";
         }
 
         public static class ImageSliderApiUrl

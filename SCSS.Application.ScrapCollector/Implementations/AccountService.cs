@@ -227,7 +227,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 RoleId = role.Id,
                 Address = model.Address,
                 IdCard = model.IDCard,
-                Status = AccountStatus.NOT_APPROVED,
+                Status = AccountStatus.ACTIVE,
                 TotalPoint = DefaultConstant.TotalPoint,
                 Rating = DefaultConstant.Rating,
             };

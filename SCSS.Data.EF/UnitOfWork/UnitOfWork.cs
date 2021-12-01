@@ -85,6 +85,8 @@ namespace SCSS.Data.EF.UnitOfWork
 
         private IRepository<Promotion> _promotionRepository;
 
+        private IRepository<PersonalSellerLocation> _personalSellerLocationRepository;
+
         private IRepository<Role> _roleRepository;
 
         private IRepository<ScrapCategory> _scrapCategoryRepository;
@@ -156,6 +158,8 @@ namespace SCSS.Data.EF.UnitOfWork
         public IRepository<Notification> NotificationRepository => _notificationRepository ??= (_notificationRepository = new Repository<Notification>(AppDbContext));
 
         public IRepository<Promotion> PromotionRepository => _promotionRepository ??= (_promotionRepository = new Repository<Promotion>(AppDbContext));
+
+        public IRepository<PersonalSellerLocation> PersonalSellerLocationRepository => _personalSellerLocationRepository ??= (_personalSellerLocationRepository = new Repository<PersonalSellerLocation>(AppDbContext));
 
         public IRepository<Role> RoleRepository => _roleRepository ??= (_roleRepository = new Repository<Role>(AppDbContext));
 

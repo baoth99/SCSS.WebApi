@@ -11,7 +11,7 @@
         private const string Map = "map";
         private const string Dashboard = "dashboard";
         private const string Complaint = "seller-complaint";
-
+        private const string PersonalSellerLocation = "personal-location";
         public static class DashboardApiUrl
         {
             public const string NearestApprovedCR = Dashboard + "/nearest-approved-request";
@@ -55,6 +55,13 @@
             public const string UploadCollectingRequestImg = CollectingRequest + "/upload-img";
             public const string GetRemainingDays = CollectingRequest + "/remaining-days";
             public const string RequestAbility = CollectingRequest + "/request-ability";
+        }
+
+        public static class PersonalSellerLocationApiUrl
+        {
+            public const string GetLocation = PersonalSellerLocation + "/get";
+            public const string AddLocation = PersonalSellerLocation + "/add";
+            public const string RemoveLocation = PersonalSellerLocation + "/remove";
         }
 
         public static class ActivityApiUrl

@@ -58,6 +58,12 @@ namespace SCSS.Utilities.Constants
             CollectingRequestStatus.COMPLETED
         };
 
+        public static readonly List<int> CancelCollectingRequestByUser = new List<int>()
+        {
+            CollectingRequestStatus.CANCEL_BY_SELLER,
+            CollectingRequestStatus.CANCEL_BY_COLLECTOR
+        };
+
         public static readonly List<int> GenderCollection = new List<int>()
         {
             Gender.FEMALE,

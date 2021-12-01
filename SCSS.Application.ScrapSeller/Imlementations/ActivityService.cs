@@ -277,7 +277,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
             if (dataResult.Status == CollectingRequestStatus.APPROVED)
             {
-                if (crEntity.RequestType == CollectingRequestType.CURRENT_REQUEST)
+                if (CollectionConstants.CurrentRequests.Contains(crEntity.RequestType.Value))
                 {
                     var approvedTime = crEntity.ApprovedTime.Value.TimeOfDay;
                     var timeRange = (int)DateTimeVN.TIMESPAN_NOW.Subtract(approvedTime).TotalMinutes;

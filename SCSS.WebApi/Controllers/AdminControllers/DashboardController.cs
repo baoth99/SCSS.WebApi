@@ -28,12 +28,36 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DashboardController"/> class.
+        /// </summary>
+        /// <param name="dashboardService">The dashboard service.</param>
         public DashboardController(IDashboardService dashboardService)
         {
             _dashboardService = dashboardService;
         }
 
         #endregion
+
+        #region Get Statistic In Day
+
+        /// <summary>
+        /// Gets the statistic.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(AdminApiUrlDefinition.DashboardApiUrl.Statistic)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> GetStatistic()
+        {
+            return await _dashboardService.GetStatisticInDay();
+        }
+
+        #endregion
+
 
     }
 }

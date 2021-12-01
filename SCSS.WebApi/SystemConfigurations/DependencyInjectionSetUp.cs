@@ -87,6 +87,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IFeedbackService, SCSS.Application.ScrapSeller.Imlementations.FeedbackService>();
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IDashboardService, SCSS.Application.ScrapSeller.Imlementations.DashboardService>();
             services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IComplaintService, SCSS.Application.ScrapSeller.Imlementations.ComplaintService>();
+            services.AddScoped<SCSS.Application.ScrapSeller.Interfaces.IPersonalSellerLocationService, SCSS.Application.ScrapSeller.Imlementations.PersonalSellerLocationService>();
 
             #endregion Seller Application           
 

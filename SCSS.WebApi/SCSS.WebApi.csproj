@@ -54,12 +54,20 @@
     <None Update="AppData\SqlCommands\FeedbackCommands\SellerFeedbackToSystem.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="AppData\SqlCommands\StatisticCommands\AdminDashboardStatistic.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="AppData\SqlCommands\StatisticCommands\DealerDashboardStastistic.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="AppData\SqlCommands\StatisticCommands\CollectorDashboardStastistic.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SignalR\AdminHubs\Hubs\" />
+    <Folder Include="SignalR\AdminHubs\IHubs\" />
   </ItemGroup>
 
 </Project>
