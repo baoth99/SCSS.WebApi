@@ -15,6 +15,8 @@ namespace SCSS.Application.ScrapCollector.Models.AccountModels
 
         public string BirthDate { get; set; }
 
+        public string ImageUrl { get; set; }
+
         [Gender]
         public int Gender { get; set; }
 

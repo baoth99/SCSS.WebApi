@@ -10,6 +10,13 @@ namespace SCSS.Utilities.Helper
     public class CommonUtils
     {
 
+        public static string GeneratePassword(int length)
+        {
+            Random random = new Random();
+            return new string(Enumerable.Repeat(CommonConstants.Chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
         public static Guid? CheckGuid(string guidString)
         {
             var isValid = Guid.TryParse(guidString, out Guid val);

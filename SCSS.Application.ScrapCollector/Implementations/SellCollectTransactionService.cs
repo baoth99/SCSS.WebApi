@@ -295,7 +295,12 @@ namespace SCSS.Application.ScrapCollector.Implementations
 
             await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(notifications);
 
-            return BaseApiResponse.OK();
+            var response = new
+            {
+                Id = insertEntity.Id
+            };
+
+            return BaseApiResponse.OK(response);
         }
 
         #endregion

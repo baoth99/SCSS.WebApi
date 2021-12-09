@@ -90,5 +90,11 @@ namespace SCSS.WebApi.Controllers.AdminControllers
 
         #endregion
 
+        #region Check Connection
+
+
+
+        #endregion
+
     }
 }

@@ -223,6 +223,26 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
 
         #endregion
 
+        #region Check Collecting Request Is Approved
+
+        /// <summary>
+        /// Determines whether [is request approved] [the specified identifier].
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Ok)]
+        [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
+        [Route(ScrapCollectorApiUrlDefinition.CollectingRequestApiUrl.IsApproved)]
+        [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
+        public async Task<BaseApiResponseModel> IsRequestApproved([FromQuery] Guid id)
+        {
+            return await _collectingRequestService.CheckCollectingRequestIsApproved(id);
+        }
+
+        #endregion
+
         #region Collecting Request
 
         /// <summary>

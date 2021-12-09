@@ -4,8 +4,8 @@ namespace SCSS.Application.ScrapDealer.Models.AccountModels
 {
     public class DealerLeaderViewModel
     {
-        public Guid DealerAccId { get; set; }
+        public Guid Key { get; set; }
 
-        public string DealerName { get; set; }
+        public string Val { get; set; }
     }
 }

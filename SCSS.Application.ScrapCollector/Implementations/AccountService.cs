@@ -190,10 +190,13 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> RegisterCollectorAccount(CollectorAccountRegisterRequestModel model)
         {
+
+            var password = CommonUtils.GeneratePassword(NumberConstant.Eight);
+
             var dictionary = new Dictionary<string, string>()
             {
                 {"name", model.Name },
-                {"password", model.Password },
+                {"password", password },
                 {"email", string.Empty },
                 {"gender", model.Gender.ToString() },
                 {"phone", model.Phone },
@@ -247,8 +250,19 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 Period = dateTimeFrom.ToStringFormat(DateTimeFormat.MMMM_yyyy)
             };
 
+            _serviceTransactionRepository.Insert(serviceTransaction);
+
             await UnitOfWork.CommitAsync();
             Logger.LogInfo(AccountRegistrationLoggerMessage.RegistrationSuccess(model.Phone, AccountRoleConstants.COLLECTOR));
+
+            // Send SMS
+            var smsMessage = new SMSMessageQueueModel()
+            {
+                Phone = entity.Phone,
+                Content = SMSMessage.CreateAccountMessage(entity.Phone, password)
+            };
+
+            await _SQSPublisherService.SMSMessageQueuePublisher.SendMessageAsync(smsMessage);
 
             return BaseApiResponse.OK();
         }

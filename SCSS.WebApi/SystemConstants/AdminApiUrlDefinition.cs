@@ -20,6 +20,7 @@ namespace SCSS.WebApi.SystemConstants
         private const string CollectDealTransaction = "transaction/collect-deal";
         private const string Register = "account-register";
         private const string Dashboard = "dashboard";
+        private const string Map = "map";
 
         public static class DashboardApiUrl
         {
@@ -28,10 +29,13 @@ namespace SCSS.WebApi.SystemConstants
 
         public static class RegisterApiUrl
         {
+            public const string UploadCollectorImage = Register + "/collector/upload-image";
+            public const string UploadDealerImage = Register + "/dealer/upload-image";
             public const string CollectorOtp = Register + "/collector-otp";
             public const string CreateCollector = Register + "/collector";
             public const string DealerOtp = Register + "/dealer-otp";
             public const string CreateDealer = Register + "/dealer";
+            public const string GetDealerLeader = Register + "/dealers-leader";
         }
 
         public static class ComplaintApiUrl
@@ -117,6 +121,7 @@ namespace SCSS.WebApi.SystemConstants
         }
         public static class AccountApiUrl
         {
+            
             public const string ChangeStatus = Account + "/change-status";
             public const string Search = Account + "/search";
             public const string Detail = Account + "/detail";
@@ -140,6 +145,14 @@ namespace SCSS.WebApi.SystemConstants
         {
             public const string Search = DealerInformation + "/search";
             public const string GetDetail = DealerInformation + "/detail";
+        }
+
+        public static class MapApiUrl
+        {
+            public const string AutoComplete = Map + "/place/autoComplete";
+            public const string PlaceDetail = Map + "/place/detail";
+            public const string ReverseGeocoding = Map + "/geocode";
+            public const string Direction = Map + "/direction";
         }
     }
 }

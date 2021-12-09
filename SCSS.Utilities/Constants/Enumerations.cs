@@ -28,6 +28,7 @@
         DealerAccount,
         DealerInformation,
         CollectorAccount,
+        Avatar,
         ImageSlider,
         ScrapCategory,
         ScrapCollectingRequest

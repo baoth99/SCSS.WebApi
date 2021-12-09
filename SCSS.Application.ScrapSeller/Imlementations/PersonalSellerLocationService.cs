@@ -107,6 +107,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                                                                 {
                                                                     x.Id,
                                                                     x.PlaceId,
+                                                                    x.PlaceName,
                                                                     y.AddressName,
                                                                     y.Address,
                                                                     y.City,
@@ -124,6 +125,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 Address = x.Address,
                 AddressName = x.AddressName,
                 PlaceId = x.PlaceId,
+                PlaceName = x.PlaceName,
                 City = x.City,
                 District = x.District,
                 Latitude = x.Latitude,

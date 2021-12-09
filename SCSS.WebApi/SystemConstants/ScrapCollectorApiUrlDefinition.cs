@@ -93,6 +93,7 @@ namespace SCSS.WebApi.SystemConstants
             public const string GetReceivedList = CollectingRequest + "/receive/get";
             public const string GetReceivedDetail = CollectingRequest + "/receive/detail";
             public const string Cancel = CollectingRequest + "/cancel";
+            public const string IsApproved = CollectingRequest + "/is-approved";
             public const string CancelReasons = CollectingRequest + "/cancel-reasons";
         }
 

@@ -40,5 +40,14 @@
             return sms;
         }
 
+        public static string CreateAccountMessage(string phone, string password)
+        {
+            return HeaderMessage + "Tai khoan cua ban da duoc dang ky thanh cong. \n" + 
+                   $"Tai Khoan {phone} \n" +
+                   $"Mat Khau: {password} \n" +
+                   "Hay dang nhap vao ung dung va doi mat khau ngay, vui long khong tiet lo mat khau cho nguoi khac. \n" +
+                   Contact;
+        }
+
     }
 }

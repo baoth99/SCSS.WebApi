@@ -17,6 +17,8 @@ namespace SCSS.Application.ScrapDealer.Models.AccountModels
 
         public string BirthDate { get; set; }
 
+        public string Avatar { get; set; }
+
         public string Address { get; set; }
 
         [Gender]
@@ -40,6 +42,8 @@ namespace SCSS.Application.ScrapDealer.Models.AccountModels
         public string DealerPhone { get; set; }
 
         public string DealerAddress { get; set; }
+
+        public string DealerAddressName { get; set; }
 
         public decimal? Latitude { get; set; }
 

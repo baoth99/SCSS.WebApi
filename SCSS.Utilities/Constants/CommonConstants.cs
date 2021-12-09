@@ -9,7 +9,9 @@ namespace SCSS.Utilities.Constants
         public const int Four = 4;
         public const int NegativeOne = -1;
         public const int Five = 5;
+        public const int Six = 6;
         public const int Seven = 7;
+        public const int Eight = 8;
         public const int Ten = 10;
         public const int Fifteen = 15;
         public const int Twenty = 20;
@@ -68,6 +70,7 @@ namespace SCSS.Utilities.Constants
         public const int Zero = 0;
         public const string ContentType = "Content-Type";
         public const string Null = "N/A";
+        public const string Chars = "abcdefghijklmnopqrstuvwxyz0123456789";
     }
 
     public class DefaultConstant

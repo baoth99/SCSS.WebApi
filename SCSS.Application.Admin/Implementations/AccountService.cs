@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using SCSS.Application.Admin.Interfaces;
 using SCSS.Application.Admin.Models.AccountModels;
 using SCSS.AWSService.Interfaces;
@@ -6,6 +7,7 @@ using SCSS.AWSService.Models.SQSModels;
 using SCSS.Data.EF.Repositories;
 using SCSS.Data.EF.UnitOfWork;
 using SCSS.Data.Entities;
+using SCSS.ORM.Dapper.Interfaces;
 using SCSS.Utilities.AuthSessionConfig;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
@@ -34,6 +36,11 @@ namespace SCSS.Application.Admin.Implementations
         /// </summary>
         private readonly IRepository<Role> _roleRepository;
 
+        /// <summary>
+        /// The collecting request repository
+        /// </summary>
+        private readonly IRepository<CollectingRequest> _collectingRequestRepository;
+
         #endregion
 
         #region Services
@@ -42,6 +49,11 @@ namespace SCSS.Application.Admin.Implementations
         /// The SQS publisher service
         /// </summary>
         private readonly ISQSPublisherService _SQSPublisherService;
+
+        /// <summary>
+        /// The dapper service
+        /// </summary>
+        private readonly IDapperService _dapperService;
 
         #endregion
 
@@ -53,11 +65,15 @@ namespace SCSS.Application.Admin.Implementations
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="userAuthSession">The user authentication session.</param>
         /// <param name="logger">The logger.</param>
-        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, ISQSPublisherService SQSPublisherService) : base(unitOfWork, userAuthSession, logger)
+        /// <param name="SQSPublisherService">The SQS publisher service.</param>
+        /// <param name="dapperService">The dapper service.</param>
+        public AccountService(IUnitOfWork unitOfWork, IAuthSession userAuthSession, ILoggerService logger, ISQSPublisherService SQSPublisherService, IDapperService dapperService) : base(unitOfWork, userAuthSession, logger)
         {
             _accountRepository = unitOfWork.AccountRepository;
+            _collectingRequestRepository = unitOfWork.CollectingRequestRepository;
             _roleRepository = unitOfWork.RoleRepository;
             _SQSPublisherService = SQSPublisherService;
+            _dapperService = dapperService;
         }
 
         #endregion
@@ -199,6 +215,25 @@ namespace SCSS.Application.Admin.Implementations
             if (model.Status == AccountStatus.BANNING)
             {
                 message = SMSMessage.BlockSMS();
+
+                var role = _roleRepository.GetById(account.Status);
+
+                if (role.Key == AccountRole.COLLECTOR)
+                {
+                    var sql = "UPDATE [CollectingRequest] \n" +
+                              "SET [Status] = @CancelBySystemStatus, [UpdatedTime] = @UpdateTime, [UpdatedBy] = @UpdatedBy \n" +
+                              "WHERE [ColletorAccountId] = @CollectorAccountId && \n" +
+                                    "[Status] = @ApprovedStatus";
+
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@CancelBySystemStatus", CollectingRequestStatus.CANCEL_BY_SYSTEM);
+                    parameters.Add("@UpdateTime", DateTimeVN.DATETIME_NOW);
+                    parameters.Add("@UpdatedBy", Guid.Empty);
+                    parameters.Add("@CollectorAccountId", account.Id);
+                    parameters.Add("@ApprovedStatus", CollectingRequestStatus.APPROVED);
+
+                    await _dapperService.SqlExecuteAsync(sql, parameters);
+                }
             }
 
             if (model.Status == AccountStatus.REJECT)

@@ -12,6 +12,8 @@ namespace SCSS.Application.ScrapSeller.Models.PersonalSellerLocationModel
 
         public string PlaceId { get; set; }
 
+        public string PlaceName { get; set; }
+
         public string AddressName { get; set; }
 
         public string Address { get; set; }

@@ -12,6 +12,7 @@ using SCSS.Utilities.Constants;
 using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -188,19 +189,23 @@ namespace SCSS.Application.ScrapDealer.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> RegisterDealerAccount(DealerAccountRegisterRequestModel model)
         {
+            var password = CommonUtils.GeneratePassword(NumberConstant.Eight);
+
             var dictionary = new Dictionary<string, string>()
             {
                 {"name", model.Name },
-                {"password", model.Password },
+                {"password", password },
                 {"email", string.Empty },
                 {"gender", model.Gender.ToString() },
                 {"phone", model.Phone },
                 {"address", model.Address }, 
                 {"birthdate", model.BirthDate }, 
-                {"image", string.Empty },
+                {"image", model.Avatar },
                 {"idcard", model.IDCard },
                 {"registertoken", model.RegisterToken }
             };
+
+            model.ManageBy = GetManageBy(model.ManageBy);
 
             var IDServer4Route = ValidatorUtil.IsNull(model.ManageBy) ? IdentityServer4Route.RegisterDealer : IdentityServer4Route.RegisterDealerMember;
 
@@ -210,6 +215,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
             {
                 return BaseApiResponse.Error(SystemMessageCode.OtherException);
             }
+
 
             // Get Role, If model.ManageBy is not null, role Key is Dealer Member, In Contrast model.ManageBy is null, role Key is Dealer
             var roleKey = ValidatorUtil.IsNull(model.ManageBy) ? AccountRole.DEALER : AccountRole.DEALER_MEMBER;
@@ -225,18 +231,19 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 Name = model.Name,
                 UserName = model.Phone,
                 Gender = model.Gender,
+                ImageUrl = model.Avatar,
                 DeviceId = model.DeviceId,
                 Phone = model.Phone,
                 BirthDate = model.BirthDate.ToDateTime(),
                 RoleId = role.Id,
                 Address = model.Address,
                 IdCard = model.IDCard,
-                Status = AccountStatus.NOT_APPROVED,
+                Status = AccountStatus.ACTIVE,
                 TotalPoint = DefaultConstant.TotalPoint
             };
 
             // Check Dealer is branch, If model.ManageBy is not null, this dealer is branch
-            if (!ValidatorUtil.IsBlank(model.ManageBy))
+            if (!ValidatorUtil.IsNull(model.ManageBy))
             {
                 accountEntity.ManagedBy = model.ManageBy;
             }
@@ -258,6 +265,8 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 LocationId = locationEntity.Id,
                 DealerPhone = model.DealerPhone,
                 DealerName = model.DealerName,
+                OpenTime = model.ActivityTimeFrom.ToTimeSpan(),
+                CloseTime = model.ActivityTimeTo.ToTimeSpan()
             };
 
             var imageFile = model.Image;
@@ -275,10 +284,26 @@ namespace SCSS.Application.ScrapDealer.Implementations
             // Commit to Database
             await UnitOfWork.CommitAsync();
 
+            // Send SMS
+            var smsMessage = new SMSMessageQueueModel()
+            {
+                Phone = accountEntity.Phone,
+                Content = SMSMessage.CreateAccountMessage(accountEntity.Phone, password)
+            };
+
+            await _SQSPublisherService.SMSMessageQueuePublisher.SendMessageAsync(smsMessage);
+
             return BaseApiResponse.OK();
         }
 
+        private Guid? GetManageBy(Guid? manageBy)
+        {
+            return ValidatorUtil.IsBlank(manageBy) ? null : manageBy;
+        }
+
         #endregion Register Scrap Dealer Account
+
+
 
         #region Update Dealer Account
 
@@ -423,8 +448,8 @@ namespace SCSS.Application.ScrapDealer.Implementations
 
             var dataResult = dataQuery.Select(x => new DealerLeaderViewModel()
             {
-                DealerAccId = x.DealerAccId,
-                DealerName = x.DealerName
+                Key = x.DealerAccId,
+                Val = x.DealerName
             }).ToList();
 
             return BaseApiResponse.OK(totalRecord: totalRecord, resData: dataResult);

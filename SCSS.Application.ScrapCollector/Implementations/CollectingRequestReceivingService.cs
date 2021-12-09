@@ -358,5 +358,31 @@ namespace SCSS.Application.ScrapCollector.Implementations
         }
 
         #endregion Validate Cancel Collecting Request Received
+
+        #region Check collecting request is approved
+
+        /// <summary>
+        /// Checks the collecting request is approved.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        public async Task<BaseApiResponseModel> CheckCollectingRequestIsApproved(Guid id)
+        {
+            var collectingRequest = await _collectingRequestRepository.GetAsync(x => x.Id == id);
+
+            if (collectingRequest == null)
+            {
+                return BaseApiResponse.NotFound(); 
+            }
+
+            var result = new
+            {
+                IsApproved = collectingRequest.Status == CollectingRequestStatus.APPROVED
+            };
+
+            return BaseApiResponse.OK(result);
+        }
+
+        #endregion
     }
 }

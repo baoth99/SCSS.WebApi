@@ -70,5 +70,12 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         /// <returns></returns>
         Task<BaseApiResponseModel> CancelCollectingRequestReceived(CollectingRequestReceivedCancelModel model);
 
+        /// <summary>
+        /// Checks the collecting request is approved.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        Task<BaseApiResponseModel> CheckCollectingRequestIsApproved(Guid id);
+
     }
 }
