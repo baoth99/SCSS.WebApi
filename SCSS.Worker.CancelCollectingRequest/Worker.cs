@@ -48,7 +48,7 @@ namespace SCSS.Worker.CancelCollectingRequest
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             //!stoppingToken.IsCancellationRequested
-            while (BooleanConstants.TRUE)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 await DoWork();
                 await Task.Delay(TimeSpan.FromMinutes(AppSettingValues.DelayMinutesSchedule));

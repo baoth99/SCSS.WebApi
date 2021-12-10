@@ -24,7 +24,7 @@ namespace SCSS.Application.ScrapSeller.Interfaces
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        Task<BaseApiResponseModel> CancelCollectingRequest(CollectingRequestCancelModel model);
+        Task<CollectingRequestResponseModel> CancelCollectingRequest(CollectingRequestCancelModel model);
 
         /// <summary>
         /// Gets the number of remaining days.

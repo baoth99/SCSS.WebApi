@@ -4,7 +4,7 @@
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development" //Production, Testing, Development
+        "DOTNET_ENVIRONMENT": "Production" //Production, Testing, Development
       }
     }
   }

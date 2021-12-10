@@ -331,7 +331,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        public async Task<Tuple<Guid?, Guid, string>> ReceiveCollectingRequest(Guid id)
+        public async Task<CollectingRequestResponseModel> ReceiveCollectingRequest(Guid id)
         {
             var collectingRequestEntity = _collectingRequestRepository.GetById(id);
 
@@ -383,8 +383,16 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     }
                 }
 
+                var res = new CollectingRequestResponseModel()
+                {
+                    Id = id,
+                    CollectingRequestCode = collectingRequestEntity.CollectingRequestCode,
+                    RequestType = collectingRequestEntity.RequestType,
+                    Status = collectingRequestEntity.Status,
+                    SellerAccountId = collectingRequestEntity.SellerAccountId
+                };
 
-                return new Tuple<Guid?, Guid, string>(collectingRequestEntity.SellerAccountId, id, collectingRequestEntity.CollectingRequestCode);
+                return res;
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -413,7 +421,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     AccountId = sellerInfo.Id,
                     Title = NotificationMessage.SellerCollectingRequestReceviedTitle,
                     Body = NotificationMessage.SellerCollectingRequestReceviedBody(collectingRequestCode),
-                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, requestId.ToString()),
+                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, requestId.ToString(), CollectingRequestStatus.APPROVED.ToString()),
                     DeviceId = sellerInfo.DeviceId,
                     NotiType = NotificationType.CollectingRequest,
                     ReferenceRecordId = requestId
@@ -423,7 +431,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     AccountId = UserAuthSession.UserSession.Id,
                     Title = NotificationMessage.CollectorCollectingRequestReceviedTitle,
                     Body = NotificationMessage.CollectorCollectingRequestReceviedBody(collectingRequestCode), 
-                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, requestId.ToString()), 
+                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, requestId.ToString(), CollectingRequestStatus.APPROVED.ToString()), 
                     DeviceId = UserAuthSession.UserSession.DeviceId,
                     NotiType = NotificationType.CollectingRequest,
                     ReferenceRecordId = requestId

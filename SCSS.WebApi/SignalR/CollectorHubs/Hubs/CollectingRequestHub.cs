@@ -1,4 +1,5 @@
-﻿using SCSS.WebApi.SignalR.CollectorHubs.IHubs;
+﻿using SCSS.Application.ScrapSeller.Models.CollectingRequestModels;
+using SCSS.WebApi.SignalR.CollectorHubs.IHubs;
 using System;
 using System.Threading.Tasks;
 
@@ -11,10 +12,10 @@ namespace SCSS.WebApi.SignalR.CollectorHubs.Hubs
         /// <summary>
         /// Receives the collecting request.
         /// </summary>
-        /// <param name="collectingRequestId">The collecting request identifier.</param>
-        public async Task ReceiveCollectingRequest(Guid collectingRequestId)
+        /// <param name="model">The model.</param>
+        public async Task ReceiveCollectingRequest(CollectingRequestNoticeModel model)
         {
-            await Clients.All.ReceiveCollectingRequest(collectingRequestId);
+            await Clients.All.ReceiveCollectingRequest(model);
         }
 
         #endregion

@@ -79,7 +79,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                 AccountId = collectorInfo.Id,
                                 Title = NotificationMessage.CollectorReminderTitle(item.CollectingRequestCode), 
                                 Body = NotificationMessage.CollectorReminderBody(item.CollectingRequestCode, item.AddressName),
-                                DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, item.Id.ToString()),
+                                DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, item.Id.ToString(), CollectingRequestStatus.APPROVED.ToString()),
                                 NotiType = NotificationType.CollectingRequest,
                                 ReferenceRecordId = item.Id,
                                 DeviceId = collectorInfo.DeviceId

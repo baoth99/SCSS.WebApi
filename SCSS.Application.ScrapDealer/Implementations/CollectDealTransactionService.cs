@@ -359,7 +359,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                     ReferenceRecordId = insertEntity.Id,
                     Title = NotificationMessage.CompletedCollectDealTransDealerTitle,
                     Body = NotificationMessage.CompletedCollectDealTransDealerBody(insertEntity.TransactionCode),
-                    DataCustom = DictionaryConstants.FirebaseCustomData(DealerAppScreen.TransactionScreen, insertEntity.Id.ToString())
+                    DataCustom = DictionaryConstants.FirebaseCustomData(DealerAppScreen.TransactionScreen, insertEntity.Id.ToString(), CollectingRequestStatus.COMPLETED.ToString())
                 },
                 new NotificationMessageQueueModel()
                 {
@@ -369,7 +369,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                     ReferenceRecordId = insertEntity.Id,
                     Title = NotificationMessage.CompletedCollectDealTransCollectorTitle,
                     Body = NotificationMessage.CompletedCollectDealTransCollectorBody(insertEntity.TransactionCode),
-                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.DealerHistoryScreen, insertEntity.Id.ToString())
+                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.DealerHistoryScreen, insertEntity.Id.ToString(), CollectingRequestStatus.COMPLETED.ToString())
                 }
             };
 

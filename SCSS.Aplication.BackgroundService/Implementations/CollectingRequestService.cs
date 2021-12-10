@@ -127,7 +127,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                                                 DeviceId = x.SellerDeviceId,
                                                                 Title = NotificationMessage.SystemCancelCRTitle,
                                                                 Body = NotificationMessage.SystemCancelCRSellerBody(x.CollectingRequestCode, x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy)),
-                                                                DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, x.CollectingRequestId.ToString()),
+                                                                DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, x.CollectingRequestId.ToString(), CollectingRequestStatus.CANCEL_BY_SYSTEM.ToString()),
                                                                 NotiType = NotificationType.CollectingRequest,
                                                                 ReferenceRecordId = x.CollectingRequestId
                                                             }).ToList();
@@ -154,7 +154,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                                             DeviceId = x.CollectorDeviceId,
                                                             Title = NotificationMessage.SystemCancelCRTitle,
                                                             Body = NotificationMessage.SystemCancelCRCollectorBody(x.CollectingRequestCode, x.CollectingRequestDate.ToStringFormat(DateTimeFormat.DD_MM_yyyy)),
-                                                            DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, x.CollectingRequestId.ToString()),
+                                                            DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, x.CollectingRequestId.ToString(), CollectingRequestStatus.CANCEL_BY_SYSTEM.ToString()),
                                                             NotiType = NotificationType.CollectingRequest,
                                                             ReferenceRecordId = x.CollectingRequestId
                                                         }).ToList();
@@ -300,6 +300,8 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                                   {
                                       AccountId = y.Id,
                                       CollectingRequestId = x.Id,
+                                      x.RequestType,
+                                      x.Status,
                                       x.CollectingRequestCode,
                                       y.DeviceId
                                   }).FirstOrDefault();
@@ -312,12 +314,22 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                     Title = NotificationMessage.CancelCollectingRequestTitleSystem(messageInfo.CollectingRequestCode),
                     Body = NotificationMessage.CancelCollectingRequestBodySystem(messageInfo.CollectingRequestCode),
                     DeviceId = messageInfo.DeviceId,
-                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, messageInfo.CollectingRequestId.ToString()),
+                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, messageInfo.CollectingRequestId.ToString(), CollectingRequestStatus.CANCEL_BY_SYSTEM.ToString()),
                     NotiType = NotificationType.CollectingRequest,
                     ReferenceRecordId = messageInfo.CollectingRequestId
                 };
 
                 await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessageAsync(publishModel);
+
+                // signalR
+                var publishRealtimeModel = new CollectingRequestRealtimeQueueModel()
+                {
+                    CollectingRequestId = messageInfo.CollectingRequestId,
+                    RequestType = messageInfo.RequestType,
+                    Status = messageInfo.Status
+                };
+
+                await _SQSPublisherService.CollectingRequestRealtimePublisher.SendMessageAsync(publishRealtimeModel);
             }
         }
 

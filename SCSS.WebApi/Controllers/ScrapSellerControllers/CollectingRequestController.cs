@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using SCSS.Application.Admin.Models;
 using SCSS.Application.ScrapSeller.Interfaces;
 using SCSS.Application.ScrapSeller.Models.CollectingRequestModels;
@@ -8,6 +9,8 @@ using SCSS.Utilities.Constants;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
+using SCSS.WebApi.SignalR.CollectorHubs.Hubs;
+using SCSS.WebApi.SignalR.CollectorHubs.IHubs;
 using SCSS.WebApi.SystemConstants;
 using System.Threading.Tasks;
 
@@ -30,6 +33,15 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
 
         #endregion Services
 
+        #region HubContext
+
+        /// <summary>
+        /// The collecing request hub context
+        /// </summary>
+        private readonly IHubContext<CollectingRequestHub, ICollecingRequestHub> _collecingRequestHubContext;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -37,10 +49,12 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         /// </summary>
         /// <param name="collectingRequestService">The collecting request service.</param>
         /// <param name="storageBlobService">The storage BLOB service.</param>
-        public CollectingRequestController(ICollectingRequestService collectingRequestService, IStorageBlobS3Service storageBlobService)
+        /// <param name="collecingRequestHubContext">The collecing request hub context.</param>
+        public CollectingRequestController(ICollectingRequestService collectingRequestService, IStorageBlobS3Service storageBlobService, IHubContext<CollectingRequestHub, ICollecingRequestHub> collecingRequestHubContext)
         {
             _collectingRequestService = collectingRequestService;
             _storageBlobService = storageBlobService;
+            _collecingRequestHubContext = collecingRequestHubContext;
         }
 
         #endregion
@@ -121,7 +135,23 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
         [ServiceFilter(typeof(ApiAuthenticateFilterAttribute))]
         public async Task<BaseApiResponseModel> CancelScrapCollectingRequest([FromBody] CollectingRequestCancelModel model)
         {
-            return await _collectingRequestService.CancelCollectingRequest(model);
+            var response = await _collectingRequestService.CancelCollectingRequest(model);
+
+            if (response == null)
+            {
+                return BaseApiResponse.Error();
+            }
+
+            var requestNotice = new CollectingRequestNoticeModel()
+            {
+                Id = response.Id,
+                RequestType = response.RequestType,
+                Status = response.Status
+            };
+
+            await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(requestNotice);
+
+            return BaseApiResponse.OK();
         }
 
         #endregion

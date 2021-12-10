@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 using SCSS.Application.ScrapCollector.Interfaces;
 using SCSS.Application.ScrapCollector.Models.CollectingRequestModels;
+using SCSS.Application.ScrapSeller.Models.CollectingRequestModels;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
 using SCSS.Utilities.Helper;
@@ -118,9 +119,9 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [ProducesResponseType(typeof(BaseApiResponseModel), HttpStatusCodes.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponseModel), HttpStatusCodes.Unauthorized)]
         [Route(ScrapCollectorApiUrlDefinition.CollectingRequestApiUrl.Receive + "/test-signalr")]
-        public async Task<BaseApiResponseModel> TestSignalR([FromQuery] Guid id)
+        public async Task<BaseApiResponseModel> TestSignalR([FromQuery] CollectingRequestNoticeModel model)
         {
-            await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(id);
+            await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(model);
             return BaseApiResponse.OK();
         }
 
@@ -149,16 +150,24 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
                 }
                 return BaseApiResponse.Error(msgErrCode);
             }
-            var resTuple = await _collectingRequestService.ReceiveCollectingRequest(id);
-            if (resTuple == null)
+            var response = await _collectingRequestService.ReceiveCollectingRequest(id);
+            if (response == null)
             {
                 return BaseApiResponse.Error(SystemMessageCode.SystemException);
             }
             // Push Collecting Request id to another collector app
-            await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(resTuple.Item2);
+
+            var requestNotice = new CollectingRequestNoticeModel()
+            {
+                Id = response.Id,
+                RequestType = response.RequestType,
+                Status = response.Status
+            };
+
+            await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(requestNotice);
 
             // Push notification to Seller App
-            return await _collectingRequestService.SendNotification(resTuple.Item1, resTuple.Item2, resTuple.Item3);
+            return await _collectingRequestService.SendNotification(response.SellerAccountId, response.Id, response.CollectingRequestCode);
         }
 
         #endregion Receive the Collecting Request 

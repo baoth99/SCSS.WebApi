@@ -202,7 +202,7 @@ namespace SCSS.Aplication.BackgroundService.Implementations
                         Body = NotificationMessage.RequestGoNowBody,
                         NotiType = NotificationType.CollectingRequest,
                         ReferenceRecordId = item.CollectingRequestId,
-                        DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, item.CollectingRequestId.ToString())
+                        DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, item.CollectingRequestId.ToString(), CollectingRequestStatus.PENDING.ToString())
                     }).ToList();
 
                     await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(messages);

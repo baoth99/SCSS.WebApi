@@ -277,7 +277,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     DeviceId = UserAuthSession.UserSession.DeviceId,
                     Title = NotificationMessage.CompletedSellerCRTitle, 
                     Body = NotificationMessage.CompletedCollectorCRBody(collectingRequest.CollectingRequestCode), 
-                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, collectingRequest.Id.ToString()),
+                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, collectingRequest.Id.ToString(), CollectingRequestStatus.COMPLETED.ToString()),
                     NotiType = NotificationType.CollectingRequest,
                     ReferenceRecordId = collectingRequest.Id
                 },
@@ -287,7 +287,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                     DeviceId = sellerAccount.DeviceId,
                     Title = NotificationMessage.CompletedSellerCRTitle, 
                     Body = NotificationMessage.CompletedSellerCRBody(collectingRequest.CollectingRequestCode), 
-                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, collectingRequest.Id.ToString()),
+                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, collectingRequest.Id.ToString(), CollectingRequestStatus.COMPLETED.ToString()),
                     NotiType = NotificationType.CollectingRequest,
                     ReferenceRecordId = collectingRequest.Id,
                 }

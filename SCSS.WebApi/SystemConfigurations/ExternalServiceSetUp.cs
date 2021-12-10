@@ -53,6 +53,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddScoped<IStorageBlobS3Service, StorageBlobS3Service>();
             services.AddScoped<IStringCacheService, StringCacheService>();
             services.AddSingleton<ISQSPublisherService, SQSPublisherService>();
+            services.AddSingleton<ISQSSubscriberService, SQSSubscriberService>();
             services.AddSingleton<ICacheListService, CacheListService>();
 
             // Goong Map

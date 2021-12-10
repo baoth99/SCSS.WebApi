@@ -26,7 +26,7 @@ namespace SCSS.Application.ScrapCollector.Interfaces
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        Task<Tuple<Guid?, Guid, string>> ReceiveCollectingRequest(Guid id);
+        Task<CollectingRequestResponseModel> ReceiveCollectingRequest(Guid id);
 
         /// <summary>
         /// Sends the notification to seller.

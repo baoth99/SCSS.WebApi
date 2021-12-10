@@ -190,7 +190,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 {
                     AccountId = UserAuthSession.UserSession.Id,
                     DeviceId = UserAuthSession.UserSession.DeviceId,
-                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, insertEntity.Id.ToString()),
+                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, insertEntity.Id.ToString(), CollectingRequestStatus.PENDING.ToString()),
                     Title = NotificationMessage.SellerRequestCRTitle,
                     Body = NotificationMessage.SellerRequestCRBody(insertEntity.CollectingRequestCode),
                     NotiType = NotificationType.CollectingRequest,
@@ -212,6 +212,14 @@ namespace SCSS.Application.ScrapSeller.Imlementations
 
                 await _SQSPublisherService.CollectingRequestNotiticationPublisher.SendMessageAsync(messageQueue);
             });
+
+            var response = new CollectingRequestResponseModel()
+            {
+                CollectingRequestCode = insertEntity.CollectingRequestCode,
+                Id = insertEntity.Id,
+                RequestType = insertEntity.RequestType,
+                Status = insertEntity.Status,
+            };
 
             return BaseApiResponse.OK(insertEntity.Id);
         }
@@ -248,7 +256,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public async Task<BaseApiResponseModel> CancelCollectingRequest(CollectingRequestCancelModel model)
+        public async Task<CollectingRequestResponseModel> CancelCollectingRequest(CollectingRequestCancelModel model)
         {
             // Get Collecting Request from ID, sellerAccountId and Status = CollectingRequestStatus.PENDING (1)
             var entity = await _collectingRequestRepository.GetByIdAsync(model.Id);
@@ -256,14 +264,14 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             // Check Collecting Request existed
             if (entity == null)
             {
-                return BaseApiResponse.NotFound();
+                return null;
             }
 
             var errorList = await ValidateCollectingRequest(entity);
 
             if (errorList.Any())
             {
-                return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
+                return null;
             }
 
             var notifcations = new List<NotificationMessageQueueModel>()
@@ -272,7 +280,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                 {
                     AccountId = UserAuthSession.UserSession.Id,
                     DeviceId = UserAuthSession.UserSession.DeviceId,
-                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, entity.Id.ToString()),
+                    DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, entity.Id.ToString(), CollectingRequestStatus.CANCEL_BY_SELLER.ToString()),
                     Title = NotificationMessage.CancelCRBySellerTitle,
                     Body = NotificationMessage.CancelCRBySellerBody(entity.CollectingRequestCode),
                     NotiType = NotificationType.CollectingRequest,
@@ -291,7 +299,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                     ReferenceRecordId = entity.Id,
                     Title = NotificationMessage.CancelCRBySellerTitle,
                     Body = NotificationMessage.CancelCRBySellerToCollectorBody(entity.CollectingRequestCode),
-                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.HistoryScreen, entity.CollectorAccountId.ToString())
+                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.HistoryScreen, entity.CollectorAccountId.ToString(), CollectingRequestStatus.CANCEL_BY_SELLER.ToString())
                 });
             }
 
@@ -307,7 +315,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             }
             catch (Exception)
             {
-                return BaseApiResponse.Error();
+                return null;
             }
 
             // Remove CRCache in PendingCollectingRequestCache
@@ -327,9 +335,14 @@ namespace SCSS.Application.ScrapSeller.Imlementations
             // Push to AWS SQS
             await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(notifcations);
 
-            return BaseApiResponse.OK();
+            return new CollectingRequestResponseModel()
+            {
+                CollectingRequestCode = entity.CollectingRequestCode,
+                Id = entity.Id,
+                RequestType = entity.RequestType,
+                Status = CollectingRequestStatus.CANCEL_BY_SELLER,
+            };
         }
-
 
 
         /// <summary>

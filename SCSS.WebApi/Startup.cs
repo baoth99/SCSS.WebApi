@@ -99,6 +99,12 @@ namespace SCSS.WebApi
 
             #endregion
 
+            #region External Service SetUp
+
+            services.AddExternalServiceSetUp();
+
+            #endregion
+
             #region Dependency Injection
 
             services.AddDependencyInjectionSetUp();
@@ -108,12 +114,6 @@ namespace SCSS.WebApi
             #region Use Swagger UI
 
             services.AddSwaggerGenSetUp();
-
-            #endregion
-
-            #region External Service SetUp
-
-            services.AddExternalServiceSetUp();
 
             #endregion
 

@@ -149,10 +149,11 @@ namespace SCSS.Utilities.Constants
             {AccountRoleConstants.DEALER_MEMBER, AccountRole.DEALER_MEMBER }
         };
 
-        public static Dictionary<string, string> FirebaseCustomData(string appScreen, string id) => new Dictionary<string, string>()
+        public static Dictionary<string, string> FirebaseCustomData(string appScreen, string id, string notiType) => new Dictionary<string, string>()
         {
             {"screen", appScreen },
-            {"id", id }
+            {"id", id },
+            {"noti_type", notiType }
         };
     }
 

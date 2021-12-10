@@ -32,6 +32,14 @@ namespace SCSS.AWSService.Interfaces
         /// </value>
         ISQSPublisher<CollectingRequestNotiticationQueueModel> CollectingRequestNotiticationPublisher { get; }
 
+        /// <summary>
+        /// Gets the collecting request realtime publisher.
+        /// </summary>
+        /// <value>
+        /// The collecting request realtime publisher.
+        /// </value>
+        ISQSPublisher<CollectingRequestRealtimeQueueModel> CollectingRequestRealtimePublisher { get; }
+
         #endregion
     }
 
@@ -62,6 +70,15 @@ namespace SCSS.AWSService.Interfaces
         /// The collecting request notitication subscriber.
         /// </value>
         ISQSSubscriber<CollectingRequestNotiticationQueueModel> CollectingRequestNotiticationSubscriber { get; }
+
+
+        /// <summary>
+        /// Gets the collecting request realtime subscriber.
+        /// </summary>
+        /// <value>
+        /// The collecting request realtime subscriber.
+        /// </value>
+        ISQSSubscriber<CollectingRequestRealtimeQueueModel> CollectingRequestRealtimeSubscriber { get; }
 
         #endregion
     }

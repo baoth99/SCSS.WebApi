@@ -26,6 +26,8 @@ namespace SCSS.AWSService.Implementations
 
         private ISQSPublisher<CollectingRequestNotiticationQueueModel> _collectingRequestNotiticationPublisher;
 
+        private ISQSPublisher<CollectingRequestRealtimeQueueModel> _collectingRequestRealtimePublisher;
+
         #endregion
 
         #region Constructor
@@ -67,6 +69,14 @@ namespace SCSS.AWSService.Implementations
         /// </value>
         public ISQSPublisher<CollectingRequestNotiticationQueueModel> CollectingRequestNotiticationPublisher => _collectingRequestNotiticationPublisher ??= (_collectingRequestNotiticationPublisher = new SQSPublisher<CollectingRequestNotiticationQueueModel>(AmazonSQS, AppSettingValues.RequestNotifierQueueUrl, Logger));
 
+        /// <summary>
+        /// Gets the collecting request realtime publisher.
+        /// </summary>
+        /// <value>
+        /// The collecting request realtime publisher.
+        /// </value>
+        public ISQSPublisher<CollectingRequestRealtimeQueueModel> CollectingRequestRealtimePublisher => _collectingRequestRealtimePublisher ??= (_collectingRequestRealtimePublisher = new SQSPublisher<CollectingRequestRealtimeQueueModel>(AmazonSQS, AppSettingValues.CollectingRequestRealtimeQueueUrl, Logger));
+
         #endregion
 
     }
@@ -90,6 +100,8 @@ namespace SCSS.AWSService.Implementations
         private ISQSSubscriber<SMSMessageQueueModel> _SMSMessageQueueSubscriber;
 
         private ISQSSubscriber<CollectingRequestNotiticationQueueModel> _collectingRequestNotiticationSubscriber;
+
+        private ISQSSubscriber<CollectingRequestRealtimeQueueModel> _collectingRequestRealtimeSubscriber;
 
         #endregion
 
@@ -131,6 +143,15 @@ namespace SCSS.AWSService.Implementations
         /// The collecting request notitication subscriber.
         /// </value>
         public ISQSSubscriber<CollectingRequestNotiticationQueueModel> CollectingRequestNotiticationSubscriber => _collectingRequestNotiticationSubscriber ??= (_collectingRequestNotiticationSubscriber = new SQSSubscriber<CollectingRequestNotiticationQueueModel>(AmazonSQS, AppSettingValues.RequestNotifierQueueUrl, Logger));
+
+
+        /// <summary>
+        /// Gets the collecting request realtime subscriber.
+        /// </summary>
+        /// <value>
+        /// The collecting request realtime subscriber.
+        /// </value>
+        public ISQSSubscriber<CollectingRequestRealtimeQueueModel> CollectingRequestRealtimeSubscriber => _collectingRequestRealtimeSubscriber ??= (_collectingRequestRealtimeSubscriber = new SQSSubscriber<CollectingRequestRealtimeQueueModel>(AmazonSQS, AppSettingValues.CollectingRequestRealtimeQueueUrl, Logger));
 
         #endregion
 
