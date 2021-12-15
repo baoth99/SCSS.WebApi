@@ -65,7 +65,8 @@ namespace SCSS.Application.ScrapDealer.Implementations
                                                                                            CollectorImage = y.ImageUrl,
                                                                                            TransactionDateTime = x.CreatedTime,
                                                                                            x.Total,
-                                                                                           x.TransactionServiceFee
+                                                                                           x.TransactionServiceFee,
+                                                                                           x.BonusAmount
                                                                                        }).OrderByDescending(x => x.TransactionDateTime);
 
             var totalRecord = dataQuery.Count();
@@ -79,7 +80,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 CollectorName = x.CollectorName,
                 CollectorImage = x.CollectorImage,
                 TransactionDateTime = x.TransactionDateTime,
-                Total = x.Total - x.TransactionServiceFee
+                Total = (x.Total - x.TransactionServiceFee) + x.BonusAmount
             }).ToList();
 
 

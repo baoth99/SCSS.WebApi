@@ -8,6 +8,6 @@ namespace SCSS.WebApi.SignalR.CollectorHubs.IHubs
 {
     public interface ICollecingRequestHub
     {
-        Task ReceiveCollectingRequest(CollectingRequestNoticeModel model);
+        Task ReceiveCollectingRequest(string noticeJsonModel);
     }
 }

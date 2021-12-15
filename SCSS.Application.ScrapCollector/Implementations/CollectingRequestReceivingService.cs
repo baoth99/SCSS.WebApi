@@ -156,8 +156,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         public async Task<BaseApiResponseModel> GetCollectingRequestDetailReceived(Guid id)
         {
             var collectingRequestEntity = await _collectingRequestRepository.GetAsyncAsNoTracking(x => x.Id.Equals(id) &&
-                                                                                                       x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id) &&
-                                                                                                       x.Status == CollectingRequestStatus.APPROVED);
+                                                                                                       x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id));
             if (collectingRequestEntity == null)
             {
                 return BaseApiResponse.NotFound();

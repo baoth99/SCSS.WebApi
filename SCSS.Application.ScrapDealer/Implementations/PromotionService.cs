@@ -65,10 +65,10 @@ namespace SCSS.Application.ScrapDealer.Implementations
             var promotionToTime = model.AppliedToTime.ToDateTime();
 
             //  Check AppliedFromTime with AppliedToTime valid
-            if (promotionFromTime.IsCompareDateTimeEqual(promotionToTime))
-            {
-                return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
-            }
+            //if (promotionFromTime.IsCompareDateTimeEqual(promotionToTime))
+            //{
+            //    return BaseApiResponse.Error(SystemMessageCode.DataInvalid);
+            //}
 
             var dealerAccountId = UserAuthSession.UserSession.Id;
 

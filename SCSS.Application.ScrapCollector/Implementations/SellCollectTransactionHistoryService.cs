@@ -116,10 +116,6 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 return BaseApiResponse.NotFound();
             }
 
-            var sellerName = _accountRepository.GetById(collectingRequest.SellerAccountId).Name;
-
-            var transaction = await _sellCollectTransactionRepository.GetAsync(x => x.CollectingRequestId.Equals(collectingRequest.Id));
-
             var complaint = _complaintRepository.GetMany(x => x.CollectingRequestId.Equals(collectingRequestId) &&
                                                                         x.CollectDealTransactionId == null)
                                             .GroupJoin(_collectorComplaintRepository.GetManyAsNoTracking(x => x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id)), x => x.Id, y => y.ComplaintId,
@@ -147,6 +143,10 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 AdminReply = complaint?.AdminReply,
                 ComplaintStatus = CommonUtils.GetComplaintStatus(complaint?.ComplaintId, complaint?.CollectorComplaintId, complaint?.AdminReply)
             };
+
+            var sellerName = _accountRepository.GetById(collectingRequest.SellerAccountId)?.Name;
+
+            var transaction = await _sellCollectTransactionRepository.GetAsync(x => x.CollectingRequestId.Equals(collectingRequest.Id));
 
             if (collectingRequest.Status == CollectingRequestStatus.COMPLETED && transaction != null)
             {

@@ -5,6 +5,7 @@ using SCSS.Application.ScrapCollector.Models.CollectingRequestModels;
 using SCSS.Application.ScrapSeller.Models.CollectingRequestModels;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
+using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
@@ -121,7 +122,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
         [Route(ScrapCollectorApiUrlDefinition.CollectingRequestApiUrl.Receive + "/test-signalr")]
         public async Task<BaseApiResponseModel> TestSignalR([FromQuery] CollectingRequestNoticeModel model)
         {
-            await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(model);
+            await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(model.ToJson());
             return BaseApiResponse.OK();
         }
 
@@ -162,7 +163,7 @@ namespace SCSS.WebApi.Controllers.ScrapCollectorControllers
                 Id = response.Id,
                 RequestType = response.RequestType,
                 Status = response.Status
-            };
+            }.ToJson();
 
             await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(requestNotice);
 

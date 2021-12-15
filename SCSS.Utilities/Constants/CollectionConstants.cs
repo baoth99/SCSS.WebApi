@@ -25,6 +25,7 @@ namespace SCSS.Utilities.Constants
         {
             CollectingRequestStatus.COMPLETED,
             CollectingRequestStatus.CANCEL_BY_COLLECTOR,
+            CollectingRequestStatus.CANCEL_BY_SELLER,
             CollectingRequestStatus.CANCEL_BY_SYSTEM
         };
 

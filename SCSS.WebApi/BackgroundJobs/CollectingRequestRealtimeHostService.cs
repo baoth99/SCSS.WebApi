@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using SCSS.Application.ScrapSeller.Models.CollectingRequestModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.AWSService.Models.SQSModels;
+using SCSS.Utilities.Extensions;
 using SCSS.WebApi.SignalR.CollectorHubs.Hubs;
 using SCSS.WebApi.SignalR.CollectorHubs.IHubs;
 using System;
@@ -82,7 +83,10 @@ namespace SCSS.WebApi.BackgroundJobs
                                 RequestType = item.RequestType,
                                 Status = item.Status
                             };
-                            await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(realtimeModel);
+
+                            var jsonModel = realtimeModel.ToJson();
+
+                            await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(jsonModel);
                         }
                     }
                 }

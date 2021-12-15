@@ -143,7 +143,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 CollectingRequestCode = collectingRequest.CollectingRequestCode,
                 SellerName = sellerInfo.Name,
                 SellerPhone = sellerInfo.Phone,
-                TransactionFeePercent = transactionFeePercent
+                TransactionFeePercent = transactionFeePercent / 100
             };
 
             return BaseApiResponse.OK(dataResult);

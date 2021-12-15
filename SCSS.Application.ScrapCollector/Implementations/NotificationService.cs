@@ -60,7 +60,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
         /// <returns></returns>
         public async Task<BaseApiResponseModel> GetNotifications(BaseFilterModel model)
         {
-            var dataQuery = await _notificationRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id) && !x.Title.Equals(NotificationMessage.RequestGoNowTitle)).ToListAsync();
+            var dataQuery = await _notificationRepository.GetManyAsNoTracking(x => x.AccountId.Equals(UserAuthSession.UserSession.Id) && x.NotificationType != NotificationType.RequestNotifier).ToListAsync();
 
             var collectingRequestNotifications = dataQuery.GroupJoin(_collectingRequestRepository.GetManyAsNoTracking(x => x.CollectorAccountId.Equals(UserAuthSession.UserSession.Id)),
                                                             x => x.ReferenceRecordId, y => y.Id, (x, y) => new

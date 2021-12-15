@@ -245,6 +245,7 @@ namespace SCSS.Utilities.Constants
     public class CollectorAppScreen
     {
         public const string CollectingRequestScreen = "1";
+        public const string CurrentCollectingRequestScreen = "4";
         public const string HistoryScreen = "2";
         public const string DealerHistoryScreen = "3";
 

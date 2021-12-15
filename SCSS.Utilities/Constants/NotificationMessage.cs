@@ -48,6 +48,10 @@
 
         public static string RequestGoNowTitle => "Yêu cầu thu gom đến ngay";
 
+        public static string RequestAppointmentTitle => "Yêu cầu thu gom đặt hẹn";
+
+        public static string RequestAppointmentBody => "Có một yêu cầu thu gom đặt hẹn ở gần bạn.";
+
         public static string RequestGoNowBody => "Có một yêu cầu thu gom mới ở gần bạn.";
 
 

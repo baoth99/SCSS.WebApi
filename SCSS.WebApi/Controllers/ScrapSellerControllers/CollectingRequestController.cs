@@ -6,6 +6,7 @@ using SCSS.Application.ScrapSeller.Models.CollectingRequestModels;
 using SCSS.AWSService.Interfaces;
 using SCSS.Utilities.BaseResponse;
 using SCSS.Utilities.Constants;
+using SCSS.Utilities.Extensions;
 using SCSS.Utilities.Helper;
 using SCSS.Utilities.ResponseModel;
 using SCSS.WebApi.AuthenticationFilter;
@@ -149,7 +150,9 @@ namespace SCSS.WebApi.Controllers.ScrapSellerControllers
                 Status = response.Status
             };
 
-            await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(requestNotice);
+            var noticeJsonModel = requestNotice.ToJson();
+
+            await _collecingRequestHubContext.Clients.All.ReceiveCollectingRequest(noticeJsonModel);
 
             return BaseApiResponse.OK();
         }

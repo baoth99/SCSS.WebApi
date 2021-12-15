@@ -86,6 +86,8 @@ namespace SCSS.Application.Admin.Implementations
                 _collectingRequestConfigRepository.UpdateRange(oldConfigs);
             }
 
+            model.MaxNumberOfRequestDays += 1;
+
             var newConfig = new CollectingRequestConfig()
             {
                 IsActive = BooleanConstants.TRUE,
@@ -195,7 +197,7 @@ namespace SCSS.Application.Admin.Implementations
                 Id = configIsUsing.Id,
                 RequestQuantity = configIsUsing.RequestQuantity,
                 ReceiveQuantity = configIsUsing.ReceiveQuantity,
-                MaxNumberOfRequestDays = configIsUsing.MaxNumberOfRequestDays,
+                MaxNumberOfRequestDays = configIsUsing.MaxNumberOfRequestDays - 1,
                 CancelTimeRange = configIsUsing.CancelTimeRange,
                 TimeRangeRequestNow = configIsUsing.TimeRangeRequestNow,
                 FeedbackDeadline = configIsUsing.FeedbackDealine,

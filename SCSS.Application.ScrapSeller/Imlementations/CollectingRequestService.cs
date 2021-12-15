@@ -299,7 +299,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                     ReferenceRecordId = entity.Id,
                     Title = NotificationMessage.CancelCRBySellerTitle,
                     Body = NotificationMessage.CancelCRBySellerToCollectorBody(entity.CollectingRequestCode),
-                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.HistoryScreen, entity.CollectorAccountId.ToString(), CollectingRequestStatus.CANCEL_BY_SELLER.ToString())
+                    DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.HistoryScreen, entity.Id.ToString(), CollectingRequestStatus.CANCEL_BY_SELLER.ToString())
                 });
             }
 

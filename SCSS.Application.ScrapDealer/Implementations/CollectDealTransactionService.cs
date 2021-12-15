@@ -156,7 +156,7 @@ namespace SCSS.Application.ScrapDealer.Implementations
                 CollectorId = collectorInfo.Id,
                 CollectorName = collectorInfo.Name,
                 CollectorPhone = collectorInfo.Phone,
-                TransactionFeePercent = serviceFee
+                TransactionFeePercent = serviceFee / 100
             };
 
             return BaseApiResponse.OK(dataResult);

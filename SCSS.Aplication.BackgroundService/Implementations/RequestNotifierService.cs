@@ -194,15 +194,17 @@ namespace SCSS.Aplication.BackgroundService.Implementations
 
                 if (nearestCollectors.Any())
                 {
+                    var screenId = item.RequestType == CollectingRequestType.CURRENT_REQUEST ? CollectorAppScreen.CurrentCollectingRequestScreen : CollectorAppScreen.CollectingRequestScreen;
+
                     var messages = nearestCollectors.Select(x => new NotificationMessageQueueModel()
                     {
                         AccountId = x.Id,
                         DeviceId = x.DeviceId,
-                        Title = NotificationMessage.RequestGoNowTitle,
-                        Body = NotificationMessage.RequestGoNowBody,
-                        NotiType = NotificationType.CollectingRequest,
+                        Title = item.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT ? NotificationMessage.RequestAppointmentTitle : NotificationMessage.RequestGoNowTitle,
+                        Body = item.RequestType == CollectingRequestType.MAKE_AN_APPOINTMENT ? NotificationMessage.RequestAppointmentBody : NotificationMessage.RequestGoNowBody,
+                        NotiType = NotificationType.RequestNotifier,
                         ReferenceRecordId = item.CollectingRequestId,
-                        DataCustom = DictionaryConstants.FirebaseCustomData(CollectorAppScreen.CollectingRequestScreen, item.CollectingRequestId.ToString(), CollectingRequestStatus.PENDING.ToString())
+                        DataCustom = DictionaryConstants.FirebaseCustomData(screenId, item.CollectingRequestId.ToString(), CollectingRequestStatus.PENDING.ToString())
                     }).ToList();
 
                     await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(messages);

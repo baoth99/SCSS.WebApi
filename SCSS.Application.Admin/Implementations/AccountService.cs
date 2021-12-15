@@ -216,13 +216,32 @@ namespace SCSS.Application.Admin.Implementations
             {
                 message = SMSMessage.BlockSMS();
 
-                var role = _roleRepository.GetById(account.Status);
+                var role = _roleRepository.GetById(account.RoleId);
 
                 if (role.Key == AccountRole.COLLECTOR)
                 {
+
+                    var collectingRequests = _collectingRequestRepository.GetManyAsNoTracking(x => x.CollectorAccountId == account.Id && x.Status == CollectingRequestStatus.APPROVED)
+                                                                        .Join(_accountRepository.GetAllAsNoTracking(), x => x.SellerAccountId, y => y.Id,
+                                                                            (x, y) => new
+                                                                            {
+                                                                                CollectingRequestId = x.Id,
+                                                                                x.SellerAccountId,
+                                                                                x.CollectingRequestCode,
+                                                                                SellerDeviceId = y.DeviceId,
+                                                                            })
+                                                                        .Select(x => new NotificationMessageQueueModel()
+                                                                        {
+                                                                            AccountId = x.SellerAccountId,
+                                                                            Body = NotificationMessage.CancelCollectingRequestTitleSystem(x.CollectingRequestCode),
+                                                                            Title = NotificationMessage.CancelCRBySellerTitle,
+                                                                            DataCustom = DictionaryConstants.FirebaseCustomData(SellerAppScreen.ActivityScreen, x.CollectingRequestId.ToString(), NotificationType.CollectingRequest),
+                                                                            DeviceId = x.SellerDeviceId
+                                                                        }).ToList();
+
                     var sql = "UPDATE [CollectingRequest] \n" +
                               "SET [Status] = @CancelBySystemStatus, [UpdatedTime] = @UpdateTime, [UpdatedBy] = @UpdatedBy \n" +
-                              "WHERE [ColletorAccountId] = @CollectorAccountId && \n" +
+                              "WHERE [CollectorAccountId] = @CollectorAccountId AND \n" +
                                     "[Status] = @ApprovedStatus";
 
                     var parameters = new DynamicParameters();
@@ -232,7 +251,12 @@ namespace SCSS.Application.Admin.Implementations
                     parameters.Add("@CollectorAccountId", account.Id);
                     parameters.Add("@ApprovedStatus", CollectingRequestStatus.APPROVED);
 
-                    await _dapperService.SqlExecuteAsync(sql, parameters);
+                    var result = await _dapperService.SqlExecuteAsync(sql, parameters);
+
+                    if (result > NumberConstant.Zero)
+                    {
+                        await _SQSPublisherService.NotificationMessageQueuePublisher.SendMessagesAsync(collectingRequests);
+                    }
                 }
             }
 
