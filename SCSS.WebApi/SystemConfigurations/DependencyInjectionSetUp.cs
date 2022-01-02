@@ -98,7 +98,7 @@ namespace SCSS.WebApi.SystemConfigurations
             services.AddHostedService<ScanFuturePromotionHostedService>();
             services.AddHostedService<CRReminderHostService>();
             services.AddHostedService<ServiceTransactionHostedService>();
-            services.AddHostedService<CollectingRequestRealtimeHostService>();
+            //services.AddHostedService<CollectingRequestRealtimeHostService>();
 
             #endregion
 

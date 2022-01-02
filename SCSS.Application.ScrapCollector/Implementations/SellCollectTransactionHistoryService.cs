@@ -74,7 +74,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 x.Status,
                 x.TransactionDate,
                 x.CollectingUpdateTime,
-                x.Total,
+                Total = x.Total - x.TransactionServiceFee,
                 DoneDateTime = DateTimeUtils.GetTransactionHistoryDate(x.Status.Value, x.TransactionDate, x.CollectingUpdateTime)
             }).OrderByDescending(x => x.DoneDateTime);
 

@@ -167,7 +167,7 @@ namespace SCSS.Application.ScrapSeller.Imlementations
                                                 })
                                         .SelectMany(x => x.Transaction.DefaultIfEmpty(), (x, y) =>
                                         {
-                                            x.Activity.Total = y?.Total;
+                                            x.Activity.Total = y?.Total - y?.TransactionServiceFee;
                                             x.Activity.CompletedTime = y != null ? y.CreatedTime : x.Activity.CompletedTime;
                                             return x.Activity;
                                         }).OrderByDescending(x => x.CompletedTime).ToList();

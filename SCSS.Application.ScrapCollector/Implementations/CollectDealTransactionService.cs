@@ -138,7 +138,7 @@ namespace SCSS.Application.ScrapCollector.Implementations
                 TransactionCode = x.TransactionCode,
                 DealerName = x.DealerName,
                 DealerImageURL = x.DealerImageUrl,
-                Total = x.Total,
+                Total = (x.Total - x.TransactionServiceFee) + x.BonusAmount,
                 TransactionServiceFee = x.TransactionServiceFee,
                 Bonus = x.BonusAmount,
                 TransactionDate = x.CreatedTime.ToStringFormat(DateTimeFormat.DD_MM_yyyy),
